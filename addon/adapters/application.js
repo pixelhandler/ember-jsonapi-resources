@@ -135,7 +135,7 @@ export default Ember.Object.extend(Ember.Evented, {
 
   cacheResource(/*resp*/) {},
 
-  initEvents: function () {
+  initEvents: Ember.on('init', function () {
     this.on('attributeChanged', this, this.updateResource);
-  }.on('init')
+  })
 });

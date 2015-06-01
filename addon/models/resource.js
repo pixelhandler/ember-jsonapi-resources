@@ -8,7 +8,7 @@ const Resource = Ember.Object.extend({
   relationships: {},
 
   toString() {
-    return "[%@Resource:%@]".fmt(this.get('type'), this.get('id'));
+    return Ember.String.fmt("[%@Resource:%@]", this.get('type'), this.get('id'));
   },
 
   addRelationship(related, id) {
@@ -59,12 +59,12 @@ const Resource = Ember.Object.extend({
 
   _attributes: {},
 
-  initEvents: function () {
+  initEvents: Ember.on('init', function () {
     const service = this.get('service');
     if (service) {
       service.on('didUpdateResource', this, this.didUpdateResource);
     }
-  }.on('init'),
+  }),
 
   didUpdateResource() {
     this._attributes = {};

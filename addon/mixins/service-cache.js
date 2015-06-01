@@ -3,12 +3,12 @@ import Ember from 'ember';
 export default Ember.Mixin.create({
   cache: null,
 
-  initCache: function() {
+  initCache: Ember.on('init', function () {
     this.cache = {
       meta: null,
-      data: Ember.ArrayProxy.create({ content: [] })
+      data: Ember.ArrayProxy.create({ content: Ember.A([]) })
     };
-  }.on('init'),
+  }),
 
   cacheResource(resp) {
     this.cacheMeta(resp);
@@ -28,7 +28,7 @@ export default Ember.Mixin.create({
       if (data.get('length') === 0) {
         data.pushObjects(resp.data);
       } else {
-        const items = [];
+        const items = Ember.A([]);
         for (let i = 0; i < resp.data.length; i++) {
           if (ids.indexOf(resp.data[i].get('id')) === -1) {
             items.push(resp.data[i]);

@@ -15,10 +15,10 @@ export default Ember.Object.extend({
   },
 
   serializeResources(resources) {
-    const collection = [];
+    const collection = Ember.A([]);
 
     resources.forEach(function(resource) {
-      collection.push(this.serializeRecord(resource));
+      collection.pushObject(this.serializeRecord(resource));
     }, this);
 
     return collection;
@@ -50,7 +50,7 @@ export default Ember.Object.extend({
 
   deserialize(resource) {
     if (Array.isArray(resource.data)) {
-      return this.deserializeResources(resource.data);
+      return this.deserializeResources(Ember.A(resource.data));
     } else if (typeof resource.data === 'object') {
       return this.deserializeResource(resource.data);
     } else {
