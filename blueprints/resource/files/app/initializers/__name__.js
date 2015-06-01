@@ -1,7 +1,7 @@
-import Service from '<% packageName %>/services/<%= resource %>';
-import Model from '<% packageName %>/models/<%= entity %>';
-import Adapter from '<% packageName %>/adapters/<%= entity %>';
-import Serializer from '<% packageName %>/serializers/<%= entity %>';
+import Service from '../services/<%= resource %>';
+import Model from '../models/<%= entity %>';
+import Adapter from '../adapters/<%= entity %>';
+import Serializer from '../serializers/<%= entity %>';
 
 export function initialize(container, application) {
   const adapter = 'service:<%= resource %>-adapter';

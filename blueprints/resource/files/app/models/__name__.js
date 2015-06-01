@@ -1,5 +1,5 @@
-import Resource from '<% packageName %>/models/resource';
-import { attr, hasOne, hasMany, hasRelated } from '<% packageName %>/models/resource';
+import Resource from 'ember-jsonapi-resources/models/resource';
+import { attr, hasOne, hasMany, hasRelated } from 'ember-jsonapi-resources/models/resource';
 
 export default Resource.extend({
   type: '<%= entity %>'
