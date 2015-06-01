@@ -1,6 +1,6 @@
-# Ember-jsonapi-resources
+# Ember JSONApi Resources
 
-This README outlines the details of collaborating on this Ember addon.
+Lightweight persistence for an Ember CLI app following the JSON API 1.0 spec.
 
 ## Installation
 

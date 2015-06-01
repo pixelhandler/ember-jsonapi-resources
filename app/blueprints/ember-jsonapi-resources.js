@@ -1,0 +1,1 @@
+export { default } from 'ember-jsonapi-resources/blueprints/ember-jsonapi-resources';
