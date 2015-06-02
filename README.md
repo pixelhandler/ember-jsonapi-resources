@@ -143,7 +143,7 @@ to the original server so you can replace the URL as needed to act as if
 the API server is running on your same domain.
 
 
-## Why a Stand-alone solution?
+## Why A Stand-Alone Solution?
 
 This addon was extracted from my blog app that uses the JSONAPI::Resources gem 
 (running on master branch for now). The blog app has auth for admin and 
@@ -163,16 +163,16 @@ addon yet.
 [JSONAPI::Resources]: https://github.com/cerebris/jsonapi-resources
 
 
-### Other Emer JSON API implementations
+### Other Ember.js JSON API Implementations
 
-- [Ember Orbit]: https://github.com/orbitjs/ember-orbit
+- [Ember Orbit]
 - Ember Data with [JSON API Adapter][ember-json-api]
 
 [Ember Orbit]: https://github.com/orbitjs/ember-orbit
 [ember-json-api]: https://github.com/kurko/ember-json-api
 
 
-### Status of the project
+### Status of the Project
 
 This addon will be under active development, so it will be fully documented and tested within a week or two.
 
