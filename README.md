@@ -39,7 +39,7 @@ To consume this addon in an Ember CLI application:
 
 ## Resource Generator
 
-Generate a resource (model with associated adapter, serializer and service)
+Generate a resource (model with associated adapter, serializer and service):
 
     ember generate resource entityName
 
