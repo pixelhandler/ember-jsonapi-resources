@@ -43,7 +43,7 @@ Generate a resource (model with associated adapter, serializer and service):
 
     ember generate resource entityName
 
-The blueprint for a 'resource' re-defines the Ember CLI 'resource' generator.
+The blueprint for a `resource` re-defines the Ember CLI `resource` generator.
 So you'll need to generate an associated route like so:
 
     ember generate route entityName
