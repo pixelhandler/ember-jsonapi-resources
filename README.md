@@ -188,7 +188,7 @@ JSON document discoverable, providing URLs for `related` and `self`.
 
 This implementation takes the posture that your application's resources
 do not need a complex abstraction but a simple implemenation of a solid
-specification. So this project great for getting started
+specification. So this project is great for getting started
 with using the JSON API spec in your Ember.js app
 
 This addon was extracted from my blog app that uses the [JSONAPI::Resources] gem
