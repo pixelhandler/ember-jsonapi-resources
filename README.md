@@ -271,14 +271,12 @@ console, is that normal?*
 
 [JSON Patch]: http://jsonpatch.com/
 
-#### ROADMAP
+#### Roadmap
 
-- Write the tests not that this is deployed in an working app.
-- Use service cache for relations in the resource (model).
+- Write the tests now that this is deployed in an working app.
+- Use cache service for relations in the resource (model).
 - Deserialize and cache the 'include' resource of a document.
-- Figure out the rest as implmented in a complex app with lots of reads
-  and writes.
-
+- Figure out the rest as implemented in a complex app with lots of reads and writes.
 
 ### Contributing / Development
 
