@@ -13,8 +13,8 @@ URLs are first class in the JSON API 1.0 specification and first class
 in the [Ember.js] Router. Why not make them first class in your persistence
 solution too? Now you can with the [ember-jsonapi-resources] addon.
 
-This addon was inspired by finding the simple path to shipping an application
-implementing spec by using the [JSONAPI::Resources] gem, to production.
+This addon was inspired by finding a simple path to shipping an application
+implementing the JSON API spec by using the [JSONAPI::Resources] gem to production.
 
 Whether you adopt the JSON API 1.0 spec, or not; this addon is a template for
 creating a data persitence solution for your [Ember.js] application that models
