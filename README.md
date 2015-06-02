@@ -16,9 +16,9 @@ solution too? Now you can with the [ember-jsonapi-resources] addon.
 This addon was inspired by finding a simple path to shipping an application
 implementing the JSON API spec by using the [JSONAPI::Resources] gem to production.
 
-Whether you adopt the JSON API 1.0 spec, or not; this addon is a template for
+Whether you adopt the JSON API 1.0 spec or not, this addon is a template for
 creating a data persitence solution for your [Ember.js] application that models
-the domain of your API server. The addon code is rather concise, borrow at will.
+the domain of your API server. The addon code is rather concise; borrow at will.
 
 
 [Introduction to fetch()]: http://updates.html5rocks.com/2015/03/introduction-to-fetch
