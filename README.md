@@ -74,32 +74,31 @@ export default Ember.Route.extend({
 
 ## Resource Services
 
-Each resource has an associated service that's uses by the `store`.
+Each `resource` has an associated service that is used by the `store`.
 
-A resource service is a combination of an `adapter`, `serializer`
-and `cache` object. The `service` is also injected into the resource
+A `resource` service is a combination of an `adapter`, `serializer`
+and `cache` object. The `service` is also injected into the `resource`
 (model) objects.
 
 The services are "evented" to facilitate close to real time updates.
 
 An `attr` of the resource is a computed property to the actual attribute
-in an `attributes` hash on the resource (model) instance.
+in an `attributes` hash on the `resource` (model) instance.
 
 When an `attr` is `set` and the value has changed an `attributeChanged`
-event is triggered on the resources service object by default the
-adapter listens to this event and handles with a call to `updateResource`.
+event is triggered on the `resource`'s service object. By default, the
+adapter listens to this event and handles it with a call to `updateResource`.
 
-The resource adapter's `updateResource` method sends a PATCH request
+The `resource` `adapter`'s `updateResource` method sends a PATCH request
 with only the data for the changed attributes.
 
-Perhaps consider a solution for buffering changes on the resource that is
-passed into a component using [ember-state-services] and [ember-buffered-proxy];
-or just re-define the resource's adapter prototype so that `initEvents` returns
-a no-op instead of listening for the 'attributeChanged' event.
+You might want to buffer changes on the resource that is
+passed into a component using [ember-state-services] and [ember-buffered-proxy],
+or you could just re-define the `resource`'s `adapter` prototype so that `initEvents` returns
+a noop instead of listening for the `attributeChanged` event.
 
 [ember-state-services]: https://github.com/stefanpenner/ember-state-services
 [ember-buffered-proxy]: https://github.com/yapplabs/ember-buffered-proxy
-
 
 ## Resource (Model)
 
