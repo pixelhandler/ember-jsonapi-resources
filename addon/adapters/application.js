@@ -99,6 +99,8 @@ export default Ember.Object.extend(Ember.Evented, {
           // TODO handle errors better
           throw new Error(resp.errors);
         });
+      } else if (resp.status === 204) {
+        return '';
       } else {
         return resp.json().then(function(json) {
           if (!isUpdate) {
