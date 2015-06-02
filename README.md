@@ -102,7 +102,7 @@ a noop instead of listening for the `attributeChanged` event.
 
 ## Resource (Model)
 
-Here is the blueprint for a resource (model) prototype:
+Here is the blueprint for a `resource` (model) prototype:
 
 ```javascript
 import Resource from 'ember-jsonapi-resources/models/resource';
@@ -124,9 +124,8 @@ export default Resource.extend({
 
 The commented out code is an example of how to setup the relationships.
 
-The relationships are asyc using promise proxy objects. So when a
-template accesses the model's relationsip a request is made for
-relation.
+The relationships are async using promise proxy objects. So when a
+template accesses the `resource`'s relationship a request is made for the relation.
 
 
 ## Configuration
