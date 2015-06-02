@@ -9,7 +9,7 @@ For example code see the [tests/dummy](tests/dummy) app in this repo.
 This solution uses the [Fetch API] instead of XMLHttpRequest (
 see [Introduction to fetch()]).
 
-URL's are first class in the JSON API 1.0 specification and first class
+URLs are first class in the JSON API 1.0 specification and first class
 in the [Ember.js] Router. Why not make them first class in your persistence
 solution too? Now you can with the [ember-jsonapi-resources] addon.
 
