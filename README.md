@@ -51,28 +51,26 @@ So you'll need to generate an associated route like so:
 
 ## Store Service
 
-A `store` service is injected into the routes; is similar to how Ember
-Data uses a store; but the resource is referenced in the plural form,
-like your API endpoint.
+A `store` service is injected into the routes. This is similar to how [Ember
+Data](https://github.com/emberjs/data) uses a `store`, but the `resource` is referenced in the plural form (
+like your API endpoint).
 
-This is the interface for the store: [/addon/services/store.js] which is
-a facade for the service for a specific resource. Basically you call the
-store methods and pass in the resource name, e.g. 'posts' which
-interacts with the service for your resource.
+[This is the interface for the `store`](/addon/services/store.js) which is
+a facade for the service for a specific `resource`. Basically you call the
+`store` methods and pass in the `resource` name, e.g. 'posts' which
+interacts with the service for your `resource`.
 
-An example route…
+An example `route`:
 
 ```javascript
 import Ember from 'ember';
 
 export default Ember.Route.extend({
-
   model() {
     return this.store.find('posts');
   }
 });
 ```
-
 
 ## Resource Services
 
