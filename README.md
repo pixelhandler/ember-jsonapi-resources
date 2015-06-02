@@ -177,7 +177,7 @@ to the original server so you can replace the URL as needed to act as if
 the API server is running on your same domain.
 
 
-## Why A Stand-Alone Solution?
+## Why a Stand-Alone Solution?
 
 URL's are first class in the JSON API 1.0 specification and first class
 in the [Ember.js] Router. Why not make them first class in your persistence
@@ -254,28 +254,22 @@ The api.pixelhandler.com server is running the [JSONAPI::Resources] gem. It foll
 
 ### Status of the Project
 
-This addon will be under active development, so it will be fully documented and
-tested within a week or two.
+This addon will be under active development, so it will be fully documented and tested within a week or two.
 
-**This is a NEW project there may be bugs depending on your use of the
-addon.** Please do file an issue if you run into a bug.
+**This is a NEW project there may be bugs depending on your use of the addon.** Please do file an issue if you run into a bug.
 
 #### Questions
 
-*Does this implement all of the specification for an Ember App?*
+*Does this implement all of the JSON API specification?*
 
-**No**, the happy path for reading, creating, updating/patching, deleting is
-ready, as well as patching relationships. No extension support has been
-worked on, e.g. [JSON Patch]. I would like to do that one day.
+**No**. The happy path for reading, creating, updating/patching, deleting is ready, as well as patching relationships. No extension support has been worked on, e.g. [JSON Patch]. I would like to do that one day.
 
 *I've installed the app and I see a lot of requests in the browser
 console, is that normal?*
 
-**Yes** for now, I trust that the browser is fine with 304 responses.
-More cache lookups will be added later.
+**Yes**. For now, I trust that the browser is fine with 304 responses. More cache lookups will be added later.
 
 [JSON Patch]: http://jsonpatch.com/
-
 
 #### ROADMAP
 
