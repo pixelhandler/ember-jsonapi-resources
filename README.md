@@ -6,8 +6,8 @@ weapon for API development).
 
 For example code see the [tests/dummy](tests/dummy) app in this repo.
 
-This solution uses the [Fetch API] instead of XMLHttpRequest,
-see [Introduction to fetch()].
+This solution uses the [Fetch API] instead of XMLHttpRequest (
+see [Introduction to fetch()]).
 
 URL's are first class in the JSON API 1.0 specification and first class
 in the [Ember.js] Router. Why not make them first class in your persistence
@@ -85,9 +85,9 @@ and `cache` object. The `service` is also injected into the resource
 The services are "evented" to facilitate close to real time updates.
 
 An `attr` of the resource is a computed property to the actual attribute
-in an `attributes` hash on the resource (model) instance. 
+in an `attributes` hash on the resource (model) instance.
 
-When an `attr` is `set` and the value has changed an `attributeChanged` 
+When an `attr` is `set` and the value has changed an `attributeChanged`
 event is triggered on the resources service object by default the
 adapter listens to this event and handles with a call to `updateResource`.
 
@@ -195,14 +195,14 @@ to not need a complex abstraction but a simple implemenation of a solid
 specification. So not only is this project great for getting started
 with using the JSON API spec in your Ember.js app
 
-This addon was extracted from my blog app that uses the [JSONAPI::Resources] gem 
-(running on master branch for now). The blog app has auth for admin and 
-commenting and resources for posts, authors, comments, commenters using relations 
+This addon was extracted from my blog app that uses the [JSONAPI::Resources] gem
+(running on master branch for now). The blog app has auth for admin and
+commenting and resources for posts, authors, comments, commenters using relations
 for hasOne and hasMany.
 
-This is a simple solution for an Ember app that utilizes resources following the 
-JSON API 1.0 spec. that operates on the idea that the objects in the app are 
-aware that they follow the spec, the model (resource), adapter, serializer and 
+This is a simple solution for an Ember app that utilizes resources following the
+JSON API 1.0 spec. that operates on the idea that the objects in the app are
+aware that they follow the spec, the model (resource), adapter, serializer and
 services just plainly follow the spec.
 
 
