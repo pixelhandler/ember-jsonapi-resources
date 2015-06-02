@@ -132,7 +132,7 @@ template accesses the `resource`'s relationship a request is made for the relati
 
 You may need configure some paths for calling your API server.
 
-Example config settings [tests/dummy/config/environment.js](tests/dummy/config/environment.js)
+Example config settings:  [tests/dummy/config/environment.js](tests/dummy/config/environment.js)
 
 ```javascript
 APP: {
@@ -145,9 +145,9 @@ contentSecurityPolicy: {
 }
 ```
 
-Also, once you've generated a resource you can assign the URL.
+Also, once you've generated a `resource` you can assign the URL.
 
-See this example [tests/dummy/app/adapters/post.js](tests/dummy/app/adapters/post.js)
+See this example: [tests/dummy/app/adapters/post.js](tests/dummy/app/adapters/post.js)
 
 ```javascript
 import ApplicationAdapter from 'ember-jsonapi-resources/adapters/application';
@@ -187,20 +187,17 @@ The [JSON API] spec defines relationships with `links` objects the make each
 JSON document discoverable, providing URLs for `related` and `self`.
 
 This implementation takes the posture that your application's resources
-to not need a complex abstraction but a simple implemenation of a solid
-specification. So not only is this project great for getting started
+do not need a complex abstraction but a simple implemenation of a solid
+specification. So this project great for getting started
 with using the JSON API spec in your Ember.js app
 
 This addon was extracted from my blog app that uses the [JSONAPI::Resources] gem
-(running on master branch for now). The blog app has auth for admin and
+(running on the master branch for now). The blog app has auth for admin and
 commenting and resources for posts, authors, comments, commenters using relations
 for hasOne and hasMany.
 
 This is a simple solution for an Ember app that utilizes resources following the
-JSON API 1.0 spec. that operates on the idea that the objects in the app are
-aware that they follow the spec, the model (resource), adapter, serializer and
-services just plainly follow the spec.
-
+JSON API 1.0 spec. It operates on the idea that the objects in the app (resource/model, adapter, serializer, services) simply follow the spec.
 
 ### Example JSON API 1.0 Document
 
@@ -238,17 +235,14 @@ services just plainly follow the spec.
 }
 ```
 
-For more examples see my API's resources
-
-A JSON API following the spec at <http://jsonapi.org>
+For more examples see my API's resources:
 
 - GET <http://api.pixelhandler.com/api/v1/posts>
 - GET <http://api.pixelhandler.com/api/v1/comments>
 - GET <http://api.pixelhandler.com/api/v1/authors>
 - GET <http://api.pixelhandler.com/api/v1/posts?sort=-date&fields[posts]=title,date&page[offset]=0&page[limit]=20>
 
-The api.pixelhandler.com server is running the [JSONAPI::Resources] gem.
-
+The api.pixelhandler.com server is running the [JSONAPI::Resources] gem. It follows the [JSON API 1.0 spec](http://jsonapi.org).
 
 ### Other Ember.js JSON API Implementations
 
@@ -257,7 +251,6 @@ The api.pixelhandler.com server is running the [JSONAPI::Resources] gem.
 
 [Ember Orbit]: https://github.com/orbitjs/ember-orbit
 [ember-json-api]: https://github.com/kurko/ember-json-api
-
 
 ### Status of the Project
 
