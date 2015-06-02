@@ -295,8 +295,8 @@ To run the app in /tests/dummy use a proxy url for a live API
 
 ## Running Tests
 
-This will be worked on shortly, the first test was to deploy to a
-working app, the demo is on <http://pixelhandler.com>. I promise to
+This will be worked on shortly. The first test was to deploy to a
+working app, a demo of which is available on <http://pixelhandler.com>. I promise to
 write tests this week.
 
 * `ember test`
