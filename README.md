@@ -1,10 +1,10 @@
 # Ember JSON API Resources
 
-An [Ember CLI] Addon… a lightweight solution for data persistence for an Ember CLI
+An [Ember CLI] Addon… a lightweight solution for data persistence in an [Ember.js]
 application following the [JSON API] 1.0 specification (your anti-bikeshedding
 weapon for API development).
 
-For example code see the 'tests/dummy' app in this repo.
+For example code see the [tests/dummy](tests/dummy) app in this repo.
 
 This solution uses the [Fetch API] instead of XMLHttpRequest,
 see [Introduction to fetch()].
@@ -13,12 +13,12 @@ URL's are first class in the JSON API 1.0 specification and first class
 in the [Ember.js] Router. Why not make them first class in your persistence
 solution too? Now you can with the [ember-jsonapi-resources] addon.
 
-This addon was inspired by finding the quickest path to shipping an a
-application using the [JSONAPI::Resources] to production.
+This addon was inspired by finding the simple path to shipping an application
+implementing spec by using the [JSONAPI::Resources] gem, to production.
 
 Whether you adopt the JSON API 1.0 spec, or not; this addon is a template for
 creating a data persitence solution for your [Ember.js] application that models
-the domain of your API server.
+the domain of your API server. The addon code is rather concise, borrow at will.
 
 
 [Introduction to fetch()]: http://updates.html5rocks.com/2015/03/introduction-to-fetch
@@ -51,13 +51,27 @@ So you'll need to generate an associated route like so:
 
 ## Store Service
 
-To be compatible with the default behavior in the Ember Route model
-hook, a `store` service is injected into the routes.
+A `store` service is injected into the routes; is similar to how Ember
+Data uses a store; but the resource is referenced in the plural form,
+like your API endpoint.
 
 This is the interface for the store: [/addon/services/store.js] which is
 a facade for the service for a specific resource. Basically you call the
 store methods and pass in the resource name, e.g. 'posts' which
 interacts with the service for your resource.
+
+An example route…
+
+```javascript
+import Ember from 'ember';
+
+export default Ember.Route.extend({
+
+  model() {
+    return this.store.find('posts');
+  }
+});
+```
 
 
 ## Resource Services
@@ -122,7 +136,7 @@ relation.
 
 You may need configure some paths for calling your API server.
 
-Example config settings [/tests/dummy/config/environment.js]
+Example config settings [tests/dummy/config/environment.js](tests/dummy/config/environment.js)
 
 ```javascript
 APP: {
@@ -137,7 +151,7 @@ contentSecurityPolicy: {
 
 Also, once you've generated a resource you can assign the URL.
 
-See this example [/tests/dummy/app/adapters/post.js]
+See this example [tests/dummy/app/adapters/post.js](tests/dummy/app/adapters/post.js)
 
 ```javascript
 import ApplicationAdapter from 'ember-jsonapi-resources/adapters/application';
@@ -162,7 +176,7 @@ export default ApplicationAdapter.extend({
 The example above also includes a customized method for the url. In the
 case where your API server is running on it's own domain and you use a
 proxy with your nginx server to access the API server on your same
-domain at /api then the JSON documents may have it's own link references
+domain at `/api` then the JSON documents may have it's own link references
 to the original server so you can replace the URL as needed to act as if
 the API server is running on your same domain.
 
@@ -190,11 +204,6 @@ This is a simple solution for an Ember app that utilizes resources following the
 JSON API 1.0 spec. that operates on the idea that the objects in the app are 
 aware that they follow the spec, the model (resource), adapter, serializer and 
 services just plainly follow the spec.
-
-I still need to document the project; e.g. how to use the ember generator for a 
-"resource". Then update the blog app to use the addon. What' I'm saying is that 
-the code works on a production app it's just not fully extracted into a working 
-addon yet.
 
 
 ### Example JSON API 1.0 Document
@@ -259,10 +268,31 @@ The api.pixelhandler.com server is running the [JSONAPI::Resources] gem.
 This addon will be under active development, so it will be fully documented and
 tested within a week or two.
 
+**This is a NEW project there may be bugs depending on your use of the
+addon.** Please do file an issue if you run into a bug.
+
+#### Questions
+
+*Does this implement all of the specification for an Ember App?*
+
+**No**, the happy path for reading, creating, updating/patching, deleting is
+ready, as well as patching relationships. No extension support has been
+worked on, e.g. [JSON Patch]. I would like to do that one day.
+
+*I've installed the app and I see a lot of requests in the browser
+console, is that normal?*
+
+**Yes** for now, I trust that the browser is fine with 304 responses.
+More cache lookups will be added later.
+
+[JSON Patch]: http://jsonpatch.com/
+
+
 #### ROADMAP
 
-- Use service cache for relations in the resource (model)
-- Deserialize and cache the 'include' resource of a document
+- Write the tests not that this is deployed in an working app.
+- Use service cache for relations in the resource (model).
+- Deserialize and cache the 'include' resource of a document.
 - Figure out the rest as implmented in a complex app with lots of reads
   and writes.
 
@@ -283,6 +313,10 @@ To run the app in /tests/dummy use a proxy url for a live API
 * Visit <http://localhost:4200>.
 
 ## Running Tests
+
+This will be worked on shortly, the first test was to deploy to a
+working app, the demo is on <http://pixelhandler.com>. I promise to
+write tests this week.
 
 * `ember test`
 * `ember test --server`
