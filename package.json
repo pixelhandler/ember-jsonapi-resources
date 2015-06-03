@@ -31,9 +31,7 @@
     "ember-disable-proxy-controllers": "^1.0.0",
     "ember-export-application-global": "^1.0.2",
     "ember-disable-prototype-extensions": "^1.0.0",
-    "ember-try": "0.0.4",
-    "inflection": "~1.7.1",
-    "lodash": "~3.9.3"
+    "ember-try": "0.0.4"
   },
   "keywords": [
     "ember-addon",
@@ -43,7 +41,9 @@
   ],
   "dependencies": {
     "ember-cli-babel": "^5.0.0",
-    "ember-inflector": "^1.6.2"
+    "ember-inflector": "^1.6.2",
+    "inflection": "~1.7.1",
+    "lodash": "~3.9.3"
   },
   "ember-addon": {
     "configPath": "tests/dummy/config"
