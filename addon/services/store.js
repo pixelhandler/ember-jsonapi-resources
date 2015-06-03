@@ -1,4 +1,5 @@
 import Ember from 'ember';
+import { pluralize } from 'ember-inflector';
 
 export default Ember.Service.extend({
 
@@ -33,6 +34,7 @@ export default Ember.Service.extend({
   },
 
   _service(type) {
+    type = pluralize(type);
     if (!this[type]) {
       throw new Error(type + ' service not initialized');
     }
