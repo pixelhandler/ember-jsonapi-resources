@@ -71,7 +71,7 @@ export default Ember.Object.extend({
 
   _createResourceInstance(resource) {
     const factoryName = 'model:' + resource.type;
-    return this.container.lookup(factoryName).create({
+    return this.container.lookupFactory(factoryName).create({
       'attributes': resource.attributes,
       'id': resource.id,
       'relationships': resource.relationships,

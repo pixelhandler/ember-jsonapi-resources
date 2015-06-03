@@ -9,7 +9,7 @@ export function initialize(container, application) {
   const service = 'service:<%= resource %>';
   const model = 'model:<%= resource %>';
 
-  application.register(model, Model, { instantiate: false });
+  application.register(model, Model, { instantiate: false, singleton: false });
   application.register(service, Service);
   application.register(adapter, Adapter);
   application.register(serializer, Serializer);

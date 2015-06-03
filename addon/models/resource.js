@@ -2,16 +2,45 @@ import Ember from 'ember';
 import { pluralize } from 'ember-inflector';
 
 const Resource = Ember.Object.extend({
+
+  /*
+    Defaults for a JSON API Resource object
+  */
+  id: null,
   type: null,
-  links: {},
-  attributes: {},
-  relationships: {},
+  links: null,
+  attributes: null,
+  relationships: null,
+
+  /*
+    init a JSON API Resource object with default as empty objects on the instance
+  */
+  init() {
+    const attrs = this.getProperties('links', 'attributes', 'relationships');
+    this.setProperties({
+      'links': attrs.links || {},
+      'attributes': attrs.attributes || {},
+      'relationships': attrs.relationships || {}
+    });
+    this._attributes = {};
+  },
+
+  isNew: false,
+
+  /*
+    Hash of changed/previous values for attributes
+
+    @private
+    @property _attributes
+  */
+  _attributes: null,
 
   toString() {
     return Ember.String.fmt("[%@Resource:%@]", this.get('type'), this.get('id'));
   },
 
   addRelationship(related, id) {
+    setupRelationship.call(this, related);
     const key = ['relationships', related, 'data'].join('.');
     let data = this.get(key);
     const type = pluralize(related);
@@ -57,8 +86,6 @@ const Resource = Ember.Object.extend({
     }
   }),
 
-  _attributes: {},
-
   initEvents: Ember.on('init', function () {
     const service = this.get('service');
     if (service) {
@@ -67,10 +94,12 @@ const Resource = Ember.Object.extend({
   }),
 
   didUpdateResource() {
-    this._attributes = {};
-  },
-
-  isNew: false
+    for (let attr in this._attributes) {
+      if (this.attrs.hasOwnProperty(attr)) {
+        delete this.attrs[attr];
+      }
+    }
+  }
 });
 
 export default Resource;
