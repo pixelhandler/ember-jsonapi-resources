@@ -113,7 +113,8 @@ const RelatedProxyUtil = Ember.Object.extend({
     const resource = this.get('resource');
     const url = this._proxyUrl(model, resource);
     const proxy = proxyFactory.extend(Ember.PromiseProxyMixin, {
-      promise: model.service.findRelated(resource, url)
+      promise: model.service.findRelated(resource, url),
+      type: resource
     });
     this._proxy = proxy.create();
     this._proxy.then(
@@ -143,7 +144,9 @@ function linksPath(resourceName) {
 
 export function hasOne(resource) {
   const util = RelatedProxyUtil.create({'resource': resource});
-  return Ember.computed(linksPath(resource), function () {
+  const path = linksPath(resource);
+  return Ember.computed(path, function () {
+    setupRelationship.call(this, resource);
     util.createProxy(this, Ember.ObjectProxy);
     return util._proxy;
   });
@@ -152,19 +155,20 @@ export function hasOne(resource) {
 export function hasMany(resource) {
   const util = RelatedProxyUtil.create({'resource': resource});
   return Ember.computed(linksPath(resource), function () {
+    setupRelationship.call(this, resource);
     util.createProxy(this, Ember.ArrayProxy);
     return util._proxy;
   });
 }
 
-export function hasRelated() {
-  const relationships = {};
-  for (let i = 0; i < arguments.length; i++) {
-    relationships[arguments[i]] = newRelation();
+export function setupRelationship(resource) {
+  if (!this.relationships[resource]) {
+    this.relationships[resource] = { links: {}, data: null };
   }
-  return relationships;
-}
-
-function newRelation() {
-  return { links: {}, data: null };
+  if (!this.relationships[resource].links) {
+    this.relationships[resource].links = {};
+  }
+  if (!this.relationships[resource].data) {
+    this.relationships[resource].data = null;
+  }
 }
