@@ -1,44 +1,80 @@
 import Ember from 'ember';
 import { pluralize } from 'ember-inflector';
 
+/*
+
+  @class Resource
+  @static
+*/
 const Resource = Ember.Object.extend({
 
   /*
-    Defaults for a JSON API Resource object
+    Persisted resource ID value
+
+    @property id
   */
   id: null,
+
+  /*
+    Extending Prototypes Must define a `type` value for the entity, e.g. `post`
+
+    @property type
+  */
   type: null,
+
+  /*
+    A default property of for a JSON API Resource object, setup in create()
+
+    @protected
+    @property attributes
+  */
   links: null,
+
+  /*
+    A default property of for a JSON API Resource object, setup in create()
+
+    @protected
+    @property attributes
+  */
   attributes: null,
+
+  /*
+    A default property of for a JSON API Resource object, setup in create()
+
+    @protected
+    @property relationships
+  */
   relationships: null,
 
   /*
-    init a JSON API Resource object with default as empty objects on the instance
-  */
-  init() {
-    const attrs = this.getProperties('links', 'attributes', 'relationships');
-    this.setProperties({
-      'links': attrs.links || {},
-      'attributes': attrs.attributes || {},
-      'relationships': attrs.relationships || {}
-    });
-    this._attributes = {};
-  },
-
-  isNew: false,
-
-  /*
-    Hash of changed/previous values for attributes
+    Hash of attributes for changed/previous values
 
     @private
     @property _attributes
   */
   _attributes: null,
 
+  /*
+    Flag for new instance, e.g. not peristed
+
+    @property isNew
+  */
+  isNew: false,
+
+  /*
+    Custom `toString` method used for clarity that the instance is a JSON API Resource kind of object
+
+    @method toString
+  */
   toString() {
-    return Ember.String.fmt("[%@Resource:%@]", this.get('type'), this.get('id'));
+    return Ember.String.fmt("[JSONAPIResource|%@:%@]", this.get('type'), this.get('id'));
   },
 
+  /*
+    Adds related links object on the relationship hash
+
+    @method addRelationship
+  */
   addRelationship(related, id) {
     setupRelationship.call(this, related);
     const key = ['relationships', related, 'data'].join('.');
@@ -53,11 +89,20 @@ const Resource = Ember.Object.extend({
     return this.set(key, data);
   },
 
+  /*
+    Set related links object on the relationship hash to have `null` data
+
+    @method removeRelationship
+  */
   removeRelationship(related) {
     const key = ['relationships', related, 'data'].join('.');
     return this.set(key, { data: null });
   },
 
+  /*
+    @method changedAttributes
+    @return {Object} the changed attributes
+  */
   changedAttributes: Ember.computed('attributes', {
     get: function () {
       const attrs = {};
@@ -72,6 +117,10 @@ const Resource = Ember.Object.extend({
     }
   }),
 
+  /*
+    @method previousAttributes
+    @return {Object} the previous attributes
+  */
   previousAttributes: Ember.computed('attributes', {
     get: function () {
       const attrs = {};
@@ -86,6 +135,11 @@ const Resource = Ember.Object.extend({
     }
   }),
 
+  /*
+    Initialize events to communicate with the service object, listen for `didUpdateResource`
+
+    @method initEvents
+  */
   initEvents: Ember.on('init', function () {
     const service = this.get('service');
     if (service) {
@@ -93,12 +147,42 @@ const Resource = Ember.Object.extend({
     }
   }),
 
+  /*
+    Handler for `didUpdateResource` event, resets private _attributes used for changed/previous tracking
+
+    @method didUpdateResource
+  */
   didUpdateResource() {
     for (let attr in this._attributes) {
-      if (this.attrs.hasOwnProperty(attr)) {
-        delete this.attrs[attr];
+      if (this._attributes.hasOwnProperty(attr)) {
+        delete this._attributes[attr];
       }
     }
+  }
+});
+
+Resource.reopenClass({
+  /*
+    To protect the JSON API Resource properties for attributes, links and relationships
+    these objects are setup during create(). This has to be defined since the attr()
+    helper needs to have new objects for each instance, to project from keeping a
+    reference on the prototype.
+
+    @method create
+    @returns {Resource} instance with protected objects:
+      `attributes`, `links` and `relationships`
+  */
+  create(properties) {
+    const prototype = {};
+    const attrs = Ember.String.w('_attributes attributes links relationships');
+    for (let i = 0; i < attrs.length; i++) {
+      prototype[attrs[i]] = {};
+    }
+    const instance = this._super(prototype);
+    if (properties) {
+      instance.setProperties(properties);
+    }
+    return instance;
   }
 });
 
@@ -120,7 +204,10 @@ export function attr(type, mutable = true) {
         this._attributes[key] = this._attributes[key] || {};
         this._attributes[key].changed = value;
         this._attributes[key].previous = lastValue;
-        this.get('service').trigger('attributeChanged', this);
+        const service = this.get('service');
+        if (service) {
+          service.trigger('attributeChanged', this);
+        }
       }
       return this.get('attributes.' + key);
     }
@@ -141,8 +228,9 @@ const RelatedProxyUtil = Ember.Object.extend({
   createProxy: function (model, proxyFactory) {
     const resource = this.get('resource');
     const url = this._proxyUrl(model, resource);
+    const service = model.container.lookup('service:' + pluralize(resource));
     const proxy = proxyFactory.extend(Ember.PromiseProxyMixin, {
-      promise: model.service.findRelated(resource, url),
+      promise: service.findRelated(resource, url),
       type: resource
     });
     this._proxy = proxy.create();

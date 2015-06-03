@@ -14,8 +14,6 @@ export function initialize(container, application) {
   application.register(adapter, Adapter);
   application.register(serializer, Serializer);
 
-  //application.inject('route', '<%= resource %>', service);
-  application.inject(model, 'service', service);
   application.inject('service:store', '<%= resource %>', service);
   application.inject(service, 'serializer', serializer);
 }

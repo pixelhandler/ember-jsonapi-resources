@@ -1,0 +1,15 @@
+<h1>{{model.title}}</h1>
+<small>
+  {{#with model.author as |author|}}
+    <span class="author">by {{author.name}}</span>&nbsp;
+  {{/with}}
+  <span class="date">({{model.date}})</span>
+</small>
+
+<hr>
+
+{{#if model.excerpt}}
+  {{model.excerpt}}
+{{/if}}
+
+{{outlet "comments"}}

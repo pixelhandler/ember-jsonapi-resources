@@ -1,6 +1,6 @@
 <ul>
 {{#each model as |post|}}
-  <li>{{post.title}}</li>
+  <li>{{#link-to "post" post.id}}{{post.title}}{{/link-to}}</li>
 {{/each}}
 </ul>
 

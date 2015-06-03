@@ -1,0 +1,21 @@
+<hr>
+<h3>Comments</h3>
+<br>
+{{#if model}}
+  <ul class="Comments">
+  {{#each model as |comment|}}
+    <li class="Comments-item">
+      {{#with comment.commenter as |commenter|}}
+        <span class="Comments-item-avatar">
+          <img src="http://www.gravatar.com/avatar/{{commenter.hash}}?r=g&d=mm&s=50" />
+        </span>
+        <span class="Comments-item-username">by <strong>{{commenter.name}}</strong>…</span>
+      {{/with}}
+      on <span class="Comments-item-date">{{comment.date}}</span>
+      <p class="Comments-item-body">{{comment.body}}</p>
+    </li>
+  {{/each}}
+  </ul>
+{{else}}
+  <p>No comments yet</p>
+{{/if}}

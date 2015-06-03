@@ -6,8 +6,10 @@ export default Ember.Object.extend(Ember.Evented, {
 
   find(options) {
     const hasIdList = (typeof options === 'string' && options.match(',') !== null);
-    if (hasIdList || Array.isArray(options)) {
-      return this.findMany(options); 
+    if (typeof options === 'string') {
+      return this.findOne(options);
+    } else if (hasIdList || Array.isArray(options)) {
+      return this.findMany(options);
     } else if (typeof options === 'object') {
       if (options.id) {
         return this.findOne(options.id, options.query);
