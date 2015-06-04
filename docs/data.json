@@ -1,0 +1,1186 @@
+{
+    "project": {
+        "name": "Ember JSON API Resources",
+        "description": "Lightweight persistence for an Ember CLI app using the JSON API 1.0 specification.",
+        "version": "0.2.1",
+        "url": "https://github.com/pixelhandler/ember-jsonapi-resources"
+    },
+    "files": {
+        "addon/adapters/application.js": {
+            "name": "addon/adapters/application.js",
+            "modules": {
+                "adapter": 1
+            },
+            "classes": {
+                "ApplicationAdapter": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "addon/initializers/store.js": {
+            "name": "addon/initializers/store.js",
+            "modules": {
+                "store": 1
+            },
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        },
+        "addon/mixins/service-cache.js": {
+            "name": "addon/mixins/service-cache.js",
+            "modules": {
+                "cache": 1
+            },
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        },
+        "addon/models/resource.js": {
+            "name": "addon/models/resource.js",
+            "modules": {
+                "resource": 1
+            },
+            "classes": {
+                "Resource": 1,
+                "RelatedProxyUtil": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "addon/serializers/application.js": {
+            "name": "addon/serializers/application.js",
+            "modules": {
+                "serializer": 1
+            },
+            "classes": {
+                "ApplicationSerializer": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "addon/services/store.js": {
+            "name": "addon/services/store.js",
+            "modules": {},
+            "classes": {
+                "StoreService": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        }
+    },
+    "modules": {
+        "ember-jsonapi-resources": {
+            "name": "ember-jsonapi-resources",
+            "submodules": {
+                "adapter": 1,
+                "store": 1,
+                "cache": 1,
+                "resource": 1,
+                "serializer": 1
+            },
+            "classes": {
+                "ApplicationAdapter": 1,
+                "Resource": 1,
+                "RelatedProxyUtil": 1,
+                "ApplicationSerializer": 1,
+                "StoreService": 1
+            },
+            "fors": {},
+            "namespaces": {},
+            "file": "addon/services/store.js",
+            "line": 10
+        },
+        "adapter": {
+            "name": "adapter",
+            "submodules": {},
+            "classes": {
+                "ApplicationAdapter": 1
+            },
+            "fors": {},
+            "is_submodule": 1,
+            "namespaces": {},
+            "module": "ember-jsonapi-resources",
+            "namespace": "",
+            "file": "addon/adapters/application.js",
+            "line": 9,
+            "description": "Adapter for a JSON API endpoint, use as a service for your backend"
+        },
+        "store": {
+            "name": "store",
+            "submodules": {},
+            "classes": {
+                "StoreService": 1
+            },
+            "fors": {},
+            "is_submodule": 1,
+            "namespaces": {},
+            "module": "ember-jsonapi-resources",
+            "namespace": "",
+            "file": "addon/services/store.js",
+            "line": 10,
+            "description": "Service for a JSON API endpoint a facade to your resource adapter"
+        },
+        "cache": {
+            "name": "cache",
+            "submodules": {},
+            "classes": {},
+            "fors": {},
+            "is_submodule": 1,
+            "namespaces": {},
+            "module": "ember-jsonapi-resources",
+            "namespace": "",
+            "file": "addon/mixins/service-cache.js",
+            "line": 1
+        },
+        "resource": {
+            "name": "resource",
+            "submodules": {},
+            "classes": {
+                "Resource": 1,
+                "RelatedProxyUtil": 1
+            },
+            "fors": {},
+            "is_submodule": 1,
+            "namespaces": {},
+            "module": "ember-jsonapi-resources",
+            "namespace": "",
+            "file": "addon/models/resource.js",
+            "line": 254,
+            "description": "A Resource class to create JSON API resource objects\n\nSee <http://jsonapi.org/format/#document-resource-objects>"
+        },
+        "serializer": {
+            "name": "serializer",
+            "submodules": {},
+            "classes": {
+                "ApplicationSerializer": 1
+            },
+            "fors": {},
+            "is_submodule": 1,
+            "namespaces": {},
+            "module": "ember-jsonapi-resources",
+            "namespace": "",
+            "file": "addon/serializers/application.js",
+            "line": 8,
+            "description": "Serializer/Deserializer for a JSON API resource object, used by adapter"
+        }
+    },
+    "classes": {
+        "ApplicationAdapter": {
+            "name": "ApplicationAdapter",
+            "shortname": "ApplicationAdapter",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "ember-jsonapi-resources",
+            "submodule": "adapter",
+            "namespace": "",
+            "file": "addon/adapters/application.js",
+            "line": 9,
+            "description": "Adapter for a JSON API endpoint, use as a service for your backend",
+            "requires": [
+                "Ember.Inflector"
+            ],
+            "static": 1
+        },
+        "Resource": {
+            "name": "Resource",
+            "shortname": "Resource",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "ember-jsonapi-resources",
+            "submodule": "resource",
+            "namespace": "",
+            "file": "addon/models/resource.js",
+            "line": 9,
+            "description": "A Resource class to create JSON API resource objects\n\nSee <http://jsonapi.org/format/#document-resource-objects>",
+            "requires": [
+                "Ember.Inflector"
+            ],
+            "static": 1
+        },
+        "RelatedProxyUtil": {
+            "name": "RelatedProxyUtil",
+            "shortname": "RelatedProxyUtil",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "ember-jsonapi-resources",
+            "submodule": "resource",
+            "namespace": "",
+            "file": "addon/models/resource.js",
+            "line": 254,
+            "description": "Mixin for creating promise proxy objects for related resources",
+            "static": 1
+        },
+        "ApplicationSerializer": {
+            "name": "ApplicationSerializer",
+            "shortname": "ApplicationSerializer",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "ember-jsonapi-resources",
+            "submodule": "serializer",
+            "namespace": "",
+            "file": "addon/serializers/application.js",
+            "line": 8,
+            "description": "Serializer/Deserializer for a JSON API resource object, used by adapter",
+            "static": 1
+        },
+        "StoreService": {
+            "name": "StoreService",
+            "shortname": "StoreService",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "ember-jsonapi-resources",
+            "submodule": "store",
+            "namespace": "",
+            "file": "addon/services/store.js",
+            "line": 10,
+            "description": "Service for a JSON API endpoint a facade to your resource adapter",
+            "requires": [
+                "Ember.Inflector"
+            ],
+            "static": 1
+        }
+    },
+    "classitems": [
+        {
+            "file": "addon/adapters/application.js",
+            "line": 18,
+            "description": "The name of the entity",
+            "itemtype": "property",
+            "name": "type",
+            "required": 1,
+            "class": "ApplicationAdapter",
+            "module": "ember-jsonapi-resources",
+            "submodule": "adapter"
+        },
+        {
+            "file": "addon/adapters/application.js",
+            "line": 26,
+            "description": "The url for the entity, e.g. /posts or /api/v1/posts",
+            "itemtype": "property",
+            "name": "url",
+            "required": 1,
+            "class": "ApplicationAdapter",
+            "module": "ember-jsonapi-resources",
+            "submodule": "adapter"
+        },
+        {
+            "file": "addon/adapters/application.js",
+            "line": 34,
+            "description": "Find resource(s) using an id or a using a query `{id: '', query: {}}`",
+            "itemtype": "method",
+            "name": "find",
+            "params": [
+                {
+                    "name": "options",
+                    "description": "use a string for a single id or an object",
+                    "type": "Object|String"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Promise"
+            },
+            "class": "ApplicationAdapter",
+            "module": "ember-jsonapi-resources",
+            "submodule": "adapter"
+        },
+        {
+            "file": "addon/adapters/application.js",
+            "line": 55,
+            "description": "Find a resource by id, optionally pass a query object, e.g. w/ filter param(s)\n\nUses a url like: /photos/1",
+            "itemtype": "method",
+            "name": "findOne",
+            "params": [
+                {
+                    "name": "id",
+                    "description": "",
+                    "type": "String"
+                },
+                {
+                    "name": "query",
+                    "description": "",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Promise"
+            },
+            "class": "ApplicationAdapter",
+            "module": "ember-jsonapi-resources",
+            "submodule": "adapter"
+        },
+        {
+            "file": "addon/adapters/application.js",
+            "line": 71,
+            "description": "Find resources using an optional query object, e.g. w/ pagination params",
+            "itemtype": "method",
+            "name": "findQuery",
+            "params": [
+                {
+                    "name": "query",
+                    "description": "",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Promise"
+            },
+            "class": "ApplicationAdapter",
+            "module": "ember-jsonapi-resources",
+            "submodule": "adapter"
+        },
+        {
+            "file": "addon/adapters/application.js",
+            "line": 85,
+            "description": "Find resources using an optional query object, e.g. w/ pagination params\n\nA Url like: /photos/1/relationships/photographer is a required param",
+            "itemtype": "method",
+            "name": "findRelated",
+            "params": [
+                {
+                    "name": "resource",
+                    "description": "name (plural) to lookup the service object w/ serializer",
+                    "type": "String"
+                },
+                {
+                    "name": "url",
+                    "description": "",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Promise"
+            },
+            "class": "ApplicationAdapter",
+            "module": "ember-jsonapi-resources",
+            "submodule": "adapter"
+        },
+        {
+            "file": "addon/adapters/application.js",
+            "line": 100,
+            "description": "Create a new resource, sends a POST request",
+            "itemtype": "method",
+            "name": "createResource",
+            "params": [
+                {
+                    "name": "the",
+                    "description": "resource instance to serialize",
+                    "type": "Resource"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Promise"
+            },
+            "class": "ApplicationAdapter",
+            "module": "ember-jsonapi-resources",
+            "submodule": "adapter"
+        },
+        {
+            "file": "addon/adapters/application.js",
+            "line": 116,
+            "description": "Patch an existing resource, sends a PATCH request. After promise is resolved\nthe `didUpdateResource` event is triggered, resource may listen on their\n`service` reference",
+            "itemtype": "method",
+            "name": "updateResource",
+            "params": [
+                {
+                    "name": "the",
+                    "description": "resource instance to serialize the changed attributes",
+                    "type": "Resource"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Promise"
+            },
+            "class": "ApplicationAdapter",
+            "module": "ember-jsonapi-resources",
+            "submodule": "adapter"
+        },
+        {
+            "file": "addon/adapters/application.js",
+            "line": 136,
+            "description": "Patch a relationship, either add or remove, sends a PATCH request\n\nAdds with payload: `{ \"data\": { \"type\": \"comments\", \"id\": \"12\" } }`\nRemoves with payload: `{ \"data\": null }`",
+            "itemtype": "method",
+            "name": "patchRelationship",
+            "params": [
+                {
+                    "name": "the",
+                    "description": "resource instance, has URLs via it's relationships property",
+                    "type": "Resource"
+                },
+                {
+                    "name": "resource",
+                    "description": "name (plural) to find the url from the resource instance",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Promise"
+            },
+            "class": "ApplicationAdapter",
+            "module": "ember-jsonapi-resources",
+            "submodule": "adapter"
+        },
+        {
+            "file": "addon/adapters/application.js",
+            "line": 161,
+            "description": "Delete an existing resource, sends a DELETE request",
+            "itemtype": "method",
+            "name": "deleteResource",
+            "params": [
+                {
+                    "name": "the",
+                    "description": "name (plural) or resource instance w/ self link",
+                    "type": "String|Resource"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Promise"
+            },
+            "class": "ApplicationAdapter",
+            "module": "ember-jsonapi-resources",
+            "submodule": "adapter"
+        },
+        {
+            "file": "addon/adapters/application.js",
+            "line": 179,
+            "description": "Makes a fetch request via Fetch API\n\nsee http://updates.html5rocks.com/2015/03/introduction-to-fetch",
+            "itemtype": "method",
+            "name": "fetch",
+            "params": [
+                {
+                    "name": "url",
+                    "description": "",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Promise"
+            },
+            "class": "ApplicationAdapter",
+            "module": "ember-jsonapi-resources",
+            "submodule": "adapter"
+        },
+        {
+            "file": "addon/adapters/application.js",
+            "line": 217,
+            "description": "Adds params and headers or Fetch request.\n\nFor example a header is set for Content-Type: application/vnd.api+json\n\nIf an `AuthorizationHeader` key exists in localStorage it will be used for\nthe `Authorization` header value.",
+            "itemtype": "method",
+            "name": "fetchOptions",
+            "params": [
+                {
+                    "name": "options",
+                    "description": "",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Object"
+            },
+            "class": "ApplicationAdapter",
+            "module": "ember-jsonapi-resources",
+            "submodule": "adapter"
+        },
+        {
+            "file": "addon/adapters/application.js",
+            "line": 243,
+            "description": "Hook to customize the URL, e.g. if your API is behind a proxy and you need\nto swap a portion of the domain to make a request on the same domain.",
+            "itemtype": "method",
+            "name": "fetchUrl",
+            "params": [
+                {
+                    "name": "url",
+                    "description": "",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "String"
+            },
+            "class": "ApplicationAdapter",
+            "module": "ember-jsonapi-resources",
+            "submodule": "adapter"
+        },
+        {
+            "file": "addon/adapters/application.js",
+            "line": 255,
+            "description": "Noop as a hook for defining how deserialized resource objects are cached,\ne.g. in memory",
+            "itemtype": "method",
+            "name": "cacheResource",
+            "params": [
+                {
+                    "name": "url",
+                    "description": "",
+                    "type": "String"
+                }
+            ],
+            "class": "ApplicationAdapter",
+            "module": "ember-jsonapi-resources",
+            "submodule": "adapter"
+        },
+        {
+            "file": "addon/adapters/application.js",
+            "line": 264,
+            "description": "Initialize events to communicate on the resource instances' service reference.\nListens for resource objects trigging `attributeChanged` events",
+            "itemtype": "method",
+            "name": "initEvents",
+            "class": "ApplicationAdapter",
+            "module": "ember-jsonapi-resources",
+            "submodule": "adapter"
+        },
+        {
+            "file": "addon/initializers/store.js",
+            "line": 8,
+            "description": "Initializer for the store service, injects into the route and controller",
+            "itemtype": "method",
+            "name": "initialize",
+            "requires": [
+                "StoreService"
+            ],
+            "class": "Resource",
+            "module": "ember-jsonapi-resources",
+            "submodule": "store"
+        },
+        {
+            "file": "addon/mixins/service-cache.js",
+            "line": 10,
+            "description": "Cache object",
+            "itemtype": "property",
+            "name": "cache",
+            "class": "Resource",
+            "module": "ember-jsonapi-resources",
+            "submodule": "cache"
+        },
+        {
+            "file": "addon/mixins/service-cache.js",
+            "line": 17,
+            "description": "Initialize a cache object",
+            "itemtype": "method",
+            "name": "initCache",
+            "class": "Resource",
+            "module": "ember-jsonapi-resources",
+            "submodule": "cache"
+        },
+        {
+            "file": "addon/mixins/service-cache.js",
+            "line": 29,
+            "description": "Store response object(s) in the cache",
+            "itemtype": "method",
+            "name": "cacheResource",
+            "class": "Resource",
+            "module": "ember-jsonapi-resources",
+            "submodule": "cache"
+        },
+        {
+            "file": "addon/mixins/service-cache.js",
+            "line": 39,
+            "description": "Store meta data in the cache",
+            "itemtype": "method",
+            "name": "cacheMeta",
+            "class": "Resource",
+            "module": "ember-jsonapi-resources",
+            "submodule": "cache"
+        },
+        {
+            "file": "addon/mixins/service-cache.js",
+            "line": 50,
+            "description": "Store resource objects in the `data` array of the cache",
+            "itemtype": "method",
+            "name": "cacheData",
+            "class": "Resource",
+            "module": "ember-jsonapi-resources",
+            "submodule": "cache"
+        },
+        {
+            "file": "addon/models/resource.js",
+            "line": 20,
+            "description": "The service object for the entity (adapter with cache and serializer)",
+            "itemtype": "property",
+            "name": "service",
+            "required": 1,
+            "class": "Resource",
+            "module": "ember-jsonapi-resources",
+            "submodule": "resource"
+        },
+        {
+            "file": "addon/models/resource.js",
+            "line": 28,
+            "description": "Extending Prototypes Must define a `type` value for the entity, e.g. `posts`",
+            "itemtype": "property",
+            "name": "type",
+            "required": 1,
+            "class": "Resource",
+            "module": "ember-jsonapi-resources",
+            "submodule": "resource"
+        },
+        {
+            "file": "addon/models/resource.js",
+            "line": 36,
+            "description": "Persisted resource ID value",
+            "itemtype": "property",
+            "name": "id",
+            "required": 1,
+            "class": "Resource",
+            "module": "ember-jsonapi-resources",
+            "submodule": "resource"
+        },
+        {
+            "file": "addon/models/resource.js",
+            "line": 44,
+            "description": "An optional property of for a JSON API Resource object, setup in create()\n\nThis object will keep the values from the response object and may be mutable\nUse this as a refence for creating computed properties\n\nFor example the `attr()` helper sets up a properties based on this content",
+            "access": "protected",
+            "tagname": "",
+            "itemtype": "property",
+            "name": "attributes",
+            "class": "Resource",
+            "module": "ember-jsonapi-resources",
+            "submodule": "resource"
+        },
+        {
+            "file": "addon/models/resource.js",
+            "line": 57,
+            "description": "An optional property of for a JSON API Resource object, setup in create()",
+            "access": "protected",
+            "tagname": "",
+            "itemtype": "property",
+            "name": "relationships",
+            "class": "Resource",
+            "module": "ember-jsonapi-resources",
+            "submodule": "resource"
+        },
+        {
+            "file": "addon/models/resource.js",
+            "line": 65,
+            "description": "An optional property of for a JSON API Resource object, setup in create()",
+            "access": "protected",
+            "tagname": "",
+            "itemtype": "property",
+            "name": "attributes",
+            "class": "Resource",
+            "module": "ember-jsonapi-resources",
+            "submodule": "resource"
+        },
+        {
+            "file": "addon/models/resource.js",
+            "line": 73,
+            "description": "An optional property of for a JSON API Resource object, setup in create()",
+            "access": "protected",
+            "tagname": "",
+            "itemtype": "property",
+            "name": "meta",
+            "class": "Resource",
+            "module": "ember-jsonapi-resources",
+            "submodule": "resource"
+        },
+        {
+            "file": "addon/models/resource.js",
+            "line": 81,
+            "description": "Hash of attributes for changed/previous values",
+            "access": "private",
+            "tagname": "",
+            "itemtype": "property",
+            "name": "_attributes",
+            "class": "Resource",
+            "module": "ember-jsonapi-resources",
+            "submodule": "resource"
+        },
+        {
+            "file": "addon/models/resource.js",
+            "line": 89,
+            "description": "Flag for new instance, e.g. not peristed",
+            "itemtype": "property",
+            "name": "isNew",
+            "class": "Resource",
+            "module": "ember-jsonapi-resources",
+            "submodule": "resource"
+        },
+        {
+            "file": "addon/models/resource.js",
+            "line": 96,
+            "description": "Custom `toString` method used for clarity that the instance is a JSON API Resource kind of object",
+            "itemtype": "method",
+            "name": "toString",
+            "class": "Resource",
+            "module": "ember-jsonapi-resources",
+            "submodule": "resource"
+        },
+        {
+            "file": "addon/models/resource.js",
+            "line": 105,
+            "description": "Adds related links object on the relationship hash",
+            "itemtype": "method",
+            "name": "addRelationship",
+            "class": "Resource",
+            "module": "ember-jsonapi-resources",
+            "submodule": "resource"
+        },
+        {
+            "file": "addon/models/resource.js",
+            "line": 124,
+            "description": "Set related links object on the relationship hash to have `null` data",
+            "itemtype": "method",
+            "name": "removeRelationship",
+            "class": "Resource",
+            "module": "ember-jsonapi-resources",
+            "submodule": "resource"
+        },
+        {
+            "file": "addon/models/resource.js",
+            "line": 134,
+            "itemtype": "method",
+            "name": "changedAttributes",
+            "return": {
+                "description": "the changed attributes",
+                "type": "Object"
+            },
+            "class": "Resource",
+            "module": "ember-jsonapi-resources",
+            "submodule": "resource"
+        },
+        {
+            "file": "addon/models/resource.js",
+            "line": 152,
+            "itemtype": "method",
+            "name": "previousAttributes",
+            "return": {
+                "description": "the previous attributes",
+                "type": "Object"
+            },
+            "class": "Resource",
+            "module": "ember-jsonapi-resources",
+            "submodule": "resource"
+        },
+        {
+            "file": "addon/models/resource.js",
+            "line": 170,
+            "description": "Initialize events to communicate with the service object, listen for `didUpdateResource`",
+            "itemtype": "method",
+            "name": "initEvents",
+            "class": "Resource",
+            "module": "ember-jsonapi-resources",
+            "submodule": "resource"
+        },
+        {
+            "file": "addon/models/resource.js",
+            "line": 182,
+            "description": "Handler for `didUpdateResource` event, resets private _attributes used for changed/previous tracking",
+            "itemtype": "method",
+            "name": "didUpdateResource",
+            "class": "Resource",
+            "module": "ember-jsonapi-resources",
+            "submodule": "resource"
+        },
+        {
+            "file": "addon/models/resource.js",
+            "line": 197,
+            "description": "To protect the JSON API Resource properties for attributes, links and relationships\nthese objects are setup during create(). This has to be defined since the attr()\nhelper needs to have new objects for each instance, to project from keeping a\nreference on the prototype.",
+            "itemtype": "method",
+            "name": "create",
+            "return": {
+                "description": "instance with protected objects:\n  `attributes`, `links` and `relationships`",
+                "type": "Resource"
+            },
+            "class": "Resource",
+            "module": "ember-jsonapi-resources",
+            "submodule": "resource"
+        },
+        {
+            "file": "addon/models/resource.js",
+            "line": 223,
+            "description": "Helper to setup computed property for resource attributes",
+            "itemtype": "method",
+            "name": "attr",
+            "class": "Resource",
+            "module": "ember-jsonapi-resources",
+            "submodule": "resource"
+        },
+        {
+            "file": "addon/models/resource.js",
+            "line": 305,
+            "description": "Helper to setup a has one relationship to another resource",
+            "itemtype": "method",
+            "name": "hasOne",
+            "class": "RelatedProxyUtil",
+            "module": "ember-jsonapi-resources",
+            "submodule": "resource"
+        },
+        {
+            "file": "addon/models/resource.js",
+            "line": 320,
+            "description": "Helper to setup a has many relationship to another resource",
+            "itemtype": "method",
+            "name": "hasMany",
+            "class": "RelatedProxyUtil",
+            "module": "ember-jsonapi-resources",
+            "submodule": "resource"
+        },
+        {
+            "file": "addon/serializers/application.js",
+            "line": 16,
+            "description": "Serialize resource(s) for the request payload",
+            "itemtype": "method",
+            "name": "serialize",
+            "params": [
+                {
+                    "name": "resources",
+                    "description": "- object(s) to serialize",
+                    "type": "Resource|Array"
+                }
+            ],
+            "return": {
+                "description": "json",
+                "type": "Object"
+            },
+            "class": "ApplicationSerializer",
+            "module": "ember-jsonapi-resources",
+            "submodule": "serializer"
+        },
+        {
+            "file": "addon/serializers/application.js",
+            "line": 35,
+            "description": "Serialize a collection of resources",
+            "itemtype": "method",
+            "name": "serializeResources",
+            "params": [
+                {
+                    "name": "resources",
+                    "description": "to serialize",
+                    "type": "Array"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Ember.Array"
+            },
+            "class": "ApplicationSerializer",
+            "module": "ember-jsonapi-resources",
+            "submodule": "serializer"
+        },
+        {
+            "file": "addon/serializers/application.js",
+            "line": 52,
+            "description": "Serialize a resource object",
+            "itemtype": "method",
+            "name": "serializeResource",
+            "params": [
+                {
+                    "name": "object",
+                    "description": "to serialize",
+                    "type": "Resource"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Object"
+            },
+            "class": "ApplicationSerializer",
+            "module": "ember-jsonapi-resources",
+            "submodule": "serializer"
+        },
+        {
+            "file": "addon/serializers/application.js",
+            "line": 72,
+            "description": "Serialize a resource object, but only the changed attributes",
+            "itemtype": "method",
+            "name": "serializeChanged",
+            "params": [
+                {
+                    "name": "object",
+                    "description": "to serialize",
+                    "type": "Resource"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Object"
+            },
+            "class": "ApplicationSerializer",
+            "module": "ember-jsonapi-resources",
+            "submodule": "serializer"
+        },
+        {
+            "file": "addon/serializers/application.js",
+            "line": 90,
+            "description": "Deserialize response objects from the request payload",
+            "itemtype": "method",
+            "name": "deserialize",
+            "params": [
+                {
+                    "name": "json",
+                    "description": "- response object, extract resource(s)",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Ember.Array|Resource"
+            },
+            "class": "ApplicationSerializer",
+            "module": "ember-jsonapi-resources",
+            "submodule": "serializer"
+        },
+        {
+            "file": "addon/serializers/application.js",
+            "line": 107,
+            "description": "Deserialize response objects in the payload data",
+            "itemtype": "method",
+            "name": "deserializeResources",
+            "params": [
+                {
+                    "name": "collection",
+                    "description": "",
+                    "type": "Array"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Object|Ember.Array"
+            },
+            "class": "ApplicationSerializer",
+            "module": "ember-jsonapi-resources",
+            "submodule": "serializer"
+        },
+        {
+            "file": "addon/serializers/application.js",
+            "line": 121,
+            "description": "Deserialize response an object in the payload data",
+            "itemtype": "method",
+            "name": "deserializeResource",
+            "params": [
+                {
+                    "name": "json",
+                    "description": "",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Resource"
+            },
+            "class": "ApplicationSerializer",
+            "module": "ember-jsonapi-resources",
+            "submodule": "serializer"
+        },
+        {
+            "file": "addon/serializers/application.js",
+            "line": 132,
+            "description": "Create a Resource from a JSON API Resource Object\n\nSee <http://jsonapi.org/format/#document-resource-objects>",
+            "access": "private",
+            "tagname": "",
+            "itemtype": "method",
+            "name": "_createResourceInstance",
+            "params": [
+                {
+                    "name": "json",
+                    "description": "",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "(Resource) instance"
+            },
+            "class": "ApplicationSerializer",
+            "module": "ember-jsonapi-resources",
+            "submodule": "serializer"
+        },
+        {
+            "file": "addon/services/store.js",
+            "line": 19,
+            "description": "Find resource(s) using an id or a using a query `{id: '', query: {}}`",
+            "itemtype": "method",
+            "name": "find",
+            "params": [
+                {
+                    "name": "type",
+                    "description": "- the entity or resource name will be pluralized",
+                    "type": "String"
+                },
+                {
+                    "name": "options",
+                    "description": "(object) or id (string)",
+                    "type": "Object|String"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Promise"
+            },
+            "class": "StoreService",
+            "module": "ember-jsonapi-resources",
+            "submodule": "store"
+        },
+        {
+            "file": "addon/services/store.js",
+            "line": 32,
+            "description": "Access to the cached object",
+            "itemtype": "method",
+            "name": "all",
+            "params": [
+                {
+                    "name": "type",
+                    "description": "- the entity or resource name will be pluralized",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Ember.Array"
+            },
+            "class": "StoreService",
+            "module": "ember-jsonapi-resources",
+            "submodule": "store"
+        },
+        {
+            "file": "addon/services/store.js",
+            "line": 44,
+            "description": "Create a new resource, sends a POST request",
+            "itemtype": "method",
+            "name": "createResource",
+            "params": [
+                {
+                    "name": "the",
+                    "description": "resource instance to serialize",
+                    "type": "Resource"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Promise"
+            },
+            "class": "StoreService",
+            "module": "ember-jsonapi-resources",
+            "submodule": "store"
+        },
+        {
+            "file": "addon/services/store.js",
+            "line": 56,
+            "description": "Patch an existing resource",
+            "itemtype": "method",
+            "name": "updateResource",
+            "params": [
+                {
+                    "name": "type",
+                    "description": "- the entity or resource name will be pluralized",
+                    "type": "String"
+                },
+                {
+                    "name": "the",
+                    "description": "resource instance to serialize the changed attributes",
+                    "type": "Resource"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Promise"
+            },
+            "class": "StoreService",
+            "module": "ember-jsonapi-resources",
+            "submodule": "store"
+        },
+        {
+            "file": "addon/services/store.js",
+            "line": 69,
+            "description": "Patch a relationship, either add or remove, sends a PATCH request\n\nAdds with payload: `{ \"data\": { \"type\": \"comments\", \"id\": \"12\" } }`\nRemoves with payload: `{ \"data\": null }`",
+            "itemtype": "method",
+            "name": "patchRelationship",
+            "params": [
+                {
+                    "name": "type",
+                    "description": "- the entity or resource name will be pluralized",
+                    "type": "String"
+                },
+                {
+                    "name": "the",
+                    "description": "resource instance, has URLs via it's relationships property",
+                    "type": "Resource"
+                },
+                {
+                    "name": "resource",
+                    "description": "name (plural) to find the url from the resource instance",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Promise"
+            },
+            "class": "StoreService",
+            "module": "ember-jsonapi-resources",
+            "submodule": "store"
+        },
+        {
+            "file": "addon/services/store.js",
+            "line": 86,
+            "description": "Delete an existing resource, sends a DELETE request",
+            "itemtype": "method",
+            "name": "deleteResource",
+            "params": [
+                {
+                    "name": "type",
+                    "description": "- the entity or resource name will be pluralized",
+                    "type": "String"
+                },
+                {
+                    "name": "the",
+                    "description": "name (plural) or resource instance w/ self link",
+                    "type": "String|Resource"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Promise"
+            },
+            "class": "StoreService",
+            "module": "ember-jsonapi-resources",
+            "submodule": "store"
+        },
+        {
+            "file": "addon/services/store.js",
+            "line": 99,
+            "description": "Lookup the injected service for a resource, pluralize type arg.",
+            "access": "private",
+            "tagname": "",
+            "itemtype": "method",
+            "name": "cacheResource",
+            "params": [
+                {
+                    "name": "type",
+                    "description": "- the entity or resource name will be pluralized",
+                    "type": "String"
+                }
+            ],
+            "class": "StoreService",
+            "module": "ember-jsonapi-resources",
+            "submodule": "store"
+        }
+    ],
+    "warnings": [
+        {
+            "message": "replacing incorrect tag: returns with return",
+            "line": " addon/models/resource.js:197"
+        }
+    ]
+}

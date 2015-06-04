@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>addon/adapters/application.js - Ember JSON API Resources</title>
+    <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
+    <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
+    <link rel="icon" href="../assets/favicon.ico">
+    <script src="http://yui.yahooapis.com/combo?3.9.1/build/yui/yui-min.js"></script>
+</head>
+<body class="yui3-skin-sam">
+
+<div id="doc">
+    <div id="hd" class="yui3-g header">
+        <div class="yui3-u-3-4">
+                <h1><img src="../assets/css/logo.png" title="Ember JSON API Resources" width="117" height="52"></h1>
+        </div>
+        <div class="yui3-u-1-4 version">
+            <em>API Docs for: 0.2.1</em>
+        </div>
+    </div>
+    <div id="bd" class="yui3-g">
+
+        <div class="yui3-u-1-4">
+            <div id="docs-sidebar" class="sidebar apidocs">
+                <div id="api-list">
+                    <h2 class="off-left">APIs</h2>
+                    <div id="api-tabview" class="tabview">
+                        <ul class="tabs">
+                            <li><a href="#api-classes">Classes</a></li>
+                            <li><a href="#api-modules">Modules</a></li>
+                        </ul>
+                
+                        <div id="api-tabview-filter">
+                            <input type="search" id="api-filter" placeholder="Type to filter APIs">
+                        </div>
+                
+                        <div id="api-tabview-panel">
+                            <ul id="api-classes" class="apis classes">
+                                <li><a href="../classes/ApplicationAdapter.html">ApplicationAdapter</a></li>
+                                <li><a href="../classes/ApplicationSerializer.html">ApplicationSerializer</a></li>
+                                <li><a href="../classes/RelatedProxyUtil.html">RelatedProxyUtil</a></li>
+                                <li><a href="../classes/Resource.html">Resource</a></li>
+                                <li><a href="../classes/StoreService.html">StoreService</a></li>
+                            </ul>
+                
+                            <ul id="api-modules" class="apis modules">
+                                <li><a href="../modules/adapter.html">adapter</a></li>
+                                <li><a href="../modules/cache.html">cache</a></li>
+                                <li><a href="../modules/ember-jsonapi-resources.html">ember-jsonapi-resources</a></li>
+                                <li><a href="../modules/resource.html">resource</a></li>
+                                <li><a href="../modules/serializer.html">serializer</a></li>
+                                <li><a href="../modules/store.html">store</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="yui3-u-3-4">
+                <div id="api-options">
+                    Show:
+                    <label for="api-show-inherited">
+                        <input type="checkbox" id="api-show-inherited" checked>
+                        Inherited
+                    </label>
+            
+                    <label for="api-show-protected">
+                        <input type="checkbox" id="api-show-protected">
+                        Protected
+                    </label>
+            
+                    <label for="api-show-private">
+                        <input type="checkbox" id="api-show-private">
+                        Private
+                    </label>
+                    <label for="api-show-deprecated">
+                        <input type="checkbox" id="api-show-deprecated">
+                        Deprecated
+                    </label>
+            
+                </div>
+            
+            <div class="apidocs">
+                <div id="docs-main">
+                    <div class="content">
+<h1 class="file-heading">File: addon/adapters/application.js</h1>
+
+<div class="file">
+    <pre class="code prettyprint linenums">
+/**
+  @module ember-jsonapi-resources
+  @submodule adapter
+**/
+
+import Ember from &#x27;ember&#x27;;
+import { pluralize } from &#x27;ember-inflector&#x27;;
+
+/**
+  Adapter for a JSON API endpoint, use as a service for your backend
+
+  @class ApplicationAdapter
+  @requires Ember.Inflector
+  @static
+*/
+export default Ember.Object.extend(Ember.Evented, {
+
+  /**
+    The name of the entity
+
+    @property type
+    @required
+  */
+  type: null,
+
+  /**
+    The url for the entity, e.g. /posts or /api/v1/posts
+
+    @property url
+    @required
+  */
+  url: null,
+
+  /**
+    Find resource(s) using an id or a using a query &#x60;{id: &#x27;&#x27;, query: {}}&#x60;
+
+    @method find
+    @param {Object|String} options use a string for a single id or an object
+    @return {Promise}
+  */
+  find(options) {
+    if (typeof options === &#x27;string&#x27;) {
+      return this.findOne(options);
+    } else if (typeof options === &#x27;object&#x27;) {
+      if (options.id) {
+        return this.findOne(options.id, options.query);
+      } else {
+        return this.findQuery(options);
+      }
+    } else {
+      return this.findQuery();
+    }
+  },
+
+  /**
+    Find a resource by id, optionally pass a query object, e.g. w/ filter param(s)
+
+    Uses a url like: /photos/1
+
+    @method findOne
+    @param {String} id
+    @param {Object} query
+    @return {Promise}
+  */
+  findOne(id, query) {
+    let url = this.get(&#x27;url&#x27;) + &#x27;/&#x27; + id;
+    url += (query) ? &#x27;?&#x27; + Ember.$.param(query) : &#x27;&#x27;;
+    return this.fetch(url, { method: &#x27;GET&#x27; });
+  },
+
+  /**
+    Find resources using an optional query object, e.g. w/ pagination params
+
+    @method findQuery
+    @param {Object} query
+    @return {Promise}
+  */
+  findQuery(options = {}) {
+    let url = this.get(&#x27;url&#x27;);
+    url += (options.query) ? &#x27;?&#x27; + Ember.$.param(options.query) : &#x27;&#x27;;
+    options = options.options || { method: &#x27;GET&#x27; };
+    return this.fetch(url, options);
+  },
+
+  /**
+    Find resources using an optional query object, e.g. w/ pagination params
+
+    A Url like: /photos/1/relationships/photographer is a required param
+
+    @method findRelated
+    @param {String} resource name (plural) to lookup the service object w/ serializer
+    @param {String} url
+    @return {Promise}
+  */
+  findRelated(resource, url) {
+    const service = this.container.lookup(&#x27;service:&#x27; + pluralize(resource));
+    return service.fetch(url);
+  },
+
+  /**
+    Create a new resource, sends a POST request
+
+    @method createResource
+    @param {Resource} the resource instance to serialize
+    @return {Promise}
+  */
+  createResource(resource) {
+    let url = this.get(&#x27;url&#x27;);
+    const json = this.serializer.serialize(resource);
+    return this.fetch(url, {
+      method: &#x27;POST&#x27;,
+      body: JSON.stringify(json)
+    });
+  },
+
+  /**
+    Patch an existing resource, sends a PATCH request. After promise is resolved
+    the &#x60;didUpdateResource&#x60; event is triggered, resource may listen on their
+    &#x60;service&#x60; reference
+
+    @method updateResource
+    @param {Resource} the resource instance to serialize the changed attributes
+    @return {Promise}
+  */
+  updateResource(resource) {
+    let url = resource.get(&#x27;links.self&#x27;) || this.get(&#x27;url&#x27;) + &#x27;/&#x27; + resource.get(&#x27;id&#x27;);
+    const json = this.serializer.serializeChanged(resource);
+    return this.fetch(url, {
+      method: &#x27;PATCH&#x27;,
+      body: JSON.stringify(json)
+    }).then(function(json) {
+      this.trigger(&#x27;didUpdateResource&#x27;, json);
+    }.bind(this));
+  },
+
+  /**
+    Patch a relationship, either add or remove, sends a PATCH request
+
+    Adds with payload: &#x60;{ &quot;data&quot;: { &quot;type&quot;: &quot;comments&quot;, &quot;id&quot;: &quot;12&quot; } }&#x60;
+    Removes with payload: &#x60;{ &quot;data&quot;: null }&#x60;
+
+    @method patchRelationship
+    @param {Resource} the resource instance, has URLs via it&#x27;s relationships property
+    @param {String} resource name (plural) to find the url from the resource instance
+    @return {Promise}
+  */
+  patchRelationship(resource, relationship) {
+    let url = [&#x27;relationships&#x27;, relationship, &#x27;links&#x27;, &#x27;self&#x27;].join(&#x27;&#x27;);
+    url = url || [this.get(&#x27;url&#x27;), resource.get(&#x27;id&#x27;), &#x27;relationships&#x27;, relationship].join(&#x27;/&#x27;);
+    url = resource.get(url);
+    let data = [&#x27;relationships&#x27;, relationship, &#x27;data&#x27;].join(&#x27;&#x27;);
+    data = resource.get(data);
+    return this.fetch(url, {
+      method: &#x27;PATCH&#x27;,
+      body: JSON.stringify(data)
+    }).then(function(json) {
+      this.trigger(&#x27;didUpdateRelationship&#x27;, json);
+    }.bind(this));
+  },
+
+  /**
+    Delete an existing resource, sends a DELETE request
+
+    @method deleteResource
+    @param {String|Resource} the name (plural) or resource instance w/ self link
+    @return {Promise}
+  */
+  deleteResource(resource) {
+    let url = this.get(&#x27;url&#x27;) + &#x27;/&#x27;;
+    if (typeof resource === &#x27;string&#x27;) {
+      url += resource;
+    } else {
+      url = resource.get(&#x27;links.self&#x27;) || url + resource.get(&#x27;id&#x27;);
+      resource.destroy();
+    }
+    return this.fetch(url, { method: &#x27;DELETE&#x27; });
+  },
+
+  /**
+    Makes a fetch request via Fetch API
+
+    see http://updates.html5rocks.com/2015/03/introduction-to-fetch
+
+    @method fetch
+    @param {String} url
+    @return {Promise}
+  */
+  fetch(url, options = {}) {
+    let isUpdate = this.fetchOptions(options);
+    url = this.fetchUrl(url);
+    return window.fetch(url, options).then(function(resp) {
+      if (resp.status &gt;= 500) {
+        throw new Error(&#x27;Server Error&#x27;);
+      } else if (resp.status &gt;= 400) {
+        resp.json().then(function(resp) {
+          // TODO handle errors better
+          throw new Error(resp.errors);
+        });
+      } else if (resp.status === 204) {
+        return &#x27;&#x27;;
+      } else {
+        return resp.json().then(function(json) {
+          if (!isUpdate) {
+            const resource = this.serializer.deserialize(json);
+            this.cacheResource({ meta: json.meta, data: resource});
+            return resource;
+          } else {
+            return json;
+          }
+        }.bind(this));
+      }
+    }.bind(this)).catch(function(error) {
+      throw error;
+    });
+  },
+
+  /**
+    Adds params and headers or Fetch request.
+
+    For example a header is set for Content-Type: application/vnd.api+json
+
+    If an &#x60;AuthorizationHeader&#x60; key exists in localStorage it will be used for
+    the &#x60;Authorization&#x60; header value.
+
+    @method fetchOptions
+    @param {Object} options
+    @return {Object}
+  */
+  fetchOptions(options) {
+    let isUpdate;
+    options.headers = options.headers || { &#x27;Content-Type&#x27;: &#x27;application/vnd.api+json&#x27; };
+    const authHeader = window.localStorage.getItem(&#x27;AuthorizationHeader&#x27;);
+    if (authHeader) {
+      options.headers[&#x27;Authorization&#x27;] = authHeader;
+    }
+    if (typeof options.update === &#x27;boolean&#x27;) {
+      isUpdate = options.update;
+      delete options.update;
+    }
+    return isUpdate;
+  },
+
+  /**
+    Hook to customize the URL, e.g. if your API is behind a proxy and you need
+    to swap a portion of the domain to make a request on the same domain.
+
+    @method fetchUrl
+    @param {String} url
+    @return {String}
+  */
+  fetchUrl(url) {
+    return url;
+  },
+
+  /**
+    Noop as a hook for defining how deserialized resource objects are cached,
+    e.g. in memory
+
+    @method cacheResource
+    @param {String} url
+  */
+  cacheResource(/*resp*/) {},
+
+  /**
+    Initialize events to communicate on the resource instances&#x27; service reference.
+    Listens for resource objects trigging &#x60;attributeChanged&#x60; events
+
+    @method initEvents
+  */
+  initEvents: Ember.on(&#x27;init&#x27;, function () {
+    this.on(&#x27;attributeChanged&#x27;, this, this.updateResource);
+  })
+});
+
+    </pre>
+</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../assets/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="../assets/js/yui-prettify.js"></script>
+<script src="../assets/../api.js"></script>
+<script src="../assets/js/api-filter.js"></script>
+<script src="../assets/js/api-list.js"></script>
+<script src="../assets/js/api-search.js"></script>
+<script src="../assets/js/apidocs.js"></script>
+</body>
+</html>
