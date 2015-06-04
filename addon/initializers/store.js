@@ -1,6 +1,11 @@
+/**
+  @module ember-jsonapi-resources
+  @submodule store
+**/
+
 import StoreService from 'ember-jsonapi-resources/services/store';
 
-/*
+/**
   Initializer for the store service, injects into the route and controller
 
   @method initialize

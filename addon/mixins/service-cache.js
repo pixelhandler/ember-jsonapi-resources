@@ -1,15 +1,20 @@
+/**
+  @module ember-jsonapi-resources
+  @submodule cache
+**/
+
 import Ember from 'ember';
 
 export default Ember.Mixin.create({
 
-  /*
+  /**
     Cache object
 
     @property cache
   */
   cache: null,
 
-  /*
+  /**
     Initialize a cache object
 
     @method initCache
@@ -21,7 +26,7 @@ export default Ember.Mixin.create({
     };
   }),
 
-  /*
+  /**
     Store response object(s) in the cache
 
     @method cacheResource
@@ -31,7 +36,7 @@ export default Ember.Mixin.create({
     this.cacheData(resp);
   },
 
-  /*
+  /**
     Store meta data in the cache
 
     @method cacheMeta
@@ -42,7 +47,7 @@ export default Ember.Mixin.create({
     }
   },
 
-  /*
+  /**
     Store resource objects in the `data` array of the cache
 
     @method cacheData

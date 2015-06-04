@@ -1,7 +1,12 @@
+/**
+  @module ember-jsonapi-resources
+  @submodule resource
+**/
+
 import Ember from 'ember';
 import { pluralize } from 'ember-inflector';
 
-/*
+/**
   A Resource class to create JSON API resource objects
 
   See <http://jsonapi.org/format/#document-resource-objects>
@@ -12,7 +17,7 @@ import { pluralize } from 'ember-inflector';
 */
 const Resource = Ember.Object.extend({
 
-  /*
+  /**
     The service object for the entity (adapter with cache and serializer)
 
     @property service
@@ -20,7 +25,7 @@ const Resource = Ember.Object.extend({
   */
   service: null,
 
-  /*
+  /**
     Extending Prototypes Must define a `type` value for the entity, e.g. `posts`
 
     @property type
@@ -28,7 +33,7 @@ const Resource = Ember.Object.extend({
   */
   type: null,
 
-  /*
+  /**
     Persisted resource ID value
 
     @property id
@@ -36,7 +41,7 @@ const Resource = Ember.Object.extend({
   */
   id: null,
 
-  /*
+  /**
     An optional property of for a JSON API Resource object, setup in create()
 
     This object will keep the values from the response object and may be mutable
@@ -49,7 +54,7 @@ const Resource = Ember.Object.extend({
   */
   attributes: null,
 
-  /*
+  /**
     An optional property of for a JSON API Resource object, setup in create()
 
     @protected
@@ -57,7 +62,7 @@ const Resource = Ember.Object.extend({
   */
   relationships: null,
 
-  /*
+  /**
     An optional property of for a JSON API Resource object, setup in create()
 
     @protected
@@ -65,7 +70,7 @@ const Resource = Ember.Object.extend({
   */
   links: null,
 
-  /*
+  /**
     An optional property of for a JSON API Resource object, setup in create()
 
     @protected
@@ -73,7 +78,7 @@ const Resource = Ember.Object.extend({
   */
   meta: null,
 
-  /*
+  /**
     Hash of attributes for changed/previous values
 
     @private
@@ -81,14 +86,14 @@ const Resource = Ember.Object.extend({
   */
   _attributes: null,
 
-  /*
+  /**
     Flag for new instance, e.g. not peristed
 
     @property isNew
   */
   isNew: false,
 
-  /*
+  /**
     Custom `toString` method used for clarity that the instance is a JSON API Resource kind of object
 
     @method toString
@@ -97,7 +102,7 @@ const Resource = Ember.Object.extend({
     return Ember.String.fmt("[JSONAPIResource|%@:%@]", this.get('type'), this.get('id'));
   },
 
-  /*
+  /**
     Adds related links object on the relationship hash
 
     @method addRelationship
@@ -116,7 +121,7 @@ const Resource = Ember.Object.extend({
     return this.set(key, data);
   },
 
-  /*
+  /**
     Set related links object on the relationship hash to have `null` data
 
     @method removeRelationship
@@ -126,7 +131,7 @@ const Resource = Ember.Object.extend({
     return this.set(key, { data: null });
   },
 
-  /*
+  /**
     @method changedAttributes
     @return {Object} the changed attributes
   */
@@ -144,7 +149,7 @@ const Resource = Ember.Object.extend({
     }
   }),
 
-  /*
+  /**
     @method previousAttributes
     @return {Object} the previous attributes
   */
@@ -162,7 +167,7 @@ const Resource = Ember.Object.extend({
     }
   }),
 
-  /*
+  /**
     Initialize events to communicate with the service object, listen for `didUpdateResource`
 
     @method initEvents
@@ -174,7 +179,7 @@ const Resource = Ember.Object.extend({
     }
   }),
 
-  /*
+  /**
     Handler for `didUpdateResource` event, resets private _attributes used for changed/previous tracking
 
     @method didUpdateResource
@@ -189,7 +194,7 @@ const Resource = Ember.Object.extend({
 });
 
 Resource.reopenClass({
-  /*
+  /**
     To protect the JSON API Resource properties for attributes, links and relationships
     these objects are setup during create(). This has to be defined since the attr()
     helper needs to have new objects for each instance, to project from keeping a
@@ -215,7 +220,7 @@ Resource.reopenClass({
 
 export default Resource;
 
-/*
+/**
   Helper to setup computed property for resource attributes
 
   @method attr
@@ -246,7 +251,7 @@ export function attr(type, mutable = true) {
   });
 }
 
-/*
+/**
   Mixin for creating promise proxy objects for related resources
 
   @class RelatedProxyUtil
@@ -297,7 +302,7 @@ function linksPath(resourceName) {
   return ['relationships', resourceName, 'links', 'related'].join('.');
 }
 
-/*
+/**
   Helper to setup a has one relationship to another resource
 
   @method hasOne
@@ -312,7 +317,7 @@ export function hasOne(resource) {
   });
 }
 
-/*
+/**
   Helper to setup a has many relationship to another resource
 
   @method hasMany

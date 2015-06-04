@@ -1,6 +1,11 @@
+/**
+  @module ember-jsonapi-resources
+  @submodule serializer
+**/
+
 import Ember from 'ember';
 
-/*
+/**
   Serializer/Deserializer for a JSON API resource object, used by adapter
 
   @class ApplicationSerializer
@@ -8,7 +13,7 @@ import Ember from 'ember';
 */
 export default Ember.Object.extend({
 
-  /*
+  /**
     Serialize resource(s) for the request payload
 
     @method serialize
@@ -27,7 +32,7 @@ export default Ember.Object.extend({
     return json;
   },
 
-  /*
+  /**
     Serialize a collection of resources
 
     @method serializeResources
@@ -44,7 +49,7 @@ export default Ember.Object.extend({
     return collection;
   },
 
-  /*
+  /**
     Serialize a resource object
 
     @method serializeResource
@@ -64,7 +69,7 @@ export default Ember.Object.extend({
     return json;
   },
 
-  /*
+  /**
     Serialize a resource object, but only the changed attributes
 
     @method serializeChanged
@@ -82,7 +87,7 @@ export default Ember.Object.extend({
     };
   },
 
-  /*
+  /**
     Deserialize response objects from the request payload
 
     @method deserialize
@@ -99,7 +104,7 @@ export default Ember.Object.extend({
     }
   },
 
-  /*
+  /**
     Deserialize response objects in the payload data
 
     @method deserializeResources
@@ -113,7 +118,7 @@ export default Ember.Object.extend({
     return collection;
   },
 
-  /*
+  /**
     Deserialize response an object in the payload data
 
     @method deserializeResource
@@ -124,7 +129,7 @@ export default Ember.Object.extend({
     return this._createResourceInstance(json);
   },
 
-  /*
+  /**
     Create a Resource from a JSON API Resource Object
 
     See <http://jsonapi.org/format/#document-resource-objects>

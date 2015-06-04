@@ -1,7 +1,12 @@
+/**
+  @module ember-jsonapi-resources
+  @submodule adapter
+**/
+
 import Ember from 'ember';
 import { pluralize } from 'ember-inflector';
 
-/*
+/**
   Adapter for a JSON API endpoint, use as a service for your backend
 
   @class ApplicationAdapter
@@ -10,7 +15,7 @@ import { pluralize } from 'ember-inflector';
 */
 export default Ember.Object.extend(Ember.Evented, {
 
-  /*
+  /**
     The name of the entity
 
     @property type
@@ -18,7 +23,7 @@ export default Ember.Object.extend(Ember.Evented, {
   */
   type: null,
 
-  /*
+  /**
     The url for the entity, e.g. /posts or /api/v1/posts
 
     @property url
@@ -26,7 +31,7 @@ export default Ember.Object.extend(Ember.Evented, {
   */
   url: null,
 
-  /*
+  /**
     Find resource(s) using an id or a using a query `{id: '', query: {}}`
 
     @method find
@@ -47,7 +52,7 @@ export default Ember.Object.extend(Ember.Evented, {
     }
   },
 
-  /*
+  /**
     Find a resource by id, optionally pass a query object, e.g. w/ filter param(s)
 
     Uses a url like: /photos/1
@@ -63,7 +68,7 @@ export default Ember.Object.extend(Ember.Evented, {
     return this.fetch(url, { method: 'GET' });
   },
 
-  /*
+  /**
     Find resources using an optional query object, e.g. w/ pagination params
 
     @method findQuery
@@ -77,7 +82,7 @@ export default Ember.Object.extend(Ember.Evented, {
     return this.fetch(url, options);
   },
 
-  /*
+  /**
     Find resources using an optional query object, e.g. w/ pagination params
 
     A Url like: /photos/1/relationships/photographer is a required param
@@ -92,7 +97,7 @@ export default Ember.Object.extend(Ember.Evented, {
     return service.fetch(url);
   },
 
-  /*
+  /**
     Create a new resource, sends a POST request
 
     @method createResource
@@ -108,7 +113,7 @@ export default Ember.Object.extend(Ember.Evented, {
     });
   },
 
-  /*
+  /**
     Patch an existing resource, sends a PATCH request. After promise is resolved
     the `didUpdateResource` event is triggered, resource may listen on their
     `service` reference
@@ -128,7 +133,7 @@ export default Ember.Object.extend(Ember.Evented, {
     }.bind(this));
   },
 
-  /*
+  /**
     Patch a relationship, either add or remove, sends a PATCH request
 
     Adds with payload: `{ "data": { "type": "comments", "id": "12" } }`
@@ -153,7 +158,7 @@ export default Ember.Object.extend(Ember.Evented, {
     }.bind(this));
   },
 
-  /*
+  /**
     Delete an existing resource, sends a DELETE request
 
     @method deleteResource
@@ -171,7 +176,7 @@ export default Ember.Object.extend(Ember.Evented, {
     return this.fetch(url, { method: 'DELETE' });
   },
 
-  /*
+  /**
     Makes a fetch request via Fetch API
 
     see http://updates.html5rocks.com/2015/03/introduction-to-fetch
@@ -209,7 +214,7 @@ export default Ember.Object.extend(Ember.Evented, {
     });
   },
 
-  /*
+  /**
     Adds params and headers or Fetch request.
 
     For example a header is set for Content-Type: application/vnd.api+json
@@ -235,7 +240,7 @@ export default Ember.Object.extend(Ember.Evented, {
     return isUpdate;
   },
 
-  /*
+  /**
     Hook to customize the URL, e.g. if your API is behind a proxy and you need
     to swap a portion of the domain to make a request on the same domain.
 
@@ -247,7 +252,7 @@ export default Ember.Object.extend(Ember.Evented, {
     return url;
   },
 
-  /*
+  /**
     Noop as a hook for defining how deserialized resource objects are cached,
     e.g. in memory
 
@@ -256,7 +261,7 @@ export default Ember.Object.extend(Ember.Evented, {
   */
   cacheResource(/*resp*/) {},
 
-  /*
+  /**
     Initialize events to communicate on the resource instances' service reference.
     Listens for resource objects trigging `attributeChanged` events
 

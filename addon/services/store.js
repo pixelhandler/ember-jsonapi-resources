@@ -1,7 +1,13 @@
+/**
+  @module ember-jsonapi-resources
+  @submodule store
+**/
+
+
 import Ember from 'ember';
 import { pluralize } from 'ember-inflector';
 
-/*
+/**
   Service for a JSON API endpoint a facade to your resource adapter
 
   @class StoreService
@@ -10,7 +16,7 @@ import { pluralize } from 'ember-inflector';
 */
 export default Ember.Service.extend({
 
-  /*
+  /**
     Find resource(s) using an id or a using a query `{id: '', query: {}}`
 
     @method find
@@ -23,7 +29,7 @@ export default Ember.Service.extend({
     return service.find(options);
   },
 
-  /*
+  /**
     Access to the cached object
 
     @method all
@@ -35,7 +41,7 @@ export default Ember.Service.extend({
     return (service.cache && service.cache.data) ? service.cache.data : Ember.A([]);
   },
 
-  /*
+  /**
     Create a new resource, sends a POST request
 
     @method createResource
@@ -47,7 +53,7 @@ export default Ember.Service.extend({
     return service.createResource(resource);
   },
 
-  /*
+  /**
     Patch an existing resource
 
     @method updateResource
@@ -60,7 +66,7 @@ export default Ember.Service.extend({
     return service.updateResource(resource);
   },
 
-  /*
+  /**
     Patch a relationship, either add or remove, sends a PATCH request
 
     Adds with payload: `{ "data": { "type": "comments", "id": "12" } }`
@@ -77,7 +83,7 @@ export default Ember.Service.extend({
     return service.patchRelationship(resource, relationship);
   },
 
-  /*
+  /**
     Delete an existing resource, sends a DELETE request
 
     @method deleteResource
@@ -90,7 +96,7 @@ export default Ember.Service.extend({
     return service.deleteResource(resource);
   },
 
-  /*
+  /**
     Lookup the injected service for a resource, pluralize type arg.
 
     @private

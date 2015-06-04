@@ -369,3 +369,20 @@ For more information on using ember-cli, visit [http://www.ember-cli.com/]
 - Use cache service for relations in the resource (model).
 - Deserialize and cache the 'include' resource of a document.
 - Figure out the rest as implemented in a complex app with lots of reads & writes.
+
+## Documentation
+
+Online documentation, build from source: [generated docs]
+
+Docs are generated from source using [yuidoc].
+
+To view the docs during development:
+
+* `yuidoc ./addon/* -c yuidoc.json --server 3333` (you can append a port number e.g. `--server 8888`, the default port is 3000)
+
+To generate docs for the gh-pages branch:
+
+* `yuidoc ./addon/* -c yuidoc.json`
+
+[generated docs]: http://pixelhandler.github.io/ember-jsonapi-resources/docs
+[yuidoc]: https://github.com/yui/yuidoc
