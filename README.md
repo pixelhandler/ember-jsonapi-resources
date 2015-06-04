@@ -20,7 +20,7 @@ the domain of your API server. The addon code is rather concise; borrow at will.
 
 **This is a pre-release**.
 
-![Travis Build Status](https://travis-ci.org/pixelhandler/ember-jsonapi-resources.svg?branch=master "Build Status")
+[![Build Status](https://travis-ci.org/pixelhandler/ember-jsonapi-resources.svg?branch=master)](https://travis-ci.org/pixelhandler/ember-jsonapi-resources)
 
 This addon will be under active development, so it will be fully documented and 
 tested within a week or two.

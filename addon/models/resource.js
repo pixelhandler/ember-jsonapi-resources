@@ -2,36 +2,47 @@ import Ember from 'ember';
 import { pluralize } from 'ember-inflector';
 
 /*
+  A Resource class to create JSON API resource objects
+
+  See <http://jsonapi.org/format/#document-resource-objects>
 
   @class Resource
+  @requires Ember.Inflector
   @static
 */
 const Resource = Ember.Object.extend({
 
   /*
-    Persisted resource ID value
+    The service object for the entity (adapter with cache and serializer)
 
-    @property id
+    @property service
+    @required
   */
-  id: null,
+  service: null,
 
   /*
-    Extending Prototypes Must define a `type` value for the entity, e.g. `post`
+    Extending Prototypes Must define a `type` value for the entity, e.g. `posts`
 
     @property type
+    @required
   */
   type: null,
 
   /*
-    A default property of for a JSON API Resource object, setup in create()
+    Persisted resource ID value
 
-    @protected
-    @property attributes
+    @property id
+    @required
   */
-  links: null,
+  id: null,
 
   /*
-    A default property of for a JSON API Resource object, setup in create()
+    An optional property of for a JSON API Resource object, setup in create()
+
+    This object will keep the values from the response object and may be mutable
+    Use this as a refence for creating computed properties
+
+    For example the `attr()` helper sets up a properties based on this content
 
     @protected
     @property attributes
@@ -39,12 +50,28 @@ const Resource = Ember.Object.extend({
   attributes: null,
 
   /*
-    A default property of for a JSON API Resource object, setup in create()
+    An optional property of for a JSON API Resource object, setup in create()
 
     @protected
     @property relationships
   */
   relationships: null,
+
+  /*
+    An optional property of for a JSON API Resource object, setup in create()
+
+    @protected
+    @property attributes
+  */
+  links: null,
+
+  /*
+    An optional property of for a JSON API Resource object, setup in create()
+
+    @protected
+    @property meta
+  */
+  meta: null,
 
   /*
     Hash of attributes for changed/previous values
@@ -174,7 +201,7 @@ Resource.reopenClass({
   */
   create(properties) {
     const prototype = {};
-    const attrs = Ember.String.w('_attributes attributes links relationships');
+    const attrs = Ember.String.w('_attributes attributes links meta relationships');
     for (let i = 0; i < attrs.length; i++) {
       prototype[attrs[i]] = {};
     }
@@ -188,6 +215,11 @@ Resource.reopenClass({
 
 export default Resource;
 
+/*
+  Helper to setup computed property for resource attributes
+
+  @method attr
+*/
 export function attr(type, mutable = true) {
   const _mutable = mutable;
   return Ember.computed('attributes', {
@@ -214,6 +246,12 @@ export function attr(type, mutable = true) {
   });
 }
 
+/*
+  Mixin for creating promise proxy objects for related resources
+
+  @class RelatedProxyUtil
+  @static
+*/
 const RelatedProxyUtil = Ember.Object.extend({
   init: function () {
     this._super();
@@ -259,6 +297,11 @@ function linksPath(resourceName) {
   return ['relationships', resourceName, 'links', 'related'].join('.');
 }
 
+/*
+  Helper to setup a has one relationship to another resource
+
+  @method hasOne
+*/
 export function hasOne(resource) {
   const util = RelatedProxyUtil.create({'resource': resource});
   const path = linksPath(resource);
@@ -269,6 +312,11 @@ export function hasOne(resource) {
   });
 }
 
+/*
+  Helper to setup a has many relationship to another resource
+
+  @method hasMany
+*/
 export function hasMany(resource) {
   const util = RelatedProxyUtil.create({'resource': resource});
   return Ember.computed(linksPath(resource), function () {
@@ -278,7 +326,7 @@ export function hasMany(resource) {
   });
 }
 
-export function setupRelationship(resource) {
+function setupRelationship(resource) {
   if (!this.relationships[resource]) {
     this.relationships[resource] = { links: {}, data: null };
   }
