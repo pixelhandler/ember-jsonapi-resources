@@ -11,6 +11,7 @@ import { pluralize } from 'ember-inflector';
 
   @class ApplicationAdapter
   @requires Ember.Inflector
+  @uses Ember.Evented
   @static
 */
 export default Ember.Object.extend(Ember.Evented, {

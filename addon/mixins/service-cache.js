@@ -5,6 +5,12 @@
 
 import Ember from 'ember';
 
+/**
+  A Mixin class for caching JSON API resource objects
+
+  @class ServiceCacheMixin
+  @requires Ember.Inflector
+*/
 export default Ember.Mixin.create({
 
   /**
