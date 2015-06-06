@@ -10,3 +10,11 @@ test('it works', function(assert) {
   var subject = ServiceCacheObject.create();
   assert.ok(subject);
 });
+
+QUnit.skip('#initCache', function(assert) {});
+
+QUnit.skip('#cacheResource', function(assert) {});
+
+QUnit.skip('#cacheMeta', function(assert) {});
+
+QUnit.skip('#cacheData', function(assert) {});

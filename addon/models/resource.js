@@ -106,9 +106,10 @@ const Resource = Ember.Object.extend({
     Adds related links object on the relationship hash
 
     @method addRelationship
+    @param {String} related - resource name
+    @param {String} id
   */
   addRelationship(related, id) {
-    setupRelationship.call(this, related);
     const key = ['relationships', related, 'data'].join('.');
     let data = this.get(key);
     const type = pluralize(related);
@@ -122,13 +123,24 @@ const Resource = Ember.Object.extend({
   },
 
   /**
-    Set related links object on the relationship hash to have `null` data
+    Remove related links object on the relationship hash to have `null` data
 
     @method removeRelationship
+    @param {String} related - resource name
+    @param {String} id
   */
-  removeRelationship(related) {
-    const key = ['relationships', related, 'data'].join('.');
-    return this.set(key, { data: null });
+  removeRelationship(related, id) {
+    let relation = this.get('relationships.' + related);
+    if (Array.isArray(relation.data)) {
+      for (let i = 0; i < relation.data.length; i++) {
+        if (relation.data[i].id === id) {
+          relation.data.splice(i, 1);
+          break;
+        }
+      }
+    } else if (typeof relation === 'object') {
+      relation.data = null;
+    }
   },
 
   /**
@@ -213,6 +225,18 @@ Resource.reopenClass({
     const instance = this._super(prototype);
     if (properties) {
       instance.setProperties(properties);
+    }
+    let proto = instance.__ember_meta__.proto;
+    for (let key in proto) {
+      if (proto.hasOwnProperty(key)) {
+        if (proto[key] && proto[key].hasOwnProperty('_meta') && typeof proto[key]._meta === 'object') {
+          if (proto[key]._meta.kind === 'hasOne') {
+            setupRelationship.call(instance, key);
+          } else if (proto[key]._meta.kind === 'hasMany') {
+            setupRelationship.call(instance, key, Ember.A([]));
+          }
+        }
+      }
     }
     return instance;
   }
@@ -311,10 +335,9 @@ export function hasOne(resource) {
   const util = RelatedProxyUtil.create({'resource': resource});
   const path = linksPath(resource);
   return Ember.computed(path, function () {
-    setupRelationship.call(this, resource);
     util.createProxy(this, Ember.ObjectProxy);
     return util._proxy;
-  });
+  }).meta({relation: resource, kind: 'hasOne'});
 }
 
 /**
@@ -325,20 +348,19 @@ export function hasOne(resource) {
 export function hasMany(resource) {
   const util = RelatedProxyUtil.create({'resource': resource});
   return Ember.computed(linksPath(resource), function () {
-    setupRelationship.call(this, resource);
     util.createProxy(this, Ember.ArrayProxy);
     return util._proxy;
-  });
+  }).meta({relation: resource, kind: 'hasMany'});
 }
 
-function setupRelationship(resource) {
+function setupRelationship(resource, data = null) {
   if (!this.relationships[resource]) {
-    this.relationships[resource] = { links: {}, data: null };
+    this.relationships[resource] = { links: {}, data: data };
   }
   if (!this.relationships[resource].links) {
     this.relationships[resource].links = {};
   }
   if (!this.relationships[resource].data) {
-    this.relationships[resource].data = null;
+    this.relationships[resource].data = data;
   }
 }

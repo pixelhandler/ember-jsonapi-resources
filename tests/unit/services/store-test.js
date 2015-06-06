@@ -10,3 +10,15 @@ test('it exists', function(assert) {
   var service = this.subject();
   assert.ok(service);
 });
+
+QUnit.skip('#find', function(assert) {});
+
+QUnit.skip('#all', function(assert) {});
+
+QUnit.skip('#createResource', function(assert) {});
+
+QUnit.skip('#updateResource', function(assert) {});
+
+QUnit.skip('#patchRelationship', function(assert) {});
+
+QUnit.skip('#deleteResource', function(assert) {});
