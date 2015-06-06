@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>RelatedProxyUtil - Ember JSON API Resources</title>
+    <title>ServiceCacheMixin - Ember JSON API Resources</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -86,22 +86,22 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-<h1>RelatedProxyUtil Class</h1>
+<h1>ServiceCacheMixin Class</h1>
 <div class="box meta">
 
 
         <div class="foundat">
-            Defined in: <a href="../files/addon_models_resource.js.html#l278"><code>addon&#x2F;models&#x2F;resource.js:278</code></a>
+            Defined in: <a href="../files/addon_mixins_service-cache.js.html#l8"><code>addon&#x2F;mixins&#x2F;service-cache.js:8</code></a>
         </div>
 
-            Module: <a href="../modules/resource.html">resource</a><br>
+            Module: <a href="../modules/cache.html">cache</a><br>
             Parent Module: <a href="../modules/ember-jsonapi-resources.html">ember-jsonapi-resources</a>
 
 </div>
 
 
 <div class="box intro">
-    <p>Mixin for creating promise proxy objects for related resources</p>
+    <p>A Mixin class for caching JSON API resource objects</p>
 
 </div>
 
@@ -111,6 +111,7 @@
         <li class="api-class-tab index"><a href="#index">Index</a></li>
 
             <li class="api-class-tab methods"><a href="#methods">Methods</a></li>
+            <li class="api-class-tab properties"><a href="#properties">Properties</a></li>
     </ul>
 
     <div>
@@ -122,16 +123,38 @@
 
                     <ul class="index-list methods">
                             <li class="index-item method">
-                                <a href="#method_hasMany">hasMany</a>
+                                <a href="#method_cacheData">cacheData</a>
 
                             </li>
                             <li class="index-item method">
-                                <a href="#method_hasOne">hasOne</a>
+                                <a href="#method_cacheMeta">cacheMeta</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_cacheResource">cacheResource</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_initCache">initCache</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_initialize">initialize</a>
 
                             </li>
                     </ul>
                 </div>
 
+                <div class="index-section properties">
+                    <h3>Properties</h3>
+
+                    <ul class="index-list properties">
+                            <li class="index-item property">
+                                <a href="#property_cache">cache</a>
+
+                            </li>
+                    </ul>
+                </div>
 
 
         </div>
@@ -139,8 +162,8 @@
             <div id="methods" class="api-class-tabpanel">
                 <h2 class="off-left">Methods</h2>
 
-<div id="method_hasMany" class="method item">
-    <h3 class="name"><code>hasMany</code></h3>
+<div id="method_cacheData" class="method item">
+    <h3 class="name"><code>cacheData</code></h3>
 
         <span class="paren">()</span>
 
@@ -154,7 +177,7 @@
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l343"><code>addon&#x2F;models&#x2F;resource.js:343</code></a>
+        <a href="../files/addon_mixins_service-cache.js.html#l56"><code>addon&#x2F;mixins&#x2F;service-cache.js:56</code></a>
         </p>
 
 
@@ -162,7 +185,7 @@
     </div>
 
     <div class="description">
-        <p>Helper to setup a has many relationship to another resource</p>
+        <p>Store resource objects in the <code>data</code> array of the cache</p>
 
     </div>
 
@@ -170,8 +193,8 @@
 
 
 </div>
-<div id="method_hasOne" class="method item">
-    <h3 class="name"><code>hasOne</code></h3>
+<div id="method_cacheMeta" class="method item">
+    <h3 class="name"><code>cacheMeta</code></h3>
 
         <span class="paren">()</span>
 
@@ -185,7 +208,7 @@
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l329"><code>addon&#x2F;models&#x2F;resource.js:329</code></a>
+        <a href="../files/addon_mixins_service-cache.js.html#l45"><code>addon&#x2F;mixins&#x2F;service-cache.js:45</code></a>
         </p>
 
 
@@ -193,7 +216,101 @@
     </div>
 
     <div class="description">
-        <p>Helper to setup a has one relationship to another resource</p>
+        <p>Store meta data in the cache</p>
+
+    </div>
+
+
+
+
+</div>
+<div id="method_cacheResource" class="method item">
+    <h3 class="name"><code>cacheResource</code></h3>
+
+        <span class="paren">()</span>
+
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/addon_mixins_service-cache.js.html#l35"><code>addon&#x2F;mixins&#x2F;service-cache.js:35</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Store response object(s) in the cache</p>
+
+    </div>
+
+
+
+
+</div>
+<div id="method_initCache" class="method item">
+    <h3 class="name"><code>initCache</code></h3>
+
+        <span class="paren">()</span>
+
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/addon_mixins_service-cache.js.html#l23"><code>addon&#x2F;mixins&#x2F;service-cache.js:23</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Initialize a cache object</p>
+
+    </div>
+
+
+
+
+</div>
+<div id="method_initialize" class="method item">
+    <h3 class="name"><code>initialize</code></h3>
+
+        <span class="paren">()</span>
+
+
+
+
+
+
+
+
+    <div class="meta">
+                    <p>Provided by the <a href="../modules/store.html">store</a> module.</p>
+                <p>
+                Defined in
+        <a href="../files/addon_initializers_store.js.html#l8"><code>addon&#x2F;initializers&#x2F;store.js:8</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Initializer for the store service, injects into the route and controller</p>
 
     </div>
 
@@ -203,6 +320,35 @@
 </div>
             </div>
 
+            <div id="properties" class="api-class-tabpanel">
+                <h2 class="off-left">Properties</h2>
+
+                    <div id="property_cache" class="property item">
+                        <h3 class="name"><code>cache</code></h3>
+                        <span class="type">Unknown</span>
+                    
+                    
+                    
+                    
+                    
+                        <div class="meta">
+                                    <p>
+                                    Defined in
+                            <a href="../files/addon_mixins_service-cache.js.html#l16"><code>addon&#x2F;mixins&#x2F;service-cache.js:16</code></a>
+                            </p>
+                    
+                    
+                        </div>
+                    
+                        <div class="description">
+                            <p>Cache object</p>
+                    
+                        </div>
+                    
+                    
+                    
+                    </div>
+            </div>
 
 
     </div>

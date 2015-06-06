@@ -5,6 +5,7 @@ YUI.add("yuidoc-meta", function(Y) {
         "ApplicationSerializer",
         "RelatedProxyUtil",
         "Resource",
+        "ServiceCacheMixin",
         "StoreService"
     ],
     "modules": [
@@ -23,7 +24,8 @@ YUI.add("yuidoc-meta", function(Y) {
         },
         {
             "displayName": "cache",
-            "name": "cache"
+            "name": "cache",
+            "description": "A Mixin class for caching JSON API resource objects"
         },
         {
             "displayName": "ember-jsonapi-resources",

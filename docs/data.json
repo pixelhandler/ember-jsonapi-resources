@@ -31,7 +31,9 @@
             "modules": {
                 "cache": 1
             },
-            "classes": {},
+            "classes": {
+                "ServiceCacheMixin": 1
+            },
             "fors": {},
             "namespaces": {}
         },
@@ -80,6 +82,7 @@
             },
             "classes": {
                 "ApplicationAdapter": 1,
+                "ServiceCacheMixin": 1,
                 "Resource": 1,
                 "RelatedProxyUtil": 1,
                 "ApplicationSerializer": 1,
@@ -123,14 +126,17 @@
         "cache": {
             "name": "cache",
             "submodules": {},
-            "classes": {},
+            "classes": {
+                "ServiceCacheMixin": 1
+            },
             "fors": {},
             "is_submodule": 1,
             "namespaces": {},
             "module": "ember-jsonapi-resources",
             "namespace": "",
             "file": "addon/mixins/service-cache.js",
-            "line": 1
+            "line": 8,
+            "description": "A Mixin class for caching JSON API resource objects"
         },
         "resource": {
             "name": "resource",
@@ -145,7 +151,7 @@
             "module": "ember-jsonapi-resources",
             "namespace": "",
             "file": "addon/models/resource.js",
-            "line": 254,
+            "line": 278,
             "description": "A Resource class to create JSON API resource objects\n\nSee <http://jsonapi.org/format/#document-resource-objects>"
         },
         "serializer": {
@@ -182,7 +188,28 @@
             "requires": [
                 "Ember.Inflector"
             ],
+            "uses": [
+                "Ember.Evented"
+            ],
             "static": 1
+        },
+        "ServiceCacheMixin": {
+            "name": "ServiceCacheMixin",
+            "shortname": "ServiceCacheMixin",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "ember-jsonapi-resources",
+            "submodule": "cache",
+            "namespace": "",
+            "file": "addon/mixins/service-cache.js",
+            "line": 8,
+            "description": "A Mixin class for caching JSON API resource objects",
+            "requires": [
+                "Ember.Inflector"
+            ]
         },
         "Resource": {
             "name": "Resource",
@@ -215,7 +242,7 @@
             "submodule": "resource",
             "namespace": "",
             "file": "addon/models/resource.js",
-            "line": 254,
+            "line": 278,
             "description": "Mixin for creating promise proxy objects for related resources",
             "static": 1
         },
@@ -258,7 +285,7 @@
     "classitems": [
         {
             "file": "addon/adapters/application.js",
-            "line": 18,
+            "line": 19,
             "description": "The name of the entity",
             "itemtype": "property",
             "name": "type",
@@ -269,7 +296,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 26,
+            "line": 27,
             "description": "The url for the entity, e.g. /posts or /api/v1/posts",
             "itemtype": "property",
             "name": "url",
@@ -280,7 +307,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 34,
+            "line": 35,
             "description": "Find resource(s) using an id or a using a query `{id: '', query: {}}`",
             "itemtype": "method",
             "name": "find",
@@ -301,7 +328,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 55,
+            "line": 56,
             "description": "Find a resource by id, optionally pass a query object, e.g. w/ filter param(s)\n\nUses a url like: /photos/1",
             "itemtype": "method",
             "name": "findOne",
@@ -327,7 +354,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 71,
+            "line": 72,
             "description": "Find resources using an optional query object, e.g. w/ pagination params",
             "itemtype": "method",
             "name": "findQuery",
@@ -348,7 +375,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 85,
+            "line": 86,
             "description": "Find resources using an optional query object, e.g. w/ pagination params\n\nA Url like: /photos/1/relationships/photographer is a required param",
             "itemtype": "method",
             "name": "findRelated",
@@ -374,7 +401,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 100,
+            "line": 101,
             "description": "Create a new resource, sends a POST request",
             "itemtype": "method",
             "name": "createResource",
@@ -395,7 +422,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 116,
+            "line": 117,
             "description": "Patch an existing resource, sends a PATCH request. After promise is resolved\nthe `didUpdateResource` event is triggered, resource may listen on their\n`service` reference",
             "itemtype": "method",
             "name": "updateResource",
@@ -416,7 +443,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 136,
+            "line": 137,
             "description": "Patch a relationship, either add or remove, sends a PATCH request\n\nAdds with payload: `{ \"data\": { \"type\": \"comments\", \"id\": \"12\" } }`\nRemoves with payload: `{ \"data\": null }`",
             "itemtype": "method",
             "name": "patchRelationship",
@@ -442,7 +469,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 161,
+            "line": 162,
             "description": "Delete an existing resource, sends a DELETE request",
             "itemtype": "method",
             "name": "deleteResource",
@@ -463,7 +490,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 179,
+            "line": 180,
             "description": "Makes a fetch request via Fetch API\n\nsee http://updates.html5rocks.com/2015/03/introduction-to-fetch",
             "itemtype": "method",
             "name": "fetch",
@@ -484,7 +511,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 217,
+            "line": 218,
             "description": "Adds params and headers or Fetch request.\n\nFor example a header is set for Content-Type: application/vnd.api+json\n\nIf an `AuthorizationHeader` key exists in localStorage it will be used for\nthe `Authorization` header value.",
             "itemtype": "method",
             "name": "fetchOptions",
@@ -505,7 +532,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 243,
+            "line": 244,
             "description": "Hook to customize the URL, e.g. if your API is behind a proxy and you need\nto swap a portion of the domain to make a request on the same domain.",
             "itemtype": "method",
             "name": "fetchUrl",
@@ -526,7 +553,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 255,
+            "line": 256,
             "description": "Noop as a hook for defining how deserialized resource objects are cached,\ne.g. in memory",
             "itemtype": "method",
             "name": "cacheResource",
@@ -543,7 +570,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 264,
+            "line": 265,
             "description": "Initialize events to communicate on the resource instances' service reference.\nListens for resource objects trigging `attributeChanged` events",
             "itemtype": "method",
             "name": "initEvents",
@@ -560,57 +587,57 @@
             "requires": [
                 "StoreService"
             ],
-            "class": "Resource",
+            "class": "ServiceCacheMixin",
             "module": "ember-jsonapi-resources",
             "submodule": "store"
         },
         {
             "file": "addon/mixins/service-cache.js",
-            "line": 10,
+            "line": 16,
             "description": "Cache object",
             "itemtype": "property",
             "name": "cache",
-            "class": "Resource",
+            "class": "ServiceCacheMixin",
             "module": "ember-jsonapi-resources",
             "submodule": "cache"
         },
         {
             "file": "addon/mixins/service-cache.js",
-            "line": 17,
+            "line": 23,
             "description": "Initialize a cache object",
             "itemtype": "method",
             "name": "initCache",
-            "class": "Resource",
+            "class": "ServiceCacheMixin",
             "module": "ember-jsonapi-resources",
             "submodule": "cache"
         },
         {
             "file": "addon/mixins/service-cache.js",
-            "line": 29,
+            "line": 35,
             "description": "Store response object(s) in the cache",
             "itemtype": "method",
             "name": "cacheResource",
-            "class": "Resource",
+            "class": "ServiceCacheMixin",
             "module": "ember-jsonapi-resources",
             "submodule": "cache"
         },
         {
             "file": "addon/mixins/service-cache.js",
-            "line": 39,
+            "line": 45,
             "description": "Store meta data in the cache",
             "itemtype": "method",
             "name": "cacheMeta",
-            "class": "Resource",
+            "class": "ServiceCacheMixin",
             "module": "ember-jsonapi-resources",
             "submodule": "cache"
         },
         {
             "file": "addon/mixins/service-cache.js",
-            "line": 50,
+            "line": 56,
             "description": "Store resource objects in the `data` array of the cache",
             "itemtype": "method",
             "name": "cacheData",
-            "class": "Resource",
+            "class": "ServiceCacheMixin",
             "module": "ember-jsonapi-resources",
             "submodule": "cache"
         },
@@ -733,23 +760,47 @@
             "description": "Adds related links object on the relationship hash",
             "itemtype": "method",
             "name": "addRelationship",
+            "params": [
+                {
+                    "name": "related",
+                    "description": "- resource name",
+                    "type": "String"
+                },
+                {
+                    "name": "id",
+                    "description": "",
+                    "type": "String"
+                }
+            ],
             "class": "Resource",
             "module": "ember-jsonapi-resources",
             "submodule": "resource"
         },
         {
             "file": "addon/models/resource.js",
-            "line": 124,
-            "description": "Set related links object on the relationship hash to have `null` data",
+            "line": 125,
+            "description": "Remove related links object on the relationship hash to have `null` data",
             "itemtype": "method",
             "name": "removeRelationship",
+            "params": [
+                {
+                    "name": "related",
+                    "description": "- resource name",
+                    "type": "String"
+                },
+                {
+                    "name": "id",
+                    "description": "",
+                    "type": "String"
+                }
+            ],
             "class": "Resource",
             "module": "ember-jsonapi-resources",
             "submodule": "resource"
         },
         {
             "file": "addon/models/resource.js",
-            "line": 134,
+            "line": 146,
             "itemtype": "method",
             "name": "changedAttributes",
             "return": {
@@ -762,7 +813,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 152,
+            "line": 164,
             "itemtype": "method",
             "name": "previousAttributes",
             "return": {
@@ -775,7 +826,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 170,
+            "line": 182,
             "description": "Initialize events to communicate with the service object, listen for `didUpdateResource`",
             "itemtype": "method",
             "name": "initEvents",
@@ -785,7 +836,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 182,
+            "line": 194,
             "description": "Handler for `didUpdateResource` event, resets private _attributes used for changed/previous tracking",
             "itemtype": "method",
             "name": "didUpdateResource",
@@ -795,7 +846,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 197,
+            "line": 209,
             "description": "To protect the JSON API Resource properties for attributes, links and relationships\nthese objects are setup during create(). This has to be defined since the attr()\nhelper needs to have new objects for each instance, to project from keeping a\nreference on the prototype.",
             "itemtype": "method",
             "name": "create",
@@ -809,7 +860,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 223,
+            "line": 247,
             "description": "Helper to setup computed property for resource attributes",
             "itemtype": "method",
             "name": "attr",
@@ -819,7 +870,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 305,
+            "line": 329,
             "description": "Helper to setup a has one relationship to another resource",
             "itemtype": "method",
             "name": "hasOne",
@@ -829,7 +880,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 320,
+            "line": 343,
             "description": "Helper to setup a has many relationship to another resource",
             "itemtype": "method",
             "name": "hasMany",
@@ -1180,7 +1231,7 @@
     "warnings": [
         {
             "message": "replacing incorrect tag: returns with return",
-            "line": " addon/models/resource.js:197"
+            "line": " addon/models/resource.js:209"
         }
     ]
 }

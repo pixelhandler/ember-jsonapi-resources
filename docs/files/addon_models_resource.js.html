@@ -42,6 +42,7 @@
                                 <li><a href="../classes/ApplicationSerializer.html">ApplicationSerializer</a></li>
                                 <li><a href="../classes/RelatedProxyUtil.html">RelatedProxyUtil</a></li>
                                 <li><a href="../classes/Resource.html">Resource</a></li>
+                                <li><a href="../classes/ServiceCacheMixin.html">ServiceCacheMixin</a></li>
                                 <li><a href="../classes/StoreService.html">StoreService</a></li>
                             </ul>
                 
@@ -197,9 +198,10 @@ const Resource = Ember.Object.extend({
     Adds related links object on the relationship hash
 
     @method addRelationship
+    @param {String} related - resource name
+    @param {String} id
   */
   addRelationship(related, id) {
-    setupRelationship.call(this, related);
     const key = [&#x27;relationships&#x27;, related, &#x27;data&#x27;].join(&#x27;.&#x27;);
     let data = this.get(key);
     const type = pluralize(related);
@@ -213,13 +215,24 @@ const Resource = Ember.Object.extend({
   },
 
   /**
-    Set related links object on the relationship hash to have &#x60;null&#x60; data
+    Remove related links object on the relationship hash to have &#x60;null&#x60; data
 
     @method removeRelationship
+    @param {String} related - resource name
+    @param {String} id
   */
-  removeRelationship(related) {
-    const key = [&#x27;relationships&#x27;, related, &#x27;data&#x27;].join(&#x27;.&#x27;);
-    return this.set(key, { data: null });
+  removeRelationship(related, id) {
+    let relation = this.get(&#x27;relationships.&#x27; + related);
+    if (Array.isArray(relation.data)) {
+      for (let i = 0; i &lt; relation.data.length; i++) {
+        if (relation.data[i].id === id) {
+          relation.data.splice(i, 1);
+          break;
+        }
+      }
+    } else if (typeof relation === &#x27;object&#x27;) {
+      relation.data = null;
+    }
   },
 
   /**
@@ -304,6 +317,18 @@ Resource.reopenClass({
     const instance = this._super(prototype);
     if (properties) {
       instance.setProperties(properties);
+    }
+    let proto = instance.__ember_meta__.proto;
+    for (let key in proto) {
+      if (proto.hasOwnProperty(key)) {
+        if (proto[key] &amp;&amp; proto[key].hasOwnProperty(&#x27;_meta&#x27;) &amp;&amp; typeof proto[key]._meta === &#x27;object&#x27;) {
+          if (proto[key]._meta.kind === &#x27;hasOne&#x27;) {
+            setupRelationship.call(instance, key);
+          } else if (proto[key]._meta.kind === &#x27;hasMany&#x27;) {
+            setupRelationship.call(instance, key, Ember.A([]));
+          }
+        }
+      }
     }
     return instance;
   }
@@ -402,10 +427,9 @@ export function hasOne(resource) {
   const util = RelatedProxyUtil.create({&#x27;resource&#x27;: resource});
   const path = linksPath(resource);
   return Ember.computed(path, function () {
-    setupRelationship.call(this, resource);
     util.createProxy(this, Ember.ObjectProxy);
     return util._proxy;
-  });
+  }).meta({relation: resource, kind: &#x27;hasOne&#x27;});
 }
 
 /**
@@ -416,21 +440,20 @@ export function hasOne(resource) {
 export function hasMany(resource) {
   const util = RelatedProxyUtil.create({&#x27;resource&#x27;: resource});
   return Ember.computed(linksPath(resource), function () {
-    setupRelationship.call(this, resource);
     util.createProxy(this, Ember.ArrayProxy);
     return util._proxy;
-  });
+  }).meta({relation: resource, kind: &#x27;hasMany&#x27;});
 }
 
-function setupRelationship(resource) {
+function setupRelationship(resource, data = null) {
   if (!this.relationships[resource]) {
-    this.relationships[resource] = { links: {}, data: null };
+    this.relationships[resource] = { links: {}, data: data };
   }
   if (!this.relationships[resource].links) {
     this.relationships[resource].links = {};
   }
   if (!this.relationships[resource].data) {
-    this.relationships[resource].data = null;
+    this.relationships[resource].data = data;
   }
 }
 
