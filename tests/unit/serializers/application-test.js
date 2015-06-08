@@ -116,5 +116,14 @@ test('#deserializeResources calls deserializeResource for each item in a collect
   }
 });
 
-
-QUnit.skip('#deserializeResource', function(assert) {});
+test('#deserializeResource', function(assert) {
+  const serializer = this.subject();
+  this.container.register('model:posts', Post);
+  let resource = serializer.deserializeResource(postMock.data);
+  assert.ok(resource, 'resource created');
+  assert.equal(resource.get('id'), postMock.data.id, 'id present in resource');
+  assert.equal(resource.get('type'), postMock.data.type, 'type present in resource');
+  assert.equal(resource.get('title'), postMock.data.attributes.title, 'title present in resource');
+  assert.equal(resource.get('excerpt'), postMock.data.attributes.excerpt, 'excerpt present in resource');
+  assert.equal(resource.toString(), '[JSONAPIResource|posts:1]');
+});
