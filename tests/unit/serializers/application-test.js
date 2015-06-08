@@ -17,34 +17,21 @@ moduleFor('serializer:application', 'Unit | Serializer | application', {
   }
 });
 
-test('with one resource, #serialize calls serializeResource', function(assert) {
+test('#serialize sets up a top level `data` member for the primary data', function(assert) {
+  const serializer = this.subject();
+  sandbox.stub(serializer, 'serializeResource', function (json) { return json; });
+  let resource = {};
+  let json = serializer.serialize(resource);
+  assert.ok(json.data, 'top level data member added');
+});
+
+test('#serialize calls serializeResource', function(assert) {
   const serializer = this.subject();
   sandbox.stub(serializer, 'serializeResource', function () {});
   let resource = {};
   serializer.serialize(resource);
   assert.ok(serializer.serializeResource.calledOnce, 'serializeResource called');
   assert.ok(serializer.serializeResource.calledWith(resource), 'serializeResource called with resource');
-});
-
-test('with a collection, #serialize calls serializeResources', function(assert) {
-  const serializer = this.subject();
-  sandbox.stub(serializer, 'serializeResources', function () {});
-  let resources = Ember.A([]);
-  serializer.serialize(resources);
-  assert.ok(serializer.serializeResources.calledOnce, 'serializeResources called');
-  assert.ok(serializer.serializeResources.calledWith(resources), 'serializeResources called with resources');
-});
-
-test('#serializeResources calls serializeResource for each item in a collection', function(assert) {
-  const serializer = this.subject();
-  sandbox.stub(serializer, 'serializeResource', function () {});
-  let resources = Ember.A([0,1,2]);
-  serializer.serializeResources(resources);
-  assert.ok(serializer.serializeResource.calledThrice, 'serializeResources called serializeResource 3 times');
-  let msg = 'serializeResource called with: ';
-  for (let i = 0; i < resources.length; i++) {
-    assert.ok(serializer.serializeResource.calledWith(resources[i]), msg + i);
-  }
 });
 
 test('#serializeResource with only attributes data', function(assert) {
