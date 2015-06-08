@@ -1,0 +1,72 @@
+{
+  "data": [
+    {
+      "id": "1",
+      "type": "posts",
+      "links": {
+        "self": "http://api.pixelhandler.com/api/v1/posts/1"
+      },
+      "attributes": {
+        "title": "Practical: Deploy an Ember App with ember-cli-deploy",
+        "date": "2015-04-25",
+        "excerpt": "The notes below demonstrate how to setup a chat application, built with [Ember CLI], that uses a backend service from [Firebase]."
+      }
+    },
+    {
+      "id": "2",
+      "type": "posts",
+      "links": {
+        "self": "http://api.pixelhandler.com/api/v1/posts/2"
+      },
+      "attributes": {
+        "title": "How Much Faster is HTMLBars Than Handlebars?",
+        "date": "2015-03-08",
+        "excerpt": "Last week I posted an article about [Measuring Performance with User Timing API, in an Ember Application](/posts/measuring-performance-with-user-timing-api-in-an-ember-application) and my conclusion was… "
+      }
+    },
+    {
+      "id": "3",
+      "type": "posts",
+      "links": {
+        "self": "http://api.pixelhandler.com/api/v1/posts/3"
+      },
+      "attributes": {
+        "title": "EmberConf 2015 - March 4th (day 2)",
+        "date": "2015-03-04",
+        "excerpt": "_Notes were taken in real time, the last entries in each section may reflect beginning of the talk (so the last became the first and the first became the last, or not)…_"
+      }
+    },
+    {
+      "id": "4",
+      "type": "posts",
+      "links": {
+        "self": "http://api.pixelhandler.com/api/v1/posts/4"
+      },
+      "attributes": {
+        "title": "EmberConf 2015 - March 3rd (day 1)",
+        "date": "2015-03-03",
+        "excerpt": "_Notes were taken in real time, the last entries in each section may reflect beginning of the talk (so the last became the first and the first became the last, or not)…_"
+      }
+    },
+    {
+      "id": "5",
+      "type": "posts",
+      "links": {
+        "self": "http://api.pixelhandler.com/api/v1/posts/5"
+      },
+      "attributes": {
+        "title": "A Bet on Web Components and Ember.Component Synchronicity",
+        "date": "2015-03-02",
+        "excerpt": "What is a native [Web Component] and how does it differ from an [Ember.Component]. Can your use of Ember Components reflect the Web Components specification?"
+      }
+    }
+  ],
+  "meta": {
+    "page": {
+      "sort": "-date",
+      "total": 66,
+      "limit": "5",
+      "offset": "0"
+    }
+  }
+}

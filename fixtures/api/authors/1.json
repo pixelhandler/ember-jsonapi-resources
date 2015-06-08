@@ -1,0 +1,21 @@
+{
+  "data": {
+    "id": "1",
+    "type": "authors",
+    "links": {
+      "self": "http://api.pixelhandler.com/api/v1/authors/1"
+    },
+    "attributes": {
+      "name": "pixelhandler",
+      "email": "pixelhandler@gmail.com"
+    },
+    "relationships": {
+      "posts": {
+        "links": {
+          "self": "http://api.pixelhandler.com/api/v1/authors/1/relationships/posts",
+          "related": "http://api.pixelhandler.com/api/v1/authors/1/posts"
+        }
+      }
+    }
+  }
+}

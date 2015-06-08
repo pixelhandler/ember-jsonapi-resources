@@ -2,33 +2,7 @@ import { moduleFor, test } from 'ember-qunit';
 import Ember from 'ember';
 import Resource from 'ember-jsonapi-resources/models/resource';
 import { attr, hasOne, hasMany } from 'ember-jsonapi-resources/models/resource';
-
-const Post = Resource.extend({
-  type: 'post',
-  title: attr(),
-  excerpt: attr(),
-  author: hasOne('author'),
-  comments: hasMany('comments')
-});
-
-const Author = Resource.extend({
-  type: 'author',
-  name: attr(),
-  posts: hasMany('posts')
-});
-
-const Comment = Resource.extend({
-  type: 'comment',
-  body: attr(),
-  commenter: hasOne('commenter'),
-  post: hasOne('post')
-});
-
-const Commenter = Resource.extend({
-  type: 'commenter',
-  name: attr(),
-  comments: hasMany('comments')
-});
+import { Post, Author, Comment, Commenter } from 'dummy/tests/helpers/resources';
 
 moduleFor('model:resource', 'Unit | Model | resource');
 

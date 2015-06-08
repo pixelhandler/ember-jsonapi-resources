@@ -1,0 +1,34 @@
+{
+  "data": {
+    "id": "1",
+    "type": "posts",
+    "links": {
+      "self": "http://api.pixelhandler.com/api/v1/posts/1"
+    },
+    "attributes": {
+      "title": "Practical: Deploy an Ember App with ember-cli-deploy",
+      "slug": "practical-deploy-an-ember-app-with-ember-cli-deploy-on-digitalocean",
+      "excerpt": "The notes below demonstrate how to setup a chat application, built with [Ember CLI], that uses a backend service from [Firebase].",
+      "date": "2015-04-25",
+      "body": "## Lightning-Approach Workflow\n\nThis approach is the default setup when using ember-cli-deploy and uses a Redis\nstore for the versions of your index.html file that you deploy."
+    },
+    "relationships": {
+      "author": {
+        "links": {
+          "self": "http://api.pixelhandler.com/api/v1/posts/1/relationships/author",
+          "related": "http://api.pixelhandler.com/api/v1/posts/1/author"
+        },
+        "data": {
+          "type": "authors",
+          "id": "1"
+        }
+      },
+      "comments": {
+        "links": {
+          "self": "http://api.pixelhandler.com/api/v1/posts/1/relationships/comments",
+          "related": "http://api.pixelhandler.com/api/v1/posts/1/comments"
+        }
+      }
+    }
+  }
+}

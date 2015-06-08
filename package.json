@@ -19,6 +19,8 @@
   "license": "MIT",
   "devDependencies": {
     "broccoli-asset-rev": "^2.0.2",
+    "broccoli-es6-concatenator": "^0.1.11",
+    "broccoli-filter": "^0.1.14",
     "broccoli-static-compiler": "^0.2.1",
     "ember-cli": "^0.2.7",
     "ember-cli-app-version": "0.3.3",

@@ -43,7 +43,7 @@ export default Ember.Object.extend({
     const collection = Ember.A([]);
 
     resources.forEach(function(resource) {
-      collection.pushObject(this.serializeRecord(resource));
+      collection.pushObject(this.serializeResource(resource));
     }, this);
 
     return collection;
