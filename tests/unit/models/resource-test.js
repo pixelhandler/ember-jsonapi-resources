@@ -199,7 +199,7 @@ test('#removeRelationship', function(assert) {
   assert.equal(JSON.stringify(commenter.get('relationships')), commenterRelations, 'removed a comment from commenter');
 });
 
-test('#initEvents', function(assert) {
+QUnit.skip('#initEvents', function(assert) {
   const proto = Resource.PrototypeMixin.mixins[1].properties;
   window.sinon.stub(proto, 'initEvents', function () { return; });
   let post = Post.create({ attributes: { id: '1', title: 'Wyatt Earp', excerpt: 'Was a gambler.'} });
