@@ -14,8 +14,8 @@ module('Unit | Initializer | store', {
   }
 });
 
-test('it works', function(assert) {
+test('it regisers the store service', function(assert) {
   initialize(container, application);
-
-  assert.ok(true);
+  let store = container.lookup('service:store');
+  assert.ok(store, 'store service added to container');
 });
