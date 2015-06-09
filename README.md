@@ -22,8 +22,7 @@ the domain of your API server. The addon code is rather concise; borrow at will.
 
 [![Build Status](https://travis-ci.org/pixelhandler/ember-jsonapi-resources.svg?branch=master)](https://travis-ci.org/pixelhandler/ember-jsonapi-resources)
 
-This addon will be under active development, so it will be fully documented and 
-tested within a week or two.
+This addon is under active development.
 
 **This is a NEW project there may be bugs depending on your use of the addon.** 
 Please do file an issue if you run into a bug.
@@ -349,11 +348,11 @@ To run the app in /tests/dummy use a proxy url for a live API
 
 ### Running Tests
 
-This will be worked on shortly. The first test was to deploy to a working app, a demo of 
-which is available on <http://pixelhandler.com>. I promise to write more tests this week.
-
 * `ember test`
 * `ember test --server`
+
+A good way to get to know more about how this addon works is to review the tests,
+see source code for the unit tests: [tests/unit](tests/unit).
 
 ### Building
 
@@ -365,7 +364,6 @@ For more information on using ember-cli, visit [http://www.ember-cli.com/]
 
 ### Roadmap
 
-- Finish writing the tests.
 - Use cache service for relations in the resource (model).
 - Deserialize and cache the 'include' resource of a document.
 - Figure out the rest as implemented in a complex app with lots of reads & writes.

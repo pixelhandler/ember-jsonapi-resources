@@ -95,7 +95,7 @@ export default Ember.Object.extend(Ember.Evented, {
   */
   findRelated(resource, url) {
     const service = this.container.lookup('service:' + pluralize(resource));
-    return service.fetch(url);
+    return service.fetch(url, { method: 'GET' });
   },
 
   /**
@@ -146,11 +146,9 @@ export default Ember.Object.extend(Ember.Evented, {
     @return {Promise}
   */
   patchRelationship(resource, relationship) {
-    let url = ['relationships', relationship, 'links', 'self'].join('');
+    let url = resource.get(['relationships', relationship, 'links', 'self'].join('.'));
     url = url || [this.get('url'), resource.get('id'), 'relationships', relationship].join('/');
-    url = resource.get(url);
-    let data = ['relationships', relationship, 'data'].join('');
-    data = resource.get(data);
+    let data = resource.get(['relationships', relationship, 'data'].join('.'));
     return this.fetch(url, {
       method: 'PATCH',
       body: JSON.stringify(data)
@@ -184,34 +182,38 @@ export default Ember.Object.extend(Ember.Evented, {
 
     @method fetch
     @param {String} url
-    @return {Promise}
+    @return {Ember.RSVP.Promise}
   */
   fetch(url, options = {}) {
     let isUpdate = this.fetchOptions(options);
     url = this.fetchUrl(url);
-    return window.fetch(url, options).then(function(resp) {
-      if (resp.status >= 500) {
-        throw new Error('Server Error');
-      } else if (resp.status >= 400) {
-        resp.json().then(function(resp) {
-          // TODO handle errors better
-          throw new Error(resp.errors);
-        });
-      } else if (resp.status === 204) {
-        return '';
-      } else {
-        return resp.json().then(function(json) {
-          if (!isUpdate) {
-            const resource = this.serializer.deserialize(json);
-            this.cacheResource({ meta: json.meta, data: resource});
-            return resource;
-          } else {
-            return json;
-          }
-        }.bind(this));
-      }
-    }.bind(this)).catch(function(error) {
-      throw error;
+    const _this = this;
+    return new Ember.RSVP.Promise(function(resolve, reject) {
+      window.fetch(url, options).then(function(resp) {
+        if (resp.status >= 500) {
+          let msg = 'The Service responded with a '+ resp.status +' error.';
+          reject(new ServerError(msg, resp));
+        } else if (resp.status >= 400) {
+          resp.json().then(function(_resp) {
+            let msg = 'The API responded with a '+ resp.status +' error.';
+            reject(new ClientError(msg, _resp));
+          });
+        } else if (resp.status === 204) {
+          resolve('');
+        } else {
+          return resp.json().then(function(json) {
+            if (!isUpdate) {
+              const resource = _this.serializer.deserialize(json);
+              _this.cacheResource({ meta: json.meta, data: resource});
+              resolve(resource);
+            } else {
+              resolve(json);
+            }
+          });
+        }
+      }).catch(function(error) {
+        reject(new FetchError('Unable to Fetch resource(s)', error));
+      });
     });
   },
 
@@ -272,3 +274,29 @@ export default Ember.Object.extend(Ember.Evented, {
     this.on('attributeChanged', this, this.updateResource);
   })
 });
+
+function ServerError(message = 'Server Error', response = null) {
+  this.name = 'Server Error';
+  this.message = message;
+  this.response = response;
+}
+ServerError.prototype = Object.create(Error.prototype);
+ServerError.prototype.constructor = ServerError;
+
+function ClientError(message = 'API Error', response = null) {
+  this.name = 'API Error';
+  this.message = message;
+  this.response = response;
+  this.errors = response.errors;
+}
+ClientError.prototype = Object.create(Error.prototype);
+ClientError.prototype.constructor = ClientError;
+
+function FetchError(message = 'Fetch Error', error = null, response = null) {
+  this.name = 'Fetch Error';
+  this.message = message;
+  this.error = error;
+  this.response = response;
+}
+FetchError.prototype = Object.create(Error.prototype);
+FetchError.prototype.constructor = FetchError;
