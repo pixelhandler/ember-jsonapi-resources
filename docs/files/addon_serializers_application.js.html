@@ -106,39 +106,16 @@ import Ember from &#x27;ember&#x27;;
 export default Ember.Object.extend({
 
   /**
-    Serialize resource(s) for the request payload
+    Serialize resource for the request payload
 
     @method serialize
-    @param {Resource|Array} resources - object(s) to serialize
+    @param {Resource|Array} resource - object to serialize
     @return {Object} json
   */
   serialize(resources) {
     const json = { data: null };
-
-    if (Array.isArray(resources)) {
-      json.data = this.serializeResources(resources);
-    } else {
-      json.data = this.serializeResource(resources);
-    }
-
+    json.data = this.serializeResource(resources);
     return json;
-  },
-
-  /**
-    Serialize a collection of resources
-
-    @method serializeResources
-    @param {Array} resources to serialize
-    @return {Ember.Array}
-  */
-  serializeResources(resources) {
-    const collection = Ember.A([]);
-
-    resources.forEach(function(resource) {
-      collection.pushObject(this.serializeRecord(resource));
-    }, this);
-
-    return collection;
   },
 
   /**

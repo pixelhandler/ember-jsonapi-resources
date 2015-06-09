@@ -469,7 +469,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 162,
+            "line": 160,
             "description": "Delete an existing resource, sends a DELETE request",
             "itemtype": "method",
             "name": "deleteResource",
@@ -490,7 +490,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 180,
+            "line": 178,
             "description": "Makes a fetch request via Fetch API\n\nsee http://updates.html5rocks.com/2015/03/introduction-to-fetch",
             "itemtype": "method",
             "name": "fetch",
@@ -503,7 +503,7 @@
             ],
             "return": {
                 "description": "",
-                "type": "Promise"
+                "type": "Ember.RSVP.Promise"
             },
             "class": "ApplicationAdapter",
             "module": "ember-jsonapi-resources",
@@ -511,7 +511,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 218,
+            "line": 220,
             "description": "Adds params and headers or Fetch request.\n\nFor example a header is set for Content-Type: application/vnd.api+json\n\nIf an `AuthorizationHeader` key exists in localStorage it will be used for\nthe `Authorization` header value.",
             "itemtype": "method",
             "name": "fetchOptions",
@@ -532,7 +532,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 244,
+            "line": 246,
             "description": "Hook to customize the URL, e.g. if your API is behind a proxy and you need\nto swap a portion of the domain to make a request on the same domain.",
             "itemtype": "method",
             "name": "fetchUrl",
@@ -553,7 +553,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 256,
+            "line": 258,
             "description": "Noop as a hook for defining how deserialized resource objects are cached,\ne.g. in memory",
             "itemtype": "method",
             "name": "cacheResource",
@@ -570,7 +570,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 265,
+            "line": 267,
             "description": "Initialize events to communicate on the resource instances' service reference.\nListens for resource objects trigging `attributeChanged` events",
             "itemtype": "method",
             "name": "initEvents",
@@ -891,13 +891,13 @@
         {
             "file": "addon/serializers/application.js",
             "line": 16,
-            "description": "Serialize resource(s) for the request payload",
+            "description": "Serialize resource for the request payload",
             "itemtype": "method",
             "name": "serialize",
             "params": [
                 {
-                    "name": "resources",
-                    "description": "- object(s) to serialize",
+                    "name": "resource",
+                    "description": "- object to serialize",
                     "type": "Resource|Array"
                 }
             ],
@@ -911,28 +911,7 @@
         },
         {
             "file": "addon/serializers/application.js",
-            "line": 35,
-            "description": "Serialize a collection of resources",
-            "itemtype": "method",
-            "name": "serializeResources",
-            "params": [
-                {
-                    "name": "resources",
-                    "description": "to serialize",
-                    "type": "Array"
-                }
-            ],
-            "return": {
-                "description": "",
-                "type": "Ember.Array"
-            },
-            "class": "ApplicationSerializer",
-            "module": "ember-jsonapi-resources",
-            "submodule": "serializer"
-        },
-        {
-            "file": "addon/serializers/application.js",
-            "line": 52,
+            "line": 29,
             "description": "Serialize a resource object",
             "itemtype": "method",
             "name": "serializeResource",
@@ -953,7 +932,7 @@
         },
         {
             "file": "addon/serializers/application.js",
-            "line": 72,
+            "line": 49,
             "description": "Serialize a resource object, but only the changed attributes",
             "itemtype": "method",
             "name": "serializeChanged",
@@ -974,7 +953,7 @@
         },
         {
             "file": "addon/serializers/application.js",
-            "line": 90,
+            "line": 67,
             "description": "Deserialize response objects from the request payload",
             "itemtype": "method",
             "name": "deserialize",
@@ -995,7 +974,7 @@
         },
         {
             "file": "addon/serializers/application.js",
-            "line": 107,
+            "line": 84,
             "description": "Deserialize response objects in the payload data",
             "itemtype": "method",
             "name": "deserializeResources",
@@ -1016,7 +995,7 @@
         },
         {
             "file": "addon/serializers/application.js",
-            "line": 121,
+            "line": 98,
             "description": "Deserialize response an object in the payload data",
             "itemtype": "method",
             "name": "deserializeResource",
@@ -1037,7 +1016,7 @@
         },
         {
             "file": "addon/serializers/application.js",
-            "line": 132,
+            "line": 109,
             "description": "Create a Resource from a JSON API Resource Object\n\nSee <http://jsonapi.org/format/#document-resource-objects>",
             "access": "private",
             "tagname": "",

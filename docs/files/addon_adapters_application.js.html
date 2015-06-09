@@ -187,7 +187,7 @@ export default Ember.Object.extend(Ember.Evented, {
   */
   findRelated(resource, url) {
     const service = this.container.lookup(&#x27;service:&#x27; + pluralize(resource));
-    return service.fetch(url);
+    return service.fetch(url, { method: &#x27;GET&#x27; });
   },
 
   /**
@@ -238,11 +238,9 @@ export default Ember.Object.extend(Ember.Evented, {
     @return {Promise}
   */
   patchRelationship(resource, relationship) {
-    let url = [&#x27;relationships&#x27;, relationship, &#x27;links&#x27;, &#x27;self&#x27;].join(&#x27;&#x27;);
+    let url = resource.get([&#x27;relationships&#x27;, relationship, &#x27;links&#x27;, &#x27;self&#x27;].join(&#x27;.&#x27;));
     url = url || [this.get(&#x27;url&#x27;), resource.get(&#x27;id&#x27;), &#x27;relationships&#x27;, relationship].join(&#x27;/&#x27;);
-    url = resource.get(url);
-    let data = [&#x27;relationships&#x27;, relationship, &#x27;data&#x27;].join(&#x27;&#x27;);
-    data = resource.get(data);
+    let data = resource.get([&#x27;relationships&#x27;, relationship, &#x27;data&#x27;].join(&#x27;.&#x27;));
     return this.fetch(url, {
       method: &#x27;PATCH&#x27;,
       body: JSON.stringify(data)
@@ -276,34 +274,38 @@ export default Ember.Object.extend(Ember.Evented, {
 
     @method fetch
     @param {String} url
-    @return {Promise}
+    @return {Ember.RSVP.Promise}
   */
   fetch(url, options = {}) {
     let isUpdate = this.fetchOptions(options);
     url = this.fetchUrl(url);
-    return window.fetch(url, options).then(function(resp) {
-      if (resp.status &gt;= 500) {
-        throw new Error(&#x27;Server Error&#x27;);
-      } else if (resp.status &gt;= 400) {
-        resp.json().then(function(resp) {
-          // TODO handle errors better
-          throw new Error(resp.errors);
-        });
-      } else if (resp.status === 204) {
-        return &#x27;&#x27;;
-      } else {
-        return resp.json().then(function(json) {
-          if (!isUpdate) {
-            const resource = this.serializer.deserialize(json);
-            this.cacheResource({ meta: json.meta, data: resource});
-            return resource;
-          } else {
-            return json;
-          }
-        }.bind(this));
-      }
-    }.bind(this)).catch(function(error) {
-      throw error;
+    const _this = this;
+    return new Ember.RSVP.Promise(function(resolve, reject) {
+      window.fetch(url, options).then(function(resp) {
+        if (resp.status &gt;= 500) {
+          let msg = &#x27;The Service responded with a &#x27;+ resp.status +&#x27; error.&#x27;;
+          reject(new ServerError(msg, resp));
+        } else if (resp.status &gt;= 400) {
+          resp.json().then(function(_resp) {
+            let msg = &#x27;The API responded with a &#x27;+ resp.status +&#x27; error.&#x27;;
+            reject(new ClientError(msg, _resp));
+          });
+        } else if (resp.status === 204) {
+          resolve(&#x27;&#x27;);
+        } else {
+          return resp.json().then(function(json) {
+            if (!isUpdate) {
+              const resource = _this.serializer.deserialize(json);
+              _this.cacheResource({ meta: json.meta, data: resource});
+              resolve(resource);
+            } else {
+              resolve(json);
+            }
+          });
+        }
+      }).catch(function(error) {
+        reject(new FetchError(&#x27;Unable to Fetch resource(s)&#x27;, error));
+      });
     });
   },
 
@@ -364,6 +366,32 @@ export default Ember.Object.extend(Ember.Evented, {
     this.on(&#x27;attributeChanged&#x27;, this, this.updateResource);
   })
 });
+
+function ServerError(message = &#x27;Server Error&#x27;, response = null) {
+  this.name = &#x27;Server Error&#x27;;
+  this.message = message;
+  this.response = response;
+}
+ServerError.prototype = Object.create(Error.prototype);
+ServerError.prototype.constructor = ServerError;
+
+function ClientError(message = &#x27;API Error&#x27;, response = null) {
+  this.name = &#x27;API Error&#x27;;
+  this.message = message;
+  this.response = response;
+  this.errors = response.errors;
+}
+ClientError.prototype = Object.create(Error.prototype);
+ClientError.prototype.constructor = ClientError;
+
+function FetchError(message = &#x27;Fetch Error&#x27;, error = null, response = null) {
+  this.name = &#x27;Fetch Error&#x27;;
+  this.message = message;
+  this.error = error;
+  this.response = response;
+}
+FetchError.prototype = Object.create(Error.prototype);
+FetchError.prototype.constructor = FetchError;
 
     </pre>
 </div>
