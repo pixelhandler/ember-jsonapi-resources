@@ -151,7 +151,7 @@
             "module": "ember-jsonapi-resources",
             "namespace": "",
             "file": "addon/models/resource.js",
-            "line": 278,
+            "line": 294,
             "description": "A Resource class to create JSON API resource objects\n\nSee <http://jsonapi.org/format/#document-resource-objects>"
         },
         "serializer": {
@@ -242,7 +242,7 @@
             "submodule": "resource",
             "namespace": "",
             "file": "addon/models/resource.js",
-            "line": 278,
+            "line": 294,
             "description": "Mixin for creating promise proxy objects for related resources",
             "static": 1
         },
@@ -617,26 +617,69 @@
             "description": "Store response object(s) in the cache",
             "itemtype": "method",
             "name": "cacheResource",
+            "params": [
+                {
+                    "name": "resp",
+                    "description": "w/ props: {Object} meta, {Array|Object} data, & {Object} headers",
+                    "type": "Object"
+                }
+            ],
             "class": "ServiceCacheMixin",
             "module": "ember-jsonapi-resources",
             "submodule": "cache"
         },
         {
             "file": "addon/mixins/service-cache.js",
-            "line": 45,
+            "line": 46,
             "description": "Store meta data in the cache",
             "itemtype": "method",
             "name": "cacheMeta",
+            "params": [
+                {
+                    "name": "resp",
+                    "description": "w/ props: {Object} meta, {Array|Object} data, & {Object} headers",
+                    "type": "Object"
+                }
+            ],
             "class": "ServiceCacheMixin",
             "module": "ember-jsonapi-resources",
             "submodule": "cache"
         },
         {
             "file": "addon/mixins/service-cache.js",
-            "line": 56,
+            "line": 58,
             "description": "Store resource objects in the `data` array of the cache",
             "itemtype": "method",
             "name": "cacheData",
+            "params": [
+                {
+                    "name": "resp",
+                    "description": "w/ props: {Object} meta, {Array|Object} data, & {Object} headers",
+                    "type": "Object"
+                }
+            ],
+            "class": "ServiceCacheMixin",
+            "module": "ember-jsonapi-resources",
+            "submodule": "cache"
+        },
+        {
+            "file": "addon/mixins/service-cache.js",
+            "line": 92,
+            "description": "Store meta from headers on resource meta",
+            "itemtype": "method",
+            "name": "cacheControl",
+            "params": [
+                {
+                    "name": "resource",
+                    "description": "",
+                    "type": "Resource"
+                },
+                {
+                    "name": "headers",
+                    "description": "",
+                    "type": "Object"
+                }
+            ],
             "class": "ServiceCacheMixin",
             "module": "ember-jsonapi-resources",
             "submodule": "cache"
@@ -647,6 +690,7 @@
             "description": "The service object for the entity (adapter with cache and serializer)",
             "itemtype": "property",
             "name": "service",
+            "type": "Object",
             "required": 1,
             "class": "Resource",
             "module": "ember-jsonapi-resources",
@@ -654,10 +698,11 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 28,
+            "line": 29,
             "description": "Extending Prototypes Must define a `type` value for the entity, e.g. `posts`",
             "itemtype": "property",
             "name": "type",
+            "type": "String",
             "required": 1,
             "class": "Resource",
             "module": "ember-jsonapi-resources",
@@ -665,10 +710,11 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 36,
+            "line": 38,
             "description": "Persisted resource ID value",
             "itemtype": "property",
             "name": "id",
+            "type": "String",
             "required": 1,
             "class": "Resource",
             "module": "ember-jsonapi-resources",
@@ -676,77 +722,83 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 44,
-            "description": "An optional property of for a JSON API Resource object, setup in create()\n\nThis object will keep the values from the response object and may be mutable\nUse this as a refence for creating computed properties\n\nFor example the `attr()` helper sets up a properties based on this content",
+            "line": 47,
+            "description": "An optional `attributes` property of for a JSON API Resource object, setup in create()\n\nThis object will keep the values from the response object and may be mutable\nUse this as a refence for creating computed properties\n\nFor example the `attr()` helper sets up a properties based on this content",
             "access": "protected",
             "tagname": "",
             "itemtype": "property",
             "name": "attributes",
+            "type": "Object",
             "class": "Resource",
             "module": "ember-jsonapi-resources",
             "submodule": "resource"
         },
         {
             "file": "addon/models/resource.js",
-            "line": 57,
-            "description": "An optional property of for a JSON API Resource object, setup in create()",
+            "line": 61,
+            "description": "An optional `relationships` property of for a JSON API Resource object, setup in create()",
             "access": "protected",
             "tagname": "",
             "itemtype": "property",
             "name": "relationships",
+            "type": "Object",
             "class": "Resource",
             "module": "ember-jsonapi-resources",
             "submodule": "resource"
         },
         {
             "file": "addon/models/resource.js",
-            "line": 65,
-            "description": "An optional property of for a JSON API Resource object, setup in create()",
+            "line": 70,
+            "description": "An optional `links` property of for a JSON API Resource object, setup in create()",
             "access": "protected",
             "tagname": "",
             "itemtype": "property",
-            "name": "attributes",
+            "name": "links",
+            "type": "Object",
             "class": "Resource",
             "module": "ember-jsonapi-resources",
             "submodule": "resource"
         },
         {
             "file": "addon/models/resource.js",
-            "line": 73,
+            "line": 79,
             "description": "An optional property of for a JSON API Resource object, setup in create()",
             "access": "protected",
             "tagname": "",
             "itemtype": "property",
             "name": "meta",
+            "type": "Object",
             "class": "Resource",
             "module": "ember-jsonapi-resources",
             "submodule": "resource"
         },
         {
             "file": "addon/models/resource.js",
-            "line": 81,
+            "line": 88,
             "description": "Hash of attributes for changed/previous values",
             "access": "private",
             "tagname": "",
             "itemtype": "property",
             "name": "_attributes",
+            "type": "Object",
             "class": "Resource",
             "module": "ember-jsonapi-resources",
             "submodule": "resource"
         },
         {
             "file": "addon/models/resource.js",
-            "line": 89,
+            "line": 97,
             "description": "Flag for new instance, e.g. not peristed",
             "itemtype": "property",
             "name": "isNew",
+            "type": "Boolean",
             "class": "Resource",
             "module": "ember-jsonapi-resources",
             "submodule": "resource"
         },
         {
             "file": "addon/models/resource.js",
-            "line": 96,
+            "line": 105,
             "description": "Custom `toString` method used for clarity that the instance is a JSON API Resource kind of object",
             "itemtype": "method",
             "name": "toString",
@@ -756,7 +808,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 105,
+            "line": 114,
             "description": "Adds related links object on the relationship hash",
             "itemtype": "method",
             "name": "addRelationship",
@@ -778,7 +830,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 125,
+            "line": 134,
             "description": "Remove related links object on the relationship hash to have `null` data",
             "itemtype": "method",
             "name": "removeRelationship",
@@ -800,7 +852,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 146,
+            "line": 155,
             "itemtype": "method",
             "name": "changedAttributes",
             "return": {
@@ -813,7 +865,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 164,
+            "line": 173,
             "itemtype": "method",
             "name": "previousAttributes",
             "return": {
@@ -826,7 +878,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 182,
+            "line": 191,
             "description": "Initialize events to communicate with the service object, listen for `didUpdateResource`",
             "itemtype": "method",
             "name": "initEvents",
@@ -836,7 +888,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 194,
+            "line": 203,
             "description": "Handler for `didUpdateResource` event, resets private _attributes used for changed/previous tracking",
             "itemtype": "method",
             "name": "didUpdateResource",
@@ -846,7 +898,17 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 209,
+            "line": 216,
+            "description": "A local cache time override to minimize duplicate fetch requests",
+            "itemtype": "method",
+            "name": "cacheFor",
+            "class": "Resource",
+            "module": "ember-jsonapi-resources",
+            "submodule": "resource"
+        },
+        {
+            "file": "addon/models/resource.js",
+            "line": 225,
             "description": "To protect the JSON API Resource properties for attributes, links and relationships\nthese objects are setup during create(). This has to be defined since the attr()\nhelper needs to have new objects for each instance, to project from keeping a\nreference on the prototype.",
             "itemtype": "method",
             "name": "create",
@@ -860,7 +922,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 247,
+            "line": 263,
             "description": "Helper to setup computed property for resource attributes",
             "itemtype": "method",
             "name": "attr",
@@ -870,20 +932,108 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 329,
-            "description": "Helper to setup a has one relationship to another resource",
+            "line": 302,
+            "description": "Checks for required `relationship` property",
             "itemtype": "method",
-            "name": "hasOne",
+            "name": "init",
             "class": "RelatedProxyUtil",
             "module": "ember-jsonapi-resources",
             "submodule": "resource"
         },
         {
             "file": "addon/models/resource.js",
-            "line": 343,
+            "line": 315,
+            "description": "The name of the relationship",
+            "itemtype": "property",
+            "name": "resource",
+            "type": "String",
+            "required": 1,
+            "class": "RelatedProxyUtil",
+            "module": "ember-jsonapi-resources",
+            "submodule": "resource"
+        },
+        {
+            "file": "addon/models/resource.js",
+            "line": 324,
+            "description": "Proxy for the requested relation, resolves w/ content from fulfilled promise",
+            "itemtype": "method",
+            "name": "createProxy",
+            "params": [
+                {
+                    "name": "resource",
+                    "description": "",
+                    "type": "Resource"
+                },
+                {
+                    "name": "proxyFactory",
+                    "description": "",
+                    "type": "Ember.ObjectProxy|Ember.ArrayProxy"
+                }
+            ],
+            "return": {
+                "description": "proxy",
+                "type": "PromiseProxy"
+            },
+            "class": "RelatedProxyUtil",
+            "module": "ember-jsonapi-resources",
+            "submodule": "resource"
+        },
+        {
+            "file": "addon/models/resource.js",
+            "line": 353,
+            "description": "Proxy url to fetch for the resource's relation",
+            "itemtype": "method",
+            "name": "proxyUrl",
+            "params": [
+                {
+                    "name": "resource",
+                    "description": "",
+                    "type": "Resource"
+                },
+                {
+                    "name": "relation",
+                    "description": "",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "proxy",
+                "type": "PromiseProxy"
+            },
+            "class": "RelatedProxyUtil",
+            "module": "ember-jsonapi-resources",
+            "submodule": "resource"
+        },
+        {
+            "file": "addon/models/resource.js",
+            "line": 375,
+            "description": "Helper to setup a has one relationship to another resource",
+            "itemtype": "method",
+            "name": "hasOne",
+            "params": [
+                {
+                    "name": "relation",
+                    "description": "",
+                    "type": "String"
+                }
+            ],
+            "class": "RelatedProxyUtil",
+            "module": "ember-jsonapi-resources",
+            "submodule": "resource"
+        },
+        {
+            "file": "addon/models/resource.js",
+            "line": 389,
             "description": "Helper to setup a has many relationship to another resource",
             "itemtype": "method",
             "name": "hasMany",
+            "params": [
+                {
+                    "name": "relation",
+                    "description": "",
+                    "type": "String"
+                }
+            ],
             "class": "RelatedProxyUtil",
             "module": "ember-jsonapi-resources",
             "submodule": "resource"
@@ -1210,7 +1360,7 @@
     "warnings": [
         {
             "message": "replacing incorrect tag: returns with return",
-            "line": " addon/models/resource.js:209"
+            "line": " addon/models/resource.js:225"
         }
     ]
 }

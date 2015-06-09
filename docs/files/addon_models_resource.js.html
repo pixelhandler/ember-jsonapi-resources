@@ -113,6 +113,7 @@ const Resource = Ember.Object.extend({
     The service object for the entity (adapter with cache and serializer)
 
     @property service
+    @type Object
     @required
   */
   service: null,
@@ -121,6 +122,7 @@ const Resource = Ember.Object.extend({
     Extending Prototypes Must define a &#x60;type&#x60; value for the entity, e.g. &#x60;posts&#x60;
 
     @property type
+    @type String
     @required
   */
   type: null,
@@ -129,12 +131,13 @@ const Resource = Ember.Object.extend({
     Persisted resource ID value
 
     @property id
+    @type String
     @required
   */
   id: null,
 
   /**
-    An optional property of for a JSON API Resource object, setup in create()
+    An optional &#x60;attributes&#x60; property of for a JSON API Resource object, setup in create()
 
     This object will keep the values from the response object and may be mutable
     Use this as a refence for creating computed properties
@@ -143,22 +146,25 @@ const Resource = Ember.Object.extend({
 
     @protected
     @property attributes
+    @type Object
   */
   attributes: null,
 
   /**
-    An optional property of for a JSON API Resource object, setup in create()
+    An optional &#x60;relationships&#x60; property of for a JSON API Resource object, setup in create()
 
     @protected
     @property relationships
+    @type Object
   */
   relationships: null,
 
   /**
-    An optional property of for a JSON API Resource object, setup in create()
+    An optional &#x60;links&#x60; property of for a JSON API Resource object, setup in create()
 
     @protected
-    @property attributes
+    @property links
+    @type Object
   */
   links: null,
 
@@ -167,6 +173,7 @@ const Resource = Ember.Object.extend({
 
     @protected
     @property meta
+    @type Object
   */
   meta: null,
 
@@ -175,6 +182,7 @@ const Resource = Ember.Object.extend({
 
     @private
     @property _attributes
+    @type Object
   */
   _attributes: null,
 
@@ -182,6 +190,7 @@ const Resource = Ember.Object.extend({
     Flag for new instance, e.g. not peristed
 
     @property isNew
+    @type Boolean
   */
   isNew: false,
 
@@ -294,7 +303,14 @@ const Resource = Ember.Object.extend({
         delete this._attributes[attr];
       }
     }
-  }
+  },
+
+  /**
+    A local cache time override to minimize duplicate fetch requests
+
+    @method cacheFor
+  */
+  cacheFor: /* minutes */ 7 * /* seconds */ 60 * /* milliseconds */ 1000
 });
 
 Resource.reopenClass({
@@ -374,39 +390,69 @@ export function attr(type, mutable = true) {
   @static
 */
 const RelatedProxyUtil = Ember.Object.extend({
+
+  /**
+    Checks for required &#x60;relationship&#x60; property
+
+    @method init
+  */
   init: function () {
     this._super();
-    if (typeof this.get(&#x27;resource&#x27;) !== &#x27;string&#x27;) {
-      throw new Error(&#x27;RelatedProxyUtil#init expects &#x60;resource&#x60; property to exist.&#x27;);
+    if (typeof this.get(&#x27;relationship&#x27;) !== &#x27;string&#x27;) {
+      throw new Error(&#x27;RelatedProxyUtil#init expects &#x60;relationship&#x60; property to exist.&#x27;);
     }
     return this;
   },
 
-  _proxy: null,
+  /**
+    The name of the relationship
 
-  createProxy: function (model, proxyFactory) {
-    const resource = this.get(&#x27;resource&#x27;);
-    const url = this._proxyUrl(model, resource);
-    const service = model.container.lookup(&#x27;service:&#x27; + pluralize(resource));
-    const proxy = proxyFactory.extend(Ember.PromiseProxyMixin, {
-      promise: service.findRelated(resource, url),
-      type: resource
+    @property resource
+    @type String
+    @required
+  */
+  relationship: null,
+
+  /**
+    Proxy for the requested relation, resolves w/ content from fulfilled promise
+
+    @method createProxy
+    @param {Resource} resource
+    @param {Ember.ObjectProxy|Ember.ArrayProxy} proxyFactory
+    @return {PromiseProxy} proxy
+  */
+  createProxy: function (resource, proxyFactory) {
+    const relation = this.get(&#x27;relationship&#x27;);
+    const url = this.proxyUrl(resource, relation);
+    const service = resource.container.lookup(&#x27;service:&#x27; + pluralize(relation));
+    let proxy = proxyFactory.extend(Ember.PromiseProxyMixin, {
+      &#x27;promise&#x27;: service.findRelated(relation, url),
+      &#x27;type&#x27;: relation
     });
-    this._proxy = proxy.create();
-    this._proxy.then(
+    proxy = proxy.create();
+    proxy.then(
       function (resources) {
-        this._proxy.set(&#x27;content&#x27;, resources);
-      }.bind(this),
+        proxy.set(&#x27;content&#x27;, resources);
+      },
       function (error) {
         console.error(error);
         throw error;
       }
     );
+    return proxy;
   },
 
-  _proxyUrl(model, resource) {
-    const related = linksPath(resource);
-    const url = model.get(related);
+  /**
+    Proxy url to fetch for the resource&#x27;s relation
+
+    @method proxyUrl
+    @param {Resource} resource
+    @param {String} relation
+    @return {PromiseProxy} proxy
+  */
+  proxyUrl(resource, relation) {
+    const related = linksPath(relation);
+    const url = resource.get(related);
     if (typeof url !== &#x27;string&#x27;) {
       throw new Error(&#x27;RelatedProxyUtil#_proxyUrl expects &#x60;model.&#x27;+ related +&#x27;&#x60; property to exist.&#x27;);
     }
@@ -414,46 +460,47 @@ const RelatedProxyUtil = Ember.Object.extend({
   }
 });
 
-function linksPath(resourceName) {
-  return [&#x27;relationships&#x27;, resourceName, &#x27;links&#x27;, &#x27;related&#x27;].join(&#x27;.&#x27;);
+function linksPath(relation) {
+  return [&#x27;relationships&#x27;, relation, &#x27;links&#x27;, &#x27;related&#x27;].join(&#x27;.&#x27;);
 }
 
 /**
   Helper to setup a has one relationship to another resource
 
   @method hasOne
+  @param {String} relation
 */
-export function hasOne(resource) {
-  const util = RelatedProxyUtil.create({&#x27;resource&#x27;: resource});
-  const path = linksPath(resource);
+export function hasOne(relation) {
+  const util = RelatedProxyUtil.create({&#x27;relationship&#x27;: relation});
+  const path = linksPath(relation);
   return Ember.computed(path, function () {
-    util.createProxy(this, Ember.ObjectProxy);
-    return util._proxy;
-  }).meta({relation: resource, kind: &#x27;hasOne&#x27;});
+    return util.createProxy(this, Ember.ObjectProxy);
+  }).meta({relation: relation, kind: &#x27;hasOne&#x27;});
 }
 
 /**
   Helper to setup a has many relationship to another resource
 
   @method hasMany
+  @param {String} relation
 */
-export function hasMany(resource) {
-  const util = RelatedProxyUtil.create({&#x27;resource&#x27;: resource});
-  return Ember.computed(linksPath(resource), function () {
-    util.createProxy(this, Ember.ArrayProxy);
-    return util._proxy;
-  }).meta({relation: resource, kind: &#x27;hasMany&#x27;});
+export function hasMany(relation) {
+  const util = RelatedProxyUtil.create({&#x27;relationship&#x27;: relation});
+  const path = linksPath(relation);
+  return Ember.computed(path, function () {
+    return util.createProxy(this, Ember.ArrayProxy);
+  }).meta({relation: relation, kind: &#x27;hasMany&#x27;});
 }
 
-function setupRelationship(resource, data = null) {
-  if (!this.relationships[resource]) {
-    this.relationships[resource] = { links: {}, data: data };
+function setupRelationship(relation, data = null) {
+  if (!this.relationships[relation]) {
+    this.relationships[relation] = { links: {}, data: data };
   }
-  if (!this.relationships[resource].links) {
-    this.relationships[resource].links = {};
+  if (!this.relationships[relation].links) {
+    this.relationships[relation].links = {};
   }
-  if (!this.relationships[resource].data) {
-    this.relationships[resource].data = data;
+  if (!this.relationships[relation].data) {
+    this.relationships[relation].data = data;
   }
 }
 

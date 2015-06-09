@@ -128,6 +128,7 @@ export default Ember.Mixin.create({
     Store response object(s) in the cache
 
     @method cacheResource
+    @param {Object} resp w/ props: {Object} meta, {Array|Object} data, &amp; {Object} headers
   */
   cacheResource(resp) {
     this.cacheMeta(resp);
@@ -138,6 +139,7 @@ export default Ember.Mixin.create({
     Store meta data in the cache
 
     @method cacheMeta
+    @param {Object} resp w/ props: {Object} meta, {Array|Object} data, &amp; {Object} headers
   */
   cacheMeta(resp) {
     if (resp.meta) {
@@ -149,18 +151,23 @@ export default Ember.Mixin.create({
     Store resource objects in the &#x60;data&#x60; array of the cache
 
     @method cacheData
+    @param {Object} resp w/ props: {Object} meta, {Array|Object} data, &amp; {Object} headers
   */
   cacheData(resp) {
     const data = this.get(&#x27;cache.data&#x27;);
     const ids = data.mapBy(&#x27;id&#x27;);
     if (Array.isArray(resp.data)) {
       if (data.get(&#x27;length&#x27;) === 0) {
+        for (let i = 0; i &lt; resp.data.length; i++) {
+          this.cacheControl(resp.data[i], resp.headers);
+        }
         data.pushObjects(resp.data);
       } else {
         const items = Ember.A([]);
-        for (let i = 0; i &lt; resp.data.length; i++) {
-          if (ids.indexOf(resp.data[i].get(&#x27;id&#x27;)) === -1) {
-            items.push(resp.data[i]);
+        for (let j = 0; j &lt; resp.data.length; j++) {
+          if (ids.indexOf(resp.data[j].get(&#x27;id&#x27;)) === -1) {
+            this.cacheControl(resp.data[j], resp.headers);
+            items.push(resp.data[j]);
           }
         }
         if (items.length &gt; 0) {
@@ -170,6 +177,31 @@ export default Ember.Mixin.create({
     } else if (typeof resp === &#x27;object&#x27;) {
       if (ids.indexOf(resp.data.get(&#x27;id&#x27;)) === -1) {
         data.pushObject(resp.data);
+      }
+    }
+  },
+
+  /**
+    Store meta from headers on resource meta
+
+    @method cacheControl
+    @param {Resource} resource
+    @param {Object} headers
+  */
+  cacheControl(resource, headers) {
+    resource.set(&#x27;meta.cacheDate&#x27;, { local: Date.now() });
+    if (headers &amp;&amp; typeof headers.get === &#x27;function&#x27;) {
+      let date = headers.get(&#x27;date&#x27;);
+      if (date) {
+        resource.set(&#x27;meta.cacheDate.server&#x27;, date);
+      }
+      let cacheControl = headers.get(&#x27;cache-control&#x27;);
+      if (cacheControl) {
+        resource.set(&#x27;meta.cacheControl&#x27;, cacheControl);
+      }
+      let etag = headers.get(&#x27;etag&#x27;);
+      if (etag) {
+        resource.set(&#x27;meta.etag&#x27;, etag);
       }
     }
   }

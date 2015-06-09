@@ -123,6 +123,10 @@
 
                     <ul class="index-list methods">
                             <li class="index-item method">
+                                <a href="#method_cacheControl">cacheControl</a>
+
+                            </li>
+                            <li class="index-item method">
                                 <a href="#method_cacheData">cacheData</a>
 
                             </li>
@@ -162,10 +166,19 @@
             <div id="methods" class="api-class-tabpanel">
                 <h2 class="off-left">Methods</h2>
 
-<div id="method_cacheData" class="method item">
-    <h3 class="name"><code>cacheData</code></h3>
+<div id="method_cacheControl" class="method item">
+    <h3 class="name"><code>cacheControl</code></h3>
 
-        <span class="paren">()</span>
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>resource</code>
+                </li>
+                <li class="arg">
+                        <code>headers</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
 
 
 
@@ -177,7 +190,70 @@
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_mixins_service-cache.js.html#l56"><code>addon&#x2F;mixins&#x2F;service-cache.js:56</code></a>
+        <a href="../files/addon_mixins_service-cache.js.html#l92"><code>addon&#x2F;mixins&#x2F;service-cache.js:92</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Store meta from headers on resource meta</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">resource</code>
+                        <span class="type"><a href="../classes/Resource.html" class="crosslink">Resource</a></span>
+
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">headers</code>
+                        <span class="type">Object</span>
+
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+
+
+</div>
+<div id="method_cacheData" class="method item">
+    <h3 class="name"><code>cacheData</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>resp</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/addon_mixins_service-cache.js.html#l58"><code>addon&#x2F;mixins&#x2F;service-cache.js:58</code></a>
         </p>
 
 
@@ -189,6 +265,23 @@
 
     </div>
 
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">resp</code>
+                        <span class="type">Object</span>
+
+
+                    <div class="param-description">
+                        <p>w/ props: {Object} meta, {Array|Object} data, &amp; {Object} headers</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
 
 
 
@@ -196,7 +289,13 @@
 <div id="method_cacheMeta" class="method item">
     <h3 class="name"><code>cacheMeta</code></h3>
 
-        <span class="paren">()</span>
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>resp</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
 
 
 
@@ -208,7 +307,7 @@
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_mixins_service-cache.js.html#l45"><code>addon&#x2F;mixins&#x2F;service-cache.js:45</code></a>
+        <a href="../files/addon_mixins_service-cache.js.html#l46"><code>addon&#x2F;mixins&#x2F;service-cache.js:46</code></a>
         </p>
 
 
@@ -220,6 +319,23 @@
 
     </div>
 
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">resp</code>
+                        <span class="type">Object</span>
+
+
+                    <div class="param-description">
+                        <p>w/ props: {Object} meta, {Array|Object} data, &amp; {Object} headers</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
 
 
 
@@ -227,7 +343,13 @@
 <div id="method_cacheResource" class="method item">
     <h3 class="name"><code>cacheResource</code></h3>
 
-        <span class="paren">()</span>
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>resp</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
 
 
 
@@ -251,6 +373,23 @@
 
     </div>
 
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">resp</code>
+                        <span class="type">Object</span>
+
+
+                    <div class="param-description">
+                        <p>w/ props: {Object} meta, {Array|Object} data, &amp; {Object} headers</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
 
 
 

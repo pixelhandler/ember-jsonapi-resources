@@ -210,6 +210,7 @@ export default Ember.Object.extend({
   */
   _createResourceInstance(json) {
     const factoryName = &#x27;model:&#x27; + json.type;
+    json.meta = json.meta || {};
     return this.container.lookupFactory(factoryName).create({
       &#x27;type&#x27;: json.type,
       &#x27;id&#x27;: json.id,
