@@ -208,7 +208,10 @@ test('#cacheResource called after successful fetch', function(assert) {
   const done = assert.async();
   const adapter = this.subject();
   sandbox.stub(adapter, 'cacheResource', function () {});
-  adapter.serializer = { deserialize: function () { return postsMock.data; } };
+  adapter.serializer = {
+    deserialize: function () { return postsMock.data; },
+    deserializeIncluded: function () { return; }
+  };
   sandbox.stub(window, 'fetch', function () {
     return Ember.RSVP.Promise.resolve({
       "status": 200,
@@ -224,6 +227,31 @@ test('#cacheResource called after successful fetch', function(assert) {
     done();
   });
 });
+
+test('serializer#deserializeIncluded called after successful fetch', function(assert) {
+  assert.expect(2);
+  const done = assert.async();
+  const adapter = this.subject();
+  adapter.serializer = {
+    deserialize: function () { return postMock.data; },
+    deserializeIncluded: sandbox.spy()
+  };
+  sandbox.stub(window, 'fetch', function () {
+    return Ember.RSVP.Promise.resolve({
+      "status": 200,
+      "json": function() {
+        return Ember.RSVP.Promise.resolve(postMock);
+      }
+    });
+  });
+  let promise = adapter.fetch('/posts/1', { method: 'GET' });
+  assert.ok(typeof promise.then === 'function', 'returns a thenable');
+  promise.then(function() {
+    assert.ok(adapter.serializer.deserializeIncluded.calledOnce, '#deserializeIncluded method called');
+    done();
+  });
+});
+
 
 test('#fetch handles 5xx (Server Error) response status', function(assert) {
   assert.expect(2);
@@ -273,7 +301,7 @@ test('#fetch handles 204 (Success, no content) response status w/o calling deser
     });
   });
   sandbox.stub(adapter, 'cacheResource', function () {});
-  adapter.serializer = { deserialize: sandbox.spy() };
+  adapter.serializer = { deserialize: sandbox.spy(), deserializeIncluded: Ember.K };
   let promise = adapter.fetch('/posts', { method: 'PATCH', body: 'json string here' });
   assert.ok(typeof promise.then === 'function', 'returns a thenable');
   assert.equal(adapter.cacheResource.callCount, 0, '#cacheResource method NOT called');
@@ -291,7 +319,7 @@ test('#fetch handles 200 (Success) response status', function(assert) {
     });
   });
   sandbox.stub(adapter, 'cacheResource', function () {});
-  adapter.serializer = { deserialize: sandbox.spy() };
+  adapter.serializer = { deserialize: sandbox.spy(), deserializeIncluded: Ember.K };
   let promise = adapter.fetch('/posts/1', { method: 'GET' });
   assert.ok(typeof promise.then === 'function', 'returns a thenable');
   promise.then(function() {

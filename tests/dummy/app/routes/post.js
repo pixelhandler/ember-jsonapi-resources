@@ -9,7 +9,11 @@ export default Ember.Route.extend({
       if (found.get('length') > 0) {
         resolve(found[0]);
       } else {
-        this.store.find('post', params.post_id).then(
+        const options = {
+          id: params.post_id,
+          query: { include: 'author,comments' }
+        };
+        this.store.find('post', options).then(
           function (post) {
             resolve(post);
           },

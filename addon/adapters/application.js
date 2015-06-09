@@ -204,7 +204,8 @@ export default Ember.Object.extend(Ember.Evented, {
           return resp.json().then(function(json) {
             if (!isUpdate) {
               const resource = _this.serializer.deserialize(json);
-              _this.cacheResource({ meta: json.meta, data: resource});
+              _this.cacheResource({ meta: json.meta, data: resource, headers: resp.headers});
+              _this.serializer.deserializeIncluded(json.included, { headers: resp.headers });
               resolve(resource);
             } else {
               resolve(json);
@@ -260,7 +261,7 @@ export default Ember.Object.extend(Ember.Evented, {
     e.g. in memory
 
     @method cacheResource
-    @param {String} url
+    @param {Object} resp w/ props: {Object} meta, {Array|Object} data, & {Object} headers
   */
   cacheResource(/*resp*/) {},
 

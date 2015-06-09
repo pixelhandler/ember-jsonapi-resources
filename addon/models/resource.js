@@ -211,7 +211,20 @@ const Resource = Ember.Object.extend({
         delete this._attributes[attr];
       }
     }
-  }
+  },
+
+  /**
+    A local cache duration, to minimize duplicate fetch requests
+
+    @method cacheDuration
+  */
+  cacheDuration: /* minutes */ 7 * /* seconds */ 60 * /* milliseconds */ 1000,
+
+  isCacheExpired: Ember.computed('meta.timeStamps.local', 'cacheDuration', function () {
+    const localTime = this.get('meta.timeStamps.local');
+    const expiresTime = localTime + this.get('cacheDuration');
+    return (localTime) ? Date.now() >= expiresTime : false;
+  })
 });
 
 Resource.reopenClass({
@@ -326,9 +339,10 @@ const RelatedProxyUtil = Ember.Object.extend({
     const relation = this.get('relationship');
     const url = this.proxyUrl(resource, relation);
     const service = resource.container.lookup('service:' + pluralize(relation));
+    let promise = this.promiseFromCache(resource, relation, service);
+    promise = promise || service.findRelated(relation, url);
     let proxy = proxyFactory.extend(Ember.PromiseProxyMixin, {
-      'promise': service.findRelated(relation, url),
-      'type': relation
+      'promise': promise, 'type': relation
     });
     proxy = proxy.create();
     proxy.then(
@@ -358,6 +372,45 @@ const RelatedProxyUtil = Ember.Object.extend({
       throw new Error('RelatedProxyUtil#_proxyUrl expects `model.'+ related +'` property to exist.');
     }
     return url;
+  },
+
+  /**
+    Lookup relation from service cache and pomisify result
+
+    @method promiseFromCache
+    @param {Resource} resource
+    @param {String} relation
+    @param {Object} service
+    @return {Promise|null}
+  */
+  promiseFromCache(resource, relation, service) {
+    let data = resource.get('relationships.' + relation + '.data');
+    if (!data) { return; }
+    let content = Ember.A([]), found;
+    if (Array.isArray(data)) {
+      for (let i = 0; i < data.length; i++) {
+        found = this.serviceCacheLookup(service, data[i]);
+        if (found) {
+          content.push(found);
+        }
+      }
+      content = (data.length && data.length === content.length) ? content : null;
+    } else {
+      content = this.serviceCacheLookup(service, data);
+    }
+    return (content) ? Ember.RSVP.Promise.resolve(content) : null;
+  },
+
+  /**
+    Lookup data in service cache
+
+    @method serviceCacheLookup
+    @param {Object} service
+    @param {Object} data
+    @return {Resource|undefined}
+  */
+  serviceCacheLookup(service, data) {
+    return (typeof data === 'object' && data.id) ? service.cacheLookup(data.id) : undefined;
   }
 });
 

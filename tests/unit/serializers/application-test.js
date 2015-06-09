@@ -127,3 +127,37 @@ test('#deserializeResource', function(assert) {
   assert.equal(resource.get('excerpt'), postMock.data.attributes.excerpt, 'excerpt present in resource');
   assert.equal(resource.toString(), '[JSONAPIResource|posts:1]');
 });
+
+test('#deserializeIncluded', function(assert) {
+  const MockService = function (name) {
+    this.cache = { data: [] };
+    this.serializer = { deserializeResource: window.sinon.expectation.create(name + '#deserializeResource') };
+    this.cacheResource = window.sinon.expectation.create(name + '#cacheResource');
+    return this;
+  };
+  let mocks = {
+    authors: new MockService('authors'),
+    comments: new MockService('comments')
+  };
+  this.container.register('model:authors', Author);
+  this.container.register('service:authors', mocks.authors, {instantiate: false});
+  this.container.register('model:comments', Comment);
+  this.container.register('service:comments', mocks.comments, {instantiate: false});
+
+  const serializer = this.subject();
+  let resource = serializer.deserializeIncluded(postMock.included, { headers:{} });
+
+  let msg = 'service authors.serializer#deserializeResource called';
+  assert.ok(mocks.authors.serializer.deserializeResource.calledOnce, msg);
+  msg = 'service authors#cacheResource called';
+  assert.ok(mocks.authors.cacheResource.calledOnce, msg);
+  msg = 'included author deserialized';
+  assert.ok(mocks.authors.serializer.deserializeResource.calledWith(postMock.included[0]), msg);
+
+  msg = 'service comments.serializer#deserializeResource called';
+  assert.ok(mocks.comments.serializer.deserializeResource.calledOnce, msg);
+  msg = 'service comments#cacheResource called';
+  assert.ok(mocks.comments.cacheResource.calledOnce, msg);
+  msg = 'included comment deserialized';
+  assert.ok(mocks.comments.serializer.deserializeResource.calledWith(postMock.included[1]), msg);
+});

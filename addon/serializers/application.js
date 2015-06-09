@@ -4,6 +4,7 @@
 **/
 
 import Ember from 'ember';
+import { pluralize } from 'ember-inflector';
 
 /**
   Serializer/Deserializer for a JSON API resource object, used by adapter
@@ -104,6 +105,25 @@ export default Ember.Object.extend({
   */
   deserializeResource(json) {
     return this._createResourceInstance(json);
+  },
+
+  /**
+    Deserialize optional included array of payload and add to service cache
+
+    @method deserializeIncluded
+    @param {Array} related
+    @param {Object} resp (optional) e.g. headers, meta, etc.
+  */
+  deserializeIncluded(related, resp) {
+    if (!related) { return; }
+    let resource, service;
+    for (let i = 0; i < related.length; i++) {
+      service = this.container.lookup('service:' + pluralize(related[i].type));
+      if (service && service.cache && service.cache.data) {
+        resource = service.serializer.deserializeResource(related[i]);
+        service.cacheResource({ meta: resp.meta, data: resource, headers: resp.headers});
+      }
+    }
   },
 
   /**
