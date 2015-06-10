@@ -15,6 +15,9 @@ Whether you adopt the JSON API 1.0 spec or not, this addon is a template for
 creating a data persitence solution for your [Ember.js] application that models
 the domain of your API server. The addon code is rather concise; borrow at will.
 
+* [Documentation][generated docs]
+* [Example app](tests/dummy/app)
+
 
 ## Status
 
@@ -99,7 +102,7 @@ on, e.g. [JSON Patch]. I would like to do that one day.
 
 **Is this lightweight? Relative to what?**
 
-**Yes** With a server that follows the JSON API specification - it just works.
+**Yes**. With a server that follows the JSON API specification - it just works.
 This is a simple solution compared with starting from scratch using AJAX, or
 adapting Ember Data to work with the URLs. This solution provides a basic,
 timed caching solution to minimize requests, and leaves a more advanced caching
@@ -114,17 +117,34 @@ set on the resource prototype (model).
 
 **What does the `store` actually do?**
 
-**Caching, plus the store behaves as expected in the default `model` hook of a route** 
-The store service is a facade for the services setup for each resource.
+**Caching, and it behaves as expected in the default `model` hook of a route**. 
+The store service is a facade for the services for each resource.
 Calling `this.store.find('entity')` in a route's model hook will lookup the service
-for that entity and call the service's `find` method. The service is a combination
-of an adapter for that entity with an associated serializer for the same entity.
-The service is an extension of that adapter with a mixin for the caching strategy
-for that entity. The default `service-cache` mixin provides a basic caching plan using
-a time value for exiration, which is a property of the resource (defaults to 7 seconds).
-
+for that entity and call that service's `find` method. The service is a combination
+of an adapter, cache mixin, and associated serializer for the same entity. The service
+is an extension of that adapter with a mixin for the caching strategy for that entity.
+The default `service-cache` mixin provides a basic caching plan using a time value
+for exiration, which is a property of the resource (defaults to 7 minutes).
 
 [JSON Patch]: http://jsonpatch.com/
+
+
+## Example Application
+
+The [tests/dummy/app](tests/dummy/app) included in this repo is a demo of using
+ember-jsonapi-resources.
+
+- [config/environment](https://github.com/pixelhandler/ember-jsonapi-resources/blob/master/tests/dummy/config/environment.js#L10-L27)
+- [store](https://github.com/pixelhandler/ember-jsonapi-resources/blob/master/tests/dummy/app/routes/index.js#L6-L12)
+- [cache](https://github.com/pixelhandler/ember-jsonapi-resources/blob/master/tests/dummy/app/routes/post.js#L6)
+- [post model](https://github.com/pixelhandler/ember-jsonapi-resources/blob/master/tests/dummy/app/models/post.js#L5-L15)
+- [posts service](https://github.com/pixelhandler/ember-jsonapi-resources/blob/master/tests/dummy/app/services/posts.js)
+- [post initializer](https://github.com/pixelhandler/ember-jsonapi-resources/blob/master/tests/dummy/app/initializers/post.js)
+- [post adapter](https://github.com/pixelhandler/ember-jsonapi-resources/blob/master/tests/dummy/app/adapters/post.js)
+- [post serializer](https://github.com/pixelhandler/ember-jsonapi-resources/blob/master/tests/dummy/app/serializers/post.js)
+- [post detail template](https://github.com/pixelhandler/ember-jsonapi-resources/blob/master/tests/dummy/app/templates/post/detail.hbs)
+- [post comments template](https://github.com/pixelhandler/ember-jsonapi-resources/blob/master/tests/dummy/app/templates/post/comments.hbs)
+
 
 
 ## Usage
@@ -147,7 +167,6 @@ Remove ember-data from both bower.json and package.json then:
 
     bower install
     npm install
-
 
 ### Resource Generator
 
