@@ -206,3 +206,26 @@ QUnit.skip('#initEvents', function(assert) {
   let post = Post.create({ attributes: { id: '1', title: 'Wyatt Earp', excerpt: 'Was a gambler.'} });
   assert.ok(proto.initEvents.calledOnce, 'initEvents called');
 });
+
+test('#cacheDuration default value is 7 minutes', function(assert) {
+  const resource = this.subject();
+  assert.equal(resource.get('cacheDuration'), 420000, '420000 milliseconds is default cache duration');
+});
+
+test('#isCacheExpired is true when local timestamp plus cacheDuration is now or in the past', function(assert) {
+  const resource = this.subject({
+    id: '1',
+    meta: { timeStamps: { local: Date.now() - 420000 } },
+    cacheDuration: 420000
+  });
+  assert.ok(resource.get('isCacheExpired'), 'cache duration is past');
+});
+
+test('#isCacheExpired is false when local timestamp plus cacheDuration is less than now', function(assert) {
+  const resource = this.subject({
+    id: '1',
+    meta: { timeStamps: { local: Date.now() - 419000 } },
+    cacheDuration: 420000
+  });
+  assert.equal(resource.get('isCacheExpired'), false, 'cache duration is in the future');
+});

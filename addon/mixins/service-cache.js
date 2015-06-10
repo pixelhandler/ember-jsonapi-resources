@@ -36,6 +36,7 @@ export default Ember.Mixin.create({
     Store response object(s) in the cache
 
     @method cacheResource
+    @param {Object} resp w/ props: {Object} meta, {Array|Object} data, & {Object} headers
   */
   cacheResource(resp) {
     this.cacheMeta(resp);
@@ -46,6 +47,7 @@ export default Ember.Mixin.create({
     Store meta data in the cache
 
     @method cacheMeta
+    @param {Object} resp w/ props: {Object} meta, {Array|Object} data, & {Object} headers
   */
   cacheMeta(resp) {
     if (resp.meta) {
@@ -57,18 +59,23 @@ export default Ember.Mixin.create({
     Store resource objects in the `data` array of the cache
 
     @method cacheData
+    @param {Object} resp w/ props: {Object} meta, {Array|Object} data, & {Object} headers
   */
   cacheData(resp) {
     const data = this.get('cache.data');
     const ids = data.mapBy('id');
     if (Array.isArray(resp.data)) {
       if (data.get('length') === 0) {
+        for (let i = 0; i < resp.data.length; i++) {
+          this.cacheControl(resp.data[i], resp.headers);
+        }
         data.pushObjects(resp.data);
       } else {
         const items = Ember.A([]);
-        for (let i = 0; i < resp.data.length; i++) {
-          if (ids.indexOf(resp.data[i].get('id')) === -1) {
-            items.push(resp.data[i]);
+        for (let j = 0; j < resp.data.length; j++) {
+          if (ids.indexOf(resp.data[j].get('id')) === -1) {
+            this.cacheControl(resp.data[j], resp.headers);
+            items.push(resp.data[j]);
           }
         }
         if (items.length > 0) {
@@ -80,5 +87,43 @@ export default Ember.Mixin.create({
         data.pushObject(resp.data);
       }
     }
+  },
+
+  /**
+    Store meta from headers on resource meta
+
+    @method cacheControl
+    @param {Resource} resource
+    @param {Object} headers
+  */
+  cacheControl(resource, headers) {
+    resource.set('meta.timeStamps', { local: Date.now() });
+    if (headers && typeof headers.get === 'function') {
+      let date = headers.get('date');
+      if (date) {
+        resource.set('meta.timeStamps.server', date);
+      }
+      let cacheControl = headers.get('cache-control');
+      if (cacheControl) {
+        resource.set('meta.cacheControl', cacheControl);
+      }
+      let etag = headers.get('etag');
+      if (etag) {
+        resource.set('meta.etag', etag);
+      }
+    }
+  },
+
+  /**
+    Lookup a resource from cached data
+
+    @method cacheLookup
+    @param {String} id
+    @returns {Resource|undefined}
+  */
+  cacheLookup(id) {
+    return this.cache.data.find(function(resource) {
+      return resource.get('id') === id && !resource.get('isCacheExpired');
+    });
   }
 });

@@ -30,5 +30,59 @@
         }
       }
     }
-  }
+  },
+  "included": [
+    {
+      "id": "1",
+      "type": "authors",
+      "links": {
+        "self": "http://api.pixelhandler.com/api/v1/authors/1"
+      },
+      "attributes": {
+        "name": "pixelhandler",
+        "email": "pixelhandler@gmail.com"
+      },
+      "relationships": {
+        "posts": {
+          "links": {
+            "self": "http://api.pixelhandler.com/api/v1/authors/1/relationships/posts",
+            "related": "http://api.pixelhandler.com/api/v1/authors/1/posts"
+          }
+        }
+      }
+    },
+    {
+      "id": "1",
+      "type": "comments",
+      "links": {
+        "self": "http://api.pixelhandler.com/api/v1/comments/1"
+      },
+      "attributes": {
+        "body": "We recorded a walkthrough of deploying an Ember app with ember-cli-deploy that follows this post here: https://www.youtube.com/watch?v=H-UDcJzlXis",
+        "created-at": "2015-05-31T20:22:14.820Z"
+      },
+      "relationships": {
+        "commenter": {
+          "links": {
+            "self": "http://api.pixelhandler.com/api/v1/comments/1/relationships/commenter",
+            "related": "http://api.pixelhandler.com/api/v1/comments/1/commenter"
+          },
+          "data": {
+            "type": "commenters",
+            "id": "1"
+          }
+        },
+        "post": {
+          "links": {
+            "self": "http://api.pixelhandler.com/api/v1/comments/1/relationships/post",
+            "related": "http://api.pixelhandler.com/api/v1/comments/1/post"
+          },
+          "data": {
+            "type": "posts",
+            "id": "1"
+          }
+        }
+      }
+    }
+  ]
 }

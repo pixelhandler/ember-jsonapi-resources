@@ -52,3 +52,27 @@ test('#cacheData stores a collection of resources', function(assert) {
   assert.equal(subject.get('cache.data').get('firstObject'), resourceA, 'resourceA added to cache.data collection');
   assert.equal(subject.get('cache.data').get('lastObject'), resourceB, 'resourceA added to cache.data collection');
 });
+
+test('#cacheLookup finds by id and returns if not expired', function(assert) {
+  let resource = Post.create({
+    id: '1',
+    meta: { timeStamps: { local: Date.now() } },
+    cacheDuration: /* minutes */ 1 * /* seconds */ 1 * /* milliseconds */ 1000
+  });
+  subject.cache.data.pushObject(resource);
+
+  let cached = subject.cacheLookup('1');
+  assert.equal(cached, resource, 'resource found in cache');
+});
+
+test('#cacheLookup does not return a resource if it is expired', function(assert) {
+  let resource = Post.create({
+    id: '1',
+    meta: { timeStamps: { local: Date.now() - 1000 } },
+    cacheDuration: /* minutes */ 1 * /* seconds */ 1 * /* milliseconds */ 1000
+  });
+  subject.cache.data.pushObject(resource);
+
+  let cached = subject.cacheLookup('1');
+  assert.notEqual(cached, resource, 'resource not found in cache');
+});
