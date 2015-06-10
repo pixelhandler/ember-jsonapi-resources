@@ -74,9 +74,9 @@ export default Ember.Mixin.create({
         const items = Ember.A([]);
         for (let j = 0; j < resp.data.length; j++) {
           if (ids.indexOf(resp.data[j].get('id')) === -1) {
-            this.cacheControl(resp.data[j], resp.headers);
             items.push(resp.data[j]);
           }
+          this.cacheControl(resp.data[j], resp.headers);
         }
         if (items.length > 0) {
           data.pushObjects(items);
@@ -123,7 +123,11 @@ export default Ember.Mixin.create({
   */
   cacheLookup(id) {
     return this.cache.data.find(function(resource) {
-      return resource.get('id') === id && !resource.get('isCacheExpired');
-    });
+      const isExpired = resource.get('isCacheExpired');
+      if (isExpired) {
+        Ember.run.next(this.cache.data, 'removeObject', resource);
+      }
+      return resource.get('id') === id && !isExpired;
+    }.bind(this));
   }
 });

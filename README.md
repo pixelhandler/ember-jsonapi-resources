@@ -18,8 +18,6 @@ the domain of your API server. The addon code is rather concise; borrow at will.
 
 ## Status
 
-**This is a pre-release**.
-
 [![Build Status](https://travis-ci.org/pixelhandler/ember-jsonapi-resources.svg?branch=master)](https://travis-ci.org/pixelhandler/ember-jsonapi-resources)
 
 This addon is under active development.
@@ -31,7 +29,8 @@ Please do file an issue if you run into a bug.
 ## Requirements
 
 This data persistence solution for an Ember.js application is a simple approach;
-however, there are a few things you'll need to understand in order to get up and running.
+however, there are a few things you'll need to understand in order to get up
+and running.
 
 * Familiarity with [Ember.js], [Ember CLI] and [JSON API]
 * You must use Ember CLI to use ember-jsonapi-resources, it's an addon
@@ -53,6 +52,10 @@ however, there are a few things you'll need to understand in order to get up and
 
 ## Why a Stand-Alone Solution?
 
+This is a simple solution for an Ember app that utilizes resources following
+the JSON API 1.0 specification. It operates on the idea that the objects in the
+app (resource/model, adapter, serializer, services) simply follow the spec.
+
 URL's are first class in the JSON API 1.0 specification and first class
 in the [Ember.js] Router. Why not make them first class in your persistence
 solution too?
@@ -60,18 +63,15 @@ solution too?
 The [JSON API] specification defines relationships including `links` objects that
 providing URLs for `related` and `self`, making your API server discoverable.
 
-This implementation takes the posture that your application's resources do not need a 
-complex abstraction but a simple implemenation of a solid specification. So this 
-project is great for getting started with using the JSON API spec in your Ember.js app.
+This implementation takes the posture that your application's resources do not
+need a complex abstraction but a simple implemenation of a solid specification.
+So, this project is great for getting started with using the JSON API spec in your
+Ember.js app.
 
-This addon was extracted from my blog app that uses the [JSONAPI::Resources] gem
-(running on the master branch for now). The blog app has auth for admin and
-commenting and resources for posts, authors, comments, commenters using relations
-for hasOne and hasMany.
-
-This is a simple solution for an Ember app that utilizes resources following
-the JSON API 1.0 specification. It operates on the idea that the objects in the app 
-(resource/model, adapter, serializer, services) simply follow the spec.
+Also, managing a distributed cache requires flexibility. When a client application
+receives a representation of a resource from a server, the client should be able
+to expire that cached object (in the browser application) based on the response
+headers; or by whatever means the developer chooses.
 
 [Introduction to fetch()]: http://updates.html5rocks.com/2015/03/introduction-to-fetch
 [Fetch API]: https://fetch.spec.whatwg.org
@@ -88,27 +88,41 @@ the JSON API 1.0 specification. It operates on the idea that the objects in the 
 
 **Neither**. This is a completely separate solution. Ember Data needs *foreign keys* 
 and provides an abstraction for adaters and serializers. It's solution helps you work 
-with various JSON document formats. Ember JSON API Resources needs *URLs* and fits a
-specific specification for an API server without the need for an abstraction.
+with various JSON document formats. Ember JSON API Resources needs *URLs* and fits
+a specific specification for an API server without the need for an abstraction.
 
 **Does this implement all of the JSON API specification?**
 
-**Not yet**. The happy path for reading, creating, updating/patching, deleting is 
-ready, as well as patching relationships. No extension support has been worked on, 
-e.g. [JSON Patch]. I would like to do that one day.
+**Not yet**. The happy path for reading, creating, updating/patching, deleting
+is ready, as well as patching relationships. No extension support has been worked
+on, e.g. [JSON Patch]. I would like to do that one day.
 
 **Is this lightweight? Relative to what?**
 
-**Yes** With a server that follows the JSON API specification - it just works. This is a 
-simple solution compared with starting from scratch using AJAX, or adapting Ember Data 
-to work with the URLs. This solution leaves the caching strategy to the developer. It 
-does provide a `store` object that caches deserialized resources.
+**Yes** With a server that follows the JSON API specification - it just works.
+This is a simple solution compared with starting from scratch using AJAX, or
+adapting Ember Data to work with the URLs. This solution provides a basic,
+timed caching solution to minimize requests, and leaves a more advanced caching
+strategy to the developer via a mixin. It does provide a `store` object that
+caches deserialized resources.
 
-**I've installed the app and I see a lot of requests in the browser console,
-is that normal?**
+**Are included resources supported (side-loading)?**
 
-**Yes**. For now, I trust that the browser is fine with 304 responses. More cache 
-lookups will be added soon.
+**Yes**. When using `?include=relation` in a request for a resource, the (related)
+included resources will be deserialized and cached using the `cacheDuration` value
+set on the resource prototype (model).
+
+**What does the `store` actually do?**
+
+**Caching, plus the store behaves as expected in the default `model` hook of a route** 
+The store service is a facade for the services setup for each resource.
+Calling `this.store.find('entity')` in a route's model hook will lookup the service
+for that entity and call the service's `find` method. The service is a combination
+of an adapter for that entity with an associated serializer for the same entity.
+The service is an extension of that adapter with a mixin for the caching strategy
+for that entity. The default `service-cache` mixin provides a basic caching plan using
+a time value for exiration, which is a property of the resource (defaults to 7 seconds).
+
 
 [JSON Patch]: http://jsonpatch.com/
 
@@ -181,6 +195,10 @@ Each `resource` has an associated service that is used by the `store`.
 
 A `resource` service is a combination of an `adapter`, `serializer` and `cache` 
 object. The `service` is also injected into the `resource` (model) objects.
+
+The caching plan for a service is simply a mixin that can be easily customized.
+To begin with, the `resource` (model) prototype and the `service-cache` mixin
+work together to provide a basic plan.
 
 The services are "evented" to facilitate close to real time updates.
 
@@ -362,11 +380,6 @@ For more information on using ember-cli, visit [http://www.ember-cli.com/]
 
 [http://www.ember-cli.com/]: http://www.ember-cli.com/
 
-### Roadmap
-
-- Use cache service for relations in the resource (model).
-- Deserialize and cache the 'include' resource of a document.
-- Figure out the rest as implemented in a complex app with lots of reads & writes.
 
 ## Documentation
 
