@@ -151,7 +151,7 @@
             "module": "ember-jsonapi-resources",
             "namespace": "",
             "file": "addon/models/resource.js",
-            "line": 294,
+            "line": 300,
             "description": "A Resource class to create JSON API resource objects\n\nSee <http://jsonapi.org/format/#document-resource-objects>"
         },
         "serializer": {
@@ -166,7 +166,7 @@
             "module": "ember-jsonapi-resources",
             "namespace": "",
             "file": "addon/serializers/application.js",
-            "line": 8,
+            "line": 9,
             "description": "Serializer/Deserializer for a JSON API resource object, used by adapter"
         }
     },
@@ -242,7 +242,7 @@
             "submodule": "resource",
             "namespace": "",
             "file": "addon/models/resource.js",
-            "line": 294,
+            "line": 300,
             "description": "Mixin for creating promise proxy objects for related resources",
             "static": 1
         },
@@ -258,7 +258,7 @@
             "submodule": "serializer",
             "namespace": "",
             "file": "addon/serializers/application.js",
-            "line": 8,
+            "line": 9,
             "description": "Serializer/Deserializer for a JSON API resource object, used by adapter",
             "static": 1
         },
@@ -511,7 +511,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 220,
+            "line": 221,
             "description": "Adds params and headers or Fetch request.\n\nFor example a header is set for Content-Type: application/vnd.api+json\n\nIf an `AuthorizationHeader` key exists in localStorage it will be used for\nthe `Authorization` header value.",
             "itemtype": "method",
             "name": "fetchOptions",
@@ -532,7 +532,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 246,
+            "line": 247,
             "description": "Hook to customize the URL, e.g. if your API is behind a proxy and you need\nto swap a portion of the domain to make a request on the same domain.",
             "itemtype": "method",
             "name": "fetchUrl",
@@ -553,15 +553,15 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 258,
+            "line": 259,
             "description": "Noop as a hook for defining how deserialized resource objects are cached,\ne.g. in memory",
             "itemtype": "method",
             "name": "cacheResource",
             "params": [
                 {
-                    "name": "url",
-                    "description": "",
-                    "type": "String"
+                    "name": "resp",
+                    "description": "w/ props: {Object} meta, {Array|Object} data, & {Object} headers",
+                    "type": "Object"
                 }
             ],
             "class": "ApplicationAdapter",
@@ -570,7 +570,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 267,
+            "line": 268,
             "description": "Initialize events to communicate on the resource instances' service reference.\nListens for resource objects trigging `attributeChanged` events",
             "itemtype": "method",
             "name": "initEvents",
@@ -680,6 +680,27 @@
                     "type": "Object"
                 }
             ],
+            "class": "ServiceCacheMixin",
+            "module": "ember-jsonapi-resources",
+            "submodule": "cache"
+        },
+        {
+            "file": "addon/mixins/service-cache.js",
+            "line": 117,
+            "description": "Lookup a resource from cached data",
+            "itemtype": "method",
+            "name": "cacheLookup",
+            "params": [
+                {
+                    "name": "id",
+                    "description": "",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Resource|undefined"
+            },
             "class": "ServiceCacheMixin",
             "module": "ember-jsonapi-resources",
             "submodule": "cache"
@@ -899,16 +920,16 @@
         {
             "file": "addon/models/resource.js",
             "line": 216,
-            "description": "A local cache time override to minimize duplicate fetch requests",
+            "description": "A local cache duration, to minimize duplicate fetch requests",
             "itemtype": "method",
-            "name": "cacheFor",
+            "name": "cacheDuration",
             "class": "Resource",
             "module": "ember-jsonapi-resources",
             "submodule": "resource"
         },
         {
             "file": "addon/models/resource.js",
-            "line": 225,
+            "line": 231,
             "description": "To protect the JSON API Resource properties for attributes, links and relationships\nthese objects are setup during create(). This has to be defined since the attr()\nhelper needs to have new objects for each instance, to project from keeping a\nreference on the prototype.",
             "itemtype": "method",
             "name": "create",
@@ -922,7 +943,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 263,
+            "line": 269,
             "description": "Helper to setup computed property for resource attributes",
             "itemtype": "method",
             "name": "attr",
@@ -932,7 +953,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 302,
+            "line": 308,
             "description": "Checks for required `relationship` property",
             "itemtype": "method",
             "name": "init",
@@ -942,7 +963,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 315,
+            "line": 321,
             "description": "The name of the relationship",
             "itemtype": "property",
             "name": "resource",
@@ -954,7 +975,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 324,
+            "line": 330,
             "description": "Proxy for the requested relation, resolves w/ content from fulfilled promise",
             "itemtype": "method",
             "name": "createProxy",
@@ -980,7 +1001,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 353,
+            "line": 360,
             "description": "Proxy url to fetch for the resource's relation",
             "itemtype": "method",
             "name": "proxyUrl",
@@ -1006,7 +1027,64 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 375,
+            "line": 377,
+            "description": "Lookup relation from service cache and pomisify result",
+            "itemtype": "method",
+            "name": "promiseFromCache",
+            "params": [
+                {
+                    "name": "resource",
+                    "description": "",
+                    "type": "Resource"
+                },
+                {
+                    "name": "relation",
+                    "description": "",
+                    "type": "String"
+                },
+                {
+                    "name": "service",
+                    "description": "",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Promise|null"
+            },
+            "class": "RelatedProxyUtil",
+            "module": "ember-jsonapi-resources",
+            "submodule": "resource"
+        },
+        {
+            "file": "addon/models/resource.js",
+            "line": 404,
+            "description": "Lookup data in service cache",
+            "itemtype": "method",
+            "name": "serviceCacheLookup",
+            "params": [
+                {
+                    "name": "service",
+                    "description": "",
+                    "type": "Object"
+                },
+                {
+                    "name": "data",
+                    "description": "",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Resource|undefined"
+            },
+            "class": "RelatedProxyUtil",
+            "module": "ember-jsonapi-resources",
+            "submodule": "resource"
+        },
+        {
+            "file": "addon/models/resource.js",
+            "line": 421,
             "description": "Helper to setup a has one relationship to another resource",
             "itemtype": "method",
             "name": "hasOne",
@@ -1023,7 +1101,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 389,
+            "line": 435,
             "description": "Helper to setup a has many relationship to another resource",
             "itemtype": "method",
             "name": "hasMany",
@@ -1040,7 +1118,7 @@
         },
         {
             "file": "addon/serializers/application.js",
-            "line": 16,
+            "line": 17,
             "description": "Serialize resource for the request payload",
             "itemtype": "method",
             "name": "serialize",
@@ -1061,7 +1139,7 @@
         },
         {
             "file": "addon/serializers/application.js",
-            "line": 29,
+            "line": 30,
             "description": "Serialize a resource object",
             "itemtype": "method",
             "name": "serializeResource",
@@ -1082,7 +1160,7 @@
         },
         {
             "file": "addon/serializers/application.js",
-            "line": 49,
+            "line": 50,
             "description": "Serialize a resource object, but only the changed attributes",
             "itemtype": "method",
             "name": "serializeChanged",
@@ -1103,7 +1181,7 @@
         },
         {
             "file": "addon/serializers/application.js",
-            "line": 67,
+            "line": 68,
             "description": "Deserialize response objects from the request payload",
             "itemtype": "method",
             "name": "deserialize",
@@ -1124,7 +1202,7 @@
         },
         {
             "file": "addon/serializers/application.js",
-            "line": 84,
+            "line": 85,
             "description": "Deserialize response objects in the payload data",
             "itemtype": "method",
             "name": "deserializeResources",
@@ -1145,7 +1223,7 @@
         },
         {
             "file": "addon/serializers/application.js",
-            "line": 98,
+            "line": 99,
             "description": "Deserialize response an object in the payload data",
             "itemtype": "method",
             "name": "deserializeResource",
@@ -1166,7 +1244,29 @@
         },
         {
             "file": "addon/serializers/application.js",
-            "line": 109,
+            "line": 110,
+            "description": "Deserialize optional included array of payload and add to service cache",
+            "itemtype": "method",
+            "name": "deserializeIncluded",
+            "params": [
+                {
+                    "name": "related",
+                    "description": "",
+                    "type": "Array"
+                },
+                {
+                    "name": "resp",
+                    "description": "(optional) e.g. headers, meta, etc.",
+                    "type": "Object"
+                }
+            ],
+            "class": "ApplicationSerializer",
+            "module": "ember-jsonapi-resources",
+            "submodule": "serializer"
+        },
+        {
+            "file": "addon/serializers/application.js",
+            "line": 129,
             "description": "Create a Resource from a JSON API Resource Object\n\nSee <http://jsonapi.org/format/#document-resource-objects>",
             "access": "private",
             "tagname": "",
@@ -1360,7 +1460,11 @@
     "warnings": [
         {
             "message": "replacing incorrect tag: returns with return",
-            "line": " addon/models/resource.js:225"
+            "line": " addon/mixins/service-cache.js:117"
+        },
+        {
+            "message": "replacing incorrect tag: returns with return",
+            "line": " addon/models/resource.js:231"
         }
     ]
 }

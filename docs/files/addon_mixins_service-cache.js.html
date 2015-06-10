@@ -166,9 +166,9 @@ export default Ember.Mixin.create({
         const items = Ember.A([]);
         for (let j = 0; j &lt; resp.data.length; j++) {
           if (ids.indexOf(resp.data[j].get(&#x27;id&#x27;)) === -1) {
-            this.cacheControl(resp.data[j], resp.headers);
             items.push(resp.data[j]);
           }
+          this.cacheControl(resp.data[j], resp.headers);
         }
         if (items.length &gt; 0) {
           data.pushObjects(items);
@@ -189,11 +189,11 @@ export default Ember.Mixin.create({
     @param {Object} headers
   */
   cacheControl(resource, headers) {
-    resource.set(&#x27;meta.cacheDate&#x27;, { local: Date.now() });
+    resource.set(&#x27;meta.timeStamps&#x27;, { local: Date.now() });
     if (headers &amp;&amp; typeof headers.get === &#x27;function&#x27;) {
       let date = headers.get(&#x27;date&#x27;);
       if (date) {
-        resource.set(&#x27;meta.cacheDate.server&#x27;, date);
+        resource.set(&#x27;meta.timeStamps.server&#x27;, date);
       }
       let cacheControl = headers.get(&#x27;cache-control&#x27;);
       if (cacheControl) {
@@ -204,6 +204,23 @@ export default Ember.Mixin.create({
         resource.set(&#x27;meta.etag&#x27;, etag);
       }
     }
+  },
+
+  /**
+    Lookup a resource from cached data
+
+    @method cacheLookup
+    @param {String} id
+    @returns {Resource|undefined}
+  */
+  cacheLookup(id) {
+    return this.cache.data.find(function(resource) {
+      const isExpired = resource.get(&#x27;isCacheExpired&#x27;);
+      if (isExpired) {
+        Ember.run.next(this.cache.data, &#x27;removeObject&#x27;, resource);
+      }
+      return resource.get(&#x27;id&#x27;) === id &amp;&amp; !isExpired;
+    }.bind(this));
   }
 });
 
