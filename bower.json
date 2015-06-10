@@ -12,7 +12,8 @@
     "loader.js": "ember-cli/loader.js#3.2.0",
     "qunit": "~1.17.1",
     "fetch": "~0.9.0",
-    "es6-promise": "~2.2.0"
+    "es6-promise": "~2.2.0",
+    "blanket": "~1.1.5"
   },
   "devDependencies": {
     "sinon": "http://sinonjs.org/releases/sinon-1.15.0.js",

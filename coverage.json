@@ -1,0 +1,56 @@
+{
+  "stats": {
+    "suites": 49,
+    "tests": 107,
+    "passes": 107,
+    "pending": 0,
+    "failures": 0,
+    "start": "2015-06-10T19:53:20.005Z",
+    "end": "2015-06-10T19:53:23.538Z"
+  },
+  "coverage": {
+    "total": {
+      "statementsTotal": 339,
+      "statementsCovered": 270,
+      "percentage": 79.65
+    },
+    "files": [
+      {
+        "name": "ember-jsonapi-resources/adapters/application",
+        "statementsTotal": 99,
+        "statementsCovered": 90,
+        "percentage": 90.91
+      },
+      {
+        "name": "ember-jsonapi-resources/models/resource",
+        "statementsTotal": 136,
+        "statementsCovered": 96,
+        "percentage": 70.59
+      },
+      {
+        "name": "ember-jsonapi-resources/initializers/store",
+        "statementsTotal": 9,
+        "statementsCovered": 9,
+        "percentage": 100
+      },
+      {
+        "name": "ember-jsonapi-resources/services/store",
+        "statementsTotal": 19,
+        "statementsCovered": 18,
+        "percentage": 94.74
+      },
+      {
+        "name": "ember-jsonapi-resources/mixins/service-cache",
+        "statementsTotal": 41,
+        "statementsCovered": 25,
+        "percentage": 60.98
+      },
+      {
+        "name": "ember-jsonapi-resources/serializers/application",
+        "statementsTotal": 35,
+        "statementsCovered": 32,
+        "percentage": 91.43
+      }
+    ]
+  }
+}
