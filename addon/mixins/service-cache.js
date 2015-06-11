@@ -17,6 +17,7 @@ export default Ember.Mixin.create({
     Cache object
 
     @property cache
+    @type Object
   */
   cache: null,
 

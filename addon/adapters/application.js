@@ -20,6 +20,7 @@ export default Ember.Object.extend(Ember.Evented, {
     The name of the entity
 
     @property type
+    @type String
     @required
   */
   type: null,
@@ -28,6 +29,7 @@ export default Ember.Object.extend(Ember.Evented, {
     The url for the entity, e.g. /posts or /api/v1/posts
 
     @property url
+    @type String
     @required
   */
   url: null,
