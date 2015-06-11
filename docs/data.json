@@ -664,7 +664,24 @@
         },
         {
             "file": "addon/mixins/service-cache.js",
-            "line": 92,
+            "line": 82,
+            "description": "Add or update cache data",
+            "itemtype": "method",
+            "name": "cacheUpdate",
+            "params": [
+                {
+                    "name": "resp",
+                    "description": "w/ props: {Object} meta, {Array|Object} data, & {Object} headers",
+                    "type": "Object"
+                }
+            ],
+            "class": "ServiceCacheMixin",
+            "module": "ember-jsonapi-resources",
+            "submodule": "cache"
+        },
+        {
+            "file": "addon/mixins/service-cache.js",
+            "line": 106,
             "description": "Store meta from headers on resource meta",
             "itemtype": "method",
             "name": "cacheControl",
@@ -686,7 +703,7 @@
         },
         {
             "file": "addon/mixins/service-cache.js",
-            "line": 117,
+            "line": 131,
             "description": "Lookup a resource from cached data",
             "itemtype": "method",
             "name": "cacheLookup",
@@ -1460,7 +1477,7 @@
     "warnings": [
         {
             "message": "replacing incorrect tag: returns with return",
-            "line": " addon/mixins/service-cache.js:117"
+            "line": " addon/mixins/service-cache.js:131"
         },
         {
             "message": "replacing incorrect tag: returns with return",

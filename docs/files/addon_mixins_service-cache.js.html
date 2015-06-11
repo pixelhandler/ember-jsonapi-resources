@@ -154,30 +154,44 @@ export default Ember.Mixin.create({
     @param {Object} resp w/ props: {Object} meta, {Array|Object} data, &amp; {Object} headers
   */
   cacheData(resp) {
-    const data = this.get(&#x27;cache.data&#x27;);
-    const ids = data.mapBy(&#x27;id&#x27;);
+    const ids = this.cache.data.mapBy(&#x27;id&#x27;);
     if (Array.isArray(resp.data)) {
-      if (data.get(&#x27;length&#x27;) === 0) {
+      if (ids.length === 0) {
         for (let i = 0; i &lt; resp.data.length; i++) {
           this.cacheControl(resp.data[i], resp.headers);
         }
-        data.pushObjects(resp.data);
+        this.cache.data.pushObjects(resp.data);
       } else {
-        const items = Ember.A([]);
-        for (let j = 0; j &lt; resp.data.length; j++) {
-          if (ids.indexOf(resp.data[j].get(&#x27;id&#x27;)) === -1) {
-            items.push(resp.data[j]);
-          }
-          this.cacheControl(resp.data[j], resp.headers);
-        }
-        if (items.length &gt; 0) {
-          data.pushObjects(items);
-        }
+        this.cacheUpdate(resp);
       }
     } else if (typeof resp === &#x27;object&#x27;) {
       if (ids.indexOf(resp.data.get(&#x27;id&#x27;)) === -1) {
-        data.pushObject(resp.data);
+        this.cache.data.pushObject(resp.data);
       }
+    }
+  },
+
+  /**
+    Add or update cache data
+
+    @method cacheUpdate
+    @param {Object} resp w/ props: {Object} meta, {Array|Object} data, &amp; {Object} headers
+  */
+  cacheUpdate(resp) {
+    const ids = this.cache.data.mapBy(&#x27;id&#x27;);
+    const items = Ember.A([]);
+    let index;
+    for (let i = 0; i &lt; resp.data.length; i++) {
+      index = ids.indexOf(resp.data[i].get(&#x27;id&#x27;));
+      if (index === -1) {
+        items.push(resp.data[i]);
+      } else {
+        this.cache.data.replaceContent(index, 1, resp.data[i]);
+      }
+      this.cacheControl(resp.data[i], resp.headers);
+    }
+    if (items.length &gt; 0) {
+      this.cache.data.pushObjects(items);
     }
   },
 
