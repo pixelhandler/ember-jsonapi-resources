@@ -16,7 +16,7 @@ creating a data persitence solution for your [Ember.js] application that models
 the domain of your API server. The addon code is rather concise; borrow at will.
 
 * [Documentation][generated docs]
-* [Example app](tests/dummy/app)
+* [Example app](https://github.com/pixelhandler/jr-test)
 
 
 ## Status
