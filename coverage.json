@@ -5,14 +5,14 @@
     "passes": 107,
     "pending": 0,
     "failures": 0,
-    "start": "2015-06-10T19:53:20.005Z",
-    "end": "2015-06-10T19:53:23.538Z"
+    "start": "2015-06-11T08:35:21.477Z",
+    "end": "2015-06-11T08:35:25.196Z"
   },
   "coverage": {
     "total": {
-      "statementsTotal": 339,
-      "statementsCovered": 270,
-      "percentage": 79.65
+      "statementsTotal": 343,
+      "statementsCovered": 269,
+      "percentage": 78.43
     },
     "files": [
       {
@@ -41,9 +41,9 @@
       },
       {
         "name": "ember-jsonapi-resources/mixins/service-cache",
-        "statementsTotal": 41,
-        "statementsCovered": 25,
-        "percentage": 60.98
+        "statementsTotal": 45,
+        "statementsCovered": 24,
+        "percentage": 53.33
       },
       {
         "name": "ember-jsonapi-resources/serializers/application",

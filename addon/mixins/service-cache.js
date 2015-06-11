@@ -62,30 +62,44 @@ export default Ember.Mixin.create({
     @param {Object} resp w/ props: {Object} meta, {Array|Object} data, & {Object} headers
   */
   cacheData(resp) {
-    const data = this.get('cache.data');
-    const ids = data.mapBy('id');
+    const ids = this.cache.data.mapBy('id');
     if (Array.isArray(resp.data)) {
-      if (data.get('length') === 0) {
+      if (ids.length === 0) {
         for (let i = 0; i < resp.data.length; i++) {
           this.cacheControl(resp.data[i], resp.headers);
         }
-        data.pushObjects(resp.data);
+        this.cache.data.pushObjects(resp.data);
       } else {
-        const items = Ember.A([]);
-        for (let j = 0; j < resp.data.length; j++) {
-          if (ids.indexOf(resp.data[j].get('id')) === -1) {
-            items.push(resp.data[j]);
-          }
-          this.cacheControl(resp.data[j], resp.headers);
-        }
-        if (items.length > 0) {
-          data.pushObjects(items);
-        }
+        this.cacheUpdate(resp);
       }
     } else if (typeof resp === 'object') {
       if (ids.indexOf(resp.data.get('id')) === -1) {
-        data.pushObject(resp.data);
+        this.cache.data.pushObject(resp.data);
       }
+    }
+  },
+
+  /**
+    Add or update cache data
+
+    @method cacheUpdate
+    @param {Object} resp w/ props: {Object} meta, {Array|Object} data, & {Object} headers
+  */
+  cacheUpdate(resp) {
+    const ids = this.cache.data.mapBy('id');
+    const items = Ember.A([]);
+    let index;
+    for (let i = 0; i < resp.data.length; i++) {
+      index = ids.indexOf(resp.data[i].get('id'));
+      if (index === -1) {
+        items.push(resp.data[i]);
+      } else {
+        this.cache.data.replaceContent(index, 1, resp.data[i]);
+      }
+      this.cacheControl(resp.data[i], resp.headers);
+    }
+    if (items.length > 0) {
+      this.cache.data.pushObjects(items);
     }
   },
 
