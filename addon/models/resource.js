@@ -229,10 +229,30 @@ const Resource = Ember.Object.extend({
 
 Resource.reopenClass({
   /**
-    To protect the JSON API Resource properties for attributes, links and relationships
-    these objects are setup during create(). This has to be defined since the attr()
-    helper needs to have new objects for each instance, to project from keeping a
-    reference on the prototype.
+    To protect the JSON API Resource properties for attributes, links and
+    relationships these objects are setup during create(). This has to be
+    defined since the attr() helper needs to have new objects for each instance,
+    to project from keeping a reference on the prototype.
+
+    The create method should only be called after looking up a factory from the
+    container, for example in a route's model hook:
+
+    ```
+    model() {
+      return this.container.lookupFactory('model:posts').create({
+        attributes: {
+          title: 'The JSON API 1.0 Spec Rocks!'
+        }
+      });
+    }
+    ```
+
+    The create method uses the container to lookup the factory's prototype and
+    find the computed properties used for relations to setup the relationships
+    for the Resource instance you create. Calling Resource#create without using
+    the factory lookup will result in an instance without a reference to the
+    application's container and you will have to manually setup the relationships
+    object prior to adding a relationship.
 
     @method create
     @returns {Resource} instance with protected objects:
