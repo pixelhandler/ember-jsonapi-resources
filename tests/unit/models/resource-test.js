@@ -2,9 +2,16 @@ import { moduleFor, test } from 'ember-qunit';
 import Ember from 'ember';
 import Resource from 'ember-jsonapi-resources/models/resource';
 import { attr, hasOne, hasMany } from 'ember-jsonapi-resources/models/resource';
-import { Post, Author, Comment, Commenter } from 'dummy/tests/helpers/resources';
+import { setup, teardown } from 'dummy/tests/helpers/resources';
 
-moduleFor('model:resource', 'Unit | Model | resource');
+moduleFor('model:resource', 'Unit | Model | resource', {
+  beforeEach() {
+    setup.call(this);
+  },
+  afterEach() {
+    teardown();
+  }
+});
 
 test('it creates an instance, default flag for isNew is false', function(assert) {
   const resource = this.subject();
@@ -61,7 +68,9 @@ test('it needs a reference to an injected service object', function(assert) {
 });
 
 test('attr() uses the attributes hash for computed model attributes', function(assert) {
-  let post = Post.create({ attributes: {id: '1', title: 'Wyatt Earp', excerpt: 'Was a gambler.'} });
+  let post = this.container.lookupFactory('model:posts').create({
+    attributes: {id: '1', title: 'Wyatt Earp', excerpt: 'Was a gambler.'}
+  });
   assert.equal(post.get('title'), 'Wyatt Earp', 'name is set to "Wyatt Earp"');
   assert.equal(post.get('excerpt'), 'Was a gambler.', 'excerpt is set to "Was a gambler."');
 
@@ -95,7 +104,9 @@ test('attr() helper creates a computed property using a unique (protected) attri
 });
 
 test('#changedAttributes', function(assert) {
-  let post = Post.create({ attributes: {id: '1', title: 'Wyatt Earp', excerpt: 'Was a gambler.'} });
+  let post = this.container.lookupFactory('model:posts').create({
+    attributes: {id: '1', title: 'Wyatt Earp', excerpt: 'Was a gambler.'}
+  });
   assert.equal(post.get('excerpt'), 'Was a gambler.', 'excerpt is set "Was a gambler."');
   post.set('excerpt', 'Became a deputy.');
   assert.equal(post.get('excerpt'), 'Became a deputy.', 'excerpt is set to "Became a deputy."');
@@ -106,7 +117,9 @@ test('#changedAttributes', function(assert) {
 });
 
 test('#previousAttributes', function(assert) {
-  let post = Post.create({ attributes: { id: '1', title: 'Wyatt Earp', excerpt: 'Was a gambler.'} });
+  let post = this.container.lookupFactory('model:posts').create({
+    attributes: { id: '1', title: 'Wyatt Earp', excerpt: 'Was a gambler.'}
+  });
   assert.equal(post.get('excerpt'), 'Was a gambler.', 'title is set toGambler');
   post.set('excerpt', 'Became a deputy.');
   assert.equal(post.get('excerpt'), 'Became a deputy.', 'excerpt is set to "Became a deputy."');
@@ -117,13 +130,19 @@ test('#previousAttributes', function(assert) {
 });
 
 test('#addRelationship', function(assert) {
-  let post = Post.create({ attributes: {id: '1', title: 'Wyatt Earp', excerpt: 'Was a gambler.'} });
-  let author = Author.create({ attributes: {id: '2', name: 'Bill'} });
+  let post = this.container.lookupFactory('model:posts').create({
+    attributes: {id: '1', title: 'Wyatt Earp', excerpt: 'Was a gambler.'}
+  });
+  let author = this.container.lookupFactory('model:authors').create({
+    attributes: {id: '2', name: 'Bill'}
+  });
   post.addRelationship('author', '2');
   let authorRelation = '{"author":{"links":{},"data":{"type":"authors","id":"2"}},"comments":{"links":{},"data":[]}}';
   assert.equal(JSON.stringify(post.get('relationships')), authorRelation, 'added relationship for author');
-  let commenter = Commenter.create({ attributes: { id: '3', name: 'Virgil Erp' } });
-  let comment = Comment.create({
+  let commenter = this.container.lookupFactory('model:commenters').create({
+    attributes: { id: '3', name: 'Virgil Erp' }
+  });
+  let comment = this.container.lookupFactory('model:comments').create({
     attributes: { id: '4', body: 'Wyatt become a deputy too.' },
     relationships: { commenter: { data: { type: 'commenter', id: '3' } } }
   });
@@ -136,26 +155,26 @@ test('#addRelationship', function(assert) {
 });
 
 test('#removeRelationship', function(assert) {
-  let post = Post.create({
+  let post = this.container.lookupFactory('model:posts').create({
     id: '1', title: 'Wyatt Earp', excerpt: 'Was a gambler.',
     relationships: {
       author: { data: { type: 'authors', id: '2' } },
       comments: { data: [{ type: 'comments', id: '4' }] }
     }
   });
-  let author = Author.create({
+  let author = this.container.lookupFactory('model:authors').create({
     attributes: { id: '2', name: 'Bill' },
     relationships: {
       posts: { data: [{ type: 'posts', id: '1' }] }
     }
   });
-  let commenter = Commenter.create({
+  let commenter = this.container.lookupFactory('model:commenters').create({
     attributes: { id: '3', name: 'Virgil Erp' },
     relationships: {
       comments: { data: [{ type: 'comments', id: '4' }] }
     }
   });
-  let comment = Comment.create({
+  let comment = this.container.lookupFactory('model:comments').create({
     attributes: { id: '4', body: 'Wyatt become a deputy too.' },
     relationships: {
       commenter: { data: { type: 'commenter', id: '3' } },
@@ -203,7 +222,8 @@ test('#removeRelationship', function(assert) {
 QUnit.skip('#initEvents', function(assert) {
   const proto = Resource.PrototypeMixin.mixins[1].properties;
   window.sinon.stub(proto, 'initEvents', function () { return; });
-  let post = Post.create({ attributes: { id: '1', title: 'Wyatt Earp', excerpt: 'Was a gambler.'} });
+  let Factory = this.container.lookupFactory('model:posts');
+  let post = Factory.create({ attributes: { id: '1', title: 'Wyatt Earp', excerpt: 'Was a gambler.'} });
   assert.ok(proto.initEvents.calledOnce, 'initEvents called');
 });
 

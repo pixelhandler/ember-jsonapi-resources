@@ -1,7 +1,7 @@
 import { moduleFor, test } from 'ember-qunit';
 import Adapter from 'ember-jsonapi-resources/adapters/application';
 import Ember from 'ember';
-import { Post } from 'dummy/tests/helpers/resources';
+import { setup, teardown } from 'dummy/tests/helpers/resources';
 
 import postMock from 'fixtures/api/posts/1';
 import postsMock from 'fixtures/api/posts';
@@ -14,10 +14,12 @@ function RSVPonerror(error) {
 
 moduleFor('adapter:application', 'Unit | Adapter | application', {
   beforeEach() {
+    setup.call(this);
     sandbox = window.sinon.sandbox.create();
     Ember.RSVP.configure('onerror', RSVPonerror);
   },
   afterEach() {
+    teardown();
     sandbox.restore();
   }
 });
@@ -88,7 +90,7 @@ test('#findQuery calls #fetch url including a query', function(assert) {
 
 test('#findRelated', function(assert) {
   this.container.register('service:authors', Adapter.extend({type: 'authors', url: '/authors'}));
-  let resource = Post.create(postMock.data);
+  let resource = this.container.lookupFactory('model:posts').create(postMock.data);
   let url = resource.get( ['relationships', 'author', 'links', 'related'].join('.') );
   const adapter = this.subject({type: 'posts', url: '/posts'});
   let service = this.container.lookup('service:authors');
@@ -124,7 +126,7 @@ test('#updateResource', function(assert) {
   };
   adapter.serializer = { serializeChanged: function () { return payload; } };
   sandbox.stub(adapter, 'fetch', function () { return Ember.RSVP.Promise.resolve(null); });
-  let resource = Post.create(postMock.data);
+  let resource = this.container.lookupFactory('model:posts').create(postMock.data);
   let promise = adapter.updateResource(resource);
   assert.ok(typeof promise.then === 'function', 'returns a thenable');
   assert.ok(adapter.fetch.calledOnce, '#fetch method called');
@@ -136,7 +138,7 @@ test('#updateResource', function(assert) {
 test('#patchRelationship', function(assert) {
   const adapter = this.subject({type: 'posts', url: '/posts'});
   sandbox.stub(adapter, 'fetch', function () { return Ember.RSVP.Promise.resolve(null); });
-  let resource = Post.create(postMock.data);
+  let resource = this.container.lookupFactory('model:posts').create(postMock.data);
   resource.addRelationship('comments', '1');
   let promise = adapter.patchRelationship(resource, 'comments');
   assert.ok(typeof promise.then === 'function', 'returns a thenable');
@@ -149,7 +151,7 @@ test('#patchRelationship', function(assert) {
 test('#deleteResource can be called with a string as the id for the resource', function(assert) {
   const adapter = this.subject({type: 'posts', url: '/posts'});
   sandbox.stub(adapter, 'fetch', function () { return Ember.RSVP.Promise.resolve(null); });
-  let resource = Post.create(postMock.data);
+  let resource = this.container.lookupFactory('model:posts').create(postMock.data);
   let promise = adapter.deleteResource('1');
   assert.ok(typeof promise.then === 'function', 'returns a thenable');
   let msg = '#fetch called with url';
@@ -159,7 +161,7 @@ test('#deleteResource can be called with a string as the id for the resource', f
 test('#deleteResource can be called with a resource having a self link, and calls resource#destroy', function(assert) {
   const adapter = this.subject({type: 'posts', url: '/posts'});
   sandbox.stub(adapter, 'fetch', function () { return Ember.RSVP.Promise.resolve(null); });
-  let resource = Post.create(postMock.data);
+  let resource = this.container.lookupFactory('model:posts').create(postMock.data);
   sandbox.stub(resource, 'destroy', function () {});
   let promise = adapter.deleteResource(resource);
   assert.ok(typeof promise.then === 'function', 'returns a thenable');

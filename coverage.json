@@ -5,14 +5,14 @@
     "passes": 107,
     "pending": 0,
     "failures": 0,
-    "start": "2015-06-11T08:35:21.477Z",
-    "end": "2015-06-11T08:35:25.196Z"
+    "start": "2015-06-14T03:19:45.224Z",
+    "end": "2015-06-14T03:19:48.930Z"
   },
   "coverage": {
     "total": {
-      "statementsTotal": 343,
-      "statementsCovered": 269,
-      "percentage": 78.43
+      "statementsTotal": 353,
+      "statementsCovered": 279,
+      "percentage": 79.04
     },
     "files": [
       {
@@ -23,9 +23,9 @@
       },
       {
         "name": "ember-jsonapi-resources/models/resource",
-        "statementsTotal": 136,
-        "statementsCovered": 96,
-        "percentage": 70.59
+        "statementsTotal": 146,
+        "statementsCovered": 106,
+        "percentage": 72.6
       },
       {
         "name": "ember-jsonapi-resources/initializers/store",

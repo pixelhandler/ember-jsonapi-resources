@@ -27,3 +27,22 @@ export const Commenter = Resource.extend({
   name: attr(),
   comments: hasMany('comments')
 });
+
+export function setup() {
+  const opts = { instantiate: false, singleton: false };
+  Post.prototype.container = this.container;
+  this.container.register('model:posts', Post, opts);
+  Author.prototype.container = this.container;
+  this.container.register('model:authors', Author, opts);
+  Comment.prototype.container = this.container;
+  this.container.register('model:comments', Comment, opts);
+  Commenter.prototype.container = this.container;
+  this.container.register('model:commenters', Commenter, opts);
+}
+
+export function teardown() {
+  delete Post.prototype.container;
+  delete Author.prototype.container;
+  delete Comment.prototype.container;
+  delete Commenter.prototype.container;
+}

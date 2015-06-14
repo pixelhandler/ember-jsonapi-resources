@@ -4,7 +4,7 @@
 **/
 
 import Ember from 'ember';
-import { pluralize } from 'ember-inflector';
+import { pluralize, singularize } from 'ember-inflector';
 
 /**
   A Resource class to create JSON API resource objects
@@ -248,17 +248,28 @@ Resource.reopenClass({
     if (properties) {
       instance.setProperties(properties);
     }
-    let proto = instance.__ember_meta__.proto;
-    for (let key in proto) {
-      if (proto.hasOwnProperty(key)) {
-        if (proto[key] && proto[key].hasOwnProperty('_meta') && typeof proto[key]._meta === 'object') {
-          if (proto[key]._meta.kind === 'hasOne') {
-            setupRelationship.call(instance, key);
-          } else if (proto[key]._meta.kind === 'hasMany') {
-            setupRelationship.call(instance, key, Ember.A([]));
+    let type = instance.get('type');
+    let msg = (type) ? Ember.String.capitalize(singularize(type)) : 'Resource';
+    if (!type) {
+      Ember.Logger.warn(msg + '#create called, instead you should first use ' + msg + '.extend({type:"entity"})');
+    }
+    let factory = 'model:' + type;
+    if (instance.container) {
+      factory = instance.container.lookupFactory(factory);
+      let proto = factory.proto();
+      factory.eachComputedProperty(function(prop) {
+        if (proto[prop] && proto[prop]._meta && typeof proto[prop]._meta === 'object') {
+          if (proto[prop]._meta.kind === 'hasOne') {
+            setupRelationship.call(instance, prop);
+          } else if (proto[prop]._meta.kind === 'hasMany') {
+            setupRelationship.call(instance, prop, Ember.A([]));
           }
         }
-      }
+      });
+    } else {
+      msg += '#create should only be called from a container lookup (relationships not setup) ';
+      msg += 'use this.container.lookupFactory("' + factory + '").create() instead.';
+      Ember.Logger.warn(msg);
     }
     return instance;
   }

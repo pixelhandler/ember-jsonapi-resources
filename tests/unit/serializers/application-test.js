@@ -1,6 +1,6 @@
 import { moduleFor, test } from 'ember-qunit';
 import Ember from 'ember';
-import { Post, Author, Comment, Commenter } from 'dummy/tests/helpers/resources';
+import { setup, teardown } from 'dummy/tests/helpers/resources';
 
 import authorMock from 'fixtures/api/authors/1';
 import postMock from 'fixtures/api/posts/1';
@@ -10,9 +10,11 @@ let sandbox;
 
 moduleFor('serializer:application', 'Unit | Serializer | application', {
   beforeEach() {
+    setup.call(this);
     sandbox = window.sinon.sandbox.create();
   },
   afterEach() {
+    teardown();
     sandbox.restore();
   }
 });
@@ -36,7 +38,7 @@ test('#serialize calls serializeResource', function(assert) {
 
 test('#serializeResource with only attributes data', function(assert) {
   const serializer = this.subject();
-  let resource = Author.create({
+  let resource = this.container.lookupFactory('model:authors').create({
     attributes: authorMock.data.attributes
   });
   let data = serializer.serializeResource(resource);
@@ -53,7 +55,7 @@ test('#serializeResource with only attributes data', function(assert) {
 
 test('#serializeResource with attributes and relationship', function(assert) {
   const serializer = this.subject();
-  let resource = Post.create({
+  let resource = this.container.lookupFactory('model:posts').create({
     attributes: postMock.data.attributes
   });
   resource.addRelationship('author', '1');
@@ -74,7 +76,7 @@ test('#serializeResource with attributes and relationship', function(assert) {
 
 test('#serializeChanged', function(assert) {
   const serializer = this.subject();
-  let resource = Post.create(postMock.data);
+  let resource = this.container.lookupFactory('model:posts').create(postMock.data);
   let changedTitle = postMock.data.attributes.title + ' changed';
   resource.set('title', changedTitle);
   let serialized = serializer.serializeChanged(resource);
@@ -118,7 +120,6 @@ test('#deserializeResources calls deserializeResource for each item in a collect
 
 test('#deserializeResource', function(assert) {
   const serializer = this.subject();
-  this.container.register('model:posts', Post);
   let resource = serializer.deserializeResource(postMock.data);
   assert.ok(resource, 'resource created');
   assert.equal(resource.get('id'), postMock.data.id, 'id present in resource');
@@ -139,9 +140,7 @@ test('#deserializeIncluded', function(assert) {
     authors: new MockService('authors'),
     comments: new MockService('comments')
   };
-  this.container.register('model:authors', Author);
   this.container.register('service:authors', mocks.authors, {instantiate: false});
-  this.container.register('model:comments', Comment);
   this.container.register('service:comments', mocks.comments, {instantiate: false});
 
   const serializer = this.subject();
