@@ -15,9 +15,9 @@ Whether you adopt the JSON API 1.0 spec or not, this addon is a template for
 creating a data persitence solution for your [Ember.js] application that models
 the domain of your API server. The addon code is rather concise; borrow at will.
 
-* [Documentation][generated docs]
+* [Code Documentation][generated docs]
 * [Example app](https://github.com/pixelhandler/jr-test)
-
+* [Guide (wiki)](https://github.com/pixelhandler/ember-jsonapi-resources/wiki)
 
 ## Status
 
