@@ -1,0 +1,49 @@
+{{#if isEditing}}
+  {{#if isNew}}
+    <button {{action 'done'}} class="u-button u-preview">Preview</button>
+    <button {{action 'cancel'}} class="u-button u-cancel">Cancel</button>
+  {{else}}
+    <button {{action 'done'}} class="u-button u-preview">Done</button>
+  {{/if}}
+  <hr>
+  <div class="Admin-form">
+    <p class="Admin-form-title">
+      <label>Title:</label>
+      <br>
+      {{input type="text" value=resource.title name="title"}}
+    </p>
+    {{#if isNew}}
+      <p class="Admin-form-date">
+        <label>Date:</label>
+        <br>
+        {{input type="date" value=resource.date name="date" placeholder="xx/xx/xxxx"}}
+      </p>
+    {{/if}}
+    <p class="Admin-form-excerpt">
+      <label>Excerpt: [Markdown]</label>
+      <br>
+      {{textarea type="text" value=resource.excerpt name="excerpt"}}
+    </p>
+  </div>
+{{else}}
+  {{#if isNew}}
+    <button {{action 'edit'}} class="u-button u-edit">Edit</button>
+    <button {{action 'cancel'}} class="u-button u-cancel">Cancel</button>
+    <button {{action 'save' model authorId}} class="u-button u-save">Save</button>
+  {{else}}
+    <button {{action 'edit'}} class="u-button u-edit">Edit</button>
+  {{/if}}
+  <hr>
+  <h1>{{resource.title}}</h1>
+  <small>
+    <span class="author">by pixelhandler</span>&nbsp;
+    <span class="date">({{resource.date}})</span>
+  </small>
+  <hr>
+  <div class="intro">
+    {{resource.excerpt}}
+  </div>
+  <div class="below-the-fold">
+    {{resource.body}}
+  </div>
+{{/if}}

@@ -1,0 +1,12 @@
+<h4>Posts Admin</h4>
+<dl class="Blog-list">
+  {{#each model key="@guid" as |post|}}
+    <dt class="Blog-list-date">{{post.date}}</dt>
+    <dd class="Blog-list-item">
+      <span class="Blog-list-item-title">{{post.title}}</span>
+      {{#link-to "admin.edit" post class="u-button"}}Edit{{/link-to}}
+      <button class="u-button" {{action "destroy" post}}>Delete</button>
+    </dd>
+  {{/each}}
+</dl>
+{{outlet}}

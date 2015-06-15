@@ -11,6 +11,11 @@ Router.map(function() {
     this.route('detail', { path: '/' });
     this.route('comments');
   });
+  this.route('admin', function () {
+    this.route('index');
+    this.route('create');
+    this.route('edit', { path: ':edit_id' });
+  });
 });
 
 export default Router;
