@@ -1,5 +1,5 @@
 <ul>
-{{#each model as |post|}}
+{{#each model key="@guid" as |post|}}
   <li>{{#link-to "post" post.id}}{{post.title}}{{/link-to}}</li>
 {{/each}}
 </ul>

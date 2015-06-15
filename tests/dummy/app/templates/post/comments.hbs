@@ -3,7 +3,7 @@
 <br>
 {{#if model}}
   <ul class="Comments">
-  {{#each model as |comment|}}
+  {{#each model key="@guid" as |comment|}}
     <li class="Comments-item">
       {{#with comment.commenter as |commenter|}}
         <span class="Comments-item-avatar">
