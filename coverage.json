@@ -1,12 +1,12 @@
 {
   "stats": {
-    "suites": 49,
-    "tests": 107,
-    "passes": 107,
+    "suites": 53,
+    "tests": 111,
+    "passes": 111,
     "pending": 0,
     "failures": 0,
-    "start": "2015-06-15T04:05:08.223Z",
-    "end": "2015-06-15T04:05:11.898Z"
+    "start": "2015-06-16T08:32:32.169Z",
+    "end": "2015-06-16T08:32:35.842Z"
   },
   "coverage": {
     "total": {
