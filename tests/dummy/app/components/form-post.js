@@ -3,7 +3,6 @@ import BufferedProxy from 'ember-buffered-proxy/proxy';
 
 export default Ember.Component.extend({
   tagName: 'form',
-  service: Ember.inject.service('post-edit'),
 
   resource: Ember.computed('post', function() {
     return BufferedProxy.create({ content: this.get('post') });
