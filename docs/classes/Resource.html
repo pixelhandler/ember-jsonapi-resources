@@ -299,7 +299,7 @@
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l269"><code>addon&#x2F;models&#x2F;resource.js:269</code></a>
+        <a href="../files/addon_models_resource.js.html#l300"><code>addon&#x2F;models&#x2F;resource.js:300</code></a>
         </p>
 
 
@@ -414,10 +414,26 @@
     </div>
 
     <div class="description">
-        <p>To protect the JSON API Resource properties for attributes, links and relationships
-these objects are setup during create(). This has to be defined since the attr()
-helper needs to have new objects for each instance, to project from keeping a
-reference on the prototype.</p>
+        <p>To protect the JSON API Resource properties for attributes, links and
+relationships these objects are setup during create(). This has to be
+defined since the attr() helper needs to have new objects for each instance,
+to project from keeping a reference on the prototype.</p>
+<p>The create method should only be called after looking up a factory from the
+container, for example in a route's model hook:</p>
+<pre class="code prettyprint"><code>model() {
+  return this.container.lookupFactory('model:posts').create({
+    attributes: {
+      title: 'The JSON API 1.0 Spec Rocks!'
+    }
+  });
+}
+</code></pre>
+<p>The create method uses the container to lookup the factory's prototype and
+find the computed properties used for relations to setup the relationships
+for the Resource instance you create. Calling Resource#create without using
+the factory lookup will result in an instance without a reference to the
+application's container and you will have to manually setup the relationships
+object prior to adding a relationship.</p>
 
     </div>
 

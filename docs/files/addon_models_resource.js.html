@@ -96,7 +96,7 @@
 **/
 
 import Ember from &#x27;ember&#x27;;
-import { pluralize } from &#x27;ember-inflector&#x27;;
+import { pluralize, singularize } from &#x27;ember-inflector&#x27;;
 
 /**
   A Resource class to create JSON API resource objects
@@ -321,10 +321,30 @@ const Resource = Ember.Object.extend({
 
 Resource.reopenClass({
   /**
-    To protect the JSON API Resource properties for attributes, links and relationships
-    these objects are setup during create(). This has to be defined since the attr()
-    helper needs to have new objects for each instance, to project from keeping a
-    reference on the prototype.
+    To protect the JSON API Resource properties for attributes, links and
+    relationships these objects are setup during create(). This has to be
+    defined since the attr() helper needs to have new objects for each instance,
+    to project from keeping a reference on the prototype.
+
+    The create method should only be called after looking up a factory from the
+    container, for example in a route&#x27;s model hook:
+
+    &#x60;&#x60;&#x60;
+    model() {
+      return this.container.lookupFactory(&#x27;model:posts&#x27;).create({
+        attributes: {
+          title: &#x27;The JSON API 1.0 Spec Rocks!&#x27;
+        }
+      });
+    }
+    &#x60;&#x60;&#x60;
+
+    The create method uses the container to lookup the factory&#x27;s prototype and
+    find the computed properties used for relations to setup the relationships
+    for the Resource instance you create. Calling Resource#create without using
+    the factory lookup will result in an instance without a reference to the
+    application&#x27;s container and you will have to manually setup the relationships
+    object prior to adding a relationship.
 
     @method create
     @returns {Resource} instance with protected objects:
@@ -340,17 +360,28 @@ Resource.reopenClass({
     if (properties) {
       instance.setProperties(properties);
     }
-    let proto = instance.__ember_meta__.proto;
-    for (let key in proto) {
-      if (proto.hasOwnProperty(key)) {
-        if (proto[key] &amp;&amp; proto[key].hasOwnProperty(&#x27;_meta&#x27;) &amp;&amp; typeof proto[key]._meta === &#x27;object&#x27;) {
-          if (proto[key]._meta.kind === &#x27;hasOne&#x27;) {
-            setupRelationship.call(instance, key);
-          } else if (proto[key]._meta.kind === &#x27;hasMany&#x27;) {
-            setupRelationship.call(instance, key, Ember.A([]));
+    let type = instance.get(&#x27;type&#x27;);
+    let msg = (type) ? Ember.String.capitalize(singularize(type)) : &#x27;Resource&#x27;;
+    if (!type) {
+      Ember.Logger.warn(msg + &#x27;#create called, instead you should first use &#x27; + msg + &#x27;.extend({type:&quot;entity&quot;})&#x27;);
+    }
+    let factory = &#x27;model:&#x27; + type;
+    if (instance.container) {
+      factory = instance.container.lookupFactory(factory);
+      let proto = factory.proto();
+      factory.eachComputedProperty(function(prop) {
+        if (proto[prop] &amp;&amp; proto[prop]._meta &amp;&amp; typeof proto[prop]._meta === &#x27;object&#x27;) {
+          if (proto[prop]._meta.kind === &#x27;hasOne&#x27;) {
+            setupRelationship.call(instance, prop);
+          } else if (proto[prop]._meta.kind === &#x27;hasMany&#x27;) {
+            setupRelationship.call(instance, prop, Ember.A([]));
           }
         }
-      }
+      });
+    } else {
+      msg += &#x27;#create should only be called from a container lookup (relationships not setup) &#x27;;
+      msg += &#x27;use this.container.lookupFactory(&quot;&#x27; + factory + &#x27;&quot;).create() instead.&#x27;;
+      Ember.Logger.warn(msg);
     }
     return instance;
   }

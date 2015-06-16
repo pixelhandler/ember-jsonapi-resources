@@ -151,7 +151,7 @@
             "module": "ember-jsonapi-resources",
             "namespace": "",
             "file": "addon/models/resource.js",
-            "line": 300,
+            "line": 331,
             "description": "A Resource class to create JSON API resource objects\n\nSee <http://jsonapi.org/format/#document-resource-objects>"
         },
         "serializer": {
@@ -242,7 +242,7 @@
             "submodule": "resource",
             "namespace": "",
             "file": "addon/models/resource.js",
-            "line": 300,
+            "line": 331,
             "description": "Mixin for creating promise proxy objects for related resources",
             "static": 1
         },
@@ -289,6 +289,7 @@
             "description": "The name of the entity",
             "itemtype": "property",
             "name": "type",
+            "type": "String",
             "required": 1,
             "class": "ApplicationAdapter",
             "module": "ember-jsonapi-resources",
@@ -296,10 +297,11 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 27,
+            "line": 28,
             "description": "The url for the entity, e.g. /posts or /api/v1/posts",
             "itemtype": "property",
             "name": "url",
+            "type": "String",
             "required": 1,
             "class": "ApplicationAdapter",
             "module": "ember-jsonapi-resources",
@@ -307,7 +309,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 35,
+            "line": 37,
             "description": "Find resource(s) using an id or a using a query `{id: '', query: {}}`",
             "itemtype": "method",
             "name": "find",
@@ -328,7 +330,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 56,
+            "line": 58,
             "description": "Find a resource by id, optionally pass a query object, e.g. w/ filter param(s)\n\nUses a url like: /photos/1",
             "itemtype": "method",
             "name": "findOne",
@@ -354,7 +356,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 72,
+            "line": 74,
             "description": "Find resources using an optional query object, e.g. w/ pagination params",
             "itemtype": "method",
             "name": "findQuery",
@@ -375,7 +377,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 86,
+            "line": 88,
             "description": "Find resources using an optional query object, e.g. w/ pagination params\n\nA Url like: /photos/1/relationships/photographer is a required param",
             "itemtype": "method",
             "name": "findRelated",
@@ -401,7 +403,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 101,
+            "line": 103,
             "description": "Create a new resource, sends a POST request",
             "itemtype": "method",
             "name": "createResource",
@@ -422,7 +424,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 117,
+            "line": 119,
             "description": "Patch an existing resource, sends a PATCH request. After promise is resolved\nthe `didUpdateResource` event is triggered, resource may listen on their\n`service` reference",
             "itemtype": "method",
             "name": "updateResource",
@@ -443,7 +445,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 137,
+            "line": 139,
             "description": "Patch a relationship, either add or remove, sends a PATCH request\n\nAdds with payload: `{ \"data\": { \"type\": \"comments\", \"id\": \"12\" } }`\nRemoves with payload: `{ \"data\": null }`",
             "itemtype": "method",
             "name": "patchRelationship",
@@ -469,7 +471,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 160,
+            "line": 162,
             "description": "Delete an existing resource, sends a DELETE request",
             "itemtype": "method",
             "name": "deleteResource",
@@ -490,7 +492,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 178,
+            "line": 180,
             "description": "Makes a fetch request via Fetch API\n\nsee http://updates.html5rocks.com/2015/03/introduction-to-fetch",
             "itemtype": "method",
             "name": "fetch",
@@ -511,7 +513,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 221,
+            "line": 223,
             "description": "Adds params and headers or Fetch request.\n\nFor example a header is set for Content-Type: application/vnd.api+json\n\nIf an `AuthorizationHeader` key exists in localStorage it will be used for\nthe `Authorization` header value.",
             "itemtype": "method",
             "name": "fetchOptions",
@@ -532,7 +534,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 247,
+            "line": 249,
             "description": "Hook to customize the URL, e.g. if your API is behind a proxy and you need\nto swap a portion of the domain to make a request on the same domain.",
             "itemtype": "method",
             "name": "fetchUrl",
@@ -553,7 +555,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 259,
+            "line": 261,
             "description": "Noop as a hook for defining how deserialized resource objects are cached,\ne.g. in memory",
             "itemtype": "method",
             "name": "cacheResource",
@@ -570,7 +572,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 268,
+            "line": 270,
             "description": "Initialize events to communicate on the resource instances' service reference.\nListens for resource objects trigging `attributeChanged` events",
             "itemtype": "method",
             "name": "initEvents",
@@ -597,13 +599,14 @@
             "description": "Cache object",
             "itemtype": "property",
             "name": "cache",
+            "type": "Object",
             "class": "ServiceCacheMixin",
             "module": "ember-jsonapi-resources",
             "submodule": "cache"
         },
         {
             "file": "addon/mixins/service-cache.js",
-            "line": 23,
+            "line": 24,
             "description": "Initialize a cache object",
             "itemtype": "method",
             "name": "initCache",
@@ -613,7 +616,7 @@
         },
         {
             "file": "addon/mixins/service-cache.js",
-            "line": 35,
+            "line": 36,
             "description": "Store response object(s) in the cache",
             "itemtype": "method",
             "name": "cacheResource",
@@ -630,7 +633,7 @@
         },
         {
             "file": "addon/mixins/service-cache.js",
-            "line": 46,
+            "line": 47,
             "description": "Store meta data in the cache",
             "itemtype": "method",
             "name": "cacheMeta",
@@ -647,7 +650,7 @@
         },
         {
             "file": "addon/mixins/service-cache.js",
-            "line": 58,
+            "line": 59,
             "description": "Store resource objects in the `data` array of the cache",
             "itemtype": "method",
             "name": "cacheData",
@@ -664,7 +667,7 @@
         },
         {
             "file": "addon/mixins/service-cache.js",
-            "line": 82,
+            "line": 83,
             "description": "Add or update cache data",
             "itemtype": "method",
             "name": "cacheUpdate",
@@ -681,7 +684,7 @@
         },
         {
             "file": "addon/mixins/service-cache.js",
-            "line": 106,
+            "line": 107,
             "description": "Store meta from headers on resource meta",
             "itemtype": "method",
             "name": "cacheControl",
@@ -703,7 +706,7 @@
         },
         {
             "file": "addon/mixins/service-cache.js",
-            "line": 131,
+            "line": 132,
             "description": "Lookup a resource from cached data",
             "itemtype": "method",
             "name": "cacheLookup",
@@ -947,7 +950,7 @@
         {
             "file": "addon/models/resource.js",
             "line": 231,
-            "description": "To protect the JSON API Resource properties for attributes, links and relationships\nthese objects are setup during create(). This has to be defined since the attr()\nhelper needs to have new objects for each instance, to project from keeping a\nreference on the prototype.",
+            "description": "To protect the JSON API Resource properties for attributes, links and\nrelationships these objects are setup during create(). This has to be\ndefined since the attr() helper needs to have new objects for each instance,\nto project from keeping a reference on the prototype.\n\nThe create method should only be called after looking up a factory from the\ncontainer, for example in a route's model hook:\n\n```\nmodel() {\n  return this.container.lookupFactory('model:posts').create({\n    attributes: {\n      title: 'The JSON API 1.0 Spec Rocks!'\n    }\n  });\n}\n```\n\nThe create method uses the container to lookup the factory's prototype and\nfind the computed properties used for relations to setup the relationships\nfor the Resource instance you create. Calling Resource#create without using\nthe factory lookup will result in an instance without a reference to the\napplication's container and you will have to manually setup the relationships\nobject prior to adding a relationship.",
             "itemtype": "method",
             "name": "create",
             "return": {
@@ -960,7 +963,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 269,
+            "line": 300,
             "description": "Helper to setup computed property for resource attributes",
             "itemtype": "method",
             "name": "attr",
@@ -970,7 +973,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 308,
+            "line": 339,
             "description": "Checks for required `relationship` property",
             "itemtype": "method",
             "name": "init",
@@ -980,7 +983,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 321,
+            "line": 352,
             "description": "The name of the relationship",
             "itemtype": "property",
             "name": "resource",
@@ -992,7 +995,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 330,
+            "line": 361,
             "description": "Proxy for the requested relation, resolves w/ content from fulfilled promise",
             "itemtype": "method",
             "name": "createProxy",
@@ -1018,7 +1021,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 360,
+            "line": 391,
             "description": "Proxy url to fetch for the resource's relation",
             "itemtype": "method",
             "name": "proxyUrl",
@@ -1044,7 +1047,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 377,
+            "line": 408,
             "description": "Lookup relation from service cache and pomisify result",
             "itemtype": "method",
             "name": "promiseFromCache",
@@ -1075,7 +1078,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 404,
+            "line": 435,
             "description": "Lookup data in service cache",
             "itemtype": "method",
             "name": "serviceCacheLookup",
@@ -1101,7 +1104,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 421,
+            "line": 452,
             "description": "Helper to setup a has one relationship to another resource",
             "itemtype": "method",
             "name": "hasOne",
@@ -1118,7 +1121,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 435,
+            "line": 466,
             "description": "Helper to setup a has many relationship to another resource",
             "itemtype": "method",
             "name": "hasMany",
@@ -1477,7 +1480,7 @@
     "warnings": [
         {
             "message": "replacing incorrect tag: returns with return",
-            "line": " addon/mixins/service-cache.js:131"
+            "line": " addon/mixins/service-cache.js:132"
         },
         {
             "message": "replacing incorrect tag: returns with return",
