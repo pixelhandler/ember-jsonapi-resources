@@ -216,10 +216,15 @@ const Resource = Ember.Object.extend({
   /**
     A local cache duration, to minimize duplicate fetch requests
 
-    @method cacheDuration
+    @property cacheDuration
+    @type Number
   */
   cacheDuration: /* minutes */ 7 * /* seconds */ 60 * /* milliseconds */ 1000,
 
+  /**
+    @property isCacheExpired
+    @type Boolean
+  */
   isCacheExpired: Ember.computed('meta.timeStamps.local', 'cacheDuration', function () {
     const localTime = this.get('meta.timeStamps.local');
     const expiresTime = localTime + this.get('cacheDuration');
