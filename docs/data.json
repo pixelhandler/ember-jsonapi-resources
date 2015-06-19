@@ -151,7 +151,7 @@
             "module": "ember-jsonapi-resources",
             "namespace": "",
             "file": "addon/models/resource.js",
-            "line": 331,
+            "line": 336,
             "description": "A Resource class to create JSON API resource objects\n\nSee <http://jsonapi.org/format/#document-resource-objects>"
         },
         "serializer": {
@@ -242,7 +242,7 @@
             "submodule": "resource",
             "namespace": "",
             "file": "addon/models/resource.js",
-            "line": 331,
+            "line": 336,
             "description": "Mixin for creating promise proxy objects for related resources",
             "static": 1
         },
@@ -941,15 +941,26 @@
             "file": "addon/models/resource.js",
             "line": 216,
             "description": "A local cache duration, to minimize duplicate fetch requests",
-            "itemtype": "method",
+            "itemtype": "property",
             "name": "cacheDuration",
+            "type": "Number",
             "class": "Resource",
             "module": "ember-jsonapi-resources",
             "submodule": "resource"
         },
         {
             "file": "addon/models/resource.js",
-            "line": 231,
+            "line": 224,
+            "itemtype": "property",
+            "name": "isCacheExpired",
+            "type": "Boolean",
+            "class": "Resource",
+            "module": "ember-jsonapi-resources",
+            "submodule": "resource"
+        },
+        {
+            "file": "addon/models/resource.js",
+            "line": 236,
             "description": "To protect the JSON API Resource properties for attributes, links and\nrelationships these objects are setup during create(). This has to be\ndefined since the attr() helper needs to have new objects for each instance,\nto project from keeping a reference on the prototype.\n\nThe create method should only be called after looking up a factory from the\ncontainer, for example in a route's model hook:\n\n```\nmodel() {\n  return this.container.lookupFactory('model:posts').create({\n    attributes: {\n      title: 'The JSON API 1.0 Spec Rocks!'\n    }\n  });\n}\n```\n\nThe create method uses the container to lookup the factory's prototype and\nfind the computed properties used for relations to setup the relationships\nfor the Resource instance you create. Calling Resource#create without using\nthe factory lookup will result in an instance without a reference to the\napplication's container and you will have to manually setup the relationships\nobject prior to adding a relationship.",
             "itemtype": "method",
             "name": "create",
@@ -963,7 +974,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 300,
+            "line": 305,
             "description": "Helper to setup computed property for resource attributes",
             "itemtype": "method",
             "name": "attr",
@@ -973,7 +984,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 339,
+            "line": 344,
             "description": "Checks for required `relationship` property",
             "itemtype": "method",
             "name": "init",
@@ -983,7 +994,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 352,
+            "line": 357,
             "description": "The name of the relationship",
             "itemtype": "property",
             "name": "resource",
@@ -995,7 +1006,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 361,
+            "line": 366,
             "description": "Proxy for the requested relation, resolves w/ content from fulfilled promise",
             "itemtype": "method",
             "name": "createProxy",
@@ -1021,7 +1032,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 391,
+            "line": 396,
             "description": "Proxy url to fetch for the resource's relation",
             "itemtype": "method",
             "name": "proxyUrl",
@@ -1047,7 +1058,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 408,
+            "line": 413,
             "description": "Lookup relation from service cache and pomisify result",
             "itemtype": "method",
             "name": "promiseFromCache",
@@ -1078,7 +1089,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 435,
+            "line": 440,
             "description": "Lookup data in service cache",
             "itemtype": "method",
             "name": "serviceCacheLookup",
@@ -1104,7 +1115,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 452,
+            "line": 457,
             "description": "Helper to setup a has one relationship to another resource",
             "itemtype": "method",
             "name": "hasOne",
@@ -1121,7 +1132,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 466,
+            "line": 471,
             "description": "Helper to setup a has many relationship to another resource",
             "itemtype": "method",
             "name": "hasMany",
@@ -1484,7 +1495,7 @@
         },
         {
             "message": "replacing incorrect tag: returns with return",
-            "line": " addon/models/resource.js:231"
+            "line": " addon/models/resource.js:236"
         }
     ]
 }
