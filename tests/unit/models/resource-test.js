@@ -69,7 +69,7 @@ test('it needs a reference to an injected service object', function(assert) {
 
 test('attr() uses the attributes hash for computed model attributes', function(assert) {
   let post = this.container.lookupFactory('model:posts').create({
-    attributes: {id: '1', title: 'Wyatt Earp', excerpt: 'Was a gambler.'}
+    id: '1', attributes: {title: 'Wyatt Earp', excerpt: 'Was a gambler.'}
   });
   assert.equal(post.get('title'), 'Wyatt Earp', 'name is set to "Wyatt Earp"');
   assert.equal(post.get('excerpt'), 'Was a gambler.', 'excerpt is set to "Was a gambler."');
@@ -118,7 +118,7 @@ test('#changedAttributes', function(assert) {
 
 test('#previousAttributes', function(assert) {
   let post = this.container.lookupFactory('model:posts').create({
-    attributes: { id: '1', title: 'Wyatt Earp', excerpt: 'Was a gambler.'}
+    id: '1', attributes: {title: 'Wyatt Earp', excerpt: 'Was a gambler.'}
   });
   assert.equal(post.get('excerpt'), 'Was a gambler.', 'title is set toGambler');
   post.set('excerpt', 'Became a deputy.');
@@ -129,12 +129,32 @@ test('#previousAttributes', function(assert) {
   assert.equal(previous.excerpt, 'Was a gambler.', 'previous excerpt value is "Became a deputy."');
 });
 
+test('#didUpdateResource empties the resource _attributes hash when resource id matches json arg id value', function(assert) {
+  let post = this.container.lookupFactory('model:posts').create({
+    id: '1', attributes: {title: 'Wyatt Earp', excerpt: 'Was a gambler.'}
+  });
+  post.set('excerpt', 'became a deputy.');
+  assert.equal(Ember.keys(post.get('_attributes')).length, 1, 'one changed attribute present before didUpdateResource called');
+  post.didUpdateResource({id: '1'});
+  assert.equal(Ember.keys(post.get('_attributes')).length, 0, 'no changed attribute present after didUpdateResource called');
+});
+
+test('#didUpdateResource does nothing if json argument has an id that does not match the resource id', function(assert) {
+  let post = this.container.lookupFactory('model:posts').create({
+    id: '1', attributes: {title: 'Wyatt Earp', excerpt: 'Was a gambler.'}
+  });
+  post.set('excerpt', 'became a deputy.');
+  assert.equal(Ember.keys(post.get('_attributes')).length, 1, 'one changed attribute present before didUpdateResource called');
+  post.didUpdateResource({id: 'not-1'});
+  assert.equal(Ember.keys(post.get('_attributes')).length, 1, 'one changed attribute still present after didUpdateResource called');
+});
+
 test('#addRelationship', function(assert) {
   let post = this.container.lookupFactory('model:posts').create({
-    attributes: {id: '1', title: 'Wyatt Earp', excerpt: 'Was a gambler.'}
+    id: '1', attributes: {title: 'Wyatt Earp', excerpt: 'Was a gambler.'}
   });
   let author = this.container.lookupFactory('model:authors').create({
-    attributes: {id: '2', name: 'Bill'}
+    id: '2', attributes: {name: 'Bill'}
   });
   post.addRelationship('author', '2');
   let authorRelation = '{"author":{"links":{},"data":{"type":"authors","id":"2"}},"comments":{"links":{},"data":[]}}';
@@ -143,7 +163,7 @@ test('#addRelationship', function(assert) {
     attributes: { id: '3', name: 'Virgil Erp' }
   });
   let comment = this.container.lookupFactory('model:comments').create({
-    attributes: { id: '4', body: 'Wyatt become a deputy too.' },
+    id: '4',  attributes: {body: 'Wyatt become a deputy too.' },
     relationships: { commenter: { data: { type: 'commenter', id: '3' } } }
   });
   let commenterRelation = '{"commenter":{"data":{"type":"commenter","id":"3"},"links":{}},"post":{"links":{},"data":null}}';
@@ -156,26 +176,26 @@ test('#addRelationship', function(assert) {
 
 test('#removeRelationship', function(assert) {
   let post = this.container.lookupFactory('model:posts').create({
-    id: '1', title: 'Wyatt Earp', excerpt: 'Was a gambler.',
+    id: '1', attributes: {title: 'Wyatt Earp', excerpt: 'Was a gambler.'},
     relationships: {
       author: { data: { type: 'authors', id: '2' } },
       comments: { data: [{ type: 'comments', id: '4' }] }
     }
   });
   let author = this.container.lookupFactory('model:authors').create({
-    attributes: { id: '2', name: 'Bill' },
+    id: '2', attributes: { name: 'Bill' },
     relationships: {
       posts: { data: [{ type: 'posts', id: '1' }] }
     }
   });
   let commenter = this.container.lookupFactory('model:commenters').create({
-    attributes: { id: '3', name: 'Virgil Erp' },
+    id: '3', attributes: { name: 'Virgil Erp' },
     relationships: {
       comments: { data: [{ type: 'comments', id: '4' }] }
     }
   });
   let comment = this.container.lookupFactory('model:comments').create({
-    attributes: { id: '4', body: 'Wyatt become a deputy too.' },
+    id: '4', attributes: { body: 'Wyatt become a deputy too.' },
     relationships: {
       commenter: { data: { type: 'commenter', id: '3' } },
       post: { data: { type: 'posts', id: '1' } }

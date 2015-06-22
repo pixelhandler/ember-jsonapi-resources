@@ -128,6 +128,7 @@ export default Ember.Object.extend(Ember.Evented, {
   updateResource(resource) {
     let url = resource.get('links.self') || this.get('url') + '/' + resource.get('id');
     const json = this.serializer.serializeChanged(resource);
+    if (!json) { return null; }
     return this.fetch(url, {
       method: 'PATCH',
       body: JSON.stringify(json)

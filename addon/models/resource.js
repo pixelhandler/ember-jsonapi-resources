@@ -168,7 +168,7 @@ const Resource = Ember.Object.extend({
       }
       return attrs;
     }
-  }),
+  }).volatile(),
 
   /**
     @method previousAttributes
@@ -186,7 +186,7 @@ const Resource = Ember.Object.extend({
       }
       return attrs;
     }
-  }),
+  }).volatile(),
 
   /**
     Initialize events to communicate with the service object, listen for `didUpdateResource`
@@ -205,7 +205,8 @@ const Resource = Ember.Object.extend({
 
     @method didUpdateResource
   */
-  didUpdateResource() {
+  didUpdateResource(json) {
+    if (this.get('id') !== json.id) { return; }
     for (let attr in this._attributes) {
       if (this._attributes.hasOwnProperty(attr)) {
         delete this._attributes[attr];

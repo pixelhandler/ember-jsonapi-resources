@@ -88,6 +88,13 @@ test('#serializeChanged', function(assert) {
   assert.equal(actual, changedTitle, 'title is serialized with changed value');
 });
 
+test('when #serializedChanged has nothing to return', function(assert) {
+  const serializer = this.subject();
+  let resource = this.container.lookupFactory('model:posts').create(postMock.data);
+  let serialized = serializer.serializeChanged(resource);
+  assert.equal(serialized, null, 'null is returned when there are no changed attributes');
+});
+
 test('With data as an object #deserialize calls #deserializeResource', function(assert) {
   const serializer = this.subject();
   sandbox.stub(serializer, 'deserializeResource', function () {});

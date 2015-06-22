@@ -135,6 +135,16 @@ test('#updateResource', function(assert) {
   assert.ok(adapter.fetch.calledWith(selfURL, { method: 'PATCH', body: JSON.stringify(payload) }), msg);
 });
 
+test('#updateResource returns null when serializer returns null (nothing changed)', function(assert) {
+  const adapter = this.subject({type: 'posts', url: '/posts'});
+  adapter.serializer = { serializeChanged: function () { return null; } };
+  sandbox.stub(adapter, 'fetch', function () { return Ember.RSVP.Promise.resolve(null); });
+  let resource = this.container.lookupFactory('model:posts').create(postMock.data);
+  let promise = adapter.updateResource(resource);
+  assert.equal(promise, null, 'null returned instead of promise');
+  assert.ok(!adapter.fetch.calledOnce, '#fetch method NOT called');
+});
+
 test('#patchRelationship', function(assert) {
   const adapter = this.subject({type: 'posts', url: '/posts'});
   sandbox.stub(adapter, 'fetch', function () { return Ember.RSVP.Promise.resolve(null); });

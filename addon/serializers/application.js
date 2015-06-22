@@ -56,6 +56,7 @@ export default Ember.Object.extend({
   */
   serializeChanged(resource) {
     let json = resource.getProperties('id', 'type', 'changedAttributes');
+    if (Ember.isEmpty(Ember.keys(json.changedAttributes))) { return null; }
     return {
       data: {
         type: json.type,

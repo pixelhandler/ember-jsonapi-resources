@@ -1,31 +1,31 @@
 {
   "stats": {
     "suites": 53,
-    "tests": 111,
-    "passes": 111,
+    "tests": 115,
+    "passes": 115,
     "pending": 0,
     "failures": 0,
-    "start": "2015-06-19T06:33:15.458Z",
-    "end": "2015-06-19T06:33:19.172Z"
+    "start": "2015-06-22T06:41:46.493Z",
+    "end": "2015-06-22T06:41:50.473Z"
   },
   "coverage": {
     "total": {
-      "statementsTotal": 353,
-      "statementsCovered": 279,
-      "percentage": 79.04
+      "statementsTotal": 359,
+      "statementsCovered": 288,
+      "percentage": 80.22
     },
     "files": [
       {
         "name": "ember-jsonapi-resources/adapters/application",
-        "statementsTotal": 99,
-        "statementsCovered": 90,
-        "percentage": 90.91
+        "statementsTotal": 101,
+        "statementsCovered": 92,
+        "percentage": 91.09
       },
       {
         "name": "ember-jsonapi-resources/models/resource",
-        "statementsTotal": 146,
-        "statementsCovered": 106,
-        "percentage": 72.6
+        "statementsTotal": 148,
+        "statementsCovered": 111,
+        "percentage": 75
       },
       {
         "name": "ember-jsonapi-resources/initializers/store",
@@ -47,9 +47,9 @@
       },
       {
         "name": "ember-jsonapi-resources/serializers/application",
-        "statementsTotal": 35,
-        "statementsCovered": 32,
-        "percentage": 91.43
+        "statementsTotal": 37,
+        "statementsCovered": 34,
+        "percentage": 91.89
       }
     ]
   }
