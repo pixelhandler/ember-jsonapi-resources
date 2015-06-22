@@ -1,6 +1,6 @@
 {
   "name": "ember-jsonapi-resources",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "description": "Lightweight persistence for an Ember CLI app using the JSON API 1.0 specification.",
   "directories": {
     "doc": "doc",
