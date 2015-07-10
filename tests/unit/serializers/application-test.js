@@ -4,7 +4,6 @@ import { setup, teardown } from 'dummy/tests/helpers/resources';
 
 import authorMock from 'fixtures/api/authors/1';
 import postMock from 'fixtures/api/posts/1';
-import postsMock from 'fixtures/api/posts';
 
 let sandbox;
 
@@ -151,7 +150,7 @@ test('#deserializeIncluded', function(assert) {
   this.container.register('service:comments', mocks.comments, {instantiate: false});
 
   const serializer = this.subject();
-  let resource = serializer.deserializeIncluded(postMock.included, { headers:{} });
+  serializer.deserializeIncluded(postMock.included, { headers:{} });
 
   let msg = 'service authors.serializer#deserializeResource called';
   assert.ok(mocks.authors.serializer.deserializeResource.calledOnce, msg);

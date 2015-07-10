@@ -161,7 +161,6 @@ test('#patchRelationship', function(assert) {
 test('#deleteResource can be called with a string as the id for the resource', function(assert) {
   const adapter = this.subject({type: 'posts', url: '/posts'});
   sandbox.stub(adapter, 'fetch', function () { return Ember.RSVP.Promise.resolve(null); });
-  let resource = this.container.lookupFactory('model:posts').create(postMock.data);
   let promise = adapter.deleteResource('1');
   assert.ok(typeof promise.then === 'function', 'returns a thenable');
   let msg = '#fetch called with url';
@@ -345,6 +344,6 @@ test('#fetch handles 200 (Success) response status', function(assert) {
 skip('#initEvents', function(assert) {
   const proto = Adapter.PrototypeMixin.mixins[2].properties;
   sandbox.stub(proto, 'initEvents', function () { return; });
-  let adapter = this.subject();
+  this.subject();
   assert.ok(proto.initEvents.calledOnce, 'initEvents called');
 });
