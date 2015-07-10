@@ -19,9 +19,12 @@ the domain of your API server. The addon code is rather concise; borrow at will.
 * [Example app](https://github.com/pixelhandler/jr-test)
 * [Guide (wiki)](https://github.com/pixelhandler/ember-jsonapi-resources/wiki)
 
-## Status
-
 [![Build Status](https://travis-ci.org/pixelhandler/ember-jsonapi-resources.svg?branch=master)](https://travis-ci.org/pixelhandler/ember-jsonapi-resources)
+[![Ember Observer Score](http://emberobserver.com/badges/ember-jsonapi-resources.svg)](http://emberobserver.com/addons/ember-jsonapi-resources)
+[![Code Climate](https://codeclimate.com/github/pixelhandler/ember-jsonapi-resources/badges/gpa.svg)](https://codeclimate.com/github/pixelhandler/ember-jsonapi-resources)
+[![Test Coverage](https://codeclimate.com/github/pixelhandler/ember-jsonapi-resources/badges/coverage.svg)](https://codeclimate.com/github/pixelhandler/ember-jsonapi-resources/coverage)
+
+## Status
 
 This addon is under active development.
 
