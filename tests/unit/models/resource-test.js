@@ -1,7 +1,7 @@
 import { moduleFor, test } from 'ember-qunit';
 import Ember from 'ember';
 import Resource from 'ember-jsonapi-resources/models/resource';
-import { attr, hasOne, hasMany } from 'ember-jsonapi-resources/models/resource';
+import { attr } from 'ember-jsonapi-resources/models/resource';
 import { setup, teardown } from 'dummy/tests/helpers/resources';
 
 moduleFor('model:resource', 'Unit | Model | resource', {
@@ -153,15 +153,9 @@ test('#addRelationship', function(assert) {
   let post = this.container.lookupFactory('model:posts').create({
     id: '1', attributes: {title: 'Wyatt Earp', excerpt: 'Was a gambler.'}
   });
-  let author = this.container.lookupFactory('model:authors').create({
-    id: '2', attributes: {name: 'Bill'}
-  });
   post.addRelationship('author', '2');
   let authorRelation = '{"author":{"links":{},"data":{"type":"authors","id":"2"}},"comments":{"links":{},"data":[]}}';
   assert.equal(JSON.stringify(post.get('relationships')), authorRelation, 'added relationship for author');
-  let commenter = this.container.lookupFactory('model:commenters').create({
-    attributes: { id: '3', name: 'Virgil Erp' }
-  });
   let comment = this.container.lookupFactory('model:comments').create({
     id: '4',  attributes: {body: 'Wyatt become a deputy too.' },
     relationships: { commenter: { data: { type: 'commenter', id: '3' } } }
@@ -243,7 +237,7 @@ QUnit.skip('#initEvents', function(assert) {
   const proto = Resource.PrototypeMixin.mixins[1].properties;
   window.sinon.stub(proto, 'initEvents', function () { return; });
   let Factory = this.container.lookupFactory('model:posts');
-  let post = Factory.create({ attributes: { id: '1', title: 'Wyatt Earp', excerpt: 'Was a gambler.'} });
+  Factory.create({ attributes: { id: '1', title: 'Wyatt Earp', excerpt: 'Was a gambler.'} });
   assert.ok(proto.initEvents.calledOnce, 'initEvents called');
 });
 
