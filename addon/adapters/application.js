@@ -224,10 +224,8 @@ export default Ember.Object.extend(Ember.Evented, {
   /**
     Adds params and headers or Fetch request.
 
-    For example a header is set for Content-Type: application/vnd.api+json
-
-    If an `AuthorizationHeader` key exists in localStorage it will be used for
-    the `Authorization` header value.
+    - The HTTP Header is set for Content-Type: application/vnd.api+json
+    - Sets Authorization header if accessible in the `authorizationCredential` property
 
     @method fetchOptions
     @param {Object} options
@@ -236,16 +234,48 @@ export default Ember.Object.extend(Ember.Evented, {
   fetchOptions(options) {
     let isUpdate;
     options.headers = options.headers || { 'Content-Type': 'application/vnd.api+json' };
-    const authHeader = window.localStorage.getItem('AuthorizationHeader');
-    if (authHeader) {
-      options.headers['Authorization'] = authHeader;
-    }
+    this.fetchAuthorizationHeader(options);
     if (typeof options.update === 'boolean') {
       isUpdate = options.update;
       delete options.update;
     }
     return isUpdate;
   },
+
+  /**
+    Sets Authorization header if accessible in the `authorizationCredential` property
+
+    @method fetchAuthorizationHeader
+    @param {Object} options
+  */
+  fetchAuthorizationHeader(options) {
+    if (options.headers[this.authorizationHeaderField]) {
+      return;
+    } else {
+      const credential = this.get('authorizationCredential');
+      if (credential && this.authorizationHeaderField) {
+        options.headers[this.authorizationHeaderField] = credential;
+      }
+    }
+  },
+
+  /**
+    Authentication credentials/token used with HTTP authentication
+    This property should be added by an Authorization Mixin
+
+    @property authorizationCredential
+    @type String
+  */
+  authorizationCredential: null,
+
+  /**
+    The name of the Authorization request-header field
+    This property should be added by an Authorization Mixin
+
+    @property authorizationHeaderField
+    @type String
+  */
+  authorizationHeaderField: null,
 
   /**
     Hook to customize the URL, e.g. if your API is behind a proxy and you need
