@@ -3,6 +3,7 @@ YUI.add("yuidoc-meta", function(Y) {
     "classes": [
         "ApplicationAdapter",
         "ApplicationSerializer",
+        "AuthorizationMixin",
         "RelatedProxyUtil",
         "Resource",
         "ServiceCacheMixin",
@@ -10,6 +11,7 @@ YUI.add("yuidoc-meta", function(Y) {
     ],
     "modules": [
         "adapter",
+        "authorization",
         "cache",
         "ember-jsonapi-resources",
         "resource",
@@ -21,6 +23,11 @@ YUI.add("yuidoc-meta", function(Y) {
             "displayName": "adapter",
             "name": "adapter",
             "description": "Adapter for a JSON API endpoint, use as a service for your backend"
+        },
+        {
+            "displayName": "authorization",
+            "name": "authorization",
+            "description": "A Mixin class for storage of credential/token uses with a HTTP Authorization request-header\n\nThe default solution is to use localStorage['AuthorizationHeader'] for the credential"
         },
         {
             "displayName": "cache",

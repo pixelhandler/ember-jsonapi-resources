@@ -40,6 +40,7 @@
                             <ul id="api-classes" class="apis classes">
                                 <li><a href="../classes/ApplicationAdapter.html">ApplicationAdapter</a></li>
                                 <li><a href="../classes/ApplicationSerializer.html">ApplicationSerializer</a></li>
+                                <li><a href="../classes/AuthorizationMixin.html">AuthorizationMixin</a></li>
                                 <li><a href="../classes/RelatedProxyUtil.html">RelatedProxyUtil</a></li>
                                 <li><a href="../classes/Resource.html">Resource</a></li>
                                 <li><a href="../classes/ServiceCacheMixin.html">ServiceCacheMixin</a></li>
@@ -48,6 +49,7 @@
                 
                             <ul id="api-modules" class="apis modules">
                                 <li><a href="../modules/adapter.html">adapter</a></li>
+                                <li><a href="../modules/authorization.html">authorization</a></li>
                                 <li><a href="../modules/cache.html">cache</a></li>
                                 <li><a href="../modules/ember-jsonapi-resources.html">ember-jsonapi-resources</a></li>
                                 <li><a href="../modules/resource.html">resource</a></li>
@@ -118,6 +120,11 @@
                     </a>
                 </li>
                 <li class="module-class">
+                    <a href="../classes/AuthorizationMixin.html">
+                        AuthorizationMixin
+                    </a>
+                </li>
+                <li class="module-class">
                     <a href="../classes/RelatedProxyUtil.html">
                         RelatedProxyUtil
                     </a>
@@ -151,6 +158,17 @@
 
                     <div class="module-submodule-description">
                         Adapter for a JSON API endpoint, use as a service for your backend
+                    </div>
+                </li>
+                <li class="module-submodule">
+                    <a href="../modules/authorization.html">
+                        authorization
+                    </a>
+
+                    <div class="module-submodule-description">
+                        A Mixin class for storage of credential/token uses with a HTTP Authorization request-header
+
+The default solution is to use localStorage['AuthorizationHeader'] for the credential
                     </div>
                 </li>
                 <li class="module-submodule">

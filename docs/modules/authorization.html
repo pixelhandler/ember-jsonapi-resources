@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>resource - Ember JSON API Resources</title>
+    <title>authorization - Ember JSON API Resources</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -88,20 +88,20 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-<h1>resource Module</h1>
+<h1>authorization Module</h1>
 <div class="box clearfix meta">
 
 
         <div class="foundat">
-            Defined in: <a href="../files/addon_models_resource.js.html#l337"><code>addon&#x2F;models&#x2F;resource.js:337</code></a>
+            Defined in: <a href="../files/addon_mixins_authorization.js.html#l8"><code>addon&#x2F;mixins&#x2F;authorization.js:8</code></a>
         </div>
 
 </div>
 
 
 <div class="box intro">
-    <p>A Resource class to create JSON API resource objects</p>
-<p>See <a href="http://jsonapi.org/format/#document-resource-objects">http://jsonapi.org/format/#document-resource-objects</a></p>
+    <p>A Mixin class for storage of credential/token uses with a HTTP Authorization request-header</p>
+<p>The default solution is to use localStorage['AuthorizationHeader'] for the credential</p>
 
 </div>
 
@@ -112,13 +112,8 @@
 
             <ul class="module-classes">
                 <li class="module-class">
-                    <a href="../classes/RelatedProxyUtil.html">
-                        RelatedProxyUtil
-                    </a>
-                </li>
-                <li class="module-class">
-                    <a href="../classes/Resource.html">
-                        Resource
+                    <a href="../classes/AuthorizationMixin.html">
+                        AuthorizationMixin
                     </a>
                 </li>
             </ul>

@@ -40,6 +40,7 @@
                             <ul id="api-classes" class="apis classes">
                                 <li><a href="../classes/ApplicationAdapter.html">ApplicationAdapter</a></li>
                                 <li><a href="../classes/ApplicationSerializer.html">ApplicationSerializer</a></li>
+                                <li><a href="../classes/AuthorizationMixin.html">AuthorizationMixin</a></li>
                                 <li><a href="../classes/RelatedProxyUtil.html">RelatedProxyUtil</a></li>
                                 <li><a href="../classes/Resource.html">Resource</a></li>
                                 <li><a href="../classes/ServiceCacheMixin.html">ServiceCacheMixin</a></li>
@@ -48,6 +49,7 @@
                 
                             <ul id="api-modules" class="apis modules">
                                 <li><a href="../modules/adapter.html">adapter</a></li>
+                                <li><a href="../modules/authorization.html">authorization</a></li>
                                 <li><a href="../modules/cache.html">cache</a></li>
                                 <li><a href="../modules/ember-jsonapi-resources.html">ember-jsonapi-resources</a></li>
                                 <li><a href="../modules/resource.html">resource</a></li>
@@ -220,6 +222,7 @@ export default Ember.Object.extend(Ember.Evented, {
   updateResource(resource) {
     let url = resource.get(&#x27;links.self&#x27;) || this.get(&#x27;url&#x27;) + &#x27;/&#x27; + resource.get(&#x27;id&#x27;);
     const json = this.serializer.serializeChanged(resource);
+    if (!json) { return null; }
     return this.fetch(url, {
       method: &#x27;PATCH&#x27;,
       body: JSON.stringify(json)
@@ -315,10 +318,8 @@ export default Ember.Object.extend(Ember.Evented, {
   /**
     Adds params and headers or Fetch request.
 
-    For example a header is set for Content-Type: application/vnd.api+json
-
-    If an &#x60;AuthorizationHeader&#x60; key exists in localStorage it will be used for
-    the &#x60;Authorization&#x60; header value.
+    - The HTTP Header is set for Content-Type: application/vnd.api+json
+    - Sets Authorization header if accessible in the &#x60;authorizationCredential&#x60; property
 
     @method fetchOptions
     @param {Object} options
@@ -327,16 +328,48 @@ export default Ember.Object.extend(Ember.Evented, {
   fetchOptions(options) {
     let isUpdate;
     options.headers = options.headers || { &#x27;Content-Type&#x27;: &#x27;application/vnd.api+json&#x27; };
-    const authHeader = window.localStorage.getItem(&#x27;AuthorizationHeader&#x27;);
-    if (authHeader) {
-      options.headers[&#x27;Authorization&#x27;] = authHeader;
-    }
+    this.fetchAuthorizationHeader(options);
     if (typeof options.update === &#x27;boolean&#x27;) {
       isUpdate = options.update;
       delete options.update;
     }
     return isUpdate;
   },
+
+  /**
+    Sets Authorization header if accessible in the &#x60;authorizationCredential&#x60; property
+
+    @method fetchAuthorizationHeader
+    @param {Object} options
+  */
+  fetchAuthorizationHeader(options) {
+    if (options.headers[this.authorizationHeaderField]) {
+      return;
+    } else {
+      const credential = this.get(&#x27;authorizationCredential&#x27;);
+      if (credential &amp;&amp; this.authorizationHeaderField) {
+        options.headers[this.authorizationHeaderField] = credential;
+      }
+    }
+  },
+
+  /**
+    Authentication credentials/token used with HTTP authentication
+    This property should be added by an Authorization Mixin
+
+    @property authorizationCredential
+    @type String
+  */
+  authorizationCredential: null,
+
+  /**
+    The name of the Authorization request-header field
+    This property should be added by an Authorization Mixin
+
+    @property authorizationHeaderField
+    @type String
+  */
+  authorizationHeaderField: null,
 
   /**
     Hook to customize the URL, e.g. if your API is behind a proxy and you need

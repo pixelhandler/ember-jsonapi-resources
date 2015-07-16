@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>resource - Ember JSON API Resources</title>
+    <title>addon/mixins/authorization.js - Ember JSON API Resources</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -88,44 +88,76 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-<h1>resource Module</h1>
-<div class="box clearfix meta">
+<h1 class="file-heading">File: addon/mixins/authorization.js</h1>
 
+<div class="file">
+    <pre class="code prettyprint linenums">
+/**
+  @module ember-jsonapi-resources
+  @submodule authorization
+**/
 
-        <div class="foundat">
-            Defined in: <a href="../files/addon_models_resource.js.html#l337"><code>addon&#x2F;models&#x2F;resource.js:337</code></a>
-        </div>
+import Ember from &#x27;ember&#x27;;
 
-</div>
+/**
+  A Mixin class for storage of credential/token uses with a HTTP Authorization request-header
 
+  The default solution is to use localStorage[&#x27;AuthorizationHeader&#x27;] for the credential
 
-<div class="box intro">
-    <p>A Resource class to create JSON API resource objects</p>
-<p>See <a href="http://jsonapi.org/format/#document-resource-objects">http://jsonapi.org/format/#document-resource-objects</a></p>
+  @class AuthorizationMixin
+*/
 
-</div>
+export default Ember.Mixin.create({
 
+  /**
+    The name of the Authorization request-header field
 
-<div class="yui3-g">
-    <div class="yui3-u-1-2">
-            <p>This module provides the following classes:</p>
+    @property authorizationHeaderField
+    @type String
+    @required
+  */
+  authorizationHeaderField: &#x27;Authorization&#x27;,
 
-            <ul class="module-classes">
-                <li class="module-class">
-                    <a href="../classes/RelatedProxyUtil.html">
-                        RelatedProxyUtil
-                    </a>
-                </li>
-                <li class="module-class">
-                    <a href="../classes/Resource.html">
-                        Resource
-                    </a>
-                </li>
-            </ul>
-    </div>
+  /**
+    The name key, stored locally, that references the Authorization request-header credential/token
 
-    <div class="yui3-u-1-2">
-    </div>
+    @property authorizationHeaderStorageKey
+    @type String
+    @required
+  */
+  authorizationHeaderStorageKey: &#x27;AuthorizationHeader&#x27;,
+
+  /**
+    Authentication credentials/token used with HTTP authentication
+
+    @property authorizationCredential
+    @type String
+    @required
+  */
+  authorizationCredential: Ember.computed({
+    get(key) {
+      key = this.get(&#x27;authorizationHeaderStorageKey&#x27;);
+      return window[this._storage].getItem(key);
+    },
+    set(key, value) {
+      key = this.get(&#x27;authorizationHeaderStorageKey&#x27;);
+      window[this._storage].setItem(key, value);
+      return value;
+    }
+  }),
+
+  /**
+    Storage type localStorage or sessionStorage
+
+    @property _storage
+    @type String
+    @private
+  */
+  _storage: [&#x27;localStorage&#x27;, &#x27;sessionStorage&#x27;][0]
+
+});
+
+    </pre>
 </div>
                     </div>
                 </div>

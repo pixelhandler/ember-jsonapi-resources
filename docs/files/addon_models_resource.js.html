@@ -40,6 +40,7 @@
                             <ul id="api-classes" class="apis classes">
                                 <li><a href="../classes/ApplicationAdapter.html">ApplicationAdapter</a></li>
                                 <li><a href="../classes/ApplicationSerializer.html">ApplicationSerializer</a></li>
+                                <li><a href="../classes/AuthorizationMixin.html">AuthorizationMixin</a></li>
                                 <li><a href="../classes/RelatedProxyUtil.html">RelatedProxyUtil</a></li>
                                 <li><a href="../classes/Resource.html">Resource</a></li>
                                 <li><a href="../classes/ServiceCacheMixin.html">ServiceCacheMixin</a></li>
@@ -48,6 +49,7 @@
                 
                             <ul id="api-modules" class="apis modules">
                                 <li><a href="../modules/adapter.html">adapter</a></li>
+                                <li><a href="../modules/authorization.html">authorization</a></li>
                                 <li><a href="../modules/cache.html">cache</a></li>
                                 <li><a href="../modules/ember-jsonapi-resources.html">ember-jsonapi-resources</a></li>
                                 <li><a href="../modules/resource.html">resource</a></li>
@@ -260,7 +262,7 @@ const Resource = Ember.Object.extend({
       }
       return attrs;
     }
-  }),
+  }).volatile(),
 
   /**
     @method previousAttributes
@@ -278,7 +280,7 @@ const Resource = Ember.Object.extend({
       }
       return attrs;
     }
-  }),
+  }).volatile(),
 
   /**
     Initialize events to communicate with the service object, listen for &#x60;didUpdateResource&#x60;
@@ -297,7 +299,8 @@ const Resource = Ember.Object.extend({
 
     @method didUpdateResource
   */
-  didUpdateResource() {
+  didUpdateResource(json) {
+    if (this.get(&#x27;id&#x27;) !== json.id) { return; }
     for (let attr in this._attributes) {
       if (this._attributes.hasOwnProperty(attr)) {
         delete this._attributes[attr];

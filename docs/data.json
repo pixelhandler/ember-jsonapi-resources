@@ -26,6 +26,17 @@
             "fors": {},
             "namespaces": {}
         },
+        "addon/mixins/authorization.js": {
+            "name": "addon/mixins/authorization.js",
+            "modules": {
+                "authorization": 1
+            },
+            "classes": {
+                "AuthorizationMixin": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
         "addon/mixins/service-cache.js": {
             "name": "addon/mixins/service-cache.js",
             "modules": {
@@ -76,12 +87,14 @@
             "submodules": {
                 "adapter": 1,
                 "store": 1,
+                "authorization": 1,
                 "cache": 1,
                 "resource": 1,
                 "serializer": 1
             },
             "classes": {
                 "ApplicationAdapter": 1,
+                "AuthorizationMixin": 1,
                 "ServiceCacheMixin": 1,
                 "Resource": 1,
                 "RelatedProxyUtil": 1,
@@ -123,6 +136,21 @@
             "line": 10,
             "description": "Service for a JSON API endpoint a facade to your resource adapter"
         },
+        "authorization": {
+            "name": "authorization",
+            "submodules": {},
+            "classes": {
+                "AuthorizationMixin": 1
+            },
+            "fors": {},
+            "is_submodule": 1,
+            "namespaces": {},
+            "module": "ember-jsonapi-resources",
+            "namespace": "",
+            "file": "addon/mixins/authorization.js",
+            "line": 8,
+            "description": "A Mixin class for storage of credential/token uses with a HTTP Authorization request-header\n\nThe default solution is to use localStorage['AuthorizationHeader'] for the credential"
+        },
         "cache": {
             "name": "cache",
             "submodules": {},
@@ -151,7 +179,7 @@
             "module": "ember-jsonapi-resources",
             "namespace": "",
             "file": "addon/models/resource.js",
-            "line": 336,
+            "line": 337,
             "description": "A Resource class to create JSON API resource objects\n\nSee <http://jsonapi.org/format/#document-resource-objects>"
         },
         "serializer": {
@@ -192,6 +220,21 @@
                 "Ember.Evented"
             ],
             "static": 1
+        },
+        "AuthorizationMixin": {
+            "name": "AuthorizationMixin",
+            "shortname": "AuthorizationMixin",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "ember-jsonapi-resources",
+            "submodule": "authorization",
+            "namespace": "",
+            "file": "addon/mixins/authorization.js",
+            "line": 8,
+            "description": "A Mixin class for storage of credential/token uses with a HTTP Authorization request-header\n\nThe default solution is to use localStorage['AuthorizationHeader'] for the credential"
         },
         "ServiceCacheMixin": {
             "name": "ServiceCacheMixin",
@@ -242,7 +285,7 @@
             "submodule": "resource",
             "namespace": "",
             "file": "addon/models/resource.js",
-            "line": 336,
+            "line": 337,
             "description": "Mixin for creating promise proxy objects for related resources",
             "static": 1
         },
@@ -445,7 +488,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 139,
+            "line": 140,
             "description": "Patch a relationship, either add or remove, sends a PATCH request\n\nAdds with payload: `{ \"data\": { \"type\": \"comments\", \"id\": \"12\" } }`\nRemoves with payload: `{ \"data\": null }`",
             "itemtype": "method",
             "name": "patchRelationship",
@@ -471,7 +514,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 162,
+            "line": 163,
             "description": "Delete an existing resource, sends a DELETE request",
             "itemtype": "method",
             "name": "deleteResource",
@@ -492,7 +535,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 180,
+            "line": 181,
             "description": "Makes a fetch request via Fetch API\n\nsee http://updates.html5rocks.com/2015/03/introduction-to-fetch",
             "itemtype": "method",
             "name": "fetch",
@@ -513,8 +556,8 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 223,
-            "description": "Adds params and headers or Fetch request.\n\nFor example a header is set for Content-Type: application/vnd.api+json\n\nIf an `AuthorizationHeader` key exists in localStorage it will be used for\nthe `Authorization` header value.",
+            "line": 224,
+            "description": "Adds params and headers or Fetch request.\n\n- The HTTP Header is set for Content-Type: application/vnd.api+json\n- Sets Authorization header if accessible in the `authorizationCredential` property",
             "itemtype": "method",
             "name": "fetchOptions",
             "params": [
@@ -534,7 +577,46 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 249,
+            "line": 245,
+            "description": "Sets Authorization header if accessible in the `authorizationCredential` property",
+            "itemtype": "method",
+            "name": "fetchAuthorizationHeader",
+            "params": [
+                {
+                    "name": "options",
+                    "description": "",
+                    "type": "Object"
+                }
+            ],
+            "class": "ApplicationAdapter",
+            "module": "ember-jsonapi-resources",
+            "submodule": "adapter"
+        },
+        {
+            "file": "addon/adapters/application.js",
+            "line": 262,
+            "description": "Authentication credentials/token used with HTTP authentication\nThis property should be added by an Authorization Mixin",
+            "itemtype": "property",
+            "name": "authorizationCredential",
+            "type": "String",
+            "class": "ApplicationAdapter",
+            "module": "ember-jsonapi-resources",
+            "submodule": "adapter"
+        },
+        {
+            "file": "addon/adapters/application.js",
+            "line": 271,
+            "description": "The name of the Authorization request-header field\nThis property should be added by an Authorization Mixin",
+            "itemtype": "property",
+            "name": "authorizationHeaderField",
+            "type": "String",
+            "class": "ApplicationAdapter",
+            "module": "ember-jsonapi-resources",
+            "submodule": "adapter"
+        },
+        {
+            "file": "addon/adapters/application.js",
+            "line": 280,
             "description": "Hook to customize the URL, e.g. if your API is behind a proxy and you need\nto swap a portion of the domain to make a request on the same domain.",
             "itemtype": "method",
             "name": "fetchUrl",
@@ -555,7 +637,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 261,
+            "line": 292,
             "description": "Noop as a hook for defining how deserialized resource objects are cached,\ne.g. in memory",
             "itemtype": "method",
             "name": "cacheResource",
@@ -572,7 +654,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 270,
+            "line": 301,
             "description": "Initialize events to communicate on the resource instances' service reference.\nListens for resource objects trigging `attributeChanged` events",
             "itemtype": "method",
             "name": "initEvents",
@@ -589,9 +671,58 @@
             "requires": [
                 "StoreService"
             ],
-            "class": "ServiceCacheMixin",
+            "class": "AuthorizationMixin",
             "module": "ember-jsonapi-resources",
             "submodule": "store"
+        },
+        {
+            "file": "addon/mixins/authorization.js",
+            "line": 18,
+            "description": "The name of the Authorization request-header field",
+            "itemtype": "property",
+            "name": "authorizationHeaderField",
+            "type": "String",
+            "required": 1,
+            "class": "AuthorizationMixin",
+            "module": "ember-jsonapi-resources",
+            "submodule": "authorization"
+        },
+        {
+            "file": "addon/mixins/authorization.js",
+            "line": 27,
+            "description": "The name key, stored locally, that references the Authorization request-header credential/token",
+            "itemtype": "property",
+            "name": "authorizationHeaderStorageKey",
+            "type": "String",
+            "required": 1,
+            "class": "AuthorizationMixin",
+            "module": "ember-jsonapi-resources",
+            "submodule": "authorization"
+        },
+        {
+            "file": "addon/mixins/authorization.js",
+            "line": 36,
+            "description": "Authentication credentials/token used with HTTP authentication",
+            "itemtype": "property",
+            "name": "authorizationCredential",
+            "type": "String",
+            "required": 1,
+            "class": "AuthorizationMixin",
+            "module": "ember-jsonapi-resources",
+            "submodule": "authorization"
+        },
+        {
+            "file": "addon/mixins/authorization.js",
+            "line": 55,
+            "description": "Storage type localStorage or sessionStorage",
+            "itemtype": "property",
+            "name": "_storage",
+            "type": "String",
+            "access": "private",
+            "tagname": "",
+            "class": "AuthorizationMixin",
+            "module": "ember-jsonapi-resources",
+            "submodule": "authorization"
         },
         {
             "file": "addon/mixins/service-cache.js",
@@ -939,7 +1070,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 216,
+            "line": 217,
             "description": "A local cache duration, to minimize duplicate fetch requests",
             "itemtype": "property",
             "name": "cacheDuration",
@@ -950,7 +1081,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 224,
+            "line": 225,
             "itemtype": "property",
             "name": "isCacheExpired",
             "type": "Boolean",
@@ -960,7 +1091,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 236,
+            "line": 237,
             "description": "To protect the JSON API Resource properties for attributes, links and\nrelationships these objects are setup during create(). This has to be\ndefined since the attr() helper needs to have new objects for each instance,\nto project from keeping a reference on the prototype.\n\nThe create method should only be called after looking up a factory from the\ncontainer, for example in a route's model hook:\n\n```\nmodel() {\n  return this.container.lookupFactory('model:posts').create({\n    attributes: {\n      title: 'The JSON API 1.0 Spec Rocks!'\n    }\n  });\n}\n```\n\nThe create method uses the container to lookup the factory's prototype and\nfind the computed properties used for relations to setup the relationships\nfor the Resource instance you create. Calling Resource#create without using\nthe factory lookup will result in an instance without a reference to the\napplication's container and you will have to manually setup the relationships\nobject prior to adding a relationship.",
             "itemtype": "method",
             "name": "create",
@@ -974,7 +1105,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 305,
+            "line": 306,
             "description": "Helper to setup computed property for resource attributes",
             "itemtype": "method",
             "name": "attr",
@@ -984,7 +1115,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 344,
+            "line": 345,
             "description": "Checks for required `relationship` property",
             "itemtype": "method",
             "name": "init",
@@ -994,7 +1125,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 357,
+            "line": 358,
             "description": "The name of the relationship",
             "itemtype": "property",
             "name": "resource",
@@ -1006,7 +1137,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 366,
+            "line": 367,
             "description": "Proxy for the requested relation, resolves w/ content from fulfilled promise",
             "itemtype": "method",
             "name": "createProxy",
@@ -1032,7 +1163,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 396,
+            "line": 397,
             "description": "Proxy url to fetch for the resource's relation",
             "itemtype": "method",
             "name": "proxyUrl",
@@ -1058,7 +1189,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 413,
+            "line": 414,
             "description": "Lookup relation from service cache and pomisify result",
             "itemtype": "method",
             "name": "promiseFromCache",
@@ -1089,7 +1220,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 440,
+            "line": 441,
             "description": "Lookup data in service cache",
             "itemtype": "method",
             "name": "serviceCacheLookup",
@@ -1115,7 +1246,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 457,
+            "line": 458,
             "description": "Helper to setup a has one relationship to another resource",
             "itemtype": "method",
             "name": "hasOne",
@@ -1132,7 +1263,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 471,
+            "line": 472,
             "description": "Helper to setup a has many relationship to another resource",
             "itemtype": "method",
             "name": "hasMany",
@@ -1212,7 +1343,7 @@
         },
         {
             "file": "addon/serializers/application.js",
-            "line": 68,
+            "line": 69,
             "description": "Deserialize response objects from the request payload",
             "itemtype": "method",
             "name": "deserialize",
@@ -1233,7 +1364,7 @@
         },
         {
             "file": "addon/serializers/application.js",
-            "line": 85,
+            "line": 86,
             "description": "Deserialize response objects in the payload data",
             "itemtype": "method",
             "name": "deserializeResources",
@@ -1254,7 +1385,7 @@
         },
         {
             "file": "addon/serializers/application.js",
-            "line": 99,
+            "line": 100,
             "description": "Deserialize response an object in the payload data",
             "itemtype": "method",
             "name": "deserializeResource",
@@ -1275,7 +1406,7 @@
         },
         {
             "file": "addon/serializers/application.js",
-            "line": 110,
+            "line": 111,
             "description": "Deserialize optional included array of payload and add to service cache",
             "itemtype": "method",
             "name": "deserializeIncluded",
@@ -1297,7 +1428,7 @@
         },
         {
             "file": "addon/serializers/application.js",
-            "line": 129,
+            "line": 130,
             "description": "Create a Resource from a JSON API Resource Object\n\nSee <http://jsonapi.org/format/#document-resource-objects>",
             "access": "private",
             "tagname": "",
@@ -1495,7 +1626,7 @@
         },
         {
             "message": "replacing incorrect tag: returns with return",
-            "line": " addon/models/resource.js:236"
+            "line": " addon/models/resource.js:237"
         }
     ]
 }
