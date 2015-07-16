@@ -17,10 +17,12 @@ moduleFor('adapter:application', 'Unit | Adapter | application', {
     setup.call(this);
     sandbox = window.sinon.sandbox.create();
     Ember.RSVP.configure('onerror', RSVPonerror);
+    window.localStorage.removeItem('AuthorizationHeader');
   },
   afterEach() {
     teardown();
     sandbox.restore();
+    window.localStorage.removeItem('AuthorizationHeader');
   }
 });
 
@@ -338,6 +340,62 @@ test('#fetch handles 200 (Success) response status', function(assert) {
     assert.ok(adapter.serializer.deserialize.calledOnce, '#deserialize method called');
     done();
   });
+});
+
+test('it uses the authorization mixin to define the property authorizationCredential', function(assert) {
+  const credential = 'supersecrettokenthatnobodycancrack';
+  window.localStorage.setItem('AuthorizationHeader', credential);
+  const adapter = this.subject();
+  let msg = 'authorizationCredential property reads localStorage["AuthorizationHeader"] value';
+  assert.equal(adapter.get('authorizationCredential'), credential, msg);
+});
+
+test('#fetchAuthorizationHeader sets Authorization option for #fetch', function(assert) {
+  const adapter = this.subject({});
+  let credential = 'supersecrettokenthatnobodycancrack';
+  adapter.set('authorizationCredential', credential);
+  let option = { headers: {} };
+  adapter.fetchAuthorizationHeader(option);
+  assert.equal(option.headers['Authorization'], credential, 'Authorization header set to' + credential);
+});
+
+test('#fetchAuthorizationHeader uses an option passed in by caller', function(assert) {
+  const adapter = this.subject();
+  let option = { headers: {"Authorization": "secretToken"} };
+  adapter.fetchAuthorizationHeader(option);
+  assert.equal(option.headers['Authorization'], "secretToken", 'Authorization header set to "secretToken"');
+});
+
+test('re-opening AuthorizationMixin can customize the settings for Authorization credentials', function(assert) {
+  const credential = '{"secure":{"access_token":"SecretToken"}}';
+  window.localStorage.setItem('ember_simple_auth:session', credential);
+  const adapter = this.subject();
+  /*
+    In a test reopening a mixin is sticky so mimicing the same behavior by reopening
+    the adapter instance, in an app the AuthorizationMixin instance should be
+    re-opened to configure custom authorization credentials
+
+    ```
+    import AuthorizationMixin from 'ember-jsonapi-resources/mixins/authorization';
+    AuthorizationMixin.reopen({
+      authorizationHeaderStorageKey: ...
+      authorizationCredential: ...
+    });
+    ```
+
+    The example below should work for using ember-simple-auth…
+  */
+  adapter.reopen({
+    authorizationHeaderStorageKey: 'ember_simple_auth:session',
+    authorizationCredential: Ember.computed({
+      get(key) {
+        key = this.get('authorizationHeaderStorageKey');
+        const simpleAuthSession = JSON.parse(window.localStorage.getItem(key));
+        return 'Bearer ' + simpleAuthSession.secure.access_token;
+      }
+    })
+  });
+  assert.equal(adapter.get('authorizationCredential'), 'Bearer SecretToken');
 });
 
 // This may only intermittently pass
