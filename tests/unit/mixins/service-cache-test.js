@@ -94,12 +94,55 @@ test('#cacheUpdate with existing cache', function(assert) {
   assert.equal(cached.get('title'), newTitle, 'cached updated title ' + newTitle);
 });
 
-test('#cacheUpdate without existing cache', function(assert) {
+test('without existing cache #cacheUpdate using data collection', function(assert) {
   subject.cacheUpdate({ meta:{}, headers:{},
     data: [ Post.create({id: '1', attributes: { title: testTitle() } }) ]
   });
   let cached = subject.cacheLookup('1');
   assert.equal(cached.get('title'), testTitle(), 'cached updated title ' + testTitle());
+});
+
+test('#cacheUpdate using data object', function(assert) {
+  subject.cache.data.pushObject( Post.create({ id: '1', attributes: { title: testTitle() } }) );
+  subject.cacheUpdate({
+    data: Post.create({
+      id: '1', attributes: { title: testTitle(1) }
+    })
+  });
+  let cached = subject.cacheLookup('1');
+  assert.equal(cached.get('title'), testTitle(1), 'cached has title update: ' + testTitle());
+});
+
+test('with existing cache #cacheData using data object', function(assert) {
+  subject.cache.data.pushObject( Post.create({ id: '1', attributes: { title: testTitle() } }) );
+  subject.cacheData({
+    data: Post.create({
+      id: '1', attributes: { title: testTitle(1) }
+    })
+  });
+  let cached = subject.cacheLookup('1');
+  assert.equal(cached.get('title'), testTitle(1), 'cached has title update: ' + testTitle(1));
+});
+
+test('without existing cache #cacheData using data object', function(assert) {
+  subject.cacheData({
+    data: Post.create({
+      id: '1', attributes: { title: testTitle() }
+    })
+  });
+  let cached = subject.cacheLookup('1');
+  assert.equal(cached.get('title'), testTitle(), 'cached has title update: ' + testTitle());
+});
+
+test('with other existing cache #cacheData using data object', function(assert) {
+  subject.cache.data.pushObject( Post.create({ id: '1', attributes: { title: testTitle() } }) );
+  subject.cacheData({
+    data: Post.create({
+      id: '2', attributes: { title: testTitle(1) }
+    })
+  });
+  let cached = subject.cacheLookup('2');
+  assert.equal(cached.get('title'), testTitle(1), 'cached has title update: ' + testTitle(1));
 });
 
 test('#cacheData can update cache using #cacheUpdate', function(assert) {

@@ -74,8 +74,15 @@ export default Ember.Mixin.create({
         this.cacheUpdate(resp);
       }
     } else if (typeof resp === 'object') {
-      if (ids.indexOf(resp.data.get('id')) === -1) {
+      if (ids.length === 0) {
         this.cache.data.pushObject(resp.data);
+        this.cacheControl(resp.data, resp.headers);
+      } else {
+        if (ids.indexOf(resp.data.get('id')) === -1) {
+          this.cache.data.pushObject(resp.data);
+        } else  {
+          this.cacheUpdate(resp);
+        }
       }
     }
   },
@@ -89,6 +96,9 @@ export default Ember.Mixin.create({
   cacheUpdate(resp) {
     const ids = this.cache.data.mapBy('id');
     const items = Ember.A([]);
+    if (!Array.isArray(resp.data) && typeof resp.data === 'object') {
+      resp.data = [ resp.data ];
+    }
     let index;
     for (let i = 0; i < resp.data.length; i++) {
       index = ids.indexOf(resp.data[i].get('id'));
