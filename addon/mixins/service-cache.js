@@ -105,7 +105,9 @@ export default Ember.Mixin.create({
   },
 
   /**
-    Store meta from headers on resource meta
+    Store meta from headers on resource meta, window.fetch includes
+    a headers object in the response use `headers.get` to lookup data
+    from the headers for cache-control, date, and etag.
 
     @method cacheControl
     @param {Resource} resource

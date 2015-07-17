@@ -76,3 +76,65 @@ test('#cacheLookup does not return a resource if it is expired', function(assert
   let cached = subject.cacheLookup('1');
   assert.notEqual(cached, resource, 'resource not found in cache');
 });
+
+test('#cacheUpdate with existing cache', function(assert) {
+  let ogTitle = testTitle();
+  subject.cache.data.pushObjects([
+    Post.create({ id: '1', attributes: { title: ogTitle } }),
+    Post.create({ id: '2', attributes: { title: testTitle(2) } })
+  ]);
+  let cached = subject.cacheLookup('1');
+  assert.equal(cached.get('title'), ogTitle, 'resource has og title ' + ogTitle);
+
+  let newTitle = testTitle(1);
+  subject.cacheUpdate({ meta:{}, headers:{},
+    data: [ Post.create({id: '1', attributes: { title: newTitle } }) ]
+  });
+  cached = subject.cacheLookup('1');
+  assert.equal(cached.get('title'), newTitle, 'cached updated title ' + newTitle);
+});
+
+test('#cacheUpdate without existing cache', function(assert) {
+  subject.cacheUpdate({ meta:{}, headers:{},
+    data: [ Post.create({id: '1', attributes: { title: testTitle() } }) ]
+  });
+  let cached = subject.cacheLookup('1');
+  assert.equal(cached.get('title'), testTitle(), 'cached updated title ' + testTitle());
+});
+
+test('#cacheData can update cache using #cacheUpdate', function(assert) {
+  subject.cache.data.pushObject(
+    Post.create({ id: '1', attributes: { title: testTitle() } })
+  );
+  let cached = subject.cacheLookup('1');
+  assert.equal(cached.get('title'), testTitle(), 'cached resource with title ' + testTitle());
+  let resource = Post.create({ id: '1', attributes: { title: testTitle(1) } });
+  subject.cacheData({ data: [ resource ] });
+  cached = subject.cacheLookup('1');
+  assert.equal(cached.get('title'), testTitle(1), 'cached resource with updated title ' + testTitle(1));
+});
+
+test('#cacheControl', function(assert) {
+  let resource = Post.create({ id: '1', attributes: { title: testTitle() } });
+  let headers = mockHeaders();
+  subject.cacheControl(resource, headers);
+  assert.equal(resource.get('meta.cacheControl'), headers.get('cache-control'), 'header cache-control added to resource meta');
+  assert.equal(resource.get('meta.timeStamps.server'), headers.get('date'), 'header date added to resource meta');
+  assert.equal(resource.get('meta.etag'), headers.get('etag'), 'header etag added to resource meta');
+});
+
+function testTitle(idx = 0) {
+  return [
+    'JSON API paints my bikeshed!',
+    'My painted bikeshed rocks, painted by JSON API!',
+    'Rails is Omakase'
+  ][idx];
+}
+
+function mockHeaders() {
+  return Ember.Object.create({
+    'cache-control': 'max-age=0, private, must-revalidate',
+    'date': (new Date()).toUTCString(),
+    'etag': 'W"a0096266a4ca13bdf581f89f58f23dd8"'
+  });
+}
