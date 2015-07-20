@@ -1,5 +1,5 @@
 import Adapter from '../adapters/author';
-import ServiceCache from 'ember-jsonapi-resources/mixins/service-cache';
+import ServiceCache from '../mixins/service-cache';
 
 Adapter.reopenClass({ isServiceFactory: true });
 

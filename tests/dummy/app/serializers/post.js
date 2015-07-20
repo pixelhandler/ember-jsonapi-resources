@@ -1,3 +1,3 @@
-import ApplicationSerializer from 'ember-jsonapi-resources/serializers/application';
+import ApplicationSerializer from './application';
 
 export default ApplicationSerializer.extend();

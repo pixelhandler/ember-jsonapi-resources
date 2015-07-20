@@ -1,6 +1,6 @@
 <h4>Posts Admin</h4>
 <dl class="Blog-list">
-  {{#each model key="@guid" as |post|}}
+  {{#each model key="@identity" as |post|}}
     <dt class="Blog-list-date">{{post.date}}</dt>
     <dd class="Blog-list-item">
       <span class="Blog-list-item-title">{{post.title}}</span>
