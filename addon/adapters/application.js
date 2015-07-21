@@ -152,6 +152,7 @@ export default Ember.Object.extend(Ember.Evented, {
     let url = resource.get(['relationships', relationship, 'links', 'self'].join('.'));
     url = url || [this.get('url'), resource.get('id'), 'relationships', relationship].join('/');
     let data = resource.get(['relationships', relationship, 'data'].join('.'));
+    data = { data: data };
     return this.fetch(url, {
       method: 'PATCH',
       body: JSON.stringify(data)

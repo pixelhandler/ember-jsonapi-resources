@@ -147,7 +147,7 @@ test('#updateResource returns null when serializer returns null (nothing changed
   assert.ok(!adapter.fetch.calledOnce, '#fetch method NOT called');
 });
 
-test('#patchRelationship', function(assert) {
+test('#patchRelationship (to-many)', function(assert) {
   const adapter = this.subject({type: 'posts', url: '/posts'});
   sandbox.stub(adapter, 'fetch', function () { return Ember.RSVP.Promise.resolve(null); });
   let resource = this.container.lookupFactory('model:posts').create(postMock.data);
@@ -155,7 +155,20 @@ test('#patchRelationship', function(assert) {
   let promise = adapter.patchRelationship(resource, 'comments');
   assert.ok(typeof promise.then === 'function', 'returns a thenable');
   let relationURL = 'http://api.pixelhandler.com/api/v1/posts/1/relationships/comments';
-  let jsonBody = '[{"type":"comments","id":"1"}]';
+  let jsonBody = '{"data":[{"type":"comments","id":"1"}]}';
+  let msg = '#fetch called with url and options with data';
+  assert.ok(adapter.fetch.calledWith(relationURL, { method: 'PATCH', body: jsonBody }), msg);
+});
+
+test('#patchRelationship (to-one)', function(assert) {
+  const adapter = this.subject({type: 'posts', url: '/posts'});
+  sandbox.stub(adapter, 'fetch', function () { return Ember.RSVP.Promise.resolve(null); });
+  let resource = this.container.lookupFactory('model:posts').create(postMock.data);
+  resource.addRelationship('author', '1');
+  let promise = adapter.patchRelationship(resource, 'author');
+  assert.ok(typeof promise.then === 'function', 'returns a thenable');
+  let relationURL = 'http://api.pixelhandler.com/api/v1/posts/1/relationships/author';
+  let jsonBody = '{"data":{"type":"authors","id":"1"}}';
   let msg = '#fetch called with url and options with data';
   assert.ok(adapter.fetch.calledWith(relationURL, { method: 'PATCH', body: jsonBody }), msg);
 });
