@@ -329,6 +329,10 @@ server to access the API server on your same domain at `/api` then the JSON docu
 may have it's own link references to the original server so you can replace the URL 
 as needed to act as if the API server is running on your same domain.
 
+#### Authorization
+
+EJR by default will pick-up credentials saved on `localStorage['AuthorizationHeader']`. If you'd like to change this, for instance to make it work with `ember-simple-auth`, there's a [configurable mixin available](https://github.com/pixelhandler/ember-jsonapi-resources/wiki/Authorization).
+
 #### Example JSON API 1.0 Document
 
 ```javascript
