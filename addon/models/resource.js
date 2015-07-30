@@ -312,6 +312,7 @@ export function attr(type, mutable = true) {
   const _mutable = mutable;
   return Ember.computed('attributes', {
     get: function (key) {
+      assertDasherizedAttr(key);
       return this.get('attributes.' + key);
     },
 
@@ -332,6 +333,17 @@ export function attr(type, mutable = true) {
       return this.get('attributes.' + key);
     }
   });
+}
+
+function assertDasherizedAttr(name) {
+  try {
+    let attrName = Ember.String.dasherize(name);
+    let msg = "Attributes are recommended to use dasherized names, e.g `'"+ attrName +"': attr()`";
+    msg += ", instead of `"+ name +": attr()`";
+    Ember.assert(msg, isDasherized(name));
+  } catch(e) {
+    console.warn(e.message);
+  }
 }
 
 /**
@@ -462,11 +474,23 @@ function linksPath(relation) {
   @param {String} relation
 */
 export function hasOne(relation) {
+  assertDasherizedHasOneRelation(relation);
   const util = RelatedProxyUtil.create({'relationship': relation});
   const path = linksPath(relation);
   return Ember.computed(path, function () {
     return util.createProxy(this, Ember.ObjectProxy);
   }).meta({relation: relation, kind: 'hasOne'});
+}
+
+function assertDasherizedHasOneRelation(name) {
+  try {
+    let relationName = Ember.String.dasherize(name);
+    let msg = " are recommended to use dasherized names, e.g `hasOne('"+ relationName +"')`";
+    msg += ", instead of `hasOne('"+ name +"')`";
+    Ember.assert(msg, isDasherized(name));
+  } catch(e) {
+    console.warn(e.message);
+  }
 }
 
 /**
@@ -476,11 +500,23 @@ export function hasOne(relation) {
   @param {String} relation
 */
 export function hasMany(relation) {
+  assertDasherizedHasManyRelation(relation);
   const util = RelatedProxyUtil.create({'relationship': relation});
   const path = linksPath(relation);
   return Ember.computed(path, function () {
     return util.createProxy(this, Ember.ArrayProxy);
   }).meta({relation: relation, kind: 'hasMany'});
+}
+
+function assertDasherizedHasManyRelation(name) {
+  try {
+    let relationName = Ember.String.dasherize(name);
+    let msg = " are recommended to use dasherized names, e.g `hasMany('"+ relationName +"')`";
+    msg += ", instead of `hasMany('"+ name +"')`";
+    Ember.assert(msg, isDasherized(name));
+  } catch(e) {
+    console.warn(e.message);
+  }
 }
 
 function setupRelationship(relation, data = null) {
@@ -493,4 +529,8 @@ function setupRelationship(relation, data = null) {
   if (!this.relationships[relation].data) {
     this.relationships[relation].data = data;
   }
+}
+
+function isDasherized(name) {
+  return (Ember.String.dasherize(name) === name);
 }
