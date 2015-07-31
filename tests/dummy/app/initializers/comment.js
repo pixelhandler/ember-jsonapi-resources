@@ -4,18 +4,13 @@ import Adapter from '../adapters/comment';
 import Serializer from '../serializers/comment';
 
 export function initialize(container, application) {
-  const adapter = 'service:comments-adapter';
-  const serializer = 'service:comments-serializer';
-  const service = 'service:comments';
-  const model = 'model:comments';
+  application.register('model:comments', Model, { instantiate: false, singleton: false });
+  application.register('service:comments', Service);
+  application.register('adapter:comments', Adapter);
+  application.register('serializer:comments', Serializer);
 
-  application.register(model, Model, { instantiate: false, singleton: false });
-  application.register(service, Service);
-  application.register(adapter, Adapter);
-  application.register(serializer, Serializer);
-
-  application.inject('service:store', 'comments', service);
-  application.inject(service, 'serializer', serializer);
+  application.inject('service:store', 'comments', 'service:comments');
+  application.inject('service:comments', 'serializer', 'serializer:comments');
 }
 
 export default {

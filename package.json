@@ -23,7 +23,7 @@
     "broccoli-filter": "^0.1.14",
     "broccoli-static-compiler": "^0.2.1",
     "ember-buffered-proxy": "^0.5.1",
-    "ember-cli": "^1.13.5",
+    "ember-cli": "^1.13.6",
     "ember-cli-app-version": "0.4.0",
     "ember-cli-blanket": "0.5.2",
     "ember-cli-content-security-policy": "0.4.0",

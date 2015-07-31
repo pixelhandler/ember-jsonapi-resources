@@ -4,18 +4,13 @@ import Adapter from '../adapters/<%= entity %>';
 import Serializer from '../serializers/<%= entity %>';
 
 export function initialize(container, application) {
-  const adapter = 'service:<%= resource %>-adapter';
-  const serializer = 'service:<%= resource %>-serializer';
-  const service = 'service:<%= resource %>';
-  const model = 'model:<%= resource %>';
+  application.register('model:<%= resource %>', Model, { instantiate: false, singleton: false });
+  application.register('service:<%= resource %>', Service);
+  application.register('adapter:<%= resource %>', Adapter);
+  application.register('serializer:<%= resource %>', Serializer);
 
-  application.register(model, Model, { instantiate: false, singleton: false });
-  application.register(service, Service);
-  application.register(adapter, Adapter);
-  application.register(serializer, Serializer);
-
-  application.inject('service:store', '<%= resource %>', service);
-  application.inject(service, 'serializer', serializer);
+  application.inject('service:store', '<%= resource %>', 'service:<%= resource %>');
+  application.inject('service:<%= resource %>', 'serializer', 'serializer:<%= resource %>');
 }
 
 export default {
