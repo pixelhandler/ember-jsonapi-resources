@@ -23,6 +23,7 @@ the domain of your API server. The addon code is rather concise; borrow at will.
 [![Ember Observer Score](http://emberobserver.com/badges/ember-jsonapi-resources.svg)](http://emberobserver.com/addons/ember-jsonapi-resources)
 [![Code Climate](https://codeclimate.com/github/pixelhandler/ember-jsonapi-resources/badges/gpa.svg)](https://codeclimate.com/github/pixelhandler/ember-jsonapi-resources)
 [![Test Coverage](https://codeclimate.com/github/pixelhandler/ember-jsonapi-resources/badges/coverage.svg)](https://codeclimate.com/github/pixelhandler/ember-jsonapi-resources/coverage)
+[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/pixelhandler/ember-jsonapi-resources?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
 ## Status
 
