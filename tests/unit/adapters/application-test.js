@@ -91,7 +91,7 @@ test('#findQuery calls #fetch url including a query', function(assert) {
 });
 
 test('#findRelated', function(assert) {
-  this.container.register('service:authors', Adapter.extend({type: 'authors', url: '/authors'}));
+  this.registry.register('service:authors', Adapter.extend({type: 'authors', url: '/authors'}));
   let resource = this.container.lookupFactory('model:posts').create(postMock.data);
   let url = resource.get( ['relationships', 'author', 'links', 'related'].join('.') );
   const adapter = this.subject({type: 'posts', url: '/posts'});

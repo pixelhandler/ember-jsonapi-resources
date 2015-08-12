@@ -31,13 +31,13 @@ export const Commenter = Resource.extend({
 export function setup() {
   const opts = { instantiate: false, singleton: false };
   Post.prototype.container = this.container;
-  this.container.register('model:posts', Post, opts);
+  this.registry.register('model:posts', Post, opts);
   Author.prototype.container = this.container;
-  this.container.register('model:authors', Author, opts);
+  this.registry.register('model:authors', Author, opts);
   Comment.prototype.container = this.container;
-  this.container.register('model:comments', Comment, opts);
+  this.registry.register('model:comments', Comment, opts);
   Commenter.prototype.container = this.container;
-  this.container.register('model:commenters', Commenter, opts);
+  this.registry.register('model:commenters', Commenter, opts);
 }
 
 export function teardown() {
