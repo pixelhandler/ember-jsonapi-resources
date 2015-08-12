@@ -134,7 +134,7 @@ test('#updateResource', function(assert) {
   assert.ok(adapter.fetch.calledOnce, '#fetch method called');
   let selfURL = 'http://api.pixelhandler.com/api/v1/posts/1';
   let msg = '#fetch called with url and options with data';
-  assert.ok(adapter.fetch.calledWith(selfURL, { method: 'PATCH', body: JSON.stringify(payload) }), msg);
+  assert.ok(adapter.fetch.calledWith(selfURL, { method: 'PATCH', body: JSON.stringify(payload), update: true }), msg);
 });
 
 test('#updateResource returns null when serializer returns null (nothing changed)', function(assert) {
@@ -204,14 +204,14 @@ test('#fetch calls #fetchURL to customize if needed', function(assert) {
   assert.ok(adapter.fetchUrl.calledWith('/posts'), '#fetchUrl called with url');
 });
 
-test('#fetch calls #fetchOptions checking if the request is an update, if true skips call to deserialize/cacheResource', function(assert) {
+test('#fetch calls #fetchOptions checking if the request is an update, if true skips call to deserialize', function(assert) {
   const adapter = this.subject({type: 'posts', url: '/posts'});
   sandbox.stub(adapter, 'fetchUrl', function () {});
   sandbox.stub(window, 'fetch', function () {
     return Ember.RSVP.Promise.resolve({
       "status": 202,
       "json": function() {
-        return Ember.RSVP.Promise.resolve(null);
+        return Ember.RSVP.Promise.resolve({data: {}, meta: {}});
       }
     });
   });
@@ -219,7 +219,6 @@ test('#fetch calls #fetchOptions checking if the request is an update, if true s
   adapter.serializer = { deserialize: sandbox.spy() };
   let promise = adapter.fetch('/posts', { method: 'PATCH', body: 'json string here', update: true });
   assert.ok(typeof promise.then === 'function', 'returns a thenable');
-  assert.equal(adapter.cacheResource.callCount, 0, '#cacheResource method NOT called');
   assert.equal(adapter.serializer.deserialize.callCount, 0, '#deserialize method NOT called');
 });
 
@@ -250,6 +249,38 @@ test('#cacheResource called after successful fetch', function(assert) {
   assert.ok(typeof promise.then === 'function', 'returns a thenable');
   promise.then(function() {
     assert.ok(adapter.cacheResource.calledOnce, '#cacheResource method called');
+    done();
+  });
+});
+
+test('#cacheUpdate called after #updateResource success', function(assert) {
+  assert.expect(2);
+  const done = assert.async();
+  const adapter = this.subject();
+  sandbox.stub(adapter, 'cacheUpdate', function () {});
+  sandbox.stub(window, 'fetch', function () {
+    return Ember.RSVP.Promise.resolve({
+      "status": 200,
+      "json": function() {
+        return Ember.RSVP.Promise.resolve(postsMock);
+      }
+    });
+  });
+  let payload = {
+    data: {
+      type: postMock.data.type,
+      id: postMock.data.id,
+      attributes: {
+        title: postMock.data.attributes.title + ' changed'
+      }
+    }
+  };
+  adapter.serializer = { serializeChanged: function () { return payload; } };
+  let resource = this.container.lookupFactory('model:posts').create(postMock.data);
+  let promise = adapter.updateResource(resource);
+  assert.ok(typeof promise.then === 'function', 'returns a thenable');
+  promise.then(function() {
+    assert.ok(adapter.cacheUpdate.calledOnce, '#cacheResource method called');
     done();
   });
 });

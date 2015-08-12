@@ -118,8 +118,8 @@ export default Ember.Object.extend(Ember.Evented, {
 
   /**
     Patch an existing resource, sends a PATCH request. After promise is resolved
-    the `didUpdateResource` event is triggered, resource may listen on their
-    `service` reference
+    the `didUpdateResource` event is triggered, given an error response a event
+    `resourceError` is triggered. A resource may listen on its `service` reference.
 
     @method updateResource
     @param {Resource} the resource instance to serialize the changed attributes
@@ -131,9 +131,12 @@ export default Ember.Object.extend(Ember.Evented, {
     if (!json) { return null; }
     return this.fetch(url, {
       method: 'PATCH',
-      body: JSON.stringify(json)
+      body: JSON.stringify(json),
+      update: true
     }).then(function(json) {
       this.trigger('didUpdateResource', json);
+    }.bind(this)).catch(function(resp) {
+      this.trigger('resourceError', resp);
     }.bind(this));
   },
 
@@ -186,6 +189,7 @@ export default Ember.Object.extend(Ember.Evented, {
 
     @method fetch
     @param {String} url
+    @param {Object} options - may include a query object or an update flag
     @return {Ember.RSVP.Promise}
   */
   fetch(url, options = {}) {
@@ -206,13 +210,14 @@ export default Ember.Object.extend(Ember.Evented, {
           resolve('');
         } else {
           return resp.json().then(function(json) {
-            if (!isUpdate) {
+            if (isUpdate) {
+              _this.cacheUpdate({ meta: json.meta, data: json.data, headers: resp.headers });
+              resolve(json.data);
+            } else {
               const resource = _this.serializer.deserialize(json);
-              _this.cacheResource({ meta: json.meta, data: resource, headers: resp.headers});
+              _this.cacheResource({ meta: json.meta, data: resource, headers: resp.headers });
               _this.serializer.deserializeIncluded(json.included, { headers: resp.headers });
               resolve(resource);
-            } else {
-              resolve(json);
             }
           });
         }
@@ -298,6 +303,14 @@ export default Ember.Object.extend(Ember.Evented, {
     @param {Object} resp w/ props: {Object} meta, {Array|Object} data, & {Object} headers
   */
   cacheResource(/*resp*/) {},
+
+  /**
+    Noop as a hook for defining how to handle cache after updating a resource
+
+    @method cacheUpdate
+    @param {Object} resp w/ props: {Object} meta, {Array|Object} data, & {Object} headers
+  */
+  cacheUpdate(/*resp*/) {},
 
   /**
     Initialize events to communicate on the resource instances' service reference.

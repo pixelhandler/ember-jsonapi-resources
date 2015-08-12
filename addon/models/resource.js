@@ -204,9 +204,11 @@ const Resource = Ember.Object.extend({
     Handler for `didUpdateResource` event, resets private _attributes used for changed/previous tracking
 
     @method didUpdateResource
+    @param json the updated data for the resource
   */
   didUpdateResource(json) {
     if (this.get('id') !== json.id) { return; }
+    this.setProperties(json);
     for (let attr in this._attributes) {
       if (this._attributes.hasOwnProperty(attr)) {
         delete this._attributes[attr];
