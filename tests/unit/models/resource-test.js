@@ -6,8 +6,9 @@ import Resource from 'ember-jsonapi-resources/models/resource';
 import { attr } from 'ember-jsonapi-resources/models/resource';
 import { setup, teardown } from 'dummy/tests/helpers/resources';
 
-let mockServices, sandbox;
+let mockServices;
 const mockService = function () {
+  let sandbox = this.sandbox;
   return Ember.Service.extend({
     findRelated: sandbox.spy(function () { return Ember.RSVP.Promise.resolve(null); }),
     cacheLookup: sandbox.spy(function () { return []; })
@@ -18,18 +19,18 @@ let entities = ['post', 'author'];
 moduleFor('model:resource', 'Unit | Model | resource', {
   beforeEach() {
     setup.call(this);
-    sandbox = window.sinon.sandbox.create();
+    this.sandbox = window.sinon.sandbox.create();
     mockServices = {};
     entities.forEach(function (entity) {
       let serviceName = pluralize(entity);
-      mockServices[serviceName] = mockService();
-      this.container.register('service:'+serviceName, mockServices[serviceName]);
+      mockServices[serviceName] = mockService.call(this);
+      this.registry.register('service:'+serviceName, mockServices[serviceName]);
     }.bind(this));
   },
   afterEach() {
     mockServices = null;
     teardown();
-    sandbox.restore();
+    this.sandbox.restore();
   }
 });
 
@@ -42,7 +43,7 @@ test('it creates an instance, default flag for isNew is false', function(assert)
 test('#toString method', function(assert) {
   const resource = this.subject();
   let stringified = resource.toString();
-  assert.equal(stringified, '[JSONAPIResource|(null):(null)]', 'resource.toString() is ' + stringified);
+  assert.equal(stringified, '[JSONAPIResource|null:null]', 'resource.toString() is ' + stringified);
   resource.setProperties({id: '1', type: 'post'});
   stringified = resource.toString();
   assert.equal(stringified, '[JSONAPIResource|post:1]', 'resource.toString() is ' + stringified);

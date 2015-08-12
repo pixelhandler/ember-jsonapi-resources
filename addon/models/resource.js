@@ -108,7 +108,9 @@ const Resource = Ember.Object.extend({
     @method toString
   */
   toString() {
-    return Ember.String.fmt("[JSONAPIResource|%@:%@]", this.get('type'), this.get('id'));
+    let type = this.get('type') || 'null';
+    let id = this.get('id') || 'null';
+    return `[JSONAPIResource|${type}:${id}]`;
   },
 
   /**

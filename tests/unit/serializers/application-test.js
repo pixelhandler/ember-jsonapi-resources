@@ -146,8 +146,8 @@ test('#deserializeIncluded', function(assert) {
     authors: new MockService('authors'),
     comments: new MockService('comments')
   };
-  this.container.register('service:authors', mocks.authors, {instantiate: false});
-  this.container.register('service:comments', mocks.comments, {instantiate: false});
+  this.registry.register('service:authors', mocks.authors, {instantiate: false});
+  this.registry.register('service:comments', mocks.comments, {instantiate: false});
 
   const serializer = this.subject();
   serializer.deserializeIncluded(postMock.included, { headers:{} });
