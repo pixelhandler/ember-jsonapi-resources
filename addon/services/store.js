@@ -100,7 +100,7 @@ export default Ember.Service.extend({
     Lookup the injected service for a resource, pluralize type arg.
 
     @private
-    @method cacheResource
+    @method _service
     @param {String} type - the entity or resource name will be pluralized unless a `{singleton: true}` option is passed
     @param {Object} options (object)
   */

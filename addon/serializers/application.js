@@ -138,15 +138,20 @@ export default Ember.Object.extend({
     @return (Resource) instance
   */
   _createResourceInstance(json) {
-    const factoryName = 'model:' + json.type;
-    json.meta = json.meta || {};
-    return this.container.lookupFactory(factoryName).create({
+    let resource = {
       'type': json.type,
       'id': json.id,
       'attributes': json.attributes,
       'relationships': json.relationships,
       'links': json.links,
       'meta': json.meta
-    });
+    };
+    for (let prop in resource) {
+      if (!resource[prop]) {
+        delete resource[prop];
+      }
+    }
+    let factoryName = 'model:' + json.type;
+    return this.container.lookupFactory(factoryName).create(resource);
   }
 });
