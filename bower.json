@@ -18,5 +18,8 @@
     "sinon": "http://sinonjs.org/releases/sinon-1.15.0.js",
     "es5-shim": "^4.0.5",
     "qunit": "~1.18.0"
+  },
+  "resolutions": {
+    "ember": "~2.0.0"
   }
 }
