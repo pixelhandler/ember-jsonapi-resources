@@ -28,6 +28,21 @@ export const Commenter = Resource.extend({
   comments: hasMany('comments')
 });
 
+export const Person = Resource.extend({
+  type: 'people',
+  name: attr()
+});
+
+export const Employee = Person.extend({
+  type: 'employees',
+  supervisor: hasOne({ resource: 'supervisor', type: 'people' })
+});
+
+export const Supervisor = Employee.extend({
+  type: 'supervisors',
+  directReports: hasMany({ resource: 'employees', type: 'people' })
+});
+
 export function setup() {
   const opts = { instantiate: false, singleton: false };
   Post.prototype.container = this.container;
@@ -38,6 +53,12 @@ export function setup() {
   this.registry.register('model:comments', Comment, opts);
   Commenter.prototype.container = this.container;
   this.registry.register('model:commenters', Commenter, opts);
+  Person.prototype.container = this.container;
+  this.registry.register('model:persons', Person, opts);
+  Employee.prototype.container = this.container;
+  this.registry.register('model:employees', Employee, opts);
+  Supervisor.prototype.container = this.container;
+  this.registry.register('model:supervisors', Supervisor, opts);
 }
 
 export function teardown() {

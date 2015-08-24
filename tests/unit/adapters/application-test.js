@@ -104,6 +104,36 @@ test('#findRelated', function(assert) {
   assert.ok(service.fetch.calledWith(expectURL, { method: 'GET' }), 'url for relation passed to service#fetch');
 });
 
+test('#findRelated can be called with optional type for the resource', function (assert) {
+  assert.expect(4);
+  const done = assert.async();
+  let PersonAdapter = Adapter.extend({type: 'people', url: '/people'});
+  PersonAdapter.reopenClass({ isServiceFactory: true });
+  this.registry.register('service:people', PersonAdapter.extend());
+  let service = this.container.lookup('service:people');
+  let stub = sandbox.stub(service, 'findRelated', function () { return Ember.RSVP.Promise.resolve(null); });
+  let resource = this.container.lookupFactory('model:employees').create({
+    type: 'employees',
+    id: 1000001,
+    name: 'The Special',
+    relationships: {
+      supervisor: {
+        links: {
+          related: 'http://locahost:3000/api/v1/employees/1/supervisor'
+        }
+      }
+    }
+  });
+  let url = resource.get( ['relationships', 'supervisor', 'links', 'related'].join('.') );
+  resource.get('supervisor').then(function() {
+    assert.ok(stub.calledOnce, 'people service findRelated method called once');
+    assert.equal(stub.firstCall.args[0].resource, 'supervisor', 'findRelated called with supervisor resource');
+    assert.equal(stub.firstCall.args[0].type, 'people', 'findRelated called with people type');
+    assert.equal(stub.firstCall.args[1], url, 'findRelated called with url, ' + url);
+    done();
+  });
+});
+
 test('#createResource', function(assert) {
   const adapter = this.subject({type: 'posts', url: '/posts'});
   adapter.serializer = { serialize: function () { return postMock; } };
