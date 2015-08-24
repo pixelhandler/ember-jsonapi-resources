@@ -222,7 +222,8 @@ export default Ember.Object.extend(Ember.Evented, {
           });
         }
       }).catch(function(error) {
-        reject(new FetchError('Unable to Fetch resource(s)', error));
+        let msg = (error && error.message) ? error.message : 'Unable to Fetch resource(s)';
+        reject(new FetchError(msg, error));
       });
     });
   },
@@ -324,25 +325,29 @@ export default Ember.Object.extend(Ember.Evented, {
 });
 
 function ServerError(message = 'Server Error', response = null) {
-  this.name = 'Server Error';
+  this.name = 'ServerError';
   this.message = message;
   this.response = response;
+  this.errors = response.errors || null;
 }
 ServerError.prototype = Object.create(Error.prototype);
 ServerError.prototype.constructor = ServerError;
 
-function ClientError(message = 'API Error', response = null) {
-  this.name = 'API Error';
+function ClientError(message = 'Client Error', response = null) {
+  this.name = 'ClientError';
   this.message = message;
   this.response = response;
-  this.errors = response.errors;
+  this.errors = response.errors || null;
+  this.errors = (response) ? response.errors || null : null;
 }
 ClientError.prototype = Object.create(Error.prototype);
 ClientError.prototype.constructor = ClientError;
 
 function FetchError(message = 'Fetch Error', error = null, response = null) {
-  this.name = 'Fetch Error';
+  this.name = 'FetchError';
   this.message = message;
+  this.stack = (error) ? error.stack || null : null;
+
   this.error = error;
   this.response = response;
 }
