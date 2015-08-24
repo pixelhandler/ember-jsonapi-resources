@@ -280,26 +280,27 @@ Resource.reopenClass({
     }
     let type = instance.get('type');
     let msg = (type) ? Ember.String.capitalize(singularize(type)) : 'Resource';
+    let factory = 'model:' + type;
     if (!type) {
       Ember.Logger.warn(msg + '#create called, instead you should first use ' + msg + '.extend({type:"entity"})');
-    }
-    let factory = 'model:' + type;
-    if (instance.container) {
-      factory = instance.container.lookupFactory(factory);
-      let proto = factory.proto();
-      factory.eachComputedProperty(function(prop) {
-        if (proto[prop] && proto[prop]._meta && typeof proto[prop]._meta === 'object') {
-          if (proto[prop]._meta.kind === 'hasOne') {
-            setupRelationship.call(instance, prop);
-          } else if (proto[prop]._meta.kind === 'hasMany') {
-            setupRelationship.call(instance, prop, Ember.A([]));
-          }
-        }
-      });
     } else {
-      msg += '#create should only be called from a container lookup (relationships not setup) ';
-      msg += 'use this.container.lookupFactory("' + factory + '").create() instead.';
-      Ember.Logger.warn(msg);
+      if (instance.container) {
+        factory = instance.container.lookupFactory(factory);
+        let proto = factory.proto();
+        factory.eachComputedProperty(function(prop) {
+          if (proto[prop] && proto[prop]._meta && typeof proto[prop]._meta === 'object') {
+            if (proto[prop]._meta.kind === 'hasOne') {
+              setupRelationship.call(instance, prop);
+            } else if (proto[prop]._meta.kind === 'hasMany') {
+              setupRelationship.call(instance, prop, Ember.A([]));
+            }
+          }
+        });
+      } else {
+        msg += '#create should only be called from a container lookup (relationships not setup) ';
+        msg += 'use this.container.lookupFactory("' + factory + '").create() instead.';
+        Ember.Logger.warn(msg);
+      }
     }
     return instance;
   }

@@ -1,0 +1,7 @@
+<ul>
+{{#each model key="@identity" as |picture|}}
+  <li>{{#link-to "pictures.detail" picture.id}}{{picture.name}}{{/link-to}}</li>
+{{/each}}
+</ul>
+
+{{outlet}}

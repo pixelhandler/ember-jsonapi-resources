@@ -1,0 +1,206 @@
+{
+  "data": [
+    {
+      "id": "1",
+      "type": "pictures",
+      "links": {
+        "self": "http://api.pixelhandler.com/api/v1/pictures/1"
+      },
+      "attributes": {
+        "name": "box of chocolates"
+      },
+      "relationships": {
+        "imageable": {
+          "links": {
+            "self": "http://api.pixelhandler.com/api/v1/pictures/1/relationships/imageable",
+            "related": "http://api.pixelhandler.com/api/v1/pictures/1/imageable"
+          },
+          "data": {
+            "type": "products",
+            "id": "3"
+          }
+        }
+      }
+    },
+    {
+      "id": "2",
+      "type": "pictures",
+      "links": {
+        "self": "http://api.pixelhandler.com/api/v1/pictures/2"
+      },
+      "attributes": {
+        "name": "10 foot candy cane"
+      },
+      "relationships": {
+        "imageable": {
+          "links": {
+            "self": "http://api.pixelhandler.com/api/v1/pictures/2/relationships/imageable",
+            "related": "http://api.pixelhandler.com/api/v1/pictures/2/imageable"
+          },
+          "data": {
+            "type": "products",
+            "id": "2"
+          }
+        }
+      }
+    },
+    {
+      "id": "3",
+      "type": "pictures",
+      "links": {
+        "self": "http://api.pixelhandler.com/api/v1/pictures/3"
+      },
+      "attributes": {
+        "name": "Hot apple fritter"
+      },
+      "relationships": {
+        "imageable": {
+          "links": {
+            "self": "http://api.pixelhandler.com/api/v1/pictures/3/relationships/imageable",
+            "related": "http://api.pixelhandler.com/api/v1/pictures/3/imageable"
+          },
+          "data": {
+            "type": "products",
+            "id": "1"
+          }
+        }
+      }
+    },
+    {
+      "id": "4",
+      "type": "pictures",
+      "links": {
+        "self": "http://api.pixelhandler.com/api/v1/pictures/4"
+      },
+      "attributes": {
+        "name": "Boston Creme"
+      },
+      "relationships": {
+        "imageable": {
+          "links": {
+            "self": "http://api.pixelhandler.com/api/v1/pictures/4/relationships/imageable",
+            "related": "http://api.pixelhandler.com/api/v1/pictures/4/imageable"
+          },
+          "data": {
+            "type": "products",
+            "id": "1"
+          }
+        }
+      }
+    },
+    {
+      "id": "5",
+      "type": "pictures",
+      "links": {
+        "self": "http://api.pixelhandler.com/api/v1/pictures/5"
+      },
+      "attributes": {
+        "name": "Bill at EmberConf"
+      },
+      "relationships": {
+        "imageable": {
+          "links": {
+            "self": "http://api.pixelhandler.com/api/v1/pictures/5/relationships/imageable",
+            "related": "http://api.pixelhandler.com/api/v1/pictures/5/imageable"
+          },
+          "data": {
+            "type": "employees",
+            "id": "1"
+          }
+        }
+      }
+    }
+  ],
+  "included": [
+    {
+      "id": "3",
+      "type": "products",
+      "links": {
+        "self": "http://api.pixelhandler.com/api/v1/products/3"
+      },
+      "attributes": {
+        "name": "Chocolates"
+      },
+      "relationships": {
+        "pictures": {
+          "links": {
+            "self": "http://api.pixelhandler.com/api/v1/products/3/relationships/pictures",
+            "related": "http://api.pixelhandler.com/api/v1/products/3/pictures"
+          }
+        }
+      }
+    },
+    {
+      "id": "2",
+      "type": "products",
+      "links": {
+        "self": "http://api.pixelhandler.com/api/v1/products/2"
+      },
+      "attributes": {
+        "name": "Candy Canes"
+      },
+      "relationships": {
+        "pictures": {
+          "links": {
+            "self": "http://api.pixelhandler.com/api/v1/products/2/relationships/pictures",
+            "related": "http://api.pixelhandler.com/api/v1/products/2/pictures"
+          }
+        }
+      }
+    },
+    {
+      "id": "1",
+      "type": "products",
+      "links": {
+        "self": "http://api.pixelhandler.com/api/v1/products/1"
+      },
+      "attributes": {
+        "name": "Donuts"
+      },
+      "relationships": {
+        "pictures": {
+          "links": {
+            "self": "http://api.pixelhandler.com/api/v1/products/1/relationships/pictures",
+            "related": "http://api.pixelhandler.com/api/v1/products/1/pictures"
+          }
+        }
+      }
+    },
+    {
+      "id": "1",
+      "type": "employees",
+      "links": {
+        "self": "http://api.pixelhandler.com/api/v1/employees/1"
+      },
+      "attributes": {
+        "name": "Bill Heaton"
+      },
+      "relationships": {
+        "pictures": {
+          "links": {
+            "self": "http://api.pixelhandler.com/api/v1/employees/1/relationships/pictures",
+            "related": "http://api.pixelhandler.com/api/v1/employees/1/pictures"
+          }
+        }
+      }
+    }
+  ],
+  "meta": {
+    "page": {
+      "total": 7,
+      "sort": [
+        {
+          "field": "id",
+          "direction": "asc"
+        }
+      ],
+      "offset": 0,
+      "limit": 5
+    }
+  },
+  "links": {
+    "first": "http://api.pixelhandler.com/api/v1/pictures?include=imageable&page%5Blimit%5D=5&page%5Boffset%5D=0",
+    "next": "http://api.pixelhandler.com/api/v1/pictures?include=imageable&page%5Blimit%5D=5&page%5Boffset%5D=5",
+    "last": "http://api.pixelhandler.com/api/v1/pictures?include=imageable&page%5Blimit%5D=5&page%5Boffset%5D=2"
+  }
+}

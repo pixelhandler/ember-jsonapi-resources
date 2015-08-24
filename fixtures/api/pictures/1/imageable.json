@@ -1,0 +1,20 @@
+{
+  "data": {
+    "id": "3",
+    "type": "products",
+    "links": {
+      "self": "http://api.pixelhandler.com/api/v1/products/3"
+    },
+    "attributes": {
+      "name": "Chocolates"
+    },
+    "relationships": {
+      "pictures": {
+        "links": {
+          "self": "http://api.pixelhandler.com/api/v1/products/3/relationships/pictures",
+          "related": "http://api.pixelhandler.com/api/v1/products/3/pictures"
+        }
+      }
+    }
+  }
+}

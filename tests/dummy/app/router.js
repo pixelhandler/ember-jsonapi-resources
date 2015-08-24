@@ -16,6 +16,15 @@ Router.map(function() {
     this.route('create');
     this.route('edit', { path: ':edit_id' });
   });
+  this.route('products', { path: '/products' }, function () {
+    this.route('detail', { path: '/:product_id' });
+  });
+  this.route('employees', { path: '/employees' }, function () {
+    this.route('detail', { path: '/:employee_id' });
+  });
+  this.route('pictures', { path: '/pictures' }, function () {
+    this.route('detail', { path: '/:picture_id' });
+  });
 });
 
 export default Router;

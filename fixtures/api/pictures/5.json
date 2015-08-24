@@ -1,0 +1,20 @@
+{
+  "data": {
+    "id": "5",
+    "type": "pictures",
+    "links": {
+      "self": "http://api.pixelhandler.com/api/v1/pictures/5"
+    },
+    "attributes": {
+      "name": "Bill at EmberConf"
+    },
+    "relationships": {
+      "imageable": {
+        "links": {
+          "self": "http://api.pixelhandler.com/api/v1/pictures/5/relationships/imageable",
+          "related": "http://api.pixelhandler.com/api/v1/pictures/5/imageable"
+        }
+      }
+    }
+  }
+}

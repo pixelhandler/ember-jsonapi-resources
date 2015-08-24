@@ -1,0 +1,20 @@
+{
+  "data": {
+    "id": "1",
+    "type": "employees",
+    "links": {
+      "self": "http://api.pixelhandler.com/api/v1/employees/1"
+    },
+    "attributes": {
+      "name": "Bill Heaton"
+    },
+    "relationships": {
+      "pictures": {
+        "links": {
+          "self": "http://api.pixelhandler.com/api/v1/employees/1/relationships/pictures",
+          "related": "http://api.pixelhandler.com/api/v1/employees/1/pictures"
+        }
+      }
+    }
+  }
+}
