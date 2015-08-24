@@ -310,7 +310,7 @@ test('serializer#deserializeIncluded called after successful fetch', function(as
 });
 
 
-test('#fetch handles 5xx (Server Error) response status', function(assert) {
+test('#fetch handles 5xx (ServerError) response status', function(assert) {
   assert.expect(2);
   const done = assert.async();
   const adapter = this.subject({type: 'posts', url: '/posts'});
@@ -320,7 +320,7 @@ test('#fetch handles 5xx (Server Error) response status', function(assert) {
   let promise = adapter.fetch('/posts', { method: 'POST', body: 'json string here' });
   assert.ok(typeof promise.then === 'function', 'returns a thenable');
   promise.catch(function(error) {
-    assert.equal(error.name, 'Server Error', '5xx response throws aa custom error');
+    assert.equal(error.name, 'ServerError', '5xx response throws aa custom error');
     done();
   });
 });
