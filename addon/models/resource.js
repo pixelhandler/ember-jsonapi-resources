@@ -381,6 +381,15 @@ const RelatedProxyUtil = Ember.Object.extend({
   relationship: null,
 
   /**
+    The name of the type of resource
+
+    @property type
+    @type String
+    @required
+  */
+  type: null,
+
+  /**
     Proxy for the requested relation, resolves w/ content from fulfilled promise
 
     @method createProxy
@@ -389,11 +398,12 @@ const RelatedProxyUtil = Ember.Object.extend({
     @return {PromiseProxy} proxy
   */
   createProxy: function (resource, proxyFactory) {
-    const relation = this.get('relationship');
-    const url = this.proxyUrl(resource, relation);
-    const service = resource.container.lookup('service:' + pluralize(relation));
+    let relation = this.get('relationship');
+    let type = this.get('type');
+    let url = this.proxyUrl(resource, relation);
+    let service = resource.container.lookup('service:' + pluralize(type));
     let promise = this.promiseFromCache(resource, relation, service);
-    promise = promise || service.findRelated(relation, url);
+    promise = promise || service.findRelated({'resource': relation, 'type': type}, url);
     let proxy = proxyFactory.extend(Ember.PromiseProxyMixin, {
       'promise': promise, 'type': relation
     });
@@ -476,14 +486,30 @@ function linksPath(relation) {
 
   @method hasOne
   @param {String} relation
+    Or, {Object} with properties for `resource` and `type`
 */
 export function hasOne(relation) {
-  assertDasherizedHasOneRelation(relation);
-  const util = RelatedProxyUtil.create({'relationship': relation});
-  const path = linksPath(relation);
+  let type = relation;
+  if (typeof type === 'object') {
+    assertResourceAndTypeProps(relation);
+    type = relation.type;
+    relation = relation.resource;
+  }
+  assertDasherizedHasOneRelation(type);
+  let util = RelatedProxyUtil.create({'relationship': relation, 'type': type});
+  let path = linksPath(relation);
   return Ember.computed(path, function () {
     return util.createProxy(this, Ember.ObjectProxy);
-  }).meta({relation: relation, kind: 'hasOne'});
+  }).meta({relation: relation, type: type, kind: 'hasOne'});
+}
+
+function assertResourceAndTypeProps(relation) {
+  try {
+    let msg = 'Options must include properties: resource, type';
+    Ember.assert(msg, relation && relation.resource && relation.type);
+  } catch(e) {
+    console.warn(e.message);
+  }
 }
 
 function assertDasherizedHasOneRelation(name) {
@@ -502,14 +528,21 @@ function assertDasherizedHasOneRelation(name) {
 
   @method hasMany
   @param {String} relation
+    Or, {Object} with properties for `resource` and `type`
 */
 export function hasMany(relation) {
+  let type = relation;
+  if (typeof type === 'object') {
+    assertResourceAndTypeProps(relation);
+    type = relation.type;
+    relation = relation.resource;
+  }
   assertDasherizedHasManyRelation(relation);
-  const util = RelatedProxyUtil.create({'relationship': relation});
-  const path = linksPath(relation);
+  let util = RelatedProxyUtil.create({'relationship': relation, 'type': type});
+  let path = linksPath(relation);
   return Ember.computed(path, function () {
     return util.createProxy(this, Ember.ArrayProxy);
-  }).meta({relation: relation, kind: 'hasMany'});
+  }).meta({relation: relation, type: type, kind: 'hasMany'});
 }
 
 function assertDasherizedHasManyRelation(name) {

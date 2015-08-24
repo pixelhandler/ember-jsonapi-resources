@@ -92,11 +92,19 @@ export default Ember.Object.extend(Ember.Evented, {
 
     @method findRelated
     @param {String} resource name (plural) to lookup the service object w/ serializer
+      or {Object} `{'resource': relation, 'type': type}` used when type is not the
+      same as the resource name, to fetch relationship using a different service
     @param {String} url
     @return {Promise}
   */
   findRelated(resource, url) {
-    const service = this.container.lookup('service:' + pluralize(resource));
+    let type = resource;
+    if (typeof type === 'object') {
+      resource = resource.resource;
+      type = resource.type;
+    }
+    let service = this.container.lookup('service:' + pluralize(type));
+    url = this.fetchUrl(url);
     return service.fetch(url, { method: 'GET' });
   },
 
