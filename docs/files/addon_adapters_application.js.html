@@ -186,11 +186,20 @@ export default Ember.Object.extend(Ember.Evented, {
 
     @method findRelated
     @param {String} resource name (plural) to lookup the service object w/ serializer
+      or {Object} &#x60;{&#x27;resource&#x27;: relation, &#x27;type&#x27;: type}&#x60; used when type is not the
+      same as the resource name, to fetch relationship using a different service
     @param {String} url
     @return {Promise}
   */
   findRelated(resource, url) {
-    const service = this.container.lookup(&#x27;service:&#x27; + pluralize(resource));
+    let type = resource;
+    if (typeof type === &#x27;object&#x27;) {
+      resource = resource.resource;
+      type = resource.type;
+    }
+    // use resource&#x27;s service if in container, otherwise use this service to fetch
+    let service = this.container.lookup(&#x27;service:&#x27; + pluralize(type)) || this;
+    url = this.fetchUrl(url);
     return service.fetch(url, { method: &#x27;GET&#x27; });
   },
 
@@ -212,8 +221,8 @@ export default Ember.Object.extend(Ember.Evented, {
 
   /**
     Patch an existing resource, sends a PATCH request. After promise is resolved
-    the &#x60;didUpdateResource&#x60; event is triggered, resource may listen on their
-    &#x60;service&#x60; reference
+    the &#x60;didUpdateResource&#x60; event is triggered, given an error response a event
+    &#x60;resourceError&#x60; is triggered. A resource may listen on its &#x60;service&#x60; reference.
 
     @method updateResource
     @param {Resource} the resource instance to serialize the changed attributes
@@ -225,9 +234,12 @@ export default Ember.Object.extend(Ember.Evented, {
     if (!json) { return null; }
     return this.fetch(url, {
       method: &#x27;PATCH&#x27;,
-      body: JSON.stringify(json)
+      body: JSON.stringify(json),
+      update: true
     }).then(function(json) {
       this.trigger(&#x27;didUpdateResource&#x27;, json);
+    }.bind(this)).catch(function(resp) {
+      this.trigger(&#x27;resourceError&#x27;, resp);
     }.bind(this));
   },
 
@@ -246,6 +258,7 @@ export default Ember.Object.extend(Ember.Evented, {
     let url = resource.get([&#x27;relationships&#x27;, relationship, &#x27;links&#x27;, &#x27;self&#x27;].join(&#x27;.&#x27;));
     url = url || [this.get(&#x27;url&#x27;), resource.get(&#x27;id&#x27;), &#x27;relationships&#x27;, relationship].join(&#x27;/&#x27;);
     let data = resource.get([&#x27;relationships&#x27;, relationship, &#x27;data&#x27;].join(&#x27;.&#x27;));
+    data = { data: data };
     return this.fetch(url, {
       method: &#x27;PATCH&#x27;,
       body: JSON.stringify(data)
@@ -279,6 +292,7 @@ export default Ember.Object.extend(Ember.Evented, {
 
     @method fetch
     @param {String} url
+    @param {Object} options - may include a query object or an update flag
     @return {Ember.RSVP.Promise}
   */
   fetch(url, options = {}) {
@@ -299,18 +313,20 @@ export default Ember.Object.extend(Ember.Evented, {
           resolve(&#x27;&#x27;);
         } else {
           return resp.json().then(function(json) {
-            if (!isUpdate) {
+            if (isUpdate) {
+              _this.cacheUpdate({ meta: json.meta, data: json.data, headers: resp.headers });
+              resolve(json.data);
+            } else {
               const resource = _this.serializer.deserialize(json);
-              _this.cacheResource({ meta: json.meta, data: resource, headers: resp.headers});
+              _this.cacheResource({ meta: json.meta, data: resource, headers: resp.headers });
               _this.serializer.deserializeIncluded(json.included, { headers: resp.headers });
               resolve(resource);
-            } else {
-              resolve(json);
             }
           });
         }
       }).catch(function(error) {
-        reject(new FetchError(&#x27;Unable to Fetch resource(s)&#x27;, error));
+        let msg = (error &amp;&amp; error.message) ? error.message : &#x27;Unable to Fetch resource(s)&#x27;;
+        reject(new FetchError(msg, error));
       });
     });
   },
@@ -393,6 +409,14 @@ export default Ember.Object.extend(Ember.Evented, {
   cacheResource(/*resp*/) {},
 
   /**
+    Noop as a hook for defining how to handle cache after updating a resource
+
+    @method cacheUpdate
+    @param {Object} resp w/ props: {Object} meta, {Array|Object} data, &amp; {Object} headers
+  */
+  cacheUpdate(/*resp*/) {},
+
+  /**
     Initialize events to communicate on the resource instances&#x27; service reference.
     Listens for resource objects trigging &#x60;attributeChanged&#x60; events
 
@@ -404,25 +428,29 @@ export default Ember.Object.extend(Ember.Evented, {
 });
 
 function ServerError(message = &#x27;Server Error&#x27;, response = null) {
-  this.name = &#x27;Server Error&#x27;;
+  this.name = &#x27;ServerError&#x27;;
   this.message = message;
   this.response = response;
+  this.errors = response.errors || null;
 }
 ServerError.prototype = Object.create(Error.prototype);
 ServerError.prototype.constructor = ServerError;
 
-function ClientError(message = &#x27;API Error&#x27;, response = null) {
-  this.name = &#x27;API Error&#x27;;
+function ClientError(message = &#x27;Client Error&#x27;, response = null) {
+  this.name = &#x27;ClientError&#x27;;
   this.message = message;
   this.response = response;
-  this.errors = response.errors;
+  this.errors = response.errors || null;
+  this.errors = (response) ? response.errors || null : null;
 }
 ClientError.prototype = Object.create(Error.prototype);
 ClientError.prototype.constructor = ClientError;
 
 function FetchError(message = &#x27;Fetch Error&#x27;, error = null, response = null) {
-  this.name = &#x27;Fetch Error&#x27;;
+  this.name = &#x27;FetchError&#x27;;
   this.message = message;
+  this.stack = (error) ? error.stack || null : null;
+
   this.error = error;
   this.response = response;
 }

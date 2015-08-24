@@ -179,7 +179,7 @@
             "module": "ember-jsonapi-resources",
             "namespace": "",
             "file": "addon/models/resource.js",
-            "line": 337,
+            "line": 354,
             "description": "A Resource class to create JSON API resource objects\n\nSee <http://jsonapi.org/format/#document-resource-objects>"
         },
         "serializer": {
@@ -285,7 +285,7 @@
             "submodule": "resource",
             "namespace": "",
             "file": "addon/models/resource.js",
-            "line": 337,
+            "line": 354,
             "description": "Mixin for creating promise proxy objects for related resources",
             "static": 1
         },
@@ -427,7 +427,7 @@
             "params": [
                 {
                     "name": "resource",
-                    "description": "name (plural) to lookup the service object w/ serializer",
+                    "description": "name (plural) to lookup the service object w/ serializer\n  or {Object} `{'resource': relation, 'type': type}` used when type is not the\n  same as the resource name, to fetch relationship using a different service",
                     "type": "String"
                 },
                 {
@@ -446,7 +446,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 103,
+            "line": 112,
             "description": "Create a new resource, sends a POST request",
             "itemtype": "method",
             "name": "createResource",
@@ -467,8 +467,8 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 119,
-            "description": "Patch an existing resource, sends a PATCH request. After promise is resolved\nthe `didUpdateResource` event is triggered, resource may listen on their\n`service` reference",
+            "line": 128,
+            "description": "Patch an existing resource, sends a PATCH request. After promise is resolved\nthe `didUpdateResource` event is triggered, given an error response a event\n`resourceError` is triggered. A resource may listen on its `service` reference.",
             "itemtype": "method",
             "name": "updateResource",
             "params": [
@@ -488,7 +488,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 140,
+            "line": 152,
             "description": "Patch a relationship, either add or remove, sends a PATCH request\n\nAdds with payload: `{ \"data\": { \"type\": \"comments\", \"id\": \"12\" } }`\nRemoves with payload: `{ \"data\": null }`",
             "itemtype": "method",
             "name": "patchRelationship",
@@ -514,7 +514,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 163,
+            "line": 176,
             "description": "Delete an existing resource, sends a DELETE request",
             "itemtype": "method",
             "name": "deleteResource",
@@ -535,7 +535,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 181,
+            "line": 194,
             "description": "Makes a fetch request via Fetch API\n\nsee http://updates.html5rocks.com/2015/03/introduction-to-fetch",
             "itemtype": "method",
             "name": "fetch",
@@ -544,6 +544,11 @@
                     "name": "url",
                     "description": "",
                     "type": "String"
+                },
+                {
+                    "name": "options",
+                    "description": "- may include a query object or an update flag",
+                    "type": "Object"
                 }
             ],
             "return": {
@@ -556,7 +561,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 224,
+            "line": 240,
             "description": "Adds params and headers or Fetch request.\n\n- The HTTP Header is set for Content-Type: application/vnd.api+json\n- Sets Authorization header if accessible in the `authorizationCredential` property",
             "itemtype": "method",
             "name": "fetchOptions",
@@ -577,7 +582,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 245,
+            "line": 261,
             "description": "Sets Authorization header if accessible in the `authorizationCredential` property",
             "itemtype": "method",
             "name": "fetchAuthorizationHeader",
@@ -594,7 +599,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 262,
+            "line": 278,
             "description": "Authentication credentials/token used with HTTP authentication\nThis property should be added by an Authorization Mixin",
             "itemtype": "property",
             "name": "authorizationCredential",
@@ -605,7 +610,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 271,
+            "line": 287,
             "description": "The name of the Authorization request-header field\nThis property should be added by an Authorization Mixin",
             "itemtype": "property",
             "name": "authorizationHeaderField",
@@ -616,7 +621,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 280,
+            "line": 296,
             "description": "Hook to customize the URL, e.g. if your API is behind a proxy and you need\nto swap a portion of the domain to make a request on the same domain.",
             "itemtype": "method",
             "name": "fetchUrl",
@@ -637,7 +642,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 292,
+            "line": 308,
             "description": "Noop as a hook for defining how deserialized resource objects are cached,\ne.g. in memory",
             "itemtype": "method",
             "name": "cacheResource",
@@ -654,7 +659,24 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 301,
+            "line": 317,
+            "description": "Noop as a hook for defining how to handle cache after updating a resource",
+            "itemtype": "method",
+            "name": "cacheUpdate",
+            "params": [
+                {
+                    "name": "resp",
+                    "description": "w/ props: {Object} meta, {Array|Object} data, & {Object} headers",
+                    "type": "Object"
+                }
+            ],
+            "class": "ApplicationAdapter",
+            "module": "ember-jsonapi-resources",
+            "submodule": "adapter"
+        },
+        {
+            "file": "addon/adapters/application.js",
+            "line": 325,
             "description": "Initialize events to communicate on the resource instances' service reference.\nListens for resource objects trigging `attributeChanged` events",
             "itemtype": "method",
             "name": "initEvents",
@@ -798,7 +820,7 @@
         },
         {
             "file": "addon/mixins/service-cache.js",
-            "line": 83,
+            "line": 90,
             "description": "Add or update cache data",
             "itemtype": "method",
             "name": "cacheUpdate",
@@ -815,8 +837,8 @@
         },
         {
             "file": "addon/mixins/service-cache.js",
-            "line": 107,
-            "description": "Store meta from headers on resource meta",
+            "line": 116,
+            "description": "Store meta from headers on resource meta, window.fetch includes\na headers object in the response use `headers.get` to lookup data\nfrom the headers for cache-control, date, and etag.",
             "itemtype": "method",
             "name": "cacheControl",
             "params": [
@@ -837,7 +859,7 @@
         },
         {
             "file": "addon/mixins/service-cache.js",
-            "line": 132,
+            "line": 143,
             "description": "Lookup a resource from cached data",
             "itemtype": "method",
             "name": "cacheLookup",
@@ -980,7 +1002,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 114,
+            "line": 116,
             "description": "Adds related links object on the relationship hash",
             "itemtype": "method",
             "name": "addRelationship",
@@ -1002,7 +1024,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 134,
+            "line": 136,
             "description": "Remove related links object on the relationship hash to have `null` data",
             "itemtype": "method",
             "name": "removeRelationship",
@@ -1024,7 +1046,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 155,
+            "line": 157,
             "itemtype": "method",
             "name": "changedAttributes",
             "return": {
@@ -1037,7 +1059,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 173,
+            "line": 175,
             "itemtype": "method",
             "name": "previousAttributes",
             "return": {
@@ -1050,7 +1072,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 191,
+            "line": 193,
             "description": "Initialize events to communicate with the service object, listen for `didUpdateResource`",
             "itemtype": "method",
             "name": "initEvents",
@@ -1060,17 +1082,23 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 203,
+            "line": 205,
             "description": "Handler for `didUpdateResource` event, resets private _attributes used for changed/previous tracking",
             "itemtype": "method",
             "name": "didUpdateResource",
+            "params": [
+                {
+                    "name": "json",
+                    "description": "the updated data for the resource"
+                }
+            ],
             "class": "Resource",
             "module": "ember-jsonapi-resources",
             "submodule": "resource"
         },
         {
             "file": "addon/models/resource.js",
-            "line": 217,
+            "line": 221,
             "description": "A local cache duration, to minimize duplicate fetch requests",
             "itemtype": "property",
             "name": "cacheDuration",
@@ -1081,7 +1109,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 225,
+            "line": 229,
             "itemtype": "property",
             "name": "isCacheExpired",
             "type": "Boolean",
@@ -1091,7 +1119,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 237,
+            "line": 241,
             "description": "To protect the JSON API Resource properties for attributes, links and\nrelationships these objects are setup during create(). This has to be\ndefined since the attr() helper needs to have new objects for each instance,\nto project from keeping a reference on the prototype.\n\nThe create method should only be called after looking up a factory from the\ncontainer, for example in a route's model hook:\n\n```\nmodel() {\n  return this.container.lookupFactory('model:posts').create({\n    attributes: {\n      title: 'The JSON API 1.0 Spec Rocks!'\n    }\n  });\n}\n```\n\nThe create method uses the container to lookup the factory's prototype and\nfind the computed properties used for relations to setup the relationships\nfor the Resource instance you create. Calling Resource#create without using\nthe factory lookup will result in an instance without a reference to the\napplication's container and you will have to manually setup the relationships\nobject prior to adding a relationship.",
             "itemtype": "method",
             "name": "create",
@@ -1105,7 +1133,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 306,
+            "line": 311,
             "description": "Helper to setup computed property for resource attributes",
             "itemtype": "method",
             "name": "attr",
@@ -1115,7 +1143,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 345,
+            "line": 362,
             "description": "Checks for required `relationship` property",
             "itemtype": "method",
             "name": "init",
@@ -1125,7 +1153,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 358,
+            "line": 375,
             "description": "The name of the relationship",
             "itemtype": "property",
             "name": "resource",
@@ -1137,7 +1165,19 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 367,
+            "line": 384,
+            "description": "The name of the type of resource",
+            "itemtype": "property",
+            "name": "type",
+            "type": "String",
+            "required": 1,
+            "class": "RelatedProxyUtil",
+            "module": "ember-jsonapi-resources",
+            "submodule": "resource"
+        },
+        {
+            "file": "addon/models/resource.js",
+            "line": 393,
             "description": "Proxy for the requested relation, resolves w/ content from fulfilled promise",
             "itemtype": "method",
             "name": "createProxy",
@@ -1163,7 +1203,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 397,
+            "line": 424,
             "description": "Proxy url to fetch for the resource's relation",
             "itemtype": "method",
             "name": "proxyUrl",
@@ -1189,7 +1229,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 414,
+            "line": 441,
             "description": "Lookup relation from service cache and pomisify result",
             "itemtype": "method",
             "name": "promiseFromCache",
@@ -1220,7 +1260,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 441,
+            "line": 468,
             "description": "Lookup data in service cache",
             "itemtype": "method",
             "name": "serviceCacheLookup",
@@ -1246,14 +1286,14 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 458,
+            "line": 485,
             "description": "Helper to setup a has one relationship to another resource",
             "itemtype": "method",
             "name": "hasOne",
             "params": [
                 {
                     "name": "relation",
-                    "description": "",
+                    "description": "Or, {Object} with properties for `resource` and `type`",
                     "type": "String"
                 }
             ],
@@ -1263,14 +1303,14 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 472,
+            "line": 527,
             "description": "Helper to setup a has many relationship to another resource",
             "itemtype": "method",
             "name": "hasMany",
             "params": [
                 {
                     "name": "relation",
-                    "description": "",
+                    "description": "Or, {Object} with properties for `resource` and `type`",
                     "type": "String"
                 }
             ],
@@ -1457,7 +1497,7 @@
             "params": [
                 {
                     "name": "type",
-                    "description": "- the entity or resource name will be pluralized",
+                    "description": "- the entity or resource name will be pluralized unless a `{singleton: true}` option is passed",
                     "type": "String"
                 },
                 {
@@ -1606,12 +1646,17 @@
             "access": "private",
             "tagname": "",
             "itemtype": "method",
-            "name": "cacheResource",
+            "name": "_service",
             "params": [
                 {
                     "name": "type",
-                    "description": "- the entity or resource name will be pluralized",
+                    "description": "- the entity or resource name will be pluralized unless a `{singleton: true}` option is passed",
                     "type": "String"
+                },
+                {
+                    "name": "options",
+                    "description": "(object)",
+                    "type": "Object"
                 }
             ],
             "class": "StoreService",
@@ -1622,11 +1667,11 @@
     "warnings": [
         {
             "message": "replacing incorrect tag: returns with return",
-            "line": " addon/mixins/service-cache.js:132"
+            "line": " addon/mixins/service-cache.js:143"
         },
         {
             "message": "replacing incorrect tag: returns with return",
-            "line": " addon/models/resource.js:237"
+            "line": " addon/models/resource.js:241"
         }
     ]
 }

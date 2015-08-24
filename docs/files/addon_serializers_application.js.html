@@ -150,7 +150,7 @@ export default Ember.Object.extend({
   */
   serializeChanged(resource) {
     let json = resource.getProperties(&#x27;id&#x27;, &#x27;type&#x27;, &#x27;changedAttributes&#x27;);
-    if (Ember.isEmpty(Ember.keys(json.changedAttributes))) { return null; }
+    if (Ember.isEmpty(Object.keys(json.changedAttributes))) { return null; }
     return {
       data: {
         type: json.type,
@@ -232,16 +232,21 @@ export default Ember.Object.extend({
     @return (Resource) instance
   */
   _createResourceInstance(json) {
-    const factoryName = &#x27;model:&#x27; + json.type;
-    json.meta = json.meta || {};
-    return this.container.lookupFactory(factoryName).create({
+    let resource = {
       &#x27;type&#x27;: json.type,
       &#x27;id&#x27;: json.id,
       &#x27;attributes&#x27;: json.attributes,
       &#x27;relationships&#x27;: json.relationships,
       &#x27;links&#x27;: json.links,
       &#x27;meta&#x27;: json.meta
-    });
+    };
+    for (let prop in resource) {
+      if (!resource[prop]) {
+        delete resource[prop];
+      }
+    }
+    let factoryName = &#x27;model:&#x27; + json.type;
+    return this.container.lookupFactory(factoryName).create(resource);
   }
 });
 

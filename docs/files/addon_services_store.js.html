@@ -114,12 +114,12 @@ export default Ember.Service.extend({
     Find resource(s) using an id or a using a query &#x60;{id: &#x27;&#x27;, query: {}}&#x60;
 
     @method find
-    @param {String} type - the entity or resource name will be pluralized
+    @param {String} type - the entity or resource name will be pluralized unless a &#x60;{singleton: true}&#x60; option is passed
     @param {Object|String} options (object) or id (string)
     @return {Promise}
   */
   find(type, options) {
-    const service = this._service(type);
+    const service = this._service(type, options);
     return service.find(options);
   },
 
@@ -194,11 +194,14 @@ export default Ember.Service.extend({
     Lookup the injected service for a resource, pluralize type arg.
 
     @private
-    @method cacheResource
-    @param {String} type - the entity or resource name will be pluralized
+    @method _service
+    @param {String} type - the entity or resource name will be pluralized unless a &#x60;{singleton: true}&#x60; option is passed
+    @param {Object} options (object)
   */
-  _service(type) {
-    type = pluralize(type);
+  _service(type, options = {}) {
+    if (!options.singleton) {
+      type = pluralize(type);
+    }
     if (!this[type]) {
       throw new Error(type + &#x27; service not initialized&#x27;);
     }
