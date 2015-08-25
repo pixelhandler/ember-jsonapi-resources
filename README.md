@@ -233,7 +233,10 @@ work together to provide a basic plan.
 The services are "evented" to facilitate close to real time updates.
 
 An `attr` of the resource is a computed property to the actual attribute in an 
-`attributes` hash on the `resource` (model) instance.
+`attributes` hash on the `resource` (model) instance. Using `attr()` supports
+any type, and an optional `type` (String) argument can be used to enforce
+setting and getting with a specific type. `'string'`, `'number'`, `'boolean'`,
+`'date'`, `'object'`, and `'array'` are all valid types for attributes.
 
 When an `attr` is `set` and the value has changed an `attributeChanged` event
 is triggered on the `resource`'s service object. By default, the adapter listens
@@ -264,8 +267,13 @@ export default Resource.extend({
   service: Ember.inject.service('<%= resource %>'),
 
   /*
-  title: attr(),
-  date: attr(),
+  title: attr('string'),
+  published: attr('date'),
+  tags: attr('array'),
+  footnotes: attr('object'),
+  revisions: attr()
+  version: attr('number'),
+  "is-approved": attr('boolean'),
 
   author: hasOne('author'),
   comments: hasMany('comments')

@@ -145,7 +145,7 @@ export default Ember.Mixin.create({
 
     @method cacheLookup
     @param {String} id
-    @returns {Resource|undefined}
+    @return {Resource|undefined}
   */
   cacheLookup(id) {
     return this.cache.data.find(function(resource) {

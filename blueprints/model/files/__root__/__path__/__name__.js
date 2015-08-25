@@ -7,8 +7,13 @@ export default Resource.extend({
   service: Ember.inject.service('<%= resource %>'),
 
   /*
-  title: attr(),
-  date: attr(),
+  title: attr('string'),
+  published: attr('date'),
+  tags: attr('array'),
+  footnotes: attr('object'),
+  revisions: attr()
+  version: attr('number'),
+  "is-approved": attr('boolean'),
 
   author: hasOne('author'),
   comments: hasMany('comments')
