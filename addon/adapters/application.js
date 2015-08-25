@@ -86,14 +86,24 @@ export default Ember.Object.extend(Ember.Evented, {
   },
 
   /**
-    Find resources using an optional query object, e.g. w/ pagination params
+    Find resources by relationship or use a specificed (optional) service to find relation
 
     A Url like: /photos/1/relationships/photographer is a required param
 
+    ```js
+    service.findRelated('photographer', '/api/v1/photos/1/relationships/photographer');
+    ```
+
+    Or, with option to find releated resource using a different service
+
+    ```js
+    service.findRelated({resource: 'photographer', type: 'people'}, url);
+    ```
+
     @method findRelated
-    @param {String} resource name (plural) to lookup the service object w/ serializer
-      or {Object} `{'resource': relation, 'type': type}` used when type is not the
-      same as the resource name, to fetch relationship using a different service
+    @param {String|Object} resource name to lookup the service object w/ serializer
+    @param {String} resource.resource the name of the resource
+    @param {String} resource.type the name of the resource
     @param {String} url
     @return {Promise}
   */
