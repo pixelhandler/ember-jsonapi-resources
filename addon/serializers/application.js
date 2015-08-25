@@ -35,7 +35,8 @@ export default Ember.Object.extend({
     @return {Object}
   */
   serializeResource(resource) {
-    const json = resource.getProperties('type', 'attributes', 'relationships');
+    let json = resource.getProperties('type', 'attributes', 'relationships');
+    json = this.transformAttributes(json, 'serialize');
     for (let relationship in json.relationships) {
       if (json.relationships.hasOwnProperty(relationship)) {
         delete json.relationships[relationship].links;
@@ -57,13 +58,15 @@ export default Ember.Object.extend({
   serializeChanged(resource) {
     let json = resource.getProperties('id', 'type', 'changedAttributes');
     if (Ember.isEmpty(Object.keys(json.changedAttributes))) { return null; }
-    return {
+    let serialized = {
       data: {
         type: json.type,
         id: json.id,
         attributes: json.changedAttributes
       }
     };
+    serialized.data = this.transformAttributes(serialized.data, 'serialize');
+    return serialized;
   },
 
   /**
@@ -105,6 +108,7 @@ export default Ember.Object.extend({
     @return {Resource}
   */
   deserializeResource(json) {
+    json = this.transformAttributes(json);
     return this._createResourceInstance(json);
   },
 
@@ -125,6 +129,47 @@ export default Ember.Object.extend({
         service.cacheResource({ meta: resp.meta, data: resource, headers: resp.headers});
       }
     }
+  },
+
+  /**
+    Transform attributes, serialize or deserialize by specified method or
+    per type of attribute, e.g. date.
+
+    Your serializer may define a specific method for a type of attribute,
+    i.e. `serializeDateAttribute` and/or `deserializeDateAttribute`. Likewise,
+    your serializer may define a specific method for the name of an attribute,
+    like `serializeUpdatedAtAttribute` and `deserializeUpdatedAtAttribute`.
+
+    During transformation a method based on the name of the attribute takes
+    priority over a transform method based on the type of attribute, e.g. date.
+
+    @method transformAttributes
+    @param {Object} json with attributes hash of resource properties to be transformed
+    @param {String} [operation='deserialize'] perform a serialize or deserialize
+      operation, the default operation is to deserialize when not passed
+    @return {Object} json
+  */
+  transformAttributes(json, operation = 'deserialize') {
+    assertTranformOperation(operation);
+    let transformMethod, factory, meta;
+    for (let attr in json.attributes) {
+      transformMethod = [operation, Ember.String.capitalize(attr), 'Attribute'].join('');
+      if (typeof this[transformMethod] === 'function') {
+        json.attributes[attr] = this[transformMethod](json.attributes[attr]);
+      } else {
+        try {
+          factory = this._lookupFactory(json.type);
+          meta = factory.metaForProperty(attr);
+          transformMethod = [operation, Ember.String.capitalize(meta.type), 'Attribute'].join('');
+          if (typeof this[transformMethod] === 'function') {
+            json.attributes[attr] = this[transformMethod](json.attributes[attr]);
+          }
+        } catch (e) {
+          continue; // metaForProperty has an assertion that may throw
+        }
+      }
+    }
+    return json;
   },
 
   /**
@@ -151,7 +196,22 @@ export default Ember.Object.extend({
         delete resource[prop];
       }
     }
-    let factoryName = 'model:' + json.type;
-    return this.container.lookupFactory(factoryName).create(resource);
+    return this._lookupFactory(json.type).create(resource);
+  },
+
+  /**
+    @private
+    @method _lookupFactory
+    @param {String} type
+    @return {Function} factory for creating resource instances
+  */
+  _lookupFactory(type) {
+    return this.container.lookupFactory('model:' + type);
   }
 });
+
+const tranformOperations = ['serialize', 'deserialize'];
+
+function assertTranformOperation(operation) {
+  Ember.assert(`${operation} is not a valid transform operation`, tranformOperations.indexOf(operation) > -1);
+}

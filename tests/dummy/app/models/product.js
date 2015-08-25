@@ -6,7 +6,7 @@ export default Resource.extend({
   type: 'products',
   service: Ember.inject.service('products'),
 
-  name: attr(),
+  name: attr('string'),
 
   pictures: hasMany('pictures')
 });

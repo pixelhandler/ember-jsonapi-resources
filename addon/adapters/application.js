@@ -231,6 +231,7 @@ export default Ember.Object.extend(Ember.Evented, {
           return resp.json().then(function(json) {
             if (isUpdate) {
               _this.cacheUpdate({ meta: json.meta, data: json.data, headers: resp.headers });
+              json.data = _this.serializer.transformAttributes(json.data);
               resolve(json.data);
             } else {
               const resource = _this.serializer.deserialize(json);

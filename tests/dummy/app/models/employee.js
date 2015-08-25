@@ -6,7 +6,7 @@ export default Resource.extend({
   type: 'employees',
   service: Ember.inject.service('employees'),
 
-  name: attr(),
+  name: attr('string'),
 
   pictures: hasMany('pictures')
 });

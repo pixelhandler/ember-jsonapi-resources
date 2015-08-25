@@ -6,7 +6,9 @@ export default Resource.extend({
   type: 'pictures',
   service: Ember.inject.service('pictures'),
 
-  name: attr(),
+  "name": attr('string'),
+  "updated-at": attr('date'),
+  "created-at": attr('date'),
 
   imageable: hasOne('imageable') // polymorphic
 });

@@ -235,6 +235,8 @@ test('#fetch calls #fetchURL to customize if needed', function(assert) {
 });
 
 test('#fetch calls #fetchOptions checking if the request is an update, if true skips call to deserialize', function(assert) {
+  const done = assert.async();
+  assert.expect(3);
   const adapter = this.subject({type: 'posts', url: '/posts'});
   sandbox.stub(adapter, 'fetchUrl', function () {});
   sandbox.stub(window, 'fetch', function () {
@@ -246,10 +248,14 @@ test('#fetch calls #fetchOptions checking if the request is an update, if true s
     });
   });
   sandbox.stub(adapter, 'cacheResource', function () {});
-  adapter.serializer = { deserialize: sandbox.spy() };
+  adapter.serializer = { deserialize: sandbox.spy(), transformAttributes: sandbox.spy() };
   let promise = adapter.fetch('/posts', { method: 'PATCH', body: 'json string here', update: true });
   assert.ok(typeof promise.then === 'function', 'returns a thenable');
-  assert.equal(adapter.serializer.deserialize.callCount, 0, '#deserialize method NOT called');
+  promise.then(function() {
+    assert.equal(adapter.serializer.deserialize.callCount, 0, '#deserialize method NOT called');
+    assert.equal(adapter.serializer.transformAttributes.callCount, 1, '#transformAttributes method called');
+    done();
+  });
 });
 
 test('#fetchUrl', function(assert) {
