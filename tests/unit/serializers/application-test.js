@@ -166,3 +166,56 @@ test('#deserializeIncluded', function(assert) {
   msg = 'included comment deserialized';
   assert.ok(mocks.comments.serializer.deserializeResource.calledWith(postMock.included[1]), msg);
 });
+
+test('#transformAttributes calls date type transform methods', function(assert) {
+  const serializer = this.subject();
+  sandbox.stub(serializer, 'deserializeDateAttribute');
+  serializer.transformAttributes(postMock.data);
+  let msg = 'called attribute type transform method: deserializeDateAttribute';
+  assert.ok(serializer.deserializeDateAttribute.called, msg);
+
+  sandbox.stub(serializer, 'serializeDateAttribute');
+  serializer.transformAttributes(postMock.data, 'serialize');
+  msg = 'called attribute type transform method: serializeDateAttribute';
+  assert.ok(serializer.serializeDateAttribute.called, msg);
+});
+
+test('#serializeDateAttribute', function(assert) {
+  const serializer = this.subject();
+  let dateString = "2015-08-25T00:00:00.000Z";
+  let serializedDate = serializer.serializeDateAttribute(new Date(dateString));
+  assert.equal(serializedDate, dateString, 'serialized created-at Date to ISO String');
+});
+
+test('#deserializeDateAttribute', function(assert) {
+  const serializer = this.subject();
+  let dateString = "2015-08-25T00:00:00.000Z";
+  let date = new Date(dateString);
+  let deserialized = serializer.deserializeDateAttribute(dateString);
+  assert.equal(deserialized.valueOf(), date.valueOf(), 'deserialized created-at from ISO String to Date');
+});
+
+test('#transformAttributes calls attribute transform methods', function(assert) {
+  const serializer = this.subject();
+  serializer.reopen({
+    serializeNameAttribute(value) {
+      return value.split('written by: ')[1];
+    },
+    deserializeNameAttribute(value) {
+      return 'written by: ' + value;
+    },
+  });
+
+  let payloadNameAttr = authorMock.data.attributes.name;
+  sandbox.spy(serializer, 'deserializeNameAttribute');
+  let data = serializer.transformAttributes(authorMock.data, 'deserialize');
+  let msg = 'called attribute transform method: deserializeNameAttribute';
+  assert.ok(serializer.deserializeNameAttribute.called, msg);
+  assert.equal(data.attributes.name, 'written by: ' + payloadNameAttr, 'deserialized name attr');
+
+  sandbox.spy(serializer, 'serializeNameAttribute');
+  data = serializer.transformAttributes(data, 'serialize');
+  msg = 'called attribute transform method: serializeNameAttribute';
+  assert.ok(serializer.serializeNameAttribute.called, msg);
+  assert.equal(payloadNameAttr, data.attributes.name, 'deserialized name attr');
+});

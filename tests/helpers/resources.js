@@ -3,34 +3,36 @@ import { attr, hasOne, hasMany } from 'ember-jsonapi-resources/models/resource';
 
 export const Post = Resource.extend({
   type: 'posts',
-  title: attr(),
-  excerpt: attr(),
+  title: attr('string'),
+  excerpt: attr('string'),
+  "updated-at": attr('date'),
+  "created-at": attr('date'),
   author: hasOne('author'),
   comments: hasMany('comments')
 });
 
 export const Author = Resource.extend({
   type: 'authors',
-  name: attr(),
+  name: attr('string'),
   posts: hasMany('posts')
 });
 
 export const Comment = Resource.extend({
   type: 'comments',
-  body: attr(),
+  body: attr('string'),
   commenter: hasOne('commenter'),
   post: hasOne('post')
 });
 
 export const Commenter = Resource.extend({
   type: 'commenters',
-  name: attr(),
+  name: attr('string'),
   comments: hasMany('comments')
 });
 
 export const Person = Resource.extend({
   type: 'people',
-  name: attr()
+  name: attr() // can use any value type for an attribute
 });
 
 export const Employee = Person.extend({

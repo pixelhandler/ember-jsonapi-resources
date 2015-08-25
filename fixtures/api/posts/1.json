@@ -10,7 +10,9 @@
       "slug": "practical-deploy-an-ember-app-with-ember-cli-deploy-on-digitalocean",
       "excerpt": "The notes below demonstrate how to setup a chat application, built with [Ember CLI], that uses a backend service from [Firebase].",
       "date": "2015-04-25",
-      "body": "## Lightning-Approach Workflow\n\nThis approach is the default setup when using ember-cli-deploy and uses a Redis\nstore for the versions of your index.html file that you deploy."
+      "body": "## Lightning-Approach Workflow\n\nThis approach is the default setup when using ember-cli-deploy and uses a Redis\nstore for the versions of your index.html file that you deploy.",
+      "created-at": "2015-04-25T00:00:00.000Z",
+      "updated-at": "2015-04-25T00:00:00.000Z"
     },
     "relationships": {
       "author": {

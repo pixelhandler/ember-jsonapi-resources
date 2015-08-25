@@ -6,9 +6,9 @@ export default Resource.extend({
   type: 'post',
   service: Ember.inject.service('posts'),
 
-  title: attr(),
+  title: attr('string'),
   date: attr(),
-  excerpt: attr(),
+  excerpt: attr('string'),
 
   author: hasOne('author'),
   comments: hasMany('comments')

@@ -102,18 +102,17 @@ a specific specification for an API server without the need for an abstraction.
 
 **Does this implement all of the JSON API specification?**
 
-**Not yet**. The happy path for reading, creating, updating/patching, deleting
+**Most of it**. The happy path for reading, creating, updating/patching, deleting
 is ready, as well as patching relationships. No extension support has been worked
 on, e.g. [JSON Patch]. I would like to do that one day.
 
 **Is this lightweight? Relative to what?**
 
 **Yes**. With a server that follows the JSON API specification - it just works.
-This is a simple solution compared with starting from scratch using AJAX, or
-adapting Ember Data to work with the URLs. This solution provides a basic,
-timed caching solution to minimize requests, and leaves a more advanced caching
-strategy to the developer via a mixin. It does provide a `store` object that
-caches deserialized resources.
+This is a simple solution compared with starting from scratch using AJAX. This
+solution provides a basic, (timed) caching solution to minimize requests, and
+leaves a more advanced caching strategy to the developer via a mixin. It does
+provide a `store` object that caches deserialized resources.
 
 **Are included resources supported (side-loading)?**
 
@@ -259,11 +258,11 @@ Here is the blueprint for a `resource` (model) prototype:
 
 ```javascript
 import Ember from 'ember';
-import Resource from 'ember-jsonapi-resources/models/resource';
+import Resource from './resource';
 import { attr, hasOne, hasMany } from 'ember-jsonapi-resources/models/resource';
 
 export default Resource.extend({
-  type: '<%= entity %>',
+  type: '<%= resource %>',
   service: Ember.inject.service('<%= resource %>'),
 
   /*
@@ -281,7 +280,17 @@ export default Resource.extend({
 });
 ```
 
-The commented out code is an example of how to setup the relationships.
+The commented out code includes an example of how to setup the relationships
+and define your attributes. `attr()` can be used for any valid type, or you can
+specify a type, e.g. `attr('string')` or `attr('date')`. An attribute that is
+defined as a `'date'` type has a built in transform method to serialize and
+deserialize the date value. Typically the JSON value for a Date object is
+communicated in ISO format, e.g. "2015-08-25T22:05:37.393Z". The application
+serializer has methods for [de]serializing the date values between client and
+server. You can add your own transform methods based on the type of the
+attribute or based on the name of the attribute, the transform methods based on
+the name of the attribute will be called instead of any transform methods based
+on the type of the attribute.
 
 The relationships are async using promise proxy objects. So when a template accesses 
 the `resource`'s relationship a request is made for the relation.
@@ -309,6 +318,8 @@ var ENV = {
 // …
 };
 ```
+
+`MODEL_FACTORY_INJECTIONS` may be already set to `true` in the app/app.js file.
 
 Also, once you've generated a `resource` you can assign the URL.
 
@@ -342,7 +353,9 @@ as needed to act as if the API server is running on your same domain.
 
 #### Authorization
 
-EJR by default will pick-up credentials saved on `localStorage['AuthorizationHeader']`. If you'd like to change this, for instance to make it work with `ember-simple-auth`, there's a [configurable mixin available](https://github.com/pixelhandler/ember-jsonapi-resources/wiki/Authorization).
+By default credentials stored at `localStorage['AuthorizationHeader']` will be used.
+If you'd like to change this, for instance to make it work with `ember-simple-auth`,
+there's a [configurable mixin available](https://github.com/pixelhandler/ember-jsonapi-resources/wiki/Authorization).
 
 #### Example JSON API 1.0 Document
 

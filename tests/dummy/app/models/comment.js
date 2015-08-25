@@ -6,7 +6,7 @@ export default Resource.extend({
   type: 'comment',
   service: Ember.inject.service('comments'),
 
-  body: attr(),
+  body: attr('string'),
 
   date: Ember.computed('attributes', {
     get() {
