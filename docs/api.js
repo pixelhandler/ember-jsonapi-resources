@@ -16,7 +16,8 @@ YUI.add("yuidoc-meta", function(Y) {
         "ember-jsonapi-resources",
         "resource",
         "serializer",
-        "store"
+        "store",
+        "utils"
     ],
     "allModules": [
         {
@@ -52,6 +53,11 @@ YUI.add("yuidoc-meta", function(Y) {
             "displayName": "store",
             "name": "store",
             "description": "Service for a JSON API endpoint a facade to your resource adapter"
+        },
+        {
+            "displayName": "utils",
+            "name": "utils",
+            "description": "Utility for creating promise proxy objects for related resources"
         }
     ]
 } };

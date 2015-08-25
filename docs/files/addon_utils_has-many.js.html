@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>ember-jsonapi-resources - Ember JSON API Resources</title>
+    <title>addon/utils/has-many.js - Ember JSON API Resources</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -89,138 +89,86 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-<h1>ember-jsonapi-resources Module</h1>
-<div class="box clearfix meta">
+<h1 class="file-heading">File: addon/utils/has-many.js</h1>
 
+<div class="file">
+    <pre class="code prettyprint linenums">
+/**
+  @module ember-jsonapi-resources
+  @submodule utils
+**/
 
-        <div class="foundat">
-            Defined in: <a href="../files/addon_utils_related-proxy.js.html#l9"><code>addon&#x2F;utils&#x2F;related-proxy.js:9</code></a>
-        </div>
+import Ember from &#x27;ember&#x27;;
+import RelatedProxyUtil from &#x27;ember-jsonapi-resources/utils/related-proxy&#x27;;
+import { linksPath } from &#x27;ember-jsonapi-resources/utils/related-proxy&#x27;;
+import { isDasherized } from &#x27;ember-jsonapi-resources/utils/is&#x27;;
 
-</div>
+/**
+  Helper to setup a has many relationship to another resource
 
+  &#x60;&#x60;&#x60;js
+  let Author = Resource.extend({
+    type: &#x27;authors&#x27;,
+    name: attr(),
+    posts: hasMany(&#x27;posts&#x27;)
+  });
+  &#x60;&#x60;&#x60;
 
-<div class="box intro">
-    
-</div>
+  Or, with an optional type to use instead of the resource&#x27;s service
 
+  &#x60;&#x60;&#x60;js
+  let Person = Resource.extend({
+    type: &#x27;people&#x27;,
+    name: attr()
+  });
 
-<div class="yui3-g">
-    <div class="yui3-u-1-2">
-            <p>This module provides the following classes:</p>
+  let Supervisor = Person.extend({
+    type: &#x27;supervisors&#x27;,
+    directReports: hasMany({ resource: &#x27;employees&#x27;, type: &#x27;people&#x27; })
+  });
+  &#x60;&#x60;&#x60;
 
-            <ul class="module-classes">
-                <li class="module-class">
-                    <a href="../classes/ApplicationAdapter.html">
-                        ApplicationAdapter
-                    </a>
-                </li>
-                <li class="module-class">
-                    <a href="../classes/ApplicationSerializer.html">
-                        ApplicationSerializer
-                    </a>
-                </li>
-                <li class="module-class">
-                    <a href="../classes/AuthorizationMixin.html">
-                        AuthorizationMixin
-                    </a>
-                </li>
-                <li class="module-class">
-                    <a href="../classes/RelatedProxyUtil.html">
-                        RelatedProxyUtil
-                    </a>
-                </li>
-                <li class="module-class">
-                    <a href="../classes/Resource.html">
-                        Resource
-                    </a>
-                </li>
-                <li class="module-class">
-                    <a href="../classes/ServiceCacheMixin.html">
-                        ServiceCacheMixin
-                    </a>
-                </li>
-                <li class="module-class">
-                    <a href="../classes/StoreService.html">
-                        StoreService
-                    </a>
-                </li>
-            </ul>
-    </div>
+  @method hasMany
+  @param {String|Object} relation the name of the relationship
+  @param {String} relation.resource the name of the relationship
+  @param {String} relation.type the name of the type or service to use
+*/
+export default function hasMany(relation) {
+  let type = relation;
+  if (typeof type === &#x27;object&#x27;) {
+    assertResourceAndTypeProps(relation);
+    type = relation.type;
+    relation = relation.resource;
+  }
+  assertDasherizedHasManyRelation(relation);
+  let util = RelatedProxyUtil.create({&#x27;relationship&#x27;: relation, &#x27;type&#x27;: type});
+  let path = linksPath(relation);
+  return Ember.computed(path, function () {
+    return util.createProxy(this, Ember.ArrayProxy);
+  }).meta({relation: relation, type: type, kind: &#x27;hasMany&#x27;});
+}
 
-    <div class="yui3-u-1-2">
-            <p>This module is a rollup of the following modules:</p>
+function assertResourceAndTypeProps(relation) {
+  try {
+    let msg = &#x27;Options must include properties: resource, type&#x27;;
+    Ember.assert(msg, relation &amp;&amp; relation.resource &amp;&amp; relation.type);
+  } catch(e) {
+    Ember.Logger.warn(e.message);
+  }
+}
 
-            <ul class="module-submodules">
-                <li class="module-submodule">
-                    <a href="../modules/adapter.html">
-                        adapter
-                    </a>
+function assertDasherizedHasManyRelation(name) {
+  try {
+    let relationName = Ember.String.dasherize(name);
+    let msg = &quot; are recommended to use dasherized names, e.g &#x60;hasMany(&#x27;&quot;+ relationName +&quot;&#x27;)&#x60;&quot;;
+    msg += &quot;, instead of &#x60;hasMany(&#x27;&quot;+ name +&quot;&#x27;)&#x60;&quot;;
+    Ember.assert(msg, isDasherized(name));
+  } catch(e) {
+    Ember.Logger.warn(e.message);
+  }
+}
 
-                    <div class="module-submodule-description">
-                        Adapter for a JSON API endpoint, use as a service for your backend
-                    </div>
-                </li>
-                <li class="module-submodule">
-                    <a href="../modules/authorization.html">
-                        authorization
-                    </a>
-
-                    <div class="module-submodule-description">
-                        A Mixin class for storage of credential/token uses with a HTTP Authorization request-header
-
-The default solution is to use localStorage['AuthorizationHeader'] for the credential
-                    </div>
-                </li>
-                <li class="module-submodule">
-                    <a href="../modules/cache.html">
-                        cache
-                    </a>
-
-                    <div class="module-submodule-description">
-                        A Mixin class for caching JSON API resource objects
-                    </div>
-                </li>
-                <li class="module-submodule">
-                    <a href="../modules/resource.html">
-                        resource
-                    </a>
-
-                    <div class="module-submodule-description">
-                        A Resource class to create JSON API resource objects
-
-See <http://jsonapi.org/format/#document-resource-objects>
-                    </div>
-                </li>
-                <li class="module-submodule">
-                    <a href="../modules/serializer.html">
-                        serializer
-                    </a>
-
-                    <div class="module-submodule-description">
-                        Serializer/Deserializer for a JSON API resource object, used by adapter
-                    </div>
-                </li>
-                <li class="module-submodule">
-                    <a href="../modules/store.html">
-                        store
-                    </a>
-
-                    <div class="module-submodule-description">
-                        Service for a JSON API endpoint a facade to your resource adapter
-                    </div>
-                </li>
-                <li class="module-submodule">
-                    <a href="../modules/utils.html">
-                        utils
-                    </a>
-
-                    <div class="module-submodule-description">
-                        Utility for creating promise proxy objects for related resources
-                    </div>
-                </li>
-            </ul>
-    </div>
+    </pre>
 </div>
                     </div>
                 </div>

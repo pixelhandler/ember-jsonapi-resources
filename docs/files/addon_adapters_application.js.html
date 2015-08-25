@@ -55,6 +55,7 @@
                                 <li><a href="../modules/resource.html">resource</a></li>
                                 <li><a href="../modules/serializer.html">serializer</a></li>
                                 <li><a href="../modules/store.html">store</a></li>
+                                <li><a href="../modules/utils.html">utils</a></li>
                             </ul>
                         </div>
                     </div>
@@ -180,14 +181,24 @@ export default Ember.Object.extend(Ember.Evented, {
   },
 
   /**
-    Find resources using an optional query object, e.g. w/ pagination params
+    Find resources by relationship or use a specificed (optional) service to find relation
 
     A Url like: /photos/1/relationships/photographer is a required param
 
+    &#x60;&#x60;&#x60;js
+    service.findRelated(&#x27;photographer&#x27;, &#x27;/api/v1/photos/1/relationships/photographer&#x27;);
+    &#x60;&#x60;&#x60;
+
+    Or, with option to find releated resource using a different service
+
+    &#x60;&#x60;&#x60;js
+    service.findRelated({resource: &#x27;photographer&#x27;, type: &#x27;people&#x27;}, url);
+    &#x60;&#x60;&#x60;
+
     @method findRelated
-    @param {String} resource name (plural) to lookup the service object w/ serializer
-      or {Object} &#x60;{&#x27;resource&#x27;: relation, &#x27;type&#x27;: type}&#x60; used when type is not the
-      same as the resource name, to fetch relationship using a different service
+    @param {String|Object} resource name to lookup the service object w/ serializer
+    @param {String} resource.resource the name of the resource
+    @param {String} resource.type the name of the resource
     @param {String} url
     @return {Promise}
   */

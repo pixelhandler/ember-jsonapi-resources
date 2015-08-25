@@ -55,6 +55,7 @@
                                 <li><a href="../modules/resource.html">resource</a></li>
                                 <li><a href="../modules/serializer.html">serializer</a></li>
                                 <li><a href="../modules/store.html">store</a></li>
+                                <li><a href="../modules/utils.html">utils</a></li>
                             </ul>
                         </div>
                     </div>
@@ -93,17 +94,17 @@
 
 
         <div class="foundat">
-            Defined in: <a href="../files/addon_models_resource.js.html#l354"><code>addon&#x2F;models&#x2F;resource.js:354</code></a>
+            Defined in: <a href="../files/addon_utils_related-proxy.js.html#l9"><code>addon&#x2F;utils&#x2F;related-proxy.js:9</code></a>
         </div>
 
-            Module: <a href="../modules/resource.html">resource</a><br>
+            Module: <a href="../modules/utils.html">utils</a><br>
             Parent Module: <a href="../modules/ember-jsonapi-resources.html">ember-jsonapi-resources</a>
 
 </div>
 
 
 <div class="box intro">
-    <p>Mixin for creating promise proxy objects for related resources</p>
+    <p>Utility for creating promise proxy objects for related resources</p>
 
 </div>
 
@@ -124,6 +125,10 @@
                     <h3>Methods</h3>
 
                     <ul class="index-list methods">
+                            <li class="index-item method">
+                                <a href="#method_attr">attr</a>
+
+                            </li>
                             <li class="index-item method">
                                 <a href="#method_createProxy">createProxy</a>
 
@@ -176,6 +181,101 @@
             <div id="methods" class="api-class-tabpanel">
                 <h2 class="off-left">Methods</h2>
 
+<div id="method_attr" class="method item">
+    <h3 class="name"><code>attr</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code class="optional">[type]</code>
+                </li>
+                <li class="arg">
+                        <code class="optional">[mutable=true]</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/addon_utils_attr.js.html#l9"><code>addon&#x2F;utils&#x2F;attr.js:9</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Utility helper to setup a computed property for a resource attribute, imported and
+exported with the resource submodule.</p>
+<p>An <code>attr</code> of the resource is a computed property to the actual attribute in an
+<code>attributes</code> hash on the <code>resource</code> (model) instance. Using <code>attr()</code> supports
+any type, and an optional <code>type</code> (String) argument can be used to enforce
+setting and getting with a specific type. <code>'string'</code>, <code>'number'</code>, <code>'boolean'</code>,
+<code>'date'</code>, <code>'object'</code>, and <code>'array'</code> are all valid types for attributes.</p>
+<p>Use <code>attr()</code>, with optional type argument, to compose your model attributes, e.g:</p>
+<pre class="code prettyprint"><code class="language-js">import Ember from 'ember';
+import Resource from 'ember-jsonapi-resources/models/resource';
+import { attr, hasOne, hasMany } from 'ember-jsonapi-resources/models/resource';
+
+export default Resource.extend({
+  type: 'articles',
+  service: Ember.inject.service('articles'),
+
+  title: attr('string'),
+  published: attr('date'),
+  tags: attr('array'),
+  footnotes: attr('object'),
+  revisions: attr()
+  version: attr('number'),
+  &quot;is-approved&quot;: attr('boolean')
+});
+</code></pre>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name optional">[type]</code>
+                        <span class="type">String</span>
+                        <span class="flag optional" title="This parameter is optional.">optional</span>
+
+
+                    <div class="param-description">
+                        <p>an optional param for the type of property, i.e. <code>string</code>,
+<code>number</code>, <code>boolean</code>, <code>date</code>, <code>object</code>, or <code>array</code></p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name optional">[mutable=true]</code>
+                        <span class="type">Boolean</span>
+                        <span class="flag optional" title="This parameter is optional.">optional</span>
+
+
+                    <div class="param-description">
+                        <p>optional param, defaults to <code>true</code> if not passed</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+
+
+</div>
 <div id="method_createProxy" class="method item">
     <h3 class="name"><code>createProxy</code></h3>
 
@@ -203,7 +303,7 @@
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l393"><code>addon&#x2F;models&#x2F;resource.js:393</code></a>
+        <a href="../files/addon_utils_related-proxy.js.html#l48"><code>addon&#x2F;utils&#x2F;related-proxy.js:48</code></a>
         </p>
 
 
@@ -275,7 +375,7 @@
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l527"><code>addon&#x2F;models&#x2F;resource.js:527</code></a>
+        <a href="../files/addon_utils_has-many.js.html#l11"><code>addon&#x2F;utils&#x2F;has-many.js:11</code></a>
         </p>
 
 
@@ -284,6 +384,23 @@
 
     <div class="description">
         <p>Helper to setup a has many relationship to another resource</p>
+<pre class="code prettyprint"><code class="language-js">let Author = Resource.extend({
+  type: 'authors',
+  name: attr(),
+  posts: hasMany('posts')
+});
+</code></pre>
+<p>Or, with an optional type to use instead of the resource's service</p>
+<pre class="code prettyprint"><code class="language-js">let Person = Resource.extend({
+  type: 'people',
+  name: attr()
+});
+
+let Supervisor = Person.extend({
+  type: 'supervisors',
+  directReports: hasMany({ resource: 'employees', type: 'people' })
+});
+</code></pre>
 
     </div>
 
@@ -293,14 +410,36 @@
             <ul class="params-list">
                 <li class="param">
                         <code class="param-name">relation</code>
-                        <span class="type">String</span>
+                        <span class="type">String | Object</span>
 
 
                     <div class="param-description">
-                        <p>Or, {Object} with properties for <code>resource</code> and <code>type</code></p>
+                        <p>the name of the relationship</p>
 
                     </div>
 
+                        <ul class="params-list">
+                            <li class="param">
+                                    <code class="param-name">resource</code>
+                                    <span class="type">String</span>
+
+                                <div class="param-description">
+                                    <p>the name of the relationship</p>
+
+                                </div>
+
+                            </li>
+                            <li class="param">
+                                    <code class="param-name">type</code>
+                                    <span class="type">String</span>
+
+                                <div class="param-description">
+                                    <p>the name of the type or service to use</p>
+
+                                </div>
+
+                            </li>
+                        </ul>
                 </li>
             </ul>
         </div>
@@ -329,7 +468,7 @@
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l485"><code>addon&#x2F;models&#x2F;resource.js:485</code></a>
+        <a href="../files/addon_utils_has-one.js.html#l11"><code>addon&#x2F;utils&#x2F;has-one.js:11</code></a>
         </p>
 
 
@@ -338,6 +477,22 @@
 
     <div class="description">
         <p>Helper to setup a has one relationship to another resource</p>
+<pre class="code prettyprint"><code class="language-js">let Employee = Person.extend({
+  type: 'employees',
+  supervisor: hasOne('supervisor')
+});
+</code></pre>
+<p>Or, with an optional type to use instead of the resource's service</p>
+<pre class="code prettyprint"><code class="language-js">let Person = Resource.extend({
+  type: 'people',
+  name: attr()
+});
+
+let Employee = Person.extend({
+  type: 'employees',
+  supervisor: hasOne({ resource: 'supervisor', type: 'people' })
+});
+</code></pre>
 
     </div>
 
@@ -347,14 +502,36 @@
             <ul class="params-list">
                 <li class="param">
                         <code class="param-name">relation</code>
-                        <span class="type">String</span>
+                        <span class="type">String | Object</span>
 
 
                     <div class="param-description">
-                        <p>Or, {Object} with properties for <code>resource</code> and <code>type</code></p>
+                        <p>the name of the relationship</p>
 
                     </div>
 
+                        <ul class="params-list">
+                            <li class="param">
+                                    <code class="param-name">resource</code>
+                                    <span class="type">String</span>
+
+                                <div class="param-description">
+                                    <p>the name of the relationship</p>
+
+                                </div>
+
+                            </li>
+                            <li class="param">
+                                    <code class="param-name">type</code>
+                                    <span class="type">String</span>
+
+                                <div class="param-description">
+                                    <p>the name of the type or service to use</p>
+
+                                </div>
+
+                            </li>
+                        </ul>
                 </li>
             </ul>
         </div>
@@ -377,7 +554,7 @@
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l362"><code>addon&#x2F;models&#x2F;resource.js:362</code></a>
+        <a href="../files/addon_utils_related-proxy.js.html#l17"><code>addon&#x2F;utils&#x2F;related-proxy.js:17</code></a>
         </p>
 
 
@@ -423,7 +600,7 @@
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l441"><code>addon&#x2F;models&#x2F;resource.js:441</code></a>
+        <a href="../files/addon_utils_related-proxy.js.html#l96"><code>addon&#x2F;utils&#x2F;related-proxy.js:96</code></a>
         </p>
 
 
@@ -509,7 +686,7 @@
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l424"><code>addon&#x2F;models&#x2F;resource.js:424</code></a>
+        <a href="../files/addon_utils_related-proxy.js.html#l79"><code>addon&#x2F;utils&#x2F;related-proxy.js:79</code></a>
         </p>
 
 
@@ -587,7 +764,7 @@
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l468"><code>addon&#x2F;models&#x2F;resource.js:468</code></a>
+        <a href="../files/addon_utils_related-proxy.js.html#l123"><code>addon&#x2F;utils&#x2F;related-proxy.js:123</code></a>
         </p>
 
 
@@ -652,7 +829,7 @@
                         <div class="meta">
                                     <p>
                                     Defined in
-                            <a href="../files/addon_models_resource.js.html#l375"><code>addon&#x2F;models&#x2F;resource.js:375</code></a>
+                            <a href="../files/addon_utils_related-proxy.js.html#l30"><code>addon&#x2F;utils&#x2F;related-proxy.js:30</code></a>
                             </p>
                     
                     
@@ -677,7 +854,7 @@
                         <div class="meta">
                                     <p>
                                     Defined in
-                            <a href="../files/addon_models_resource.js.html#l384"><code>addon&#x2F;models&#x2F;resource.js:384</code></a>
+                            <a href="../files/addon_utils_related-proxy.js.html#l39"><code>addon&#x2F;utils&#x2F;related-proxy.js:39</code></a>
                             </p>
                     
                     

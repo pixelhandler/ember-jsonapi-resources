@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>ember-jsonapi-resources - Ember JSON API Resources</title>
+    <title>addon/utils/attr.js - Ember JSON API Resources</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -89,138 +89,127 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-<h1>ember-jsonapi-resources Module</h1>
-<div class="box clearfix meta">
+<h1 class="file-heading">File: addon/utils/attr.js</h1>
 
+<div class="file">
+    <pre class="code prettyprint linenums">
+/**
+  @module ember-jsonapi-resources
+  @submodule utils
+**/
 
-        <div class="foundat">
-            Defined in: <a href="../files/addon_utils_related-proxy.js.html#l9"><code>addon&#x2F;utils&#x2F;related-proxy.js:9</code></a>
-        </div>
+import Ember from &#x27;ember&#x27;;
+import { isBlank, isDasherized, isType } from &#x27;ember-jsonapi-resources/utils/is&#x27;;
 
-</div>
+/**
+  Utility helper to setup a computed property for a resource attribute, imported and
+  exported with the resource submodule.
 
+  An &#x60;attr&#x60; of the resource is a computed property to the actual attribute in an 
+  &#x60;attributes&#x60; hash on the &#x60;resource&#x60; (model) instance. Using &#x60;attr()&#x60; supports
+  any type, and an optional &#x60;type&#x60; (String) argument can be used to enforce
+  setting and getting with a specific type. &#x60;&#x27;string&#x27;&#x60;, &#x60;&#x27;number&#x27;&#x60;, &#x60;&#x27;boolean&#x27;&#x60;,
+  &#x60;&#x27;date&#x27;&#x60;, &#x60;&#x27;object&#x27;&#x60;, and &#x60;&#x27;array&#x27;&#x60; are all valid types for attributes.
+  
+  Use &#x60;attr()&#x60;, with optional type argument, to compose your model attributes, e.g:
 
-<div class="box intro">
-    
-</div>
+  &#x60;&#x60;&#x60;js
+  import Ember from &#x27;ember&#x27;;
+  import Resource from &#x27;ember-jsonapi-resources/models/resource&#x27;;
+  import { attr, hasOne, hasMany } from &#x27;ember-jsonapi-resources/models/resource&#x27;;
 
+  export default Resource.extend({
+    type: &#x27;articles&#x27;,
+    service: Ember.inject.service(&#x27;articles&#x27;),
 
-<div class="yui3-g">
-    <div class="yui3-u-1-2">
-            <p>This module provides the following classes:</p>
+    title: attr(&#x27;string&#x27;),
+    published: attr(&#x27;date&#x27;),
+    tags: attr(&#x27;array&#x27;),
+    footnotes: attr(&#x27;object&#x27;),
+    revisions: attr()
+    version: attr(&#x27;number&#x27;),
+    &quot;is-approved&quot;: attr(&#x27;boolean&#x27;)
+  });
+  &#x60;&#x60;&#x60;
 
-            <ul class="module-classes">
-                <li class="module-class">
-                    <a href="../classes/ApplicationAdapter.html">
-                        ApplicationAdapter
-                    </a>
-                </li>
-                <li class="module-class">
-                    <a href="../classes/ApplicationSerializer.html">
-                        ApplicationSerializer
-                    </a>
-                </li>
-                <li class="module-class">
-                    <a href="../classes/AuthorizationMixin.html">
-                        AuthorizationMixin
-                    </a>
-                </li>
-                <li class="module-class">
-                    <a href="../classes/RelatedProxyUtil.html">
-                        RelatedProxyUtil
-                    </a>
-                </li>
-                <li class="module-class">
-                    <a href="../classes/Resource.html">
-                        Resource
-                    </a>
-                </li>
-                <li class="module-class">
-                    <a href="../classes/ServiceCacheMixin.html">
-                        ServiceCacheMixin
-                    </a>
-                </li>
-                <li class="module-class">
-                    <a href="../classes/StoreService.html">
-                        StoreService
-                    </a>
-                </li>
-            </ul>
-    </div>
+  @method attr
+  @param {String} [type] an optional param for the type of property, i.e. &#x60;string&#x60;,
+    &#x60;number&#x60;, &#x60;boolean&#x60;, &#x60;date&#x60;, &#x60;object&#x60;, or &#x60;array&#x60;
+  @param {Boolean} [mutable=true] optional param, defaults to &#x60;true&#x60; if not passed
+*/
+export default function attr(type = &#x27;any&#x27;, mutable = true) {
+  const _mutable = mutable;
+  if (type !== &#x27;any&#x27; &amp;&amp; !isBlank(type)) {
+    assertValidTypeOption(type);
+  }
+  return Ember.computed(&#x27;attributes&#x27;, {
+    get: function (key) {
+      assertDasherizedAttr(key);
+      let value = this.get(&#x27;attributes.&#x27; + key);
+      if (!isBlank(value)) {
+        assertType.call(this, key, value);
+      }
+      return value;
+    },
 
-    <div class="yui3-u-1-2">
-            <p>This module is a rollup of the following modules:</p>
+    set: function (key, value) {
+      const lastValue = this.get(&#x27;attributes.&#x27; + key);
+      if (!_mutable) {
+        return immutableValue(key, value, lastValue);
+      }
+      if (value === lastValue) { return value; }
+      assertType.call(this, key, value);
+      this.set(&#x27;attributes.&#x27; + key, value);
+      if (!this.get(&#x27;isNew&#x27;)) {
+        this._attributes[key] = this._attributes[key] || {};
+        this._attributes[key].changed = value;
+        this._attributes[key].previous = lastValue;
+        const service = this.get(&#x27;service&#x27;);
+        if (service) {
+          service.trigger(&#x27;attributeChanged&#x27;, this);
+        }
+      }
+      return this.get(&#x27;attributes.&#x27; + key);
+    }
+  }).meta({type: type, mutable: mutable});
+}
 
-            <ul class="module-submodules">
-                <li class="module-submodule">
-                    <a href="../modules/adapter.html">
-                        adapter
-                    </a>
+function assertValidTypeOption(type) {
+  if (type === &#x27;any&#x27;) { return; }
+  let allowed = &#x27;string number boolean date object array&#x27;;
+  let msg = &#x27;Allowed types are: &#x27; + allowed + &#x27; however &#x27; + type + &#x27; was given instead.&#x27;;
+  Ember.assert(msg, allowed.split(&#x27; &#x27;).indexOf(type) &gt; -1);
+}
 
-                    <div class="module-submodule-description">
-                        Adapter for a JSON API endpoint, use as a service for your backend
-                    </div>
-                </li>
-                <li class="module-submodule">
-                    <a href="../modules/authorization.html">
-                        authorization
-                    </a>
+function assertDasherizedAttr(name) {
+  try {
+    let attrName = Ember.String.dasherize(name);
+    let msg = &quot;Attributes are recommended to use dasherized names, e.g &#x60;&#x27;&quot;+ attrName +&quot;&#x27;: attr()&#x60;&quot;;
+    msg += &quot;, instead of &#x60;&quot;+ name +&quot;: attr()&#x60;&quot;;
+    Ember.assert(msg, isDasherized(name));
+  } catch(e) {
+    Ember.Logger.warn(e.message);
+  }
+}
 
-                    <div class="module-submodule-description">
-                        A Mixin class for storage of credential/token uses with a HTTP Authorization request-header
+function assertType(key, value) {
+  let meta = this.constructor.metaForProperty(key);
+  if (meta &amp;&amp; meta.type &amp;&amp; meta.type !== &#x27;any&#x27;) {
+    let msg = this.toString() + &#x27;#&#x27; + key + &#x27; is expected to be a &#x27; + meta.type;
+    Ember.assert(msg, isType(meta.type, value));
+  }
+}
 
-The default solution is to use localStorage['AuthorizationHeader'] for the credential
-                    </div>
-                </li>
-                <li class="module-submodule">
-                    <a href="../modules/cache.html">
-                        cache
-                    </a>
+function immutableValue(key, value, lastValue) {
+  let msg = [
+    this.toString(), &#x27;#&#x27;, key, &#x27; is not mutable set was called with &#x27;,
+    &#x27;&#x60;&#x27;, value, &#x27;&#x60;&#x27;, &#x27; but is previous set to &#x60;&#x27;, lastValue, &#x27;&#x60;&#x27;
+  ];
+  Ember.Logger.warn(msg.join(&#x27;&#x27;));
+  return lastValue;
+}
 
-                    <div class="module-submodule-description">
-                        A Mixin class for caching JSON API resource objects
-                    </div>
-                </li>
-                <li class="module-submodule">
-                    <a href="../modules/resource.html">
-                        resource
-                    </a>
-
-                    <div class="module-submodule-description">
-                        A Resource class to create JSON API resource objects
-
-See <http://jsonapi.org/format/#document-resource-objects>
-                    </div>
-                </li>
-                <li class="module-submodule">
-                    <a href="../modules/serializer.html">
-                        serializer
-                    </a>
-
-                    <div class="module-submodule-description">
-                        Serializer/Deserializer for a JSON API resource object, used by adapter
-                    </div>
-                </li>
-                <li class="module-submodule">
-                    <a href="../modules/store.html">
-                        store
-                    </a>
-
-                    <div class="module-submodule-description">
-                        Service for a JSON API endpoint a facade to your resource adapter
-                    </div>
-                </li>
-                <li class="module-submodule">
-                    <a href="../modules/utils.html">
-                        utils
-                    </a>
-
-                    <div class="module-submodule-description">
-                        Utility for creating promise proxy objects for related resources
-                    </div>
-                </li>
-            </ul>
-    </div>
+    </pre>
 </div>
                     </div>
                 </div>

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>ember-jsonapi-resources - Ember JSON API Resources</title>
+    <title>addon/utils/related-proxy.js - Ember JSON API Resources</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -89,138 +89,152 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-<h1>ember-jsonapi-resources Module</h1>
-<div class="box clearfix meta">
+<h1 class="file-heading">File: addon/utils/related-proxy.js</h1>
 
+<div class="file">
+    <pre class="code prettyprint linenums">
+/**
+  @module ember-jsonapi-resources
+  @submodule utils
+**/
 
-        <div class="foundat">
-            Defined in: <a href="../files/addon_utils_related-proxy.js.html#l9"><code>addon&#x2F;utils&#x2F;related-proxy.js:9</code></a>
-        </div>
+import Ember from &#x27;ember&#x27;;
+import { pluralize } from &#x27;ember-inflector&#x27;;
 
-</div>
+/**
+  Utility for creating promise proxy objects for related resources
 
+  @class RelatedProxyUtil
+  @static
+*/
+const RelatedProxyUtil = Ember.Object.extend({
 
-<div class="box intro">
-    
-</div>
+  /**
+    Checks for required &#x60;relationship&#x60; property
 
+    @method init
+  */
+  init: function () {
+    this._super();
+    if (typeof this.get(&#x27;relationship&#x27;) !== &#x27;string&#x27;) {
+      throw new Error(&#x27;RelatedProxyUtil#init expects &#x60;relationship&#x60; property to exist.&#x27;);
+    }
+    return this;
+  },
 
-<div class="yui3-g">
-    <div class="yui3-u-1-2">
-            <p>This module provides the following classes:</p>
+  /**
+    The name of the relationship
 
-            <ul class="module-classes">
-                <li class="module-class">
-                    <a href="../classes/ApplicationAdapter.html">
-                        ApplicationAdapter
-                    </a>
-                </li>
-                <li class="module-class">
-                    <a href="../classes/ApplicationSerializer.html">
-                        ApplicationSerializer
-                    </a>
-                </li>
-                <li class="module-class">
-                    <a href="../classes/AuthorizationMixin.html">
-                        AuthorizationMixin
-                    </a>
-                </li>
-                <li class="module-class">
-                    <a href="../classes/RelatedProxyUtil.html">
-                        RelatedProxyUtil
-                    </a>
-                </li>
-                <li class="module-class">
-                    <a href="../classes/Resource.html">
-                        Resource
-                    </a>
-                </li>
-                <li class="module-class">
-                    <a href="../classes/ServiceCacheMixin.html">
-                        ServiceCacheMixin
-                    </a>
-                </li>
-                <li class="module-class">
-                    <a href="../classes/StoreService.html">
-                        StoreService
-                    </a>
-                </li>
-            </ul>
-    </div>
+    @property resource
+    @type String
+    @required
+  */
+  relationship: null,
 
-    <div class="yui3-u-1-2">
-            <p>This module is a rollup of the following modules:</p>
+  /**
+    The name of the type of resource
 
-            <ul class="module-submodules">
-                <li class="module-submodule">
-                    <a href="../modules/adapter.html">
-                        adapter
-                    </a>
+    @property type
+    @type String
+    @required
+  */
+  type: null,
 
-                    <div class="module-submodule-description">
-                        Adapter for a JSON API endpoint, use as a service for your backend
-                    </div>
-                </li>
-                <li class="module-submodule">
-                    <a href="../modules/authorization.html">
-                        authorization
-                    </a>
+  /**
+    Proxy for the requested relation, resolves w/ content from fulfilled promise
 
-                    <div class="module-submodule-description">
-                        A Mixin class for storage of credential/token uses with a HTTP Authorization request-header
+    @method createProxy
+    @param {Resource} resource
+    @param {Ember.ObjectProxy|Ember.ArrayProxy} proxyFactory
+    @return {PromiseProxy} proxy
+  */
+  createProxy: function (resource, proxyFactory) {
+    let relation = this.get(&#x27;relationship&#x27;);
+    let type = this.get(&#x27;type&#x27;);
+    let url = this.proxyUrl(resource, relation);
+    let service = resource.container.lookup(&#x27;service:&#x27; + pluralize(type));
+    let promise = this.promiseFromCache(resource, relation, service);
+    promise = promise || service.findRelated({&#x27;resource&#x27;: relation, &#x27;type&#x27;: type}, url);
+    let proxy = proxyFactory.extend(Ember.PromiseProxyMixin, {
+      &#x27;promise&#x27;: promise, &#x27;type&#x27;: relation
+    });
+    proxy = proxy.create();
+    proxy.then(
+      function (resources) {
+        proxy.set(&#x27;content&#x27;, resources);
+      },
+      function (error) {
+        Ember.Logger.error(error);
+        throw error;
+      }
+    );
+    return proxy;
+  },
 
-The default solution is to use localStorage['AuthorizationHeader'] for the credential
-                    </div>
-                </li>
-                <li class="module-submodule">
-                    <a href="../modules/cache.html">
-                        cache
-                    </a>
+  /**
+    Proxy url to fetch for the resource&#x27;s relation
 
-                    <div class="module-submodule-description">
-                        A Mixin class for caching JSON API resource objects
-                    </div>
-                </li>
-                <li class="module-submodule">
-                    <a href="../modules/resource.html">
-                        resource
-                    </a>
+    @method proxyUrl
+    @param {Resource} resource
+    @param {String} relation
+    @return {PromiseProxy} proxy
+  */
+  proxyUrl(resource, relation) {
+    const related = linksPath(relation);
+    const url = resource.get(related);
+    if (typeof url !== &#x27;string&#x27;) {
+      throw new Error(&#x27;RelatedProxyUtil#_proxyUrl expects &#x60;model.&#x27;+ related +&#x27;&#x60; property to exist.&#x27;);
+    }
+    return url;
+  },
 
-                    <div class="module-submodule-description">
-                        A Resource class to create JSON API resource objects
+  /**
+    Lookup relation from service cache and pomisify result
 
-See <http://jsonapi.org/format/#document-resource-objects>
-                    </div>
-                </li>
-                <li class="module-submodule">
-                    <a href="../modules/serializer.html">
-                        serializer
-                    </a>
+    @method promiseFromCache
+    @param {Resource} resource
+    @param {String} relation
+    @param {Object} service
+    @return {Promise|null}
+  */
+  promiseFromCache(resource, relation, service) {
+    let data = resource.get(&#x27;relationships.&#x27; + relation + &#x27;.data&#x27;);
+    if (!data) { return; }
+    let content = Ember.A([]), found;
+    if (Array.isArray(data)) {
+      for (let i = 0; i &lt; data.length; i++) {
+        found = this.serviceCacheLookup(service, data[i]);
+        if (found) {
+          content.push(found);
+        }
+      }
+      content = (data.length &amp;&amp; data.length === content.length) ? content : null;
+    } else {
+      content = this.serviceCacheLookup(service, data);
+    }
+    return (content) ? Ember.RSVP.Promise.resolve(content) : null;
+  },
 
-                    <div class="module-submodule-description">
-                        Serializer/Deserializer for a JSON API resource object, used by adapter
-                    </div>
-                </li>
-                <li class="module-submodule">
-                    <a href="../modules/store.html">
-                        store
-                    </a>
+  /**
+    Lookup data in service cache
 
-                    <div class="module-submodule-description">
-                        Service for a JSON API endpoint a facade to your resource adapter
-                    </div>
-                </li>
-                <li class="module-submodule">
-                    <a href="../modules/utils.html">
-                        utils
-                    </a>
+    @method serviceCacheLookup
+    @param {Object} service
+    @param {Object} data
+    @return {Resource|undefined}
+  */
+  serviceCacheLookup(service, data) {
+    return (typeof data === &#x27;object&#x27; &amp;&amp; data.id) ? service.cacheLookup(data.id) : undefined;
+  }
+});
 
-                    <div class="module-submodule-description">
-                        Utility for creating promise proxy objects for related resources
-                    </div>
-                </li>
-            </ul>
-    </div>
+export default RelatedProxyUtil;
+
+export function linksPath(relation) {
+  return [&#x27;relationships&#x27;, relation, &#x27;links&#x27;, &#x27;related&#x27;].join(&#x27;.&#x27;);
+}
+
+    </pre>
 </div>
                     </div>
                 </div>

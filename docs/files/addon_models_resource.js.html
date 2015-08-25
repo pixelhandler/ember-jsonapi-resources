@@ -55,6 +55,7 @@
                                 <li><a href="../modules/resource.html">resource</a></li>
                                 <li><a href="../modules/serializer.html">serializer</a></li>
                                 <li><a href="../modules/store.html">store</a></li>
+                                <li><a href="../modules/utils.html">utils</a></li>
                             </ul>
                         </div>
                     </div>
@@ -99,6 +100,9 @@
 
 import Ember from &#x27;ember&#x27;;
 import { pluralize, singularize } from &#x27;ember-inflector&#x27;;
+import attr from &#x27;ember-jsonapi-resources/utils/attr&#x27;;
+import hasOne from &#x27;ember-jsonapi-resources/utils/has-one&#x27;;
+import hasMany from &#x27;ember-jsonapi-resources/utils/has-many&#x27;;
 
 /**
   A Resource class to create JSON API resource objects
@@ -359,7 +363,7 @@ Resource.reopenClass({
     object prior to adding a relationship.
 
     @method create
-    @returns {Resource} instance with protected objects:
+    @return {Resource} instance with protected objects:
       &#x60;attributes&#x60;, &#x60;links&#x60; and &#x60;relationships&#x60;
   */
   create(properties) {
@@ -379,17 +383,7 @@ Resource.reopenClass({
       Ember.Logger.warn(msg + &#x27;#create called, instead you should first use &#x27; + msg + &#x27;.extend({type:&quot;entity&quot;})&#x27;);
     } else {
       if (instance.container) {
-        factory = instance.container.lookupFactory(factory);
-        let proto = factory.proto();
-        factory.eachComputedProperty(function(prop) {
-          if (proto[prop] &amp;&amp; proto[prop]._meta &amp;&amp; typeof proto[prop]._meta === &#x27;object&#x27;) {
-            if (proto[prop]._meta.kind === &#x27;hasOne&#x27;) {
-              setupRelationship.call(instance, prop);
-            } else if (proto[prop]._meta.kind === &#x27;hasMany&#x27;) {
-              setupRelationship.call(instance, prop, Ember.A([]));
-            }
-          }
-        });
+        useComputedPropsMetaToSetupRelationships(factory, instance);
       } else {
         msg += &#x27;#create should only be called from a container lookup (relationships not setup) &#x27;;
         msg += &#x27;use this.container.lookupFactory(&quot;&#x27; + factory + &#x27;&quot;).create() instead.&#x27;;
@@ -402,253 +396,28 @@ Resource.reopenClass({
 
 export default Resource;
 
-/**
-  Helper to setup computed property for resource attributes
+export { attr, hasOne, hasMany };
 
-  @method attr
-*/
-export function attr(type, mutable = true) {
-  const _mutable = mutable;
-  return Ember.computed(&#x27;attributes&#x27;, {
-    get: function (key) {
-      assertDasherizedAttr(key);
-      return this.get(&#x27;attributes.&#x27; + key);
-    },
+let _rp = &#x27;service type id attributes relationships links meta _attributes isNew cacheDuration isCacheExpired&#x27;;
+const ignoredMetaProps = _rp.split(&#x27; &#x27;);
 
-    set: function (key, value) {
-      const lastValue = this.get(&#x27;attributes.&#x27; + key);
-      if (!_mutable) { return lastValue; }
-      if (value === lastValue) { return value; }
-      this.set(&#x27;attributes.&#x27; + key, value);
-      if (!this.get(&#x27;isNew&#x27;)) {
-        this._attributes[key] = this._attributes[key] || {};
-        this._attributes[key].changed = value;
-        this._attributes[key].previous = lastValue;
-        const service = this.get(&#x27;service&#x27;);
-        if (service) {
-          service.trigger(&#x27;attributeChanged&#x27;, this);
+function useComputedPropsMetaToSetupRelationships(factory, instance) {
+  factory = instance.container.lookupFactory(factory);
+  factory.eachComputedProperty(function(prop) {
+    if (ignoredMetaProps.indexOf(prop) &gt; -1) { return; }
+    try {
+      let meta = factory.metaForProperty(prop);
+      if (meta &amp;&amp; meta.kind) {
+        if (meta.kind === &#x27;hasOne&#x27;) {
+          setupRelationship.call(instance, prop);
+        } else if (meta.kind === &#x27;hasMany&#x27;) {
+          setupRelationship.call(instance, prop, Ember.A([]));
         }
       }
-      return this.get(&#x27;attributes.&#x27; + key);
+    } catch (e) {
+      return; // metaForProperty has an assertion that may throw
     }
   });
-}
-
-function assertDasherizedAttr(name) {
-  try {
-    let attrName = Ember.String.dasherize(name);
-    let msg = &quot;Attributes are recommended to use dasherized names, e.g &#x60;&#x27;&quot;+ attrName +&quot;&#x27;: attr()&#x60;&quot;;
-    msg += &quot;, instead of &#x60;&quot;+ name +&quot;: attr()&#x60;&quot;;
-    Ember.assert(msg, isDasherized(name));
-  } catch(e) {
-    console.warn(e.message);
-  }
-}
-
-/**
-  Mixin for creating promise proxy objects for related resources
-
-  @class RelatedProxyUtil
-  @static
-*/
-const RelatedProxyUtil = Ember.Object.extend({
-
-  /**
-    Checks for required &#x60;relationship&#x60; property
-
-    @method init
-  */
-  init: function () {
-    this._super();
-    if (typeof this.get(&#x27;relationship&#x27;) !== &#x27;string&#x27;) {
-      throw new Error(&#x27;RelatedProxyUtil#init expects &#x60;relationship&#x60; property to exist.&#x27;);
-    }
-    return this;
-  },
-
-  /**
-    The name of the relationship
-
-    @property resource
-    @type String
-    @required
-  */
-  relationship: null,
-
-  /**
-    The name of the type of resource
-
-    @property type
-    @type String
-    @required
-  */
-  type: null,
-
-  /**
-    Proxy for the requested relation, resolves w/ content from fulfilled promise
-
-    @method createProxy
-    @param {Resource} resource
-    @param {Ember.ObjectProxy|Ember.ArrayProxy} proxyFactory
-    @return {PromiseProxy} proxy
-  */
-  createProxy: function (resource, proxyFactory) {
-    let relation = this.get(&#x27;relationship&#x27;);
-    let type = this.get(&#x27;type&#x27;);
-    let url = this.proxyUrl(resource, relation);
-    let service = resource.container.lookup(&#x27;service:&#x27; + pluralize(type));
-    let promise = this.promiseFromCache(resource, relation, service);
-    promise = promise || service.findRelated({&#x27;resource&#x27;: relation, &#x27;type&#x27;: type}, url);
-    let proxy = proxyFactory.extend(Ember.PromiseProxyMixin, {
-      &#x27;promise&#x27;: promise, &#x27;type&#x27;: relation
-    });
-    proxy = proxy.create();
-    proxy.then(
-      function (resources) {
-        proxy.set(&#x27;content&#x27;, resources);
-      },
-      function (error) {
-        console.error(error);
-        throw error;
-      }
-    );
-    return proxy;
-  },
-
-  /**
-    Proxy url to fetch for the resource&#x27;s relation
-
-    @method proxyUrl
-    @param {Resource} resource
-    @param {String} relation
-    @return {PromiseProxy} proxy
-  */
-  proxyUrl(resource, relation) {
-    const related = linksPath(relation);
-    const url = resource.get(related);
-    if (typeof url !== &#x27;string&#x27;) {
-      throw new Error(&#x27;RelatedProxyUtil#_proxyUrl expects &#x60;model.&#x27;+ related +&#x27;&#x60; property to exist.&#x27;);
-    }
-    return url;
-  },
-
-  /**
-    Lookup relation from service cache and pomisify result
-
-    @method promiseFromCache
-    @param {Resource} resource
-    @param {String} relation
-    @param {Object} service
-    @return {Promise|null}
-  */
-  promiseFromCache(resource, relation, service) {
-    let data = resource.get(&#x27;relationships.&#x27; + relation + &#x27;.data&#x27;);
-    if (!data) { return; }
-    let content = Ember.A([]), found;
-    if (Array.isArray(data)) {
-      for (let i = 0; i &lt; data.length; i++) {
-        found = this.serviceCacheLookup(service, data[i]);
-        if (found) {
-          content.push(found);
-        }
-      }
-      content = (data.length &amp;&amp; data.length === content.length) ? content : null;
-    } else {
-      content = this.serviceCacheLookup(service, data);
-    }
-    return (content) ? Ember.RSVP.Promise.resolve(content) : null;
-  },
-
-  /**
-    Lookup data in service cache
-
-    @method serviceCacheLookup
-    @param {Object} service
-    @param {Object} data
-    @return {Resource|undefined}
-  */
-  serviceCacheLookup(service, data) {
-    return (typeof data === &#x27;object&#x27; &amp;&amp; data.id) ? service.cacheLookup(data.id) : undefined;
-  }
-});
-
-function linksPath(relation) {
-  return [&#x27;relationships&#x27;, relation, &#x27;links&#x27;, &#x27;related&#x27;].join(&#x27;.&#x27;);
-}
-
-/**
-  Helper to setup a has one relationship to another resource
-
-  @method hasOne
-  @param {String} relation
-    Or, {Object} with properties for &#x60;resource&#x60; and &#x60;type&#x60;
-*/
-export function hasOne(relation) {
-  let type = relation;
-  if (typeof type === &#x27;object&#x27;) {
-    assertResourceAndTypeProps(relation);
-    type = relation.type;
-    relation = relation.resource;
-  }
-  assertDasherizedHasOneRelation(type);
-  let util = RelatedProxyUtil.create({&#x27;relationship&#x27;: relation, &#x27;type&#x27;: type});
-  let path = linksPath(relation);
-  return Ember.computed(path, function () {
-    return util.createProxy(this, Ember.ObjectProxy);
-  }).meta({relation: relation, type: type, kind: &#x27;hasOne&#x27;});
-}
-
-function assertResourceAndTypeProps(relation) {
-  try {
-    let msg = &#x27;Options must include properties: resource, type&#x27;;
-    Ember.assert(msg, relation &amp;&amp; relation.resource &amp;&amp; relation.type);
-  } catch(e) {
-    console.warn(e.message);
-  }
-}
-
-function assertDasherizedHasOneRelation(name) {
-  try {
-    let relationName = Ember.String.dasherize(name);
-    let msg = &quot; are recommended to use dasherized names, e.g &#x60;hasOne(&#x27;&quot;+ relationName +&quot;&#x27;)&#x60;&quot;;
-    msg += &quot;, instead of &#x60;hasOne(&#x27;&quot;+ name +&quot;&#x27;)&#x60;&quot;;
-    Ember.assert(msg, isDasherized(name));
-  } catch(e) {
-    console.warn(e.message);
-  }
-}
-
-/**
-  Helper to setup a has many relationship to another resource
-
-  @method hasMany
-  @param {String} relation
-    Or, {Object} with properties for &#x60;resource&#x60; and &#x60;type&#x60;
-*/
-export function hasMany(relation) {
-  let type = relation;
-  if (typeof type === &#x27;object&#x27;) {
-    assertResourceAndTypeProps(relation);
-    type = relation.type;
-    relation = relation.resource;
-  }
-  assertDasherizedHasManyRelation(relation);
-  let util = RelatedProxyUtil.create({&#x27;relationship&#x27;: relation, &#x27;type&#x27;: type});
-  let path = linksPath(relation);
-  return Ember.computed(path, function () {
-    return util.createProxy(this, Ember.ArrayProxy);
-  }).meta({relation: relation, type: type, kind: &#x27;hasMany&#x27;});
-}
-
-function assertDasherizedHasManyRelation(name) {
-  try {
-    let relationName = Ember.String.dasherize(name);
-    let msg = &quot; are recommended to use dasherized names, e.g &#x60;hasMany(&#x27;&quot;+ relationName +&quot;&#x27;)&#x60;&quot;;
-    msg += &quot;, instead of &#x60;hasMany(&#x27;&quot;+ name +&quot;&#x27;)&#x60;&quot;;
-    Ember.assert(msg, isDasherized(name));
-  } catch(e) {
-    console.warn(e.message);
-  }
 }
 
 function setupRelationship(relation, data = null) {
@@ -661,10 +430,6 @@ function setupRelationship(relation, data = null) {
   if (!this.relationships[relation].data) {
     this.relationships[relation].data = data;
   }
-}
-
-function isDasherized(name) {
-  return (Ember.String.dasherize(name) === name);
 }
 
     </pre>
