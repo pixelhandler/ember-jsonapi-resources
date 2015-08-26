@@ -3,7 +3,7 @@ import Model from '../models/<%= entity %>';
 import Adapter from '../adapters/<%= entity %>';
 import Serializer from '../serializers/<%= entity %>';
 
-export function initialize(container, application) {
+export function initialize(registry, application) {
   application.register('model:<%= resource %>', Model, { instantiate: false, singleton: false });
   application.register('service:<%= resource %>', Service);
   application.register('adapter:<%= resource %>', Adapter);

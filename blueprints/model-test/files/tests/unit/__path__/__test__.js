@@ -6,7 +6,7 @@ moduleFor('model:<%= entity %>', 'Unit | Model | <%= entity %>', {
     const opts = { instantiate: false, singleton: false };
     Resource.prototype.container = this.container;
     // Use a non-standard name, i.e. pluralized instead of singular
-    this.container.register('model:<%= resource %>', Resource, opts);
+    this.registry.register('model:<%= resource %>', Resource, opts);
   },
   afterEach() {
     delete Resource.prototype.container;

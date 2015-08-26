@@ -5,7 +5,7 @@ moduleFor('serializer:<%= dasherizedModuleName %>', '<%= friendlyTestDescription
   beforeEach() {
     Resource.prototype.container = this.container;
     let opts = { instantiate: false, singleton: false };
-    this.container.register('model:<%= resource %>', Resource, opts);
+    this.registry.register('model:<%= resource %>', Resource, opts);
   },
   afterEach() {
     delete Resource.prototype.container;
