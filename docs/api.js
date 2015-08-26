@@ -8,7 +8,8 @@ YUI.add("yuidoc-meta", function(Y) {
         "Resource",
         "ServiceCacheMixin",
         "StoreService",
-        "TransformDateAttribute"
+        "TransformDateAttribute",
+        "TransformsMixin"
     ],
     "modules": [
         "adapter",
@@ -49,7 +50,7 @@ YUI.add("yuidoc-meta", function(Y) {
         {
             "displayName": "serializer",
             "name": "serializer",
-            "description": "Serializer/Deserializer for a JSON API resource object, used by adapter"
+            "description": "Serializer/Deserializer for a JSON API resource object, used by adapter.\n\nWhen extending use a mixin or define transform methods to serialize and/or\ndeserializer attributes based on the name or the type of attribute.\n\nThe methods use a naming convention:\n\n  - '[de]serialize' + 'AttrName' or 'TypeName' + 'Attribute'\n  - E.g. use `serializeNameAttribute` and `deserializeNameAttribute` in\n    a generated serializer for use with `name: attr()`\n  - Or, redefine `serializeDateAttribute` and `deserializeDateAttribute`\n    to use your own data transformation with `attr('date')` the default,\n    Date type [de]serialize methods transfrom to/from ISO Format.\n  - Transform methods based on the name of the attribute will be called\n    instead of any transform methods based on the type of the attribute."
         },
         {
             "displayName": "store",
@@ -58,7 +59,8 @@ YUI.add("yuidoc-meta", function(Y) {
         },
         {
             "displayName": "transforms",
-            "name": "transforms"
+            "name": "transforms",
+            "description": "A Mixin class for methods to transform resource attributes, includes date\nattribute methods to serialize and deserialize the date(time) to/from\nISO Format for use with `attr('date')`\n\nAny valid attribute type (string, boolean, number, object, array, date) can\nbe added to your app, just generate a transforms mixin and define other\ntypes if needed, and use the type when defining a resource attribute,\ne.g. attr('array')"
         },
         {
             "displayName": "utils",

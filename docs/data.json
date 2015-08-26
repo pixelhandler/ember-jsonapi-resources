@@ -53,7 +53,9 @@
             "modules": {
                 "transforms": 1
             },
-            "classes": {},
+            "classes": {
+                "TransformsMixin": 1
+            },
             "fors": {},
             "namespaces": {}
         },
@@ -154,6 +156,7 @@
                 "ApplicationAdapter": 1,
                 "AuthorizationMixin": 1,
                 "ServiceCacheMixin": 1,
+                "TransformsMixin": 1,
                 "Resource": 1,
                 "ApplicationSerializer": 1,
                 "StoreService": 1,
@@ -228,14 +231,17 @@
         "transforms": {
             "name": "transforms",
             "submodules": {},
-            "classes": {},
+            "classes": {
+                "TransformsMixin": 1
+            },
             "fors": {},
             "is_submodule": 1,
             "namespaces": {},
             "module": "ember-jsonapi-resources",
             "namespace": "",
             "file": "addon/mixins/transforms.js",
-            "line": 1
+            "line": 9,
+            "description": "A Mixin class for methods to transform resource attributes, includes date\nattribute methods to serialize and deserialize the date(time) to/from\nISO Format for use with `attr('date')`\n\nAny valid attribute type (string, boolean, number, object, array, date) can\nbe added to your app, just generate a transforms mixin and define other\ntypes if needed, and use the type when defining a resource attribute,\ne.g. attr('array')"
         },
         "resource": {
             "name": "resource",
@@ -265,7 +271,7 @@
             "namespace": "",
             "file": "addon/serializers/application.js",
             "line": 9,
-            "description": "Serializer/Deserializer for a JSON API resource object, used by adapter"
+            "description": "Serializer/Deserializer for a JSON API resource object, used by adapter.\n\nWhen extending use a mixin or define transform methods to serialize and/or\ndeserializer attributes based on the name or the type of attribute.\n\nThe methods use a naming convention:\n\n  - '[de]serialize' + 'AttrName' or 'TypeName' + 'Attribute'\n  - E.g. use `serializeNameAttribute` and `deserializeNameAttribute` in\n    a generated serializer for use with `name: attr()`\n  - Or, redefine `serializeDateAttribute` and `deserializeDateAttribute`\n    to use your own data transformation with `attr('date')` the default,\n    Date type [de]serialize methods transfrom to/from ISO Format.\n  - Transform methods based on the name of the attribute will be called\n    instead of any transform methods based on the type of the attribute."
         },
         "utils": {
             "name": "utils",
@@ -340,6 +346,21 @@
                 "Ember.Inflector"
             ]
         },
+        "TransformsMixin": {
+            "name": "TransformsMixin",
+            "shortname": "TransformsMixin",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "ember-jsonapi-resources",
+            "submodule": "transforms",
+            "namespace": "",
+            "file": "addon/mixins/transforms.js",
+            "line": 9,
+            "description": "A Mixin class for methods to transform resource attributes, includes date\nattribute methods to serialize and deserialize the date(time) to/from\nISO Format for use with `attr('date')`\n\nAny valid attribute type (string, boolean, number, object, array, date) can\nbe added to your app, just generate a transforms mixin and define other\ntypes if needed, and use the type when defining a resource attribute,\ne.g. attr('array')"
+        },
         "Resource": {
             "name": "Resource",
             "shortname": "Resource",
@@ -372,7 +393,7 @@
             "namespace": "",
             "file": "addon/serializers/application.js",
             "line": 9,
-            "description": "Serializer/Deserializer for a JSON API resource object, used by adapter",
+            "description": "Serializer/Deserializer for a JSON API resource object, used by adapter.\n\nWhen extending use a mixin or define transform methods to serialize and/or\ndeserializer attributes based on the name or the type of attribute.\n\nThe methods use a naming convention:\n\n  - '[de]serialize' + 'AttrName' or 'TypeName' + 'Attribute'\n  - E.g. use `serializeNameAttribute` and `deserializeNameAttribute` in\n    a generated serializer for use with `name: attr()`\n  - Or, redefine `serializeDateAttribute` and `deserializeDateAttribute`\n    to use your own data transformation with `attr('date')` the default,\n    Date type [de]serialize methods transfrom to/from ISO Format.\n  - Transform methods based on the name of the attribute will be called\n    instead of any transform methods based on the type of the attribute.",
             "static": 1
         },
         "StoreService": {
@@ -992,7 +1013,7 @@
         },
         {
             "file": "addon/mixins/transforms.js",
-            "line": 10,
+            "line": 22,
             "itemtype": "method",
             "name": "serializeDateAttribute",
             "params": [
@@ -1006,13 +1027,13 @@
                 "description": "date value as ISO String for JSON payload, or null",
                 "type": "String|Null"
             },
-            "class": "Resource",
+            "class": "TransformsMixin",
             "module": "ember-jsonapi-resources",
             "submodule": "transforms"
         },
         {
             "file": "addon/mixins/transforms.js",
-            "line": 19,
+            "line": 31,
             "itemtype": "method",
             "name": "deserializeDateAttribute",
             "params": [
@@ -1026,7 +1047,7 @@
                 "description": "date value from JSON payload, or null",
                 "type": "Date|Null"
             },
-            "class": "Resource",
+            "class": "TransformsMixin",
             "module": "ember-jsonapi-resources",
             "submodule": "transforms"
         },
@@ -1285,7 +1306,7 @@
         },
         {
             "file": "addon/serializers/application.js",
-            "line": 17,
+            "line": 31,
             "description": "Serialize resource for the request payload",
             "itemtype": "method",
             "name": "serialize",
@@ -1306,7 +1327,7 @@
         },
         {
             "file": "addon/serializers/application.js",
-            "line": 30,
+            "line": 44,
             "description": "Serialize a resource object",
             "itemtype": "method",
             "name": "serializeResource",
@@ -1327,7 +1348,7 @@
         },
         {
             "file": "addon/serializers/application.js",
-            "line": 51,
+            "line": 65,
             "description": "Serialize a resource object, but only the changed attributes",
             "itemtype": "method",
             "name": "serializeChanged",
@@ -1348,7 +1369,7 @@
         },
         {
             "file": "addon/serializers/application.js",
-            "line": 72,
+            "line": 86,
             "description": "Deserialize response objects from the request payload",
             "itemtype": "method",
             "name": "deserialize",
@@ -1369,7 +1390,7 @@
         },
         {
             "file": "addon/serializers/application.js",
-            "line": 89,
+            "line": 103,
             "description": "Deserialize response objects in the payload data",
             "itemtype": "method",
             "name": "deserializeResources",
@@ -1390,7 +1411,7 @@
         },
         {
             "file": "addon/serializers/application.js",
-            "line": 103,
+            "line": 117,
             "description": "Deserialize response an object in the payload data",
             "itemtype": "method",
             "name": "deserializeResource",
@@ -1411,7 +1432,7 @@
         },
         {
             "file": "addon/serializers/application.js",
-            "line": 115,
+            "line": 129,
             "description": "Deserialize optional included array of payload and add to service cache",
             "itemtype": "method",
             "name": "deserializeIncluded",
@@ -1433,7 +1454,7 @@
         },
         {
             "file": "addon/serializers/application.js",
-            "line": 134,
+            "line": 148,
             "description": "Transform attributes, serialize or deserialize by specified method or\nper type of attribute, e.g. date.\n\nYour serializer may define a specific method for a type of attribute,\ni.e. `serializeDateAttribute` and/or `deserializeDateAttribute`. Likewise,\nyour serializer may define a specific method for the name of an attribute,\nlike `serializeUpdatedAtAttribute` and `deserializeUpdatedAtAttribute`.\n\nDuring transformation a method based on the name of the attribute takes\npriority over a transform method based on the type of attribute, e.g. date.",
             "itemtype": "method",
             "name": "transformAttributes",
@@ -1461,7 +1482,7 @@
         },
         {
             "file": "addon/serializers/application.js",
-            "line": 175,
+            "line": 189,
             "description": "Create a Resource from a JSON API Resource Object\n\nSee <http://jsonapi.org/format/#document-resource-objects>",
             "access": "private",
             "tagname": "",
@@ -1483,7 +1504,7 @@
         },
         {
             "file": "addon/serializers/application.js",
-            "line": 202,
+            "line": 216,
             "access": "private",
             "tagname": "",
             "itemtype": "method",
@@ -1928,7 +1949,7 @@
             "file": "addon/utils/transforms.js",
             "line": 29,
             "itemtype": "method",
-            "name": "serialize",
+            "name": "deserialize",
             "params": [
                 {
                     "name": "date",

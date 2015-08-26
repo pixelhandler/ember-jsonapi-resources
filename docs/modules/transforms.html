@@ -46,6 +46,7 @@
                                 <li><a href="../classes/ServiceCacheMixin.html">ServiceCacheMixin</a></li>
                                 <li><a href="../classes/StoreService.html">StoreService</a></li>
                                 <li><a href="../classes/TransformDateAttribute.html">TransformDateAttribute</a></li>
+                                <li><a href="../classes/TransformsMixin.html">TransformsMixin</a></li>
                             </ul>
                 
                             <ul id="api-modules" class="apis modules">
@@ -96,19 +97,35 @@
 
 
         <div class="foundat">
-            Defined in: <a href="../files/addon_mixins_transforms.js.html#l1"><code>addon&#x2F;mixins&#x2F;transforms.js:1</code></a>
+            Defined in: <a href="../files/addon_mixins_transforms.js.html#l9"><code>addon&#x2F;mixins&#x2F;transforms.js:9</code></a>
         </div>
 
 </div>
 
 
 <div class="box intro">
-    
+    <p>A Mixin class for methods to transform resource attributes, includes date
+attribute methods to serialize and deserialize the date(time) to/from
+ISO Format for use with <code>attr('date')</code></p>
+<p>Any valid attribute type (string, boolean, number, object, array, date) can
+be added to your app, just generate a transforms mixin and define other
+types if needed, and use the type when defining a resource attribute,
+e.g. attr('array')</p>
+
 </div>
 
 
 <div class="yui3-g">
     <div class="yui3-u-1-2">
+            <p>This module provides the following classes:</p>
+
+            <ul class="module-classes">
+                <li class="module-class">
+                    <a href="../classes/TransformsMixin.html">
+                        TransformsMixin
+                    </a>
+                </li>
+            </ul>
     </div>
 
     <div class="yui3-u-1-2">

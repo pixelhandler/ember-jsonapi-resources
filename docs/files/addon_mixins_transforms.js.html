@@ -46,6 +46,7 @@
                                 <li><a href="../classes/ServiceCacheMixin.html">ServiceCacheMixin</a></li>
                                 <li><a href="../classes/StoreService.html">StoreService</a></li>
                                 <li><a href="../classes/TransformDateAttribute.html">TransformDateAttribute</a></li>
+                                <li><a href="../classes/TransformsMixin.html">TransformsMixin</a></li>
                             </ul>
                 
                             <ul id="api-modules" class="apis modules">
@@ -103,6 +104,18 @@
 import Ember from &#x27;ember&#x27;;
 import { dateTransform } from &#x27;ember-jsonapi-resources/utils/transforms&#x27;;
 
+/**
+  A Mixin class for methods to transform resource attributes, includes date
+  attribute methods to serialize and deserialize the date(time) to/from
+  ISO Format for use with &#x60;attr(&#x27;date&#x27;)&#x60;
+
+  Any valid attribute type (string, boolean, number, object, array, date) can
+  be added to your app, just generate a transforms mixin and define other
+  types if needed, and use the type when defining a resource attribute,
+  e.g. attr(&#x27;array&#x27;)
+
+  @class TransformsMixin
+*/
 export default Ember.Mixin.create({
   /**
     @method serializeDateAttribute

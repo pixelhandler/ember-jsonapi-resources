@@ -46,6 +46,7 @@
                                 <li><a href="../classes/ServiceCacheMixin.html">ServiceCacheMixin</a></li>
                                 <li><a href="../classes/StoreService.html">StoreService</a></li>
                                 <li><a href="../classes/TransformDateAttribute.html">TransformDateAttribute</a></li>
+                                <li><a href="../classes/TransformsMixin.html">TransformsMixin</a></li>
                             </ul>
                 
                             <ul id="api-modules" class="apis modules">
@@ -104,7 +105,21 @@ import Ember from &#x27;ember&#x27;;
 import { pluralize } from &#x27;ember-inflector&#x27;;
 
 /**
-  Serializer/Deserializer for a JSON API resource object, used by adapter
+  Serializer/Deserializer for a JSON API resource object, used by adapter.
+
+  When extending use a mixin or define transform methods to serialize and/or
+  deserializer attributes based on the name or the type of attribute.
+
+  The methods use a naming convention:
+
+    - &#x27;[de]serialize&#x27; + &#x27;AttrName&#x27; or &#x27;TypeName&#x27; + &#x27;Attribute&#x27;
+    - E.g. use &#x60;serializeNameAttribute&#x60; and &#x60;deserializeNameAttribute&#x60; in
+      a generated serializer for use with &#x60;name: attr()&#x60;
+    - Or, redefine &#x60;serializeDateAttribute&#x60; and &#x60;deserializeDateAttribute&#x60;
+      to use your own data transformation with &#x60;attr(&#x27;date&#x27;)&#x60; the default,
+      Date type [de]serialize methods transfrom to/from ISO Format.
+    - Transform methods based on the name of the attribute will be called
+      instead of any transform methods based on the type of the attribute.
 
   @class ApplicationSerializer
   @static

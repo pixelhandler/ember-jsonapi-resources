@@ -46,6 +46,7 @@
                                 <li><a href="../classes/ServiceCacheMixin.html">ServiceCacheMixin</a></li>
                                 <li><a href="../classes/StoreService.html">StoreService</a></li>
                                 <li><a href="../classes/TransformDateAttribute.html">TransformDateAttribute</a></li>
+                                <li><a href="../classes/TransformsMixin.html">TransformsMixin</a></li>
                             </ul>
                 
                             <ul id="api-modules" class="apis modules">
@@ -152,6 +153,11 @@
                         TransformDateAttribute
                     </a>
                 </li>
+                <li class="module-class">
+                    <a href="../classes/TransformsMixin.html">
+                        TransformsMixin
+                    </a>
+                </li>
             </ul>
     </div>
 
@@ -205,7 +211,21 @@ See <http://jsonapi.org/format/#document-resource-objects>
                     </a>
 
                     <div class="module-submodule-description">
-                        Serializer/Deserializer for a JSON API resource object, used by adapter
+                        Serializer/Deserializer for a JSON API resource object, used by adapter.
+
+When extending use a mixin or define transform methods to serialize and/or
+deserializer attributes based on the name or the type of attribute.
+
+The methods use a naming convention:
+
+  - '[de]serialize' + 'AttrName' or 'TypeName' + 'Attribute'
+  - E.g. use <code>serializeNameAttribute</code> and <code>deserializeNameAttribute</code> in
+    a generated serializer for use with <code>name: attr()</code>
+  - Or, redefine <code>serializeDateAttribute</code> and <code>deserializeDateAttribute</code>
+    to use your own data transformation with <code>attr(&#x27;date&#x27;)</code> the default,
+    Date type [de]serialize methods transfrom to/from ISO Format.
+  - Transform methods based on the name of the attribute will be called
+    instead of any transform methods based on the type of the attribute.
                     </div>
                 </li>
                 <li class="module-submodule">
@@ -223,7 +243,14 @@ See <http://jsonapi.org/format/#document-resource-objects>
                     </a>
 
                     <div class="module-submodule-description">
-                        
+                        A Mixin class for methods to transform resource attributes, includes date
+attribute methods to serialize and deserialize the date(time) to/from
+ISO Format for use with <code>attr(&#x27;date&#x27;)</code>
+
+Any valid attribute type (string, boolean, number, object, array, date) can
+be added to your app, just generate a transforms mixin and define other
+types if needed, and use the type when defining a resource attribute,
+e.g. attr('array')
                     </div>
                 </li>
                 <li class="module-submodule">

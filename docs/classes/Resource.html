@@ -46,6 +46,7 @@
                                 <li><a href="../classes/ServiceCacheMixin.html">ServiceCacheMixin</a></li>
                                 <li><a href="../classes/StoreService.html">StoreService</a></li>
                                 <li><a href="../classes/TransformDateAttribute.html">TransformDateAttribute</a></li>
+                                <li><a href="../classes/TransformsMixin.html">TransformsMixin</a></li>
                             </ul>
                 
                             <ul id="api-modules" class="apis modules">
@@ -141,10 +142,6 @@
 
                             </li>
                             <li class="index-item method">
-                                <a href="#method_deserializeDateAttribute">deserializeDateAttribute</a>
-
-                            </li>
-                            <li class="index-item method">
                                 <a href="#method_didUpdateResource">didUpdateResource</a>
 
                             </li>
@@ -158,10 +155,6 @@
                             </li>
                             <li class="index-item method">
                                 <a href="#method_removeRelationship">removeRelationship</a>
-
-                            </li>
-                            <li class="index-item method">
-                                <a href="#method_serializeDateAttribute">serializeDateAttribute</a>
 
                             </li>
                             <li class="index-item method">
@@ -402,72 +395,6 @@ object prior to adding a relationship.</p>
 
 
 </div>
-<div id="method_deserializeDateAttribute" class="method item">
-    <h3 class="name"><code>deserializeDateAttribute</code></h3>
-
-        <div class="args">
-            <span class="paren">(</span><ul class="args-list inline commas">
-                <li class="arg">
-                        <code>date</code>
-                </li>
-            </ul><span class="paren">)</span>
-        </div>
-
-        <span class="returns-inline">
-            <span class="type">Date | Null</span>
-        </span>
-
-
-
-
-
-
-
-    <div class="meta">
-                    <p>Provided by the <a href="../modules/transforms.html">transforms</a> module.</p>
-                <p>
-                Defined in
-        <a href="../files/addon_mixins_transforms.js.html#l19"><code>addon&#x2F;mixins&#x2F;transforms.js:19</code></a>
-        </p>
-
-
-
-    </div>
-
-    <div class="description">
-        
-    </div>
-
-        <div class="params">
-            <h4>Parameters:</h4>
-
-            <ul class="params-list">
-                <li class="param">
-                        <code class="param-name">date</code>
-                        <span class="type">String</span>
-
-
-                    <div class="param-description">
-                        <p>usually in ISO format, must be a valid argument for Date</p>
-
-                    </div>
-
-                </li>
-            </ul>
-        </div>
-
-        <div class="returns">
-            <h4>Returns:</h4>
-
-            <div class="returns-description">
-                        <span class="type">Date | Null</span>:
-                    <p>date value from JSON payload, or null</p>
-
-            </div>
-        </div>
-
-
-</div>
 <div id="method_didUpdateResource" class="method item">
     <h3 class="name"><code>didUpdateResource</code></h3>
 
@@ -661,71 +588,6 @@ object prior to adding a relationship.</p>
             </ul>
         </div>
 
-
-
-</div>
-<div id="method_serializeDateAttribute" class="method item">
-    <h3 class="name"><code>serializeDateAttribute</code></h3>
-
-        <div class="args">
-            <span class="paren">(</span><ul class="args-list inline commas">
-                <li class="arg">
-                        <code>date</code>
-                </li>
-            </ul><span class="paren">)</span>
-        </div>
-
-        <span class="returns-inline">
-            <span class="type">String | Null</span>
-        </span>
-
-
-
-
-
-
-
-    <div class="meta">
-                    <p>Provided by the <a href="../modules/transforms.html">transforms</a> module.</p>
-                <p>
-                Defined in
-        <a href="../files/addon_mixins_transforms.js.html#l10"><code>addon&#x2F;mixins&#x2F;transforms.js:10</code></a>
-        </p>
-
-
-
-    </div>
-
-    <div class="description">
-        
-    </div>
-
-        <div class="params">
-            <h4>Parameters:</h4>
-
-            <ul class="params-list">
-                <li class="param">
-                        <code class="param-name">date</code>
-                        <span class="type">Date | String</span>
-
-
-                    <div class="param-description">
-                         
-                    </div>
-
-                </li>
-            </ul>
-        </div>
-
-        <div class="returns">
-            <h4>Returns:</h4>
-
-            <div class="returns-description">
-                        <span class="type">String | Null</span>:
-                    <p>date value as ISO String for JSON payload, or null</p>
-
-            </div>
-        </div>
 
 
 </div>

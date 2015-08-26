@@ -46,6 +46,7 @@
                                 <li><a href="../classes/ServiceCacheMixin.html">ServiceCacheMixin</a></li>
                                 <li><a href="../classes/StoreService.html">StoreService</a></li>
                                 <li><a href="../classes/TransformDateAttribute.html">TransformDateAttribute</a></li>
+                                <li><a href="../classes/TransformsMixin.html">TransformsMixin</a></li>
                             </ul>
                 
                             <ul id="api-modules" class="apis modules">
@@ -103,7 +104,20 @@
 
 
 <div class="box intro">
-    <p>Serializer/Deserializer for a JSON API resource object, used by adapter</p>
+    <p>Serializer/Deserializer for a JSON API resource object, used by adapter.</p>
+<p>When extending use a mixin or define transform methods to serialize and/or
+deserializer attributes based on the name or the type of attribute.</p>
+<p>The methods use a naming convention:</p>
+<ul>
+<li>'[de]serialize' + 'AttrName' or 'TypeName' + 'Attribute'</li>
+<li>E.g. use <code>serializeNameAttribute</code> and <code>deserializeNameAttribute</code> in
+a generated serializer for use with <code>name: attr()</code></li>
+<li>Or, redefine <code>serializeDateAttribute</code> and <code>deserializeDateAttribute</code>
+to use your own data transformation with <code>attr('date')</code> the default,
+Date type [de]serialize methods transfrom to/from ISO Format.</li>
+<li>Transform methods based on the name of the attribute will be called
+instead of any transform methods based on the type of the attribute.</li>
+</ul>
 
 </div>
 

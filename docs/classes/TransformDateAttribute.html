@@ -46,6 +46,7 @@
                                 <li><a href="../classes/ServiceCacheMixin.html">ServiceCacheMixin</a></li>
                                 <li><a href="../classes/StoreService.html">StoreService</a></li>
                                 <li><a href="../classes/TransformDateAttribute.html">TransformDateAttribute</a></li>
+                                <li><a href="../classes/TransformsMixin.html">TransformsMixin</a></li>
                             </ul>
                 
                             <ul id="api-modules" class="apis modules">
@@ -126,7 +127,7 @@
 
                     <ul class="index-list methods">
                             <li class="index-item method">
-                                <a href="#method_serialize">serialize</a>
+                                <a href="#method_deserialize">deserialize</a>
 
                             </li>
                             <li class="index-item method">
@@ -143,6 +144,71 @@
             <div id="methods" class="api-class-tabpanel">
                 <h2 class="off-left">Methods</h2>
 
+<div id="method_deserialize" class="method item">
+    <h3 class="name"><code>deserialize</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>date</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">Date | Null</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/addon_utils_transforms.js.html#l29"><code>addon&#x2F;utils&#x2F;transforms.js:29</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">date</code>
+                        <span class="type">String</span>
+
+
+                    <div class="param-description">
+                        <p>usually in ISO format, must be a valid argument for Date</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Date | Null</span>:
+                    <p>date value from JSON payload, or null</p>
+
+            </div>
+        </div>
+
+
+</div>
 <div id="method_serialize" class="method item">
     <h3 class="name"><code>serialize</code></h3>
 
@@ -201,71 +267,6 @@
             <div class="returns-description">
                         <span class="type">String | Null</span>:
                     <p>date value as ISO String for JSON payload, or null</p>
-
-            </div>
-        </div>
-
-
-</div>
-<div id="method_serialize" class="method item">
-    <h3 class="name"><code>serialize</code></h3>
-
-        <div class="args">
-            <span class="paren">(</span><ul class="args-list inline commas">
-                <li class="arg">
-                        <code>date</code>
-                </li>
-            </ul><span class="paren">)</span>
-        </div>
-
-        <span class="returns-inline">
-            <span class="type">Date | Null</span>
-        </span>
-
-
-
-
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/addon_utils_transforms.js.html#l29"><code>addon&#x2F;utils&#x2F;transforms.js:29</code></a>
-        </p>
-
-
-
-    </div>
-
-    <div class="description">
-        
-    </div>
-
-        <div class="params">
-            <h4>Parameters:</h4>
-
-            <ul class="params-list">
-                <li class="param">
-                        <code class="param-name">date</code>
-                        <span class="type">String</span>
-
-
-                    <div class="param-description">
-                        <p>usually in ISO format, must be a valid argument for Date</p>
-
-                    </div>
-
-                </li>
-            </ul>
-        </div>
-
-        <div class="returns">
-            <h4>Returns:</h4>
-
-            <div class="returns-description">
-                        <span class="type">Date | Null</span>:
-                    <p>date value from JSON payload, or null</p>
 
             </div>
         </div>
