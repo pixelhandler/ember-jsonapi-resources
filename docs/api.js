@@ -7,7 +7,8 @@ YUI.add("yuidoc-meta", function(Y) {
         "RelatedProxyUtil",
         "Resource",
         "ServiceCacheMixin",
-        "StoreService"
+        "StoreService",
+        "TransformDateAttribute"
     ],
     "modules": [
         "adapter",
@@ -17,6 +18,7 @@ YUI.add("yuidoc-meta", function(Y) {
         "resource",
         "serializer",
         "store",
+        "transforms",
         "utils"
     ],
     "allModules": [
@@ -53,6 +55,10 @@ YUI.add("yuidoc-meta", function(Y) {
             "displayName": "store",
             "name": "store",
             "description": "Service for a JSON API endpoint a facade to your resource adapter"
+        },
+        {
+            "displayName": "transforms",
+            "name": "transforms"
         },
         {
             "displayName": "utils",

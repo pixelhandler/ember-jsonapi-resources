@@ -45,6 +45,7 @@
                                 <li><a href="../classes/Resource.html">Resource</a></li>
                                 <li><a href="../classes/ServiceCacheMixin.html">ServiceCacheMixin</a></li>
                                 <li><a href="../classes/StoreService.html">StoreService</a></li>
+                                <li><a href="../classes/TransformDateAttribute.html">TransformDateAttribute</a></li>
                             </ul>
                 
                             <ul id="api-modules" class="apis modules">
@@ -55,6 +56,7 @@
                                 <li><a href="../modules/resource.html">resource</a></li>
                                 <li><a href="../modules/serializer.html">serializer</a></li>
                                 <li><a href="../modules/store.html">store</a></li>
+                                <li><a href="../modules/transforms.html">transforms</a></li>
                                 <li><a href="../modules/utils.html">utils</a></li>
                             </ul>
                         </div>
@@ -128,6 +130,10 @@
                                 <a href="#method__createResourceInstance">_createResourceInstance</a>
 
                             </li>
+                            <li class="index-item method private">
+                                <a href="#method__lookupFactory">_lookupFactory</a>
+
+                            </li>
                             <li class="index-item method">
                                 <a href="#method_deserialize">deserialize</a>
 
@@ -154,6 +160,10 @@
                             </li>
                             <li class="index-item method">
                                 <a href="#method_serializeResource">serializeResource</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_transformAttributes">transformAttributes</a>
 
                             </li>
                     </ul>
@@ -191,7 +201,7 @@
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_serializers_application.js.html#l130"><code>addon&#x2F;serializers&#x2F;application.js:130</code></a>
+        <a href="../files/addon_serializers_application.js.html#l175"><code>addon&#x2F;serializers&#x2F;application.js:175</code></a>
         </p>
 
 
@@ -232,6 +242,71 @@
 
 
 </div>
+<div id="method__lookupFactory" class="method item private">
+    <h3 class="name"><code>_lookupFactory</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>type</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">Function</span>
+        </span>
+
+
+        <span class="flag private">private</span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/addon_serializers_application.js.html#l202"><code>addon&#x2F;serializers&#x2F;application.js:202</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">type</code>
+                        <span class="type">String</span>
+
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Function</span>:
+                    <p>factory for creating resource instances</p>
+
+            </div>
+        </div>
+
+
+</div>
 <div id="method_deserialize" class="method item">
     <h3 class="name"><code>deserialize</code></h3>
 
@@ -256,7 +331,7 @@
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_serializers_application.js.html#l69"><code>addon&#x2F;serializers&#x2F;application.js:69</code></a>
+        <a href="../files/addon_serializers_application.js.html#l72"><code>addon&#x2F;serializers&#x2F;application.js:72</code></a>
         </p>
 
 
@@ -322,7 +397,7 @@
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_serializers_application.js.html#l111"><code>addon&#x2F;serializers&#x2F;application.js:111</code></a>
+        <a href="../files/addon_serializers_application.js.html#l115"><code>addon&#x2F;serializers&#x2F;application.js:115</code></a>
         </p>
 
 
@@ -389,7 +464,7 @@
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_serializers_application.js.html#l100"><code>addon&#x2F;serializers&#x2F;application.js:100</code></a>
+        <a href="../files/addon_serializers_application.js.html#l103"><code>addon&#x2F;serializers&#x2F;application.js:103</code></a>
         </p>
 
 
@@ -452,7 +527,7 @@
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_serializers_application.js.html#l86"><code>addon&#x2F;serializers&#x2F;application.js:86</code></a>
+        <a href="../files/addon_serializers_application.js.html#l89"><code>addon&#x2F;serializers&#x2F;application.js:89</code></a>
         </p>
 
 
@@ -583,7 +658,7 @@
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_serializers_application.js.html#l50"><code>addon&#x2F;serializers&#x2F;application.js:50</code></a>
+        <a href="../files/addon_serializers_application.js.html#l51"><code>addon&#x2F;serializers&#x2F;application.js:51</code></a>
         </p>
 
 
@@ -682,6 +757,95 @@
 
             <div class="returns-description">
                         <span class="type">Object</span>:
+            </div>
+        </div>
+
+
+</div>
+<div id="method_transformAttributes" class="method item">
+    <h3 class="name"><code>transformAttributes</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>json</code>
+                </li>
+                <li class="arg">
+                        <code class="optional">[operation=&#x27;deserialize&#x27;]</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">Object</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/addon_serializers_application.js.html#l134"><code>addon&#x2F;serializers&#x2F;application.js:134</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Transform attributes, serialize or deserialize by specified method or
+per type of attribute, e.g. date.</p>
+<p>Your serializer may define a specific method for a type of attribute,
+i.e. <code>serializeDateAttribute</code> and/or <code>deserializeDateAttribute</code>. Likewise,
+your serializer may define a specific method for the name of an attribute,
+like <code>serializeUpdatedAtAttribute</code> and <code>deserializeUpdatedAtAttribute</code>.</p>
+<p>During transformation a method based on the name of the attribute takes
+priority over a transform method based on the type of attribute, e.g. date.</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">json</code>
+                        <span class="type">Object</span>
+
+
+                    <div class="param-description">
+                        <p>with attributes hash of resource properties to be transformed</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name optional">[operation=&#x27;deserialize&#x27;]</code>
+                        <span class="type">String</span>
+                        <span class="flag optional" title="This parameter is optional.">optional</span>
+
+
+                    <div class="param-description">
+                        <p>perform a serialize or deserialize
+operation, the default operation is to deserialize when not passed</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Object</span>:
+                    <p>json</p>
+
             </div>
         </div>
 

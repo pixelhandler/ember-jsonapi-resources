@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>addon/utils/attr.js - Ember JSON API Resources</title>
+    <title>TransformDateAttribute - Ember JSON API Resources</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -91,127 +91,192 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-<h1 class="file-heading">File: addon/utils/attr.js</h1>
+<h1>TransformDateAttribute Class</h1>
+<div class="box meta">
 
-<div class="file">
-    <pre class="code prettyprint linenums">
-/**
-  @module ember-jsonapi-resources
-  @submodule utils
-**/
 
-import Ember from &#x27;ember&#x27;;
-import { isBlank, isDasherized, isType } from &#x27;ember-jsonapi-resources/utils/is&#x27;;
+        <div class="foundat">
+            Defined in: <a href="../files/addon_utils_transforms.js.html#l8"><code>addon&#x2F;utils&#x2F;transforms.js:8</code></a>
+        </div>
 
-/**
-  Utility helper to setup a computed property for a resource attribute, imported and
-  exported with the resource submodule.
+            Module: <a href="../modules/utils.html">utils</a><br>
+            Parent Module: <a href="../modules/ember-jsonapi-resources.html">ember-jsonapi-resources</a>
 
-  An &#x60;attr&#x60; of the resource is a computed property to the actual attribute in an
-  &#x60;attributes&#x60; hash on the &#x60;resource&#x60; (model) instance. Using &#x60;attr()&#x60; supports
-  any type, and an optional &#x60;type&#x60; (String) argument can be used to enforce
-  setting and getting with a specific type. &#x60;&#x27;string&#x27;&#x60;, &#x60;&#x27;number&#x27;&#x60;, &#x60;&#x27;boolean&#x27;&#x60;,
-  &#x60;&#x27;date&#x27;&#x60;, &#x60;&#x27;object&#x27;&#x60;, and &#x60;&#x27;array&#x27;&#x60; are all valid types for attributes.
+</div>
 
-  Use &#x60;attr()&#x60;, with optional type argument, to compose your model attributes, e.g:
 
-  &#x60;&#x60;&#x60;js
-  import Ember from &#x27;ember&#x27;;
-  import Resource from &#x27;ember-jsonapi-resources/models/resource&#x27;;
-  import { attr, hasOne, hasMany } from &#x27;ember-jsonapi-resources/models/resource&#x27;;
+<div class="box intro">
+    
+</div>
 
-  export default Resource.extend({
-    type: &#x27;articles&#x27;,
-    service: Ember.inject.service(&#x27;articles&#x27;),
 
-    title: attr(&#x27;string&#x27;),
-    published: attr(&#x27;date&#x27;),
-    tags: attr(&#x27;array&#x27;),
-    footnotes: attr(&#x27;object&#x27;),
-    revisions: attr()
-    version: attr(&#x27;number&#x27;),
-    &quot;is-approved&quot;: attr(&#x27;boolean&#x27;)
-  });
-  &#x60;&#x60;&#x60;
+<div id="classdocs" class="tabview">
+    <ul class="api-class-tabs">
+        <li class="api-class-tab index"><a href="#index">Index</a></li>
 
-  @method attr
-  @param {String} [type] an optional param for the type of property, i.e. &#x60;string&#x60;,
-    &#x60;number&#x60;, &#x60;boolean&#x60;, &#x60;date&#x60;, &#x60;object&#x60;, or &#x60;array&#x60;
-  @param {Boolean} [mutable=true] optional param, defaults to &#x60;true&#x60; if not passed
-*/
-export default function attr(type = &#x27;any&#x27;, mutable = true) {
-  const _mutable = mutable;
-  if (type !== &#x27;any&#x27; &amp;&amp; !isBlank(type)) {
-    assertValidTypeOption(type);
-  }
-  return Ember.computed(&#x27;attributes&#x27;, {
-    get: function (key) {
-      assertDasherizedAttr(key);
-      let value = this.get(&#x27;attributes.&#x27; + key);
-      if (!isBlank(value)) {
-        assertType.call(this, key, value);
-      }
-      return value;
-    },
+            <li class="api-class-tab methods"><a href="#methods">Methods</a></li>
+    </ul>
 
-    set: function (key, value) {
-      const lastValue = this.get(&#x27;attributes.&#x27; + key);
-      if (!_mutable) {
-        return immutableValue(key, value, lastValue);
-      }
-      if (value === lastValue) { return value; }
-      assertType.call(this, key, value);
-      this.set(&#x27;attributes.&#x27; + key, value);
-      if (!this.get(&#x27;isNew&#x27;)) {
-        this._attributes[key] = this._attributes[key] || {};
-        this._attributes[key].changed = value;
-        this._attributes[key].previous = lastValue;
-        const service = this.get(&#x27;service&#x27;);
-        if (service) {
-          service.trigger(&#x27;attributeChanged&#x27;, this);
-        }
-      }
-      return this.get(&#x27;attributes.&#x27; + key);
-    }
-  }).meta({type: type, mutable: mutable});
-}
+    <div>
+        <div id="index" class="api-class-tabpanel index">
+            <h2 class="off-left">Item Index</h2>
 
-function assertValidTypeOption(type) {
-  if (type === &#x27;any&#x27;) { return; }
-  let allowed = &#x27;string number boolean date object array&#x27;;
-  let msg = &#x27;Allowed types are: &#x27; + allowed + &#x27; however &#x27; + type + &#x27; was given instead.&#x27;;
-  Ember.assert(msg, allowed.split(&#x27; &#x27;).indexOf(type) &gt; -1);
-}
+                <div class="index-section methods">
+                    <h3>Methods</h3>
 
-function assertDasherizedAttr(name) {
-  try {
-    let attrName = Ember.String.dasherize(name);
-    let msg = &quot;Attributes are recommended to use dasherized names, e.g &#x60;&#x27;&quot;+ attrName +&quot;&#x27;: attr()&#x60;&quot;;
-    msg += &quot;, instead of &#x60;&quot;+ name +&quot;: attr()&#x60;&quot;;
-    Ember.assert(msg, isDasherized(name));
-  } catch(e) {
-    Ember.Logger.warn(e.message);
-  }
-}
+                    <ul class="index-list methods">
+                            <li class="index-item method">
+                                <a href="#method_serialize">serialize</a>
 
-function assertType(key, value) {
-  let meta = this.constructor.metaForProperty(key);
-  if (meta &amp;&amp; meta.type &amp;&amp; meta.type !== &#x27;any&#x27;) {
-    let msg = this.toString() + &#x27;#&#x27; + key + &#x27; is expected to be a &#x27; + meta.type;
-    Ember.assert(msg, isType(meta.type, value));
-  }
-}
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_serialize">serialize</a>
 
-function immutableValue(key, value, lastValue) {
-  let msg = [
-    this.toString(), &#x27;#&#x27;, key, &#x27; is not mutable set was called with &#x27;,
-    &#x27;&#x60;&#x27;, value, &#x27;&#x60;&#x27;, &#x27; but is previous set to &#x60;&#x27;, lastValue, &#x27;&#x60;&#x27;
-  ];
-  Ember.Logger.warn(msg.join(&#x27;&#x27;));
-  return lastValue;
-}
+                            </li>
+                    </ul>
+                </div>
 
-    </pre>
+
+
+        </div>
+
+            <div id="methods" class="api-class-tabpanel">
+                <h2 class="off-left">Methods</h2>
+
+<div id="method_serialize" class="method item">
+    <h3 class="name"><code>serialize</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>date</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">String | Null</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/addon_utils_transforms.js.html#l13"><code>addon&#x2F;utils&#x2F;transforms.js:13</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">date</code>
+                        <span class="type">Date | String</span>
+
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">String | Null</span>:
+                    <p>date value as ISO String for JSON payload, or null</p>
+
+            </div>
+        </div>
+
+
+</div>
+<div id="method_serialize" class="method item">
+    <h3 class="name"><code>serialize</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>date</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">Date | Null</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/addon_utils_transforms.js.html#l29"><code>addon&#x2F;utils&#x2F;transforms.js:29</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">date</code>
+                        <span class="type">String</span>
+
+
+                    <div class="param-description">
+                        <p>usually in ISO format, must be a valid argument for Date</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Date | Null</span>:
+                    <p>date value from JSON payload, or null</p>
+
+            </div>
+        </div>
+
+
+</div>
+            </div>
+
+
+
+    </div>
 </div>
                     </div>
                 </div>

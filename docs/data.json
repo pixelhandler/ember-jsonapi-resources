@@ -48,6 +48,15 @@
             "fors": {},
             "namespaces": {}
         },
+        "addon/mixins/transforms.js": {
+            "name": "addon/mixins/transforms.js",
+            "modules": {
+                "transforms": 1
+            },
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        },
         "addon/models/resource.js": {
             "name": "addon/models/resource.js",
             "modules": {
@@ -117,6 +126,15 @@
             },
             "fors": {},
             "namespaces": {}
+        },
+        "addon/utils/transforms.js": {
+            "name": "addon/utils/transforms.js",
+            "modules": {},
+            "classes": {
+                "TransformDateAttribute": 1
+            },
+            "fors": {},
+            "namespaces": {}
         }
     },
     "modules": {
@@ -127,6 +145,7 @@
                 "store": 1,
                 "authorization": 1,
                 "cache": 1,
+                "transforms": 1,
                 "resource": 1,
                 "serializer": 1,
                 "utils": 1
@@ -138,12 +157,13 @@
                 "Resource": 1,
                 "ApplicationSerializer": 1,
                 "StoreService": 1,
-                "RelatedProxyUtil": 1
+                "RelatedProxyUtil": 1,
+                "TransformDateAttribute": 1
             },
             "fors": {},
             "namespaces": {},
-            "file": "addon/utils/related-proxy.js",
-            "line": 9
+            "file": "addon/utils/transforms.js",
+            "line": 8
         },
         "adapter": {
             "name": "adapter",
@@ -205,6 +225,18 @@
             "line": 8,
             "description": "A Mixin class for caching JSON API resource objects"
         },
+        "transforms": {
+            "name": "transforms",
+            "submodules": {},
+            "classes": {},
+            "fors": {},
+            "is_submodule": 1,
+            "namespaces": {},
+            "module": "ember-jsonapi-resources",
+            "namespace": "",
+            "file": "addon/mixins/transforms.js",
+            "line": 1
+        },
         "resource": {
             "name": "resource",
             "submodules": {},
@@ -239,15 +271,16 @@
             "name": "utils",
             "submodules": {},
             "classes": {
-                "RelatedProxyUtil": 1
+                "RelatedProxyUtil": 1,
+                "TransformDateAttribute": 1
             },
             "fors": {},
             "is_submodule": 1,
             "namespaces": {},
             "module": "ember-jsonapi-resources",
             "namespace": "",
-            "file": "addon/utils/related-proxy.js",
-            "line": 9,
+            "file": "addon/utils/transforms.js",
+            "line": 8,
             "description": "Utility for creating promise proxy objects for related resources"
         }
     },
@@ -376,6 +409,20 @@
             "line": 9,
             "description": "Utility for creating promise proxy objects for related resources",
             "static": 1
+        },
+        "TransformDateAttribute": {
+            "name": "TransformDateAttribute",
+            "shortname": "TransformDateAttribute",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "ember-jsonapi-resources",
+            "submodule": "utils",
+            "namespace": "",
+            "file": "addon/utils/transforms.js",
+            "line": 8
         }
     },
     "classitems": [
@@ -626,7 +673,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 250,
+            "line": 251,
             "description": "Adds params and headers or Fetch request.\n\n- The HTTP Header is set for Content-Type: application/vnd.api+json\n- Sets Authorization header if accessible in the `authorizationCredential` property",
             "itemtype": "method",
             "name": "fetchOptions",
@@ -647,7 +694,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 271,
+            "line": 272,
             "description": "Sets Authorization header if accessible in the `authorizationCredential` property",
             "itemtype": "method",
             "name": "fetchAuthorizationHeader",
@@ -664,7 +711,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 288,
+            "line": 289,
             "description": "Authentication credentials/token used with HTTP authentication\nThis property should be added by an Authorization Mixin",
             "itemtype": "property",
             "name": "authorizationCredential",
@@ -675,7 +722,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 297,
+            "line": 298,
             "description": "The name of the Authorization request-header field\nThis property should be added by an Authorization Mixin",
             "itemtype": "property",
             "name": "authorizationHeaderField",
@@ -686,7 +733,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 306,
+            "line": 307,
             "description": "Hook to customize the URL, e.g. if your API is behind a proxy and you need\nto swap a portion of the domain to make a request on the same domain.",
             "itemtype": "method",
             "name": "fetchUrl",
@@ -707,7 +754,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 318,
+            "line": 319,
             "description": "Noop as a hook for defining how deserialized resource objects are cached,\ne.g. in memory",
             "itemtype": "method",
             "name": "cacheResource",
@@ -724,7 +771,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 327,
+            "line": 328,
             "description": "Noop as a hook for defining how to handle cache after updating a resource",
             "itemtype": "method",
             "name": "cacheUpdate",
@@ -741,7 +788,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 335,
+            "line": 336,
             "description": "Initialize events to communicate on the resource instances' service reference.\nListens for resource objects trigging `attributeChanged` events",
             "itemtype": "method",
             "name": "initEvents",
@@ -942,6 +989,46 @@
             "class": "ServiceCacheMixin",
             "module": "ember-jsonapi-resources",
             "submodule": "cache"
+        },
+        {
+            "file": "addon/mixins/transforms.js",
+            "line": 10,
+            "itemtype": "method",
+            "name": "serializeDateAttribute",
+            "params": [
+                {
+                    "name": "date",
+                    "description": "",
+                    "type": "Date|String"
+                }
+            ],
+            "return": {
+                "description": "date value as ISO String for JSON payload, or null",
+                "type": "String|Null"
+            },
+            "class": "Resource",
+            "module": "ember-jsonapi-resources",
+            "submodule": "transforms"
+        },
+        {
+            "file": "addon/mixins/transforms.js",
+            "line": 19,
+            "itemtype": "method",
+            "name": "deserializeDateAttribute",
+            "params": [
+                {
+                    "name": "date",
+                    "description": "usually in ISO format, must be a valid argument for Date",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "date value from JSON payload, or null",
+                "type": "Date|Null"
+            },
+            "class": "Resource",
+            "module": "ember-jsonapi-resources",
+            "submodule": "transforms"
         },
         {
             "file": "addon/models/resource.js",
@@ -1240,7 +1327,7 @@
         },
         {
             "file": "addon/serializers/application.js",
-            "line": 50,
+            "line": 51,
             "description": "Serialize a resource object, but only the changed attributes",
             "itemtype": "method",
             "name": "serializeChanged",
@@ -1261,7 +1348,7 @@
         },
         {
             "file": "addon/serializers/application.js",
-            "line": 69,
+            "line": 72,
             "description": "Deserialize response objects from the request payload",
             "itemtype": "method",
             "name": "deserialize",
@@ -1282,7 +1369,7 @@
         },
         {
             "file": "addon/serializers/application.js",
-            "line": 86,
+            "line": 89,
             "description": "Deserialize response objects in the payload data",
             "itemtype": "method",
             "name": "deserializeResources",
@@ -1303,7 +1390,7 @@
         },
         {
             "file": "addon/serializers/application.js",
-            "line": 100,
+            "line": 103,
             "description": "Deserialize response an object in the payload data",
             "itemtype": "method",
             "name": "deserializeResource",
@@ -1324,7 +1411,7 @@
         },
         {
             "file": "addon/serializers/application.js",
-            "line": 111,
+            "line": 115,
             "description": "Deserialize optional included array of payload and add to service cache",
             "itemtype": "method",
             "name": "deserializeIncluded",
@@ -1346,7 +1433,35 @@
         },
         {
             "file": "addon/serializers/application.js",
-            "line": 130,
+            "line": 134,
+            "description": "Transform attributes, serialize or deserialize by specified method or\nper type of attribute, e.g. date.\n\nYour serializer may define a specific method for a type of attribute,\ni.e. `serializeDateAttribute` and/or `deserializeDateAttribute`. Likewise,\nyour serializer may define a specific method for the name of an attribute,\nlike `serializeUpdatedAtAttribute` and `deserializeUpdatedAtAttribute`.\n\nDuring transformation a method based on the name of the attribute takes\npriority over a transform method based on the type of attribute, e.g. date.",
+            "itemtype": "method",
+            "name": "transformAttributes",
+            "params": [
+                {
+                    "name": "json",
+                    "description": "with attributes hash of resource properties to be transformed",
+                    "type": "Object"
+                },
+                {
+                    "name": "operation",
+                    "description": "perform a serialize or deserialize\n  operation, the default operation is to deserialize when not passed",
+                    "type": "String",
+                    "optional": true,
+                    "optdefault": "'deserialize'"
+                }
+            ],
+            "return": {
+                "description": "json",
+                "type": "Object"
+            },
+            "class": "ApplicationSerializer",
+            "module": "ember-jsonapi-resources",
+            "submodule": "serializer"
+        },
+        {
+            "file": "addon/serializers/application.js",
+            "line": 175,
             "description": "Create a Resource from a JSON API Resource Object\n\nSee <http://jsonapi.org/format/#document-resource-objects>",
             "access": "private",
             "tagname": "",
@@ -1361,6 +1476,28 @@
             ],
             "return": {
                 "description": "(Resource) instance"
+            },
+            "class": "ApplicationSerializer",
+            "module": "ember-jsonapi-resources",
+            "submodule": "serializer"
+        },
+        {
+            "file": "addon/serializers/application.js",
+            "line": 202,
+            "access": "private",
+            "tagname": "",
+            "itemtype": "method",
+            "name": "_lookupFactory",
+            "params": [
+                {
+                    "name": "type",
+                    "description": "",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "factory for creating resource instances",
+                "type": "Function"
             },
             "class": "ApplicationSerializer",
             "module": "ember-jsonapi-resources",
@@ -1544,7 +1681,7 @@
         {
             "file": "addon/utils/attr.js",
             "line": 9,
-            "description": "Utility helper to setup a computed property for a resource attribute, imported and\nexported with the resource submodule.\n\nAn `attr` of the resource is a computed property to the actual attribute in an \n`attributes` hash on the `resource` (model) instance. Using `attr()` supports\nany type, and an optional `type` (String) argument can be used to enforce\nsetting and getting with a specific type. `'string'`, `'number'`, `'boolean'`,\n`'date'`, `'object'`, and `'array'` are all valid types for attributes.\n\nUse `attr()`, with optional type argument, to compose your model attributes, e.g:\n\n```js\nimport Ember from 'ember';\nimport Resource from 'ember-jsonapi-resources/models/resource';\nimport { attr, hasOne, hasMany } from 'ember-jsonapi-resources/models/resource';\n\nexport default Resource.extend({\n  type: 'articles',\n  service: Ember.inject.service('articles'),\n\n  title: attr('string'),\n  published: attr('date'),\n  tags: attr('array'),\n  footnotes: attr('object'),\n  revisions: attr()\n  version: attr('number'),\n  \"is-approved\": attr('boolean')\n});\n```",
+            "description": "Utility helper to setup a computed property for a resource attribute, imported and\nexported with the resource submodule.\n\nAn `attr` of the resource is a computed property to the actual attribute in an\n`attributes` hash on the `resource` (model) instance. Using `attr()` supports\nany type, and an optional `type` (String) argument can be used to enforce\nsetting and getting with a specific type. `'string'`, `'number'`, `'boolean'`,\n`'date'`, `'object'`, and `'array'` are all valid types for attributes.\n\nUse `attr()`, with optional type argument, to compose your model attributes, e.g:\n\n```js\nimport Ember from 'ember';\nimport Resource from 'ember-jsonapi-resources/models/resource';\nimport { attr, hasOne, hasMany } from 'ember-jsonapi-resources/models/resource';\n\nexport default Resource.extend({\n  type: 'articles',\n  service: Ember.inject.service('articles'),\n\n  title: attr('string'),\n  published: attr('date'),\n  tags: attr('array'),\n  footnotes: attr('object'),\n  revisions: attr()\n  version: attr('number'),\n  \"is-approved\": attr('boolean')\n});\n```",
             "itemtype": "method",
             "name": "attr",
             "params": [
@@ -1764,6 +1901,46 @@
                 "type": "Resource|undefined"
             },
             "class": "RelatedProxyUtil",
+            "module": "ember-jsonapi-resources",
+            "submodule": "utils"
+        },
+        {
+            "file": "addon/utils/transforms.js",
+            "line": 13,
+            "itemtype": "method",
+            "name": "serialize",
+            "params": [
+                {
+                    "name": "date",
+                    "description": "",
+                    "type": "Date|String"
+                }
+            ],
+            "return": {
+                "description": "date value as ISO String for JSON payload, or null",
+                "type": "String|Null"
+            },
+            "class": "TransformDateAttribute",
+            "module": "ember-jsonapi-resources",
+            "submodule": "utils"
+        },
+        {
+            "file": "addon/utils/transforms.js",
+            "line": 29,
+            "itemtype": "method",
+            "name": "serialize",
+            "params": [
+                {
+                    "name": "date",
+                    "description": "usually in ISO format, must be a valid argument for Date",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "date value from JSON payload, or null",
+                "type": "Date|Null"
+            },
+            "class": "TransformDateAttribute",
             "module": "ember-jsonapi-resources",
             "submodule": "utils"
         }
