@@ -198,24 +198,24 @@ test('#deserializeDateAttribute', function(assert) {
 test('#transformAttributes calls attribute transform methods', function(assert) {
   const serializer = this.subject();
   serializer.reopen({
-    serializeNameAttribute(value) {
+    serializeFullNameAttribute(value) {
       return value.split('written by: ')[1];
     },
-    deserializeNameAttribute(value) {
+    deserializeFullNameAttribute(value) {
       return 'written by: ' + value;
     },
   });
 
-  let payloadNameAttr = authorMock.data.attributes.name;
-  sandbox.spy(serializer, 'deserializeNameAttribute');
+  let payloadNameAttr = authorMock.data.attributes['full-name'];
+  sandbox.spy(serializer, 'deserializeFullNameAttribute');
   let data = serializer.transformAttributes(authorMock.data, 'deserialize');
-  let msg = 'called attribute transform method: deserializeNameAttribute';
-  assert.ok(serializer.deserializeNameAttribute.called, msg);
-  assert.equal(data.attributes.name, 'written by: ' + payloadNameAttr, 'deserialized name attr');
+  let msg = 'called attribute transform method: deserializeFullNameAttribute';
+  assert.ok(serializer.deserializeFullNameAttribute.called, msg);
+  assert.equal(data.attributes['full-name'], 'written by: ' + payloadNameAttr, 'deserialized full-name attr');
 
-  sandbox.spy(serializer, 'serializeNameAttribute');
+  sandbox.spy(serializer, 'serializeFullNameAttribute');
   data = serializer.transformAttributes(data, 'serialize');
-  msg = 'called attribute transform method: serializeNameAttribute';
-  assert.ok(serializer.serializeNameAttribute.called, msg);
-  assert.equal(payloadNameAttr, data.attributes.name, 'deserialized name attr');
+  msg = 'called attribute transform method: serializeFullNameAttribute';
+  assert.ok(serializer.serializeFullNameAttribute.called, msg);
+  assert.equal(payloadNameAttr, data.attributes['full-name'], 'deserialized full-name attr');
 });

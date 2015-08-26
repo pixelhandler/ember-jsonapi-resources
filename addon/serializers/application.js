@@ -167,14 +167,14 @@ export default Ember.Object.extend({
     assertTranformOperation(operation);
     let transformMethod, factory, meta;
     for (let attr in json.attributes) {
-      transformMethod = [operation, Ember.String.capitalize(attr), 'Attribute'].join('');
+      transformMethod = transformMethodName(operation, attr);
       if (typeof this[transformMethod] === 'function') {
         json.attributes[attr] = this[transformMethod](json.attributes[attr]);
       } else {
         try {
           factory = this._lookupFactory(json.type);
           meta = factory.metaForProperty(attr);
-          transformMethod = [operation, Ember.String.capitalize(meta.type), 'Attribute'].join('');
+          transformMethod = transformMethodName(operation, meta.type);
           if (typeof this[transformMethod] === 'function') {
             json.attributes[attr] = this[transformMethod](json.attributes[attr]);
           }
@@ -228,4 +228,8 @@ const tranformOperations = ['serialize', 'deserialize'];
 
 function assertTranformOperation(operation) {
   Ember.assert(`${operation} is not a valid transform operation`, tranformOperations.indexOf(operation) > -1);
+}
+
+function transformMethodName(operation, attrName) {
+  return [operation, Ember.String.classify(attrName), 'Attribute'].join('');
 }
