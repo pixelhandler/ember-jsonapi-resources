@@ -7,7 +7,21 @@ import Ember from 'ember';
 import { pluralize } from 'ember-inflector';
 
 /**
-  Serializer/Deserializer for a JSON API resource object, used by adapter
+  Serializer/Deserializer for a JSON API resource object, used by adapter.
+
+  When extending use a mixin or define transform methods to serialize and/or
+  deserializer attributes based on the name or the type of attribute.
+
+  The methods use a naming convention:
+
+    - '[de]serialize' + 'AttrName' or 'TypeName' + 'Attribute'
+    - E.g. use `serializeNameAttribute` and `deserializeNameAttribute` in
+      a generated serializer for use with `name: attr()`
+    - Or, redefine `serializeDateAttribute` and `deserializeDateAttribute`
+      to use your own data transformation with `attr('date')` the default,
+      Date type [de]serialize methods transfrom to/from ISO Format.
+    - Transform methods based on the name of the attribute will be called
+      instead of any transform methods based on the type of the attribute.
 
   @class ApplicationSerializer
   @static

@@ -27,7 +27,7 @@ class TransformDateAttribute {
   }
 
   /**
-    @method serialize
+    @method deserialize
     @param {String} date usually in ISO format, must be a valid argument for Date
     @return {Date|Null} date value from JSON payload, or null
   */
