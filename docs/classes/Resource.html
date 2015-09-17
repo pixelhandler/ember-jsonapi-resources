@@ -41,6 +41,7 @@
                                 <li><a href="../classes/ApplicationAdapter.html">ApplicationAdapter</a></li>
                                 <li><a href="../classes/ApplicationSerializer.html">ApplicationSerializer</a></li>
                                 <li><a href="../classes/AuthorizationMixin.html">AuthorizationMixin</a></li>
+                                <li><a href="../classes/Fetch.html">Fetch</a></li>
                                 <li><a href="../classes/RelatedProxyUtil.html">RelatedProxyUtil</a></li>
                                 <li><a href="../classes/Resource.html">Resource</a></li>
                                 <li><a href="../classes/ServiceCacheMixin.html">ServiceCacheMixin</a></li>
@@ -49,11 +50,13 @@
                                 <li><a href="../classes/TransformsMixin.html">TransformsMixin</a></li>
                             </ul>
                 
+                
                             <ul id="api-modules" class="apis modules">
                                 <li><a href="../modules/adapter.html">adapter</a></li>
                                 <li><a href="../modules/authorization.html">authorization</a></li>
                                 <li><a href="../modules/cache.html">cache</a></li>
                                 <li><a href="../modules/ember-jsonapi-resources.html">ember-jsonapi-resources</a></li>
+                                <li><a href="../modules/fetch.html">fetch</a></li>
                                 <li><a href="../modules/resource.html">resource</a></li>
                                 <li><a href="../modules/serializer.html">serializer</a></li>
                                 <li><a href="../modules/store.html">store</a></li>
@@ -627,288 +630,288 @@ object prior to adding a relationship.</p>
             <div id="properties" class="api-class-tabpanel">
                 <h2 class="off-left">Properties</h2>
 
-                    <div id="property__attributes" class="property item private">
-                        <h3 class="name"><code>_attributes</code></h3>
-                        <span class="type">Object</span>
-                    
-                    
-                            <span class="flag private">private</span>
-                    
-                    
-                    
-                        <div class="meta">
-                                    <p>
-                                    Defined in
-                            <a href="../files/addon_models_resource.js.html#l91"><code>addon&#x2F;models&#x2F;resource.js:91</code></a>
-                            </p>
-                    
-                    
-                        </div>
-                    
-                        <div class="description">
-                            <p>Hash of attributes for changed/previous values</p>
-                    
-                        </div>
-                    
-                    
-                    
-                    </div>
-                    <div id="property_attributes" class="property item protected">
-                        <h3 class="name"><code>attributes</code></h3>
-                        <span class="type">Object</span>
-                    
-                    
-                            <span class="flag protected">protected</span>
-                    
-                    
-                    
-                        <div class="meta">
-                                    <p>
-                                    Defined in
-                            <a href="../files/addon_models_resource.js.html#l50"><code>addon&#x2F;models&#x2F;resource.js:50</code></a>
-                            </p>
-                    
-                    
-                        </div>
-                    
-                        <div class="description">
-                            <p>An optional <code>attributes</code> property of for a JSON API Resource object, setup in create()</p>
-                    <p>This object will keep the values from the response object and may be mutable
-                    Use this as a refence for creating computed properties</p>
-                    <p>For example the <code>attr()</code> helper sets up a properties based on this content</p>
-                    
-                        </div>
-                    
-                    
-                    
-                    </div>
-                    <div id="property_cacheDuration" class="property item">
-                        <h3 class="name"><code>cacheDuration</code></h3>
-                        <span class="type">Number</span>
-                    
-                    
-                    
-                    
-                    
-                        <div class="meta">
-                                    <p>
-                                    Defined in
-                            <a href="../files/addon_models_resource.js.html#l224"><code>addon&#x2F;models&#x2F;resource.js:224</code></a>
-                            </p>
-                    
-                    
-                        </div>
-                    
-                        <div class="description">
-                            <p>A local cache duration, to minimize duplicate fetch requests</p>
-                    
-                        </div>
-                    
-                    
-                    
-                    </div>
-                    <div id="property_id" class="property item">
-                        <h3 class="name"><code>id</code></h3>
-                        <span class="type">String</span>
-                    
-                    
-                    
-                    
-                    
-                        <div class="meta">
-                                    <p>
-                                    Defined in
-                            <a href="../files/addon_models_resource.js.html#l41"><code>addon&#x2F;models&#x2F;resource.js:41</code></a>
-                            </p>
-                    
-                    
-                        </div>
-                    
-                        <div class="description">
-                            <p>Persisted resource ID value</p>
-                    
-                        </div>
-                    
-                    
-                    
-                    </div>
-                    <div id="property_isCacheExpired" class="property item">
-                        <h3 class="name"><code>isCacheExpired</code></h3>
-                        <span class="type">Boolean</span>
-                    
-                    
-                    
-                    
-                    
-                        <div class="meta">
-                                    <p>
-                                    Defined in
-                            <a href="../files/addon_models_resource.js.html#l232"><code>addon&#x2F;models&#x2F;resource.js:232</code></a>
-                            </p>
-                    
-                    
-                        </div>
-                    
-                        <div class="description">
-                            
-                        </div>
-                    
-                    
-                    
-                    </div>
-                    <div id="property_isNew" class="property item">
-                        <h3 class="name"><code>isNew</code></h3>
-                        <span class="type">Boolean</span>
-                    
-                    
-                    
-                    
-                    
-                        <div class="meta">
-                                    <p>
-                                    Defined in
-                            <a href="../files/addon_models_resource.js.html#l100"><code>addon&#x2F;models&#x2F;resource.js:100</code></a>
-                            </p>
-                    
-                    
-                        </div>
-                    
-                        <div class="description">
-                            <p>Flag for new instance, e.g. not peristed</p>
-                    
-                        </div>
-                    
-                    
-                    
-                    </div>
-                    <div id="property_links" class="property item protected">
-                        <h3 class="name"><code>links</code></h3>
-                        <span class="type">Object</span>
-                    
-                    
-                            <span class="flag protected">protected</span>
-                    
-                    
-                    
-                        <div class="meta">
-                                    <p>
-                                    Defined in
-                            <a href="../files/addon_models_resource.js.html#l73"><code>addon&#x2F;models&#x2F;resource.js:73</code></a>
-                            </p>
-                    
-                    
-                        </div>
-                    
-                        <div class="description">
-                            <p>An optional <code>links</code> property of for a JSON API Resource object, setup in create()</p>
-                    
-                        </div>
-                    
-                    
-                    
-                    </div>
-                    <div id="property_meta" class="property item protected">
-                        <h3 class="name"><code>meta</code></h3>
-                        <span class="type">Object</span>
-                    
-                    
-                            <span class="flag protected">protected</span>
-                    
-                    
-                    
-                        <div class="meta">
-                                    <p>
-                                    Defined in
-                            <a href="../files/addon_models_resource.js.html#l82"><code>addon&#x2F;models&#x2F;resource.js:82</code></a>
-                            </p>
-                    
-                    
-                        </div>
-                    
-                        <div class="description">
-                            <p>An optional property of for a JSON API Resource object, setup in create()</p>
-                    
-                        </div>
-                    
-                    
-                    
-                    </div>
-                    <div id="property_relationships" class="property item protected">
-                        <h3 class="name"><code>relationships</code></h3>
-                        <span class="type">Object</span>
-                    
-                    
-                            <span class="flag protected">protected</span>
-                    
-                    
-                    
-                        <div class="meta">
-                                    <p>
-                                    Defined in
-                            <a href="../files/addon_models_resource.js.html#l64"><code>addon&#x2F;models&#x2F;resource.js:64</code></a>
-                            </p>
-                    
-                    
-                        </div>
-                    
-                        <div class="description">
-                            <p>An optional <code>relationships</code> property of for a JSON API Resource object, setup in create()</p>
-                    
-                        </div>
-                    
-                    
-                    
-                    </div>
-                    <div id="property_service" class="property item">
-                        <h3 class="name"><code>service</code></h3>
-                        <span class="type">Object</span>
-                    
-                    
-                    
-                    
-                    
-                        <div class="meta">
-                                    <p>
-                                    Defined in
-                            <a href="../files/addon_models_resource.js.html#l23"><code>addon&#x2F;models&#x2F;resource.js:23</code></a>
-                            </p>
-                    
-                    
-                        </div>
-                    
-                        <div class="description">
-                            <p>The service object for the entity (adapter with cache and serializer)</p>
-                    
-                        </div>
-                    
-                    
-                    
-                    </div>
-                    <div id="property_type" class="property item">
-                        <h3 class="name"><code>type</code></h3>
-                        <span class="type">String</span>
-                    
-                    
-                    
-                    
-                    
-                        <div class="meta">
-                                    <p>
-                                    Defined in
-                            <a href="../files/addon_models_resource.js.html#l32"><code>addon&#x2F;models&#x2F;resource.js:32</code></a>
-                            </p>
-                    
-                    
-                        </div>
-                    
-                        <div class="description">
-                            <p>Extending Prototypes Must define a <code>type</code> value for the entity, e.g. <code>posts</code></p>
-                    
-                        </div>
-                    
-                    
-                    
-                    </div>
+<div id="property__attributes" class="property item private">
+    <h3 class="name"><code>_attributes</code></h3>
+    <span class="type">Object</span>
+
+
+        <span class="flag private">private</span>
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/addon_models_resource.js.html#l91"><code>addon&#x2F;models&#x2F;resource.js:91</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>Hash of attributes for changed/previous values</p>
+
+    </div>
+
+
+
+</div>
+<div id="property_attributes" class="property item protected">
+    <h3 class="name"><code>attributes</code></h3>
+    <span class="type">Object</span>
+
+
+        <span class="flag protected">protected</span>
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/addon_models_resource.js.html#l50"><code>addon&#x2F;models&#x2F;resource.js:50</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>An optional <code>attributes</code> property of for a JSON API Resource object, setup in create()</p>
+<p>This object will keep the values from the response object and may be mutable
+Use this as a refence for creating computed properties</p>
+<p>For example the <code>attr()</code> helper sets up a properties based on this content</p>
+
+    </div>
+
+
+
+</div>
+<div id="property_cacheDuration" class="property item">
+    <h3 class="name"><code>cacheDuration</code></h3>
+    <span class="type">Number</span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/addon_models_resource.js.html#l224"><code>addon&#x2F;models&#x2F;resource.js:224</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>A local cache duration, to minimize duplicate fetch requests</p>
+
+    </div>
+
+
+
+</div>
+<div id="property_id" class="property item">
+    <h3 class="name"><code>id</code></h3>
+    <span class="type">String</span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/addon_models_resource.js.html#l41"><code>addon&#x2F;models&#x2F;resource.js:41</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>Persisted resource ID value</p>
+
+    </div>
+
+
+
+</div>
+<div id="property_isCacheExpired" class="property item">
+    <h3 class="name"><code>isCacheExpired</code></h3>
+    <span class="type">Boolean</span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/addon_models_resource.js.html#l232"><code>addon&#x2F;models&#x2F;resource.js:232</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        
+    </div>
+
+
+
+</div>
+<div id="property_isNew" class="property item">
+    <h3 class="name"><code>isNew</code></h3>
+    <span class="type">Boolean</span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/addon_models_resource.js.html#l100"><code>addon&#x2F;models&#x2F;resource.js:100</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>Flag for new instance, e.g. not peristed</p>
+
+    </div>
+
+
+
+</div>
+<div id="property_links" class="property item protected">
+    <h3 class="name"><code>links</code></h3>
+    <span class="type">Object</span>
+
+
+        <span class="flag protected">protected</span>
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/addon_models_resource.js.html#l73"><code>addon&#x2F;models&#x2F;resource.js:73</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>An optional <code>links</code> property of for a JSON API Resource object, setup in create()</p>
+
+    </div>
+
+
+
+</div>
+<div id="property_meta" class="property item protected">
+    <h3 class="name"><code>meta</code></h3>
+    <span class="type">Object</span>
+
+
+        <span class="flag protected">protected</span>
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/addon_models_resource.js.html#l82"><code>addon&#x2F;models&#x2F;resource.js:82</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>An optional property of for a JSON API Resource object, setup in create()</p>
+
+    </div>
+
+
+
+</div>
+<div id="property_relationships" class="property item protected">
+    <h3 class="name"><code>relationships</code></h3>
+    <span class="type">Object</span>
+
+
+        <span class="flag protected">protected</span>
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/addon_models_resource.js.html#l64"><code>addon&#x2F;models&#x2F;resource.js:64</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>An optional <code>relationships</code> property of for a JSON API Resource object, setup in create()</p>
+
+    </div>
+
+
+
+</div>
+<div id="property_service" class="property item">
+    <h3 class="name"><code>service</code></h3>
+    <span class="type">Object</span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/addon_models_resource.js.html#l23"><code>addon&#x2F;models&#x2F;resource.js:23</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>The service object for the entity (adapter with cache and serializer)</p>
+
+    </div>
+
+
+
+</div>
+<div id="property_type" class="property item">
+    <h3 class="name"><code>type</code></h3>
+    <span class="type">String</span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/addon_models_resource.js.html#l32"><code>addon&#x2F;models&#x2F;resource.js:32</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>Extending Prototypes Must define a <code>type</code> value for the entity, e.g. <code>posts</code></p>
+
+    </div>
+
+
+
+</div>
             </div>
 
 

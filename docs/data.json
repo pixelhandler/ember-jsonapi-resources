@@ -37,6 +37,17 @@
             "fors": {},
             "namespaces": {}
         },
+        "addon/mixins/fetch.js": {
+            "name": "addon/mixins/fetch.js",
+            "modules": {
+                "fetch": 1
+            },
+            "classes": {
+                "Fetch": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
         "addon/mixins/service-cache.js": {
             "name": "addon/mixins/service-cache.js",
             "modules": {
@@ -146,15 +157,18 @@
                 "adapter": 1,
                 "store": 1,
                 "authorization": 1,
+                "fetch": 1,
                 "cache": 1,
                 "transforms": 1,
                 "resource": 1,
                 "serializer": 1,
                 "utils": 1
             },
+            "elements": {},
             "classes": {
                 "ApplicationAdapter": 1,
                 "AuthorizationMixin": 1,
+                "Fetch": 1,
                 "ServiceCacheMixin": 1,
                 "TransformsMixin": 1,
                 "Resource": 1,
@@ -171,6 +185,7 @@
         "adapter": {
             "name": "adapter",
             "submodules": {},
+            "elements": {},
             "classes": {
                 "ApplicationAdapter": 1
             },
@@ -180,12 +195,13 @@
             "module": "ember-jsonapi-resources",
             "namespace": "",
             "file": "addon/adapters/application.js",
-            "line": 9,
+            "line": 10,
             "description": "Adapter for a JSON API endpoint, use as a service for your backend"
         },
         "store": {
             "name": "store",
             "submodules": {},
+            "elements": {},
             "classes": {
                 "StoreService": 1
             },
@@ -201,6 +217,7 @@
         "authorization": {
             "name": "authorization",
             "submodules": {},
+            "elements": {},
             "classes": {
                 "AuthorizationMixin": 1
             },
@@ -213,9 +230,26 @@
             "line": 8,
             "description": "A Mixin class for storage of credential/token uses with a HTTP Authorization request-header\n\nThe default solution is to use localStorage['AuthorizationHeader'] for the credential"
         },
+        "fetch": {
+            "name": "fetch",
+            "submodules": {},
+            "elements": {},
+            "classes": {
+                "Fetch": 1
+            },
+            "fors": {},
+            "is_submodule": 1,
+            "namespaces": {},
+            "module": "ember-jsonapi-resources",
+            "namespace": "",
+            "file": "addon/mixins/fetch.js",
+            "line": 7,
+            "description": "Fetch/Ajax methods for use with an Adapter calls `cacheUpdate`, `cacheResource`\nmethods and a `serializer` injection."
+        },
         "cache": {
             "name": "cache",
             "submodules": {},
+            "elements": {},
             "classes": {
                 "ServiceCacheMixin": 1
             },
@@ -231,6 +265,7 @@
         "transforms": {
             "name": "transforms",
             "submodules": {},
+            "elements": {},
             "classes": {
                 "TransformsMixin": 1
             },
@@ -246,6 +281,7 @@
         "resource": {
             "name": "resource",
             "submodules": {},
+            "elements": {},
             "classes": {
                 "Resource": 1
             },
@@ -261,6 +297,7 @@
         "serializer": {
             "name": "serializer",
             "submodules": {},
+            "elements": {},
             "classes": {
                 "ApplicationSerializer": 1
             },
@@ -276,6 +313,7 @@
         "utils": {
             "name": "utils",
             "submodules": {},
+            "elements": {},
             "classes": {
                 "RelatedProxyUtil": 1,
                 "TransformDateAttribute": 1
@@ -303,7 +341,7 @@
             "submodule": "adapter",
             "namespace": "",
             "file": "addon/adapters/application.js",
-            "line": 9,
+            "line": 10,
             "description": "Adapter for a JSON API endpoint, use as a service for your backend",
             "requires": [
                 "Ember.Inflector"
@@ -327,6 +365,21 @@
             "file": "addon/mixins/authorization.js",
             "line": 8,
             "description": "A Mixin class for storage of credential/token uses with a HTTP Authorization request-header\n\nThe default solution is to use localStorage['AuthorizationHeader'] for the credential"
+        },
+        "Fetch": {
+            "name": "Fetch",
+            "shortname": "Fetch",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "ember-jsonapi-resources",
+            "submodule": "fetch",
+            "namespace": "",
+            "file": "addon/mixins/fetch.js",
+            "line": 7,
+            "description": "Fetch/Ajax methods for use with an Adapter calls `cacheUpdate`, `cacheResource`\nmethods and a `serializer` injection."
         },
         "ServiceCacheMixin": {
             "name": "ServiceCacheMixin",
@@ -446,10 +499,11 @@
             "line": 8
         }
     },
+    "elements": {},
     "classitems": [
         {
             "file": "addon/adapters/application.js",
-            "line": 19,
+            "line": 20,
             "description": "The name of the entity",
             "itemtype": "property",
             "name": "type",
@@ -461,7 +515,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 28,
+            "line": 29,
             "description": "The url for the entity, e.g. /posts or /api/v1/posts",
             "itemtype": "property",
             "name": "url",
@@ -473,7 +527,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 37,
+            "line": 38,
             "description": "Find resource(s) using an id or a using a query `{id: '', query: {}}`",
             "itemtype": "method",
             "name": "find",
@@ -494,7 +548,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 58,
+            "line": 59,
             "description": "Find a resource by id, optionally pass a query object, e.g. w/ filter param(s)\n\nUses a url like: /photos/1",
             "itemtype": "method",
             "name": "findOne",
@@ -520,7 +574,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 74,
+            "line": 75,
             "description": "Find resources using an optional query object, e.g. w/ pagination params",
             "itemtype": "method",
             "name": "findQuery",
@@ -541,7 +595,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 88,
+            "line": 89,
             "description": "Find resources by relationship or use a specificed (optional) service to find relation\n\nA Url like: /photos/1/relationships/photographer is a required param\n\n```js\nservice.findRelated('photographer', '/api/v1/photos/1/relationships/photographer');\n```\n\nOr, with option to find releated resource using a different service\n\n```js\nservice.findRelated({resource: 'photographer', type: 'people'}, url);\n```",
             "itemtype": "method",
             "name": "findRelated",
@@ -579,7 +633,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 122,
+            "line": 123,
             "description": "Create a new resource, sends a POST request",
             "itemtype": "method",
             "name": "createResource",
@@ -600,7 +654,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 138,
+            "line": 139,
             "description": "Patch an existing resource, sends a PATCH request. After promise is resolved\nthe `didUpdateResource` event is triggered, given an error response a event\n`resourceError` is triggered. A resource may listen on its `service` reference.",
             "itemtype": "method",
             "name": "updateResource",
@@ -621,7 +675,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 162,
+            "line": 163,
             "description": "Patch a relationship, either add or remove, sends a PATCH request\n\nAdds with payload: `{ \"data\": { \"type\": \"comments\", \"id\": \"12\" } }`\nRemoves with payload: `{ \"data\": null }`",
             "itemtype": "method",
             "name": "patchRelationship",
@@ -647,7 +701,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 186,
+            "line": 187,
             "description": "Delete an existing resource, sends a DELETE request",
             "itemtype": "method",
             "name": "deleteResource",
@@ -668,8 +722,8 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 204,
-            "description": "Makes a fetch request via Fetch API\n\nsee http://updates.html5rocks.com/2015/03/introduction-to-fetch",
+            "line": 205,
+            "description": "Fetches data using Fetch API or XMLHttpRequest",
             "itemtype": "method",
             "name": "fetch",
             "params": [
@@ -694,67 +748,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 251,
-            "description": "Adds params and headers or Fetch request.\n\n- The HTTP Header is set for Content-Type: application/vnd.api+json\n- Sets Authorization header if accessible in the `authorizationCredential` property",
-            "itemtype": "method",
-            "name": "fetchOptions",
-            "params": [
-                {
-                    "name": "options",
-                    "description": "",
-                    "type": "Object"
-                }
-            ],
-            "return": {
-                "description": "",
-                "type": "Object"
-            },
-            "class": "ApplicationAdapter",
-            "module": "ember-jsonapi-resources",
-            "submodule": "adapter"
-        },
-        {
-            "file": "addon/adapters/application.js",
-            "line": 272,
-            "description": "Sets Authorization header if accessible in the `authorizationCredential` property",
-            "itemtype": "method",
-            "name": "fetchAuthorizationHeader",
-            "params": [
-                {
-                    "name": "options",
-                    "description": "",
-                    "type": "Object"
-                }
-            ],
-            "class": "ApplicationAdapter",
-            "module": "ember-jsonapi-resources",
-            "submodule": "adapter"
-        },
-        {
-            "file": "addon/adapters/application.js",
-            "line": 289,
-            "description": "Authentication credentials/token used with HTTP authentication\nThis property should be added by an Authorization Mixin",
-            "itemtype": "property",
-            "name": "authorizationCredential",
-            "type": "String",
-            "class": "ApplicationAdapter",
-            "module": "ember-jsonapi-resources",
-            "submodule": "adapter"
-        },
-        {
-            "file": "addon/adapters/application.js",
-            "line": 298,
-            "description": "The name of the Authorization request-header field\nThis property should be added by an Authorization Mixin",
-            "itemtype": "property",
-            "name": "authorizationHeaderField",
-            "type": "String",
-            "class": "ApplicationAdapter",
-            "module": "ember-jsonapi-resources",
-            "submodule": "adapter"
-        },
-        {
-            "file": "addon/adapters/application.js",
-            "line": 307,
+            "line": 223,
             "description": "Hook to customize the URL, e.g. if your API is behind a proxy and you need\nto swap a portion of the domain to make a request on the same domain.",
             "itemtype": "method",
             "name": "fetchUrl",
@@ -775,7 +769,67 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 319,
+            "line": 235,
+            "description": "Adds params and headers or Fetch request.\n\n- The HTTP Header is set for Content-Type: application/vnd.api+json\n- Sets Authorization header if accessible in the `authorizationCredential` property",
+            "itemtype": "method",
+            "name": "fetchOptions",
+            "params": [
+                {
+                    "name": "options",
+                    "description": "",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Object"
+            },
+            "class": "ApplicationAdapter",
+            "module": "ember-jsonapi-resources",
+            "submodule": "adapter"
+        },
+        {
+            "file": "addon/adapters/application.js",
+            "line": 256,
+            "description": "Sets Authorization header if accessible in the `authorizationCredential` property",
+            "itemtype": "method",
+            "name": "fetchAuthorizationHeader",
+            "params": [
+                {
+                    "name": "options",
+                    "description": "",
+                    "type": "Object"
+                }
+            ],
+            "class": "ApplicationAdapter",
+            "module": "ember-jsonapi-resources",
+            "submodule": "adapter"
+        },
+        {
+            "file": "addon/adapters/application.js",
+            "line": 273,
+            "description": "Authentication credentials/token used with HTTP authentication\nThis property should be added by an Authorization Mixin",
+            "itemtype": "property",
+            "name": "authorizationCredential",
+            "type": "String",
+            "class": "ApplicationAdapter",
+            "module": "ember-jsonapi-resources",
+            "submodule": "adapter"
+        },
+        {
+            "file": "addon/adapters/application.js",
+            "line": 282,
+            "description": "The name of the Authorization request-header field\nThis property should be added by an Authorization Mixin",
+            "itemtype": "property",
+            "name": "authorizationHeaderField",
+            "type": "String",
+            "class": "ApplicationAdapter",
+            "module": "ember-jsonapi-resources",
+            "submodule": "adapter"
+        },
+        {
+            "file": "addon/adapters/application.js",
+            "line": 291,
             "description": "Noop as a hook for defining how deserialized resource objects are cached,\ne.g. in memory",
             "itemtype": "method",
             "name": "cacheResource",
@@ -792,7 +846,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 328,
+            "line": 300,
             "description": "Noop as a hook for defining how to handle cache after updating a resource",
             "itemtype": "method",
             "name": "cacheUpdate",
@@ -809,7 +863,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 336,
+            "line": 308,
             "description": "Initialize events to communicate on the resource instances' service reference.\nListens for resource objects trigging `attributeChanged` events",
             "itemtype": "method",
             "name": "initEvents",
@@ -832,7 +886,7 @@
         },
         {
             "file": "addon/mixins/authorization.js",
-            "line": 18,
+            "line": 17,
             "description": "The name of the Authorization request-header field",
             "itemtype": "property",
             "name": "authorizationHeaderField",
@@ -844,7 +898,7 @@
         },
         {
             "file": "addon/mixins/authorization.js",
-            "line": 27,
+            "line": 26,
             "description": "The name key, stored locally, that references the Authorization request-header credential/token",
             "itemtype": "property",
             "name": "authorizationHeaderStorageKey",
@@ -856,7 +910,7 @@
         },
         {
             "file": "addon/mixins/authorization.js",
-            "line": 36,
+            "line": 35,
             "description": "Authentication credentials/token used with HTTP authentication",
             "itemtype": "property",
             "name": "authorizationCredential",
@@ -868,7 +922,7 @@
         },
         {
             "file": "addon/mixins/authorization.js",
-            "line": 55,
+            "line": 54,
             "description": "Storage type localStorage or sessionStorage",
             "itemtype": "property",
             "name": "_storage",
@@ -878,6 +932,119 @@
             "class": "AuthorizationMixin",
             "module": "ember-jsonapi-resources",
             "submodule": "authorization"
+        },
+        {
+            "file": "addon/mixins/fetch.js",
+            "line": 14,
+            "description": "Flag indicates whether to use window.fetch or not",
+            "itemtype": "property",
+            "name": "useFetch",
+            "type": "Boolean",
+            "class": "Fetch",
+            "module": "ember-jsonapi-resources",
+            "submodule": "fetch"
+        },
+        {
+            "file": "addon/mixins/fetch.js",
+            "line": 25,
+            "description": "Flag to use $.ajax instead of window.fetch",
+            "itemtype": "property",
+            "name": "useAjax",
+            "type": "Boolean",
+            "class": "Fetch",
+            "module": "ember-jsonapi-resources",
+            "submodule": "fetch"
+        },
+        {
+            "file": "addon/mixins/fetch.js",
+            "line": 33,
+            "description": "Makes a fetch request via Fetch API (may use polyfill)\n\nsee http://updates.html5rocks.com/2015/03/introduction-to-fetch",
+            "access": "private",
+            "tagname": "",
+            "itemtype": "method",
+            "name": "_fetch",
+            "params": [
+                {
+                    "name": "url",
+                    "description": "",
+                    "type": "String"
+                },
+                {
+                    "name": "options",
+                    "description": "- may include a query object or an update flag",
+                    "type": "Object"
+                },
+                {
+                    "name": "isUpdate",
+                    "description": "",
+                    "type": "Boolean"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Ember.RSVP.Promise"
+            },
+            "class": "Fetch",
+            "module": "ember-jsonapi-resources",
+            "submodule": "fetch"
+        },
+        {
+            "file": "addon/mixins/fetch.js",
+            "line": 80,
+            "description": "Makes an XHR request via $.ajax",
+            "access": "private",
+            "tagname": "",
+            "itemtype": "method",
+            "name": "_ajax",
+            "params": [
+                {
+                    "name": "url",
+                    "description": "",
+                    "type": "String"
+                },
+                {
+                    "name": "options",
+                    "description": "- may include a query object or an update flag",
+                    "type": "Object"
+                },
+                {
+                    "name": "isUpdate",
+                    "description": "",
+                    "type": "Boolean"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Ember.RSVP.Promise"
+            },
+            "requires": [
+                "jQuery"
+            ],
+            "class": "Fetch",
+            "module": "ember-jsonapi-resources",
+            "submodule": "fetch"
+        },
+        {
+            "file": "addon/mixins/fetch.js",
+            "line": 128,
+            "access": "private",
+            "tagname": "",
+            "itemtype": "method",
+            "name": "_getXHRHeaders",
+            "params": [
+                {
+                    "name": "jqXHR",
+                    "description": "",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Object"
+            },
+            "class": "Fetch",
+            "module": "ember-jsonapi-resources",
+            "submodule": "fetch"
         },
         {
             "file": "addon/mixins/service-cache.js",

@@ -41,6 +41,7 @@
                                 <li><a href="../classes/ApplicationAdapter.html">ApplicationAdapter</a></li>
                                 <li><a href="../classes/ApplicationSerializer.html">ApplicationSerializer</a></li>
                                 <li><a href="../classes/AuthorizationMixin.html">AuthorizationMixin</a></li>
+                                <li><a href="../classes/Fetch.html">Fetch</a></li>
                                 <li><a href="../classes/RelatedProxyUtil.html">RelatedProxyUtil</a></li>
                                 <li><a href="../classes/Resource.html">Resource</a></li>
                                 <li><a href="../classes/ServiceCacheMixin.html">ServiceCacheMixin</a></li>
@@ -49,11 +50,13 @@
                                 <li><a href="../classes/TransformsMixin.html">TransformsMixin</a></li>
                             </ul>
                 
+                
                             <ul id="api-modules" class="apis modules">
                                 <li><a href="../modules/adapter.html">adapter</a></li>
                                 <li><a href="../modules/authorization.html">authorization</a></li>
                                 <li><a href="../modules/cache.html">cache</a></li>
                                 <li><a href="../modules/ember-jsonapi-resources.html">ember-jsonapi-resources</a></li>
+                                <li><a href="../modules/fetch.html">fetch</a></li>
                                 <li><a href="../modules/resource.html">resource</a></li>
                                 <li><a href="../modules/serializer.html">serializer</a></li>
                                 <li><a href="../modules/store.html">store</a></li>
@@ -265,14 +268,14 @@ export default Ember.Object.extend({
     assertTranformOperation(operation);
     let transformMethod, factory, meta;
     for (let attr in json.attributes) {
-      transformMethod = [operation, Ember.String.capitalize(attr), &#x27;Attribute&#x27;].join(&#x27;&#x27;);
+      transformMethod = transformMethodName(operation, attr);
       if (typeof this[transformMethod] === &#x27;function&#x27;) {
         json.attributes[attr] = this[transformMethod](json.attributes[attr]);
       } else {
         try {
           factory = this._lookupFactory(json.type);
           meta = factory.metaForProperty(attr);
-          transformMethod = [operation, Ember.String.capitalize(meta.type), &#x27;Attribute&#x27;].join(&#x27;&#x27;);
+          transformMethod = transformMethodName(operation, meta.type);
           if (typeof this[transformMethod] === &#x27;function&#x27;) {
             json.attributes[attr] = this[transformMethod](json.attributes[attr]);
           }
@@ -326,6 +329,10 @@ const tranformOperations = [&#x27;serialize&#x27;, &#x27;deserialize&#x27;];
 
 function assertTranformOperation(operation) {
   Ember.assert(&#x60;${operation} is not a valid transform operation&#x60;, tranformOperations.indexOf(operation) &gt; -1);
+}
+
+function transformMethodName(operation, attrName) {
+  return [operation, Ember.String.classify(attrName), &#x27;Attribute&#x27;].join(&#x27;&#x27;);
 }
 
     </pre>

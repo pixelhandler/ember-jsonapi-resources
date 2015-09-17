@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>addon/utils/transforms.js - Ember JSON API Resources</title>
+    <title>fetch - Ember JSON API Resources</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -95,57 +95,40 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-<h1 class="file-heading">File: addon/utils/transforms.js</h1>
+<h1>fetch Module</h1>
+<div class="box clearfix meta">
 
-<div class="file">
-    <pre class="code prettyprint linenums">
-/**
-  @module ember-jsonapi-resources
-  @submodule utils
-**/
 
-import { isBlank, isType } from &#x27;ember-jsonapi-resources/utils/is&#x27;;
+        <div class="foundat">
+            Defined in: <a href="../files/addon_mixins_fetch.js.html#l7"><code>addon&#x2F;mixins&#x2F;fetch.js:7</code></a>
+        </div>
 
-/**
-  @class TransformDateAttribute
-*/
-class TransformDateAttribute {
+</div>
 
-  /**
-    @method serialize
-    @param {Date|String} date
-    @return {String|Null} date value as ISO String for JSON payload, or null
-  */
-  serialize(date) {
-    if (isBlank(date) || date === &#x27;&#x27;) {
-      date = null;
-    } else if (isType(&#x27;date&#x27;, date)) {
-      date = date.toISOString();
-    } else if (isType(&#x27;string&#x27;, date)) {
-      date = new Date(date);
-    }
-    return (date) ? date : null;
-  }
 
-  /**
-    @method deserialize
-    @param {String} date usually in ISO format, must be a valid argument for Date
-    @return {Date|Null} date value from JSON payload, or null
-  */
-  deserialize(date) {
-    if (isBlank(date)) {
-      date = null;
-    } else if (isType(&#x27;string&#x27;, date) || isType(&#x27;number&#x27;, date)) {
-      date = new Date(date);
-    }
-    return (date) ? date : null;
-  }
+<div class="box intro">
+    <p>Fetch/Ajax methods for use with an Adapter calls <code>cacheUpdate</code>, <code>cacheResource</code>
+methods and a <code>serializer</code> injection.</p>
 
-}
+</div>
 
-export let dateTransform = new TransformDateAttribute();
 
-    </pre>
+<div class="yui3-g">
+    <div class="yui3-u-1-2">
+            <p>This module provides the following classes:</p>
+
+            <ul class="module-classes">
+                <li class="module-class">
+                    <a href="../classes/Fetch.html">
+                        Fetch
+                    </a>
+                </li>
+            </ul>
+    </div>
+
+
+    <div class="yui3-u-1-2">
+    </div>
 </div>
                     </div>
                 </div>

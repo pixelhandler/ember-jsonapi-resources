@@ -4,6 +4,7 @@ YUI.add("yuidoc-meta", function(Y) {
         "ApplicationAdapter",
         "ApplicationSerializer",
         "AuthorizationMixin",
+        "Fetch",
         "RelatedProxyUtil",
         "Resource",
         "ServiceCacheMixin",
@@ -16,6 +17,7 @@ YUI.add("yuidoc-meta", function(Y) {
         "authorization",
         "cache",
         "ember-jsonapi-resources",
+        "fetch",
         "resource",
         "serializer",
         "store",
@@ -43,6 +45,11 @@ YUI.add("yuidoc-meta", function(Y) {
             "name": "ember-jsonapi-resources"
         },
         {
+            "displayName": "fetch",
+            "name": "fetch",
+            "description": "Fetch/Ajax methods for use with an Adapter calls `cacheUpdate`, `cacheResource`\nmethods and a `serializer` injection."
+        },
+        {
             "displayName": "resource",
             "name": "resource",
             "description": "A Resource class to create JSON API resource objects\n\nSee <http://jsonapi.org/format/#document-resource-objects>"
@@ -67,6 +74,7 @@ YUI.add("yuidoc-meta", function(Y) {
             "name": "utils",
             "description": "Utility for creating promise proxy objects for related resources"
         }
-    ]
+    ],
+    "elements": []
 } };
 });
