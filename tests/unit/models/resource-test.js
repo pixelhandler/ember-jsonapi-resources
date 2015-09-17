@@ -234,6 +234,103 @@ test('#removeRelationship', function(assert) {
   assert.equal(JSON.stringify(commenter.get('relationships')), commenterRelations, 'removed a comment from commenter');
 });
 
+test('#addRelationships', function(assert) {
+  let post = this.container.lookupFactory('model:posts').create({
+    id: '1', attributes: {title: 'Wyatt Earp', excerpt: 'Was a gambler.'}
+  });
+  post.addRelationships('comments', ['4', '5']);
+  let comments = post.get('relationships.comments.data');
+  assert.ok(comments.mapBy('id').indexOf('4') !== -1, 'Comment id 4 added');
+  assert.ok(comments.mapBy('id').indexOf('5') !== -1, 'Comment id 5 added');
+  assert.equal(comments[0].type, 'comments', 'relation has comments type');
+  assert.equal(comments[1].type, 'comments', 'relation has comments type');
+  post.addRelationships('author', '2');
+  let author = post.get('relationships.author.data');
+  assert.equal(author.id, '2', 'Author id 2 added');
+  assert.equal(author.type, 'authors', 'Author id 2 added');
+});
+
+test('#removeRelationships', function(assert) {
+  let post = this.container.lookupFactory('model:posts').create({
+    id: '1', attributes: {title: 'Wyatt Earp', excerpt: 'Was a gambler.'},
+    relationships: {
+      author: { data: { type: 'authors', id: '2' } },
+      comments: { data: [{ type: 'comments', id: '4' }] }
+    }
+  });
+  post.removeRelationships('comments', ['4']);
+  let comments = post.get('relationships.comments.data');
+  assert.equal(comments.length, 0, 'remove comment relation');
+  post.removeRelationships('author', '2');
+  let author = post.get('relationships.author.data');
+  assert.equal(author, null, 'removed author');
+});
+
+test('#updateRelationship', function(assert) {
+  let serviceOp = this.sandbox.spy();
+  let post = this.container.lookupFactory('model:posts').create({
+    id: '1', attributes: {title: 'Wyatt Earp', excerpt: 'Was a gambler.'},
+    relationships: {
+      author: { data: { type: 'authors', id: '2' } },
+      comments: { data: [{ type: 'comments', id: '4' }] }
+    },
+    // mock service
+    service: { patchRelationship: serviceOp }
+  });
+  let author = post.get('relationships.author.data');
+  let comments = post.get('relationships.comments.data');
+  assert.equal(author.id, 2, 'post has author id 2');
+
+  post.updateRelationship('comments', ['4', '5']);
+  comments = post.get('relationships.comments.data');
+  assert.ok(serviceOp.calledOnce, 'service#patchRelationship called once');
+  assert.equal(comments.length, 2, 'post has 2 comments');
+
+  post.updateRelationship('comments', ['1', '2', '3', '4']);
+  comments = post.get('relationships.comments.data');
+  assert.equal(comments.length, 5, 'post has 5 comments');
+
+  post.updateRelationship('comments', ['1', '2']);
+  comments = post.get('relationships.comments.data');
+  assert.equal(comments.length, 2, 'post has 2 comments');
+
+  post.updateRelationship('comments', []);
+  comments = post.get('relationships.comments.data');
+  assert.equal(comments.length, 0, 'post has 0 comments');
+
+  post.updateRelationship('author', '1');
+  author = post.get('relationships.author.data');
+  assert.equal(author.id, 1, 'author id changed to 1');
+
+  post.updateRelationship('author', null);
+  author = post.get('relationships.author.data');
+  assert.equal(author, null, 'author removed');
+});
+
+test('#isNew resource uses relations without proxied content', function(assert) {
+  let serviceOp = this.sandbox.spy();
+  let post = this.container.lookupFactory('model:posts').create({
+    id: '1', attributes: {title: 'Wyatt Earp', excerpt: 'Was a gambler.'},
+    isNew: true,
+    // mock service
+    service: { findRelated: serviceOp }
+  });
+
+  post.addRelationships('comments', ['4', '5']);
+  let comments = post.get('comments');
+  assert.equal(serviceOp.calledOnce, false, 'service#findRelated not called after adding to-many');
+  assert.equal(comments.length, 0, '0 comments');
+  comments = post.get('relationships.comments.data');
+  assert.equal(comments.length, 2, '2 items in comments data');
+
+  post.addRelationships('author', '2');
+  assert.equal(serviceOp.calledOnce, false, 'service#findRelated not called after adding to-one');
+  let author = post.get('author');
+  assert.equal(author.id, undefined, 'author id is undefined');
+  author = post.get('relationships.author.data');
+  assert.equal(author.id, 2, 'author data id is 2');
+});
+
 // This may only intermittently pass
 QUnit.skip('#initEvents', function(assert) {
   const proto = Resource.PrototypeMixin.mixins[1].properties;

@@ -164,7 +164,7 @@ export default Ember.Object.extend(FetchMixin, Ember.Evented, {
     Patch a relationship, either add or remove, sends a PATCH request
 
     Adds with payload: `{ "data": { "type": "comments", "id": "12" } }`
-    Removes with payload: `{ "data": null }`
+    Removes with payload: `{ "data": null }` for to-one or `{ "data": [] }` for to-many
 
     @method patchRelationship
     @param {Resource} the resource instance, has URLs via it's relationships property
@@ -245,6 +245,7 @@ export default Ember.Object.extend(FetchMixin, Ember.Evented, {
   fetchOptions(options) {
     let isUpdate;
     options.headers = options.headers || { 'Content-Type': 'application/vnd.api+json' };
+    options.credentials = options.credentials || 'same-origin';
     this.fetchAuthorizationHeader(options);
     if (typeof options.update === 'boolean') {
       isUpdate = options.update;

@@ -74,8 +74,8 @@ export default Ember.Service.extend({
 
     @method patchRelationship
     @param {String} type - the entity or resource name will be pluralized
-    @param {Resource} the resource instance, has URLs via it's relationships property
-    @param {String} resource name (plural) to find the url from the resource instance
+    @param {Resource} resource - model instance, has URLs via it's relationships property
+    @param {String} relationship - resource name (plural) to find the url from the resource instance
     @return {Promise}
   */
   patchRelationship(type, resource, relationship) {

@@ -50,20 +50,51 @@ const RelatedProxyUtil = Ember.Object.extend({
 
     @method createProxy
     @param {Resource} resource
+    @param {String} kind 'many' or 'one'
+    @return {PromiseProxy|ObjectProxy|ArrayProxy} proxy instance, new resource uses mock relations
+  */
+  createProxy(resource, kind) {
+    let mockRelation, proxyFactory;
+    if (kind === 'many') {
+      mockRelation = Ember.A([]);
+      proxyFactory = Ember.ArrayProxy;
+    } else if (kind === 'one') {
+      mockRelation = Ember.Object.create();
+      proxyFactory = Ember.ObjectProxy;
+    }
+    if (resource.get('isNew')) {
+      return mockRelation;
+    } else {
+      let proxy = this.proxySetup(resource, proxyFactory);
+      return this.proxyResolution(proxy);
+    }
+  },
+
+  /**
+    @method proxySetup
+    @param {Resource} resource
     @param {Ember.ObjectProxy|Ember.ArrayProxy} proxyFactory
     @return {PromiseProxy} proxy
   */
-  createProxy: function (resource, proxyFactory) {
+  proxySetup(resource, proxyFactory) {
     let relation = this.get('relationship');
     let type = this.get('type');
     let url = this.proxyUrl(resource, relation);
     let service = resource.container.lookup('service:' + pluralize(type));
     let promise = this.promiseFromCache(resource, relation, service);
     promise = promise || service.findRelated({'resource': relation, 'type': type}, url);
-    let proxy = proxyFactory.extend(Ember.PromiseProxyMixin, {
+    let proxyProto = proxyFactory.extend(Ember.PromiseProxyMixin, {
       'promise': promise, 'type': relation
     });
-    proxy = proxy.create();
+    return proxyProto.create();
+  },
+
+  /**
+    @method proxyResolution
+    @param {proxy} resource
+    @return {PromiseProxy} proxy
+  */
+  proxyResolution(proxy) {
     proxy.then(
       function (resources) {
         proxy.set('content', resources);

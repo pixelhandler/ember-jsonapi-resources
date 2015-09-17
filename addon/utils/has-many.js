@@ -49,7 +49,7 @@ export default function hasMany(relation) {
   let util = RelatedProxyUtil.create({'relationship': relation, 'type': type});
   let path = linksPath(relation);
   return Ember.computed(path, function () {
-    return util.createProxy(this, Ember.ArrayProxy);
+    return util.createProxy(this, 'many');
   }).meta({relation: relation, type: type, kind: 'hasMany'});
 }
 

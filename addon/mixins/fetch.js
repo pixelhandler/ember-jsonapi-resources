@@ -8,7 +8,7 @@ import Ember from 'ember';
   Fetch/Ajax methods for use with an Adapter calls `cacheUpdate`, `cacheResource`
   methods and a `serializer` injection.
 
-  @class Fetch
+  @class FetchMixin
 */
 export default Ember.Mixin.create({
   /**
