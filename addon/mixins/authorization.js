@@ -12,7 +12,6 @@ import Ember from 'ember';
 
   @class AuthorizationMixin
 */
-
 export default Ember.Mixin.create({
 
   /**

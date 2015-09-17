@@ -5,6 +5,7 @@
 
 import Ember from 'ember';
 import { pluralize } from 'ember-inflector';
+import FetchMixin from 'ember-jsonapi-resources/mixins/fetch';
 
 /**
   Adapter for a JSON API endpoint, use as a service for your backend
@@ -14,7 +15,7 @@ import { pluralize } from 'ember-inflector';
   @uses Ember.Evented
   @static
 */
-export default Ember.Object.extend(Ember.Evented, {
+export default Ember.Object.extend(FetchMixin, Ember.Evented, {
 
   /**
     The name of the entity
@@ -202,9 +203,7 @@ export default Ember.Object.extend(Ember.Evented, {
   },
 
   /**
-    Makes a fetch request via Fetch API
-
-    see http://updates.html5rocks.com/2015/03/introduction-to-fetch
+    Fetches data using Fetch API or XMLHttpRequest
 
     @method fetch
     @param {String} url
@@ -212,40 +211,25 @@ export default Ember.Object.extend(Ember.Evented, {
     @return {Ember.RSVP.Promise}
   */
   fetch(url, options = {}) {
-    let isUpdate = this.fetchOptions(options);
     url = this.fetchUrl(url);
-    const _this = this;
-    return new Ember.RSVP.Promise(function(resolve, reject) {
-      window.fetch(url, options).then(function(resp) {
-        if (resp.status >= 500) {
-          let msg = 'The Service responded with a '+ resp.status +' error.';
-          reject(new ServerError(msg, resp));
-        } else if (resp.status >= 400) {
-          resp.json().then(function(_resp) {
-            let msg = 'The API responded with a '+ resp.status +' error.';
-            reject(new ClientError(msg, _resp));
-          });
-        } else if (resp.status === 204) {
-          resolve('');
-        } else {
-          return resp.json().then(function(json) {
-            if (isUpdate) {
-              _this.cacheUpdate({ meta: json.meta, data: json.data, headers: resp.headers });
-              json.data = _this.serializer.transformAttributes(json.data);
-              resolve(json.data);
-            } else {
-              const resource = _this.serializer.deserialize(json);
-              _this.cacheResource({ meta: json.meta, data: resource, headers: resp.headers });
-              _this.serializer.deserializeIncluded(json.included, { headers: resp.headers });
-              resolve(resource);
-            }
-          });
-        }
-      }).catch(function(error) {
-        let msg = (error && error.message) ? error.message : 'Unable to Fetch resource(s)';
-        reject(new FetchError(msg, error));
-      });
-    });
+    let isUpdate = this.fetchOptions(options);
+    if (this.get('useFetch')) {
+      return this._fetch(url, options, isUpdate);
+    } else {
+      return this._ajax(url, options, isUpdate);
+    }
+  },
+
+  /**
+    Hook to customize the URL, e.g. if your API is behind a proxy and you need
+    to swap a portion of the domain to make a request on the same domain.
+
+    @method fetchUrl
+    @param {String} url
+    @return {String}
+  */
+  fetchUrl(url) {
+    return url;
   },
 
   /**
@@ -305,18 +289,6 @@ export default Ember.Object.extend(Ember.Evented, {
   authorizationHeaderField: null,
 
   /**
-    Hook to customize the URL, e.g. if your API is behind a proxy and you need
-    to swap a portion of the domain to make a request on the same domain.
-
-    @method fetchUrl
-    @param {String} url
-    @return {String}
-  */
-  fetchUrl(url) {
-    return url;
-  },
-
-  /**
     Noop as a hook for defining how deserialized resource objects are cached,
     e.g. in memory
 
@@ -343,33 +315,3 @@ export default Ember.Object.extend(Ember.Evented, {
     this.on('attributeChanged', this, this.updateResource);
   })
 });
-
-function ServerError(message = 'Server Error', response = null) {
-  this.name = 'ServerError';
-  this.message = message;
-  this.response = response;
-  this.errors = response.errors || null;
-}
-ServerError.prototype = Object.create(Error.prototype);
-ServerError.prototype.constructor = ServerError;
-
-function ClientError(message = 'Client Error', response = null) {
-  this.name = 'ClientError';
-  this.message = message;
-  this.response = response;
-  this.errors = response.errors || null;
-  this.errors = (response) ? response.errors || null : null;
-}
-ClientError.prototype = Object.create(Error.prototype);
-ClientError.prototype.constructor = ClientError;
-
-function FetchError(message = 'Fetch Error', error = null, response = null) {
-  this.name = 'FetchError';
-  this.message = message;
-  this.stack = (error) ? error.stack || null : null;
-
-  this.error = error;
-  this.response = response;
-}
-FetchError.prototype = Object.create(Error.prototype);
-FetchError.prototype.constructor = FetchError;
