@@ -18,7 +18,7 @@ export default Ember.Mixin.create({
     @type Boolean
   */
   useFetch: Ember.computed('useAjax', function () {
-    let notFirefox = navigator.userAgent.indexOf("Firefox") === -1;
+    let notFirefox = window.navigator.userAgent.indexOf("Firefox") === -1;
     return !this.get('useAjax') && window.fetch && notFirefox;
   }),
 
@@ -92,13 +92,7 @@ export default Ember.Mixin.create({
     let _this = this;
     return new Ember.RSVP.Promise(function(resolve, reject) {
       Ember.$.ajax(url, options).done(function(json, textStatus, jqXHR) {
-        if (jqXHR.status >= 500) {
-          let msg = 'The Service responded with ' + textStatus + ' ' + jqXHR.status;
-          reject(new ServerError(msg, json));
-        } else if (jqXHR.status >= 400) {
-          let msg = 'The API responded with a '+ jqXHR.status +' error.';
-          reject(new ClientError(msg, json));
-        } else if (jqXHR.status === 204) {
+        if (jqXHR.status === 204) {
           resolve('');
         } else {
           let headers = _this._getAjaxHeaders(jqXHR);
@@ -114,13 +108,22 @@ export default Ember.Mixin.create({
           }
         }
       }).fail(function(jqXHR, textStatus, errorThrown) {
-        let msg = (errorThrown) ? errorThrown : 'Unable to Fetch resource(s)';
-        reject(new FetchError(msg, {
-          code: jqXHR.status,
-          message: errorThrown,
-          'status': textStatus,
-          response: jqXHR.responseText
-        }));
+        let msg;
+        if (jqXHR.status >= 500) {
+          msg = 'The Service responded with ' + textStatus + ' ' + jqXHR.status;
+          reject(new ServerError(msg, jqXHR.responseJSON || jqXHR.responseText));
+        } else if (jqXHR.status >= 400) {
+          msg = 'The API responded with a '+ jqXHR.status +' error.';
+          reject(new ClientError(msg, jqXHR.responseJSON || jqXHR.responseText));
+        } else {
+          msg = (errorThrown) ? errorThrown : 'Unable to Fetch resource(s)';
+          reject(new FetchError(msg, {
+            code: jqXHR.status,
+            message: errorThrown,
+            'status': textStatus,
+            response: jqXHR.responseText
+          }));
+        }
       });
     });
   },

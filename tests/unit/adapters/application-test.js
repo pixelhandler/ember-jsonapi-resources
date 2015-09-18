@@ -356,7 +356,7 @@ test('#fetch handles 5xx (ServerError) response status', function(assert) {
   let promise = adapter.fetch('/posts', { method: 'POST', body: 'json string here' });
   assert.ok(typeof promise.then === 'function', 'returns a thenable');
   promise.catch(function(error) {
-    assert.equal(error.name, 'ServerError', '5xx response throws aa custom error');
+    assert.equal(error.name, 'ServerError', '5xx response throws a custom error');
     done();
   });
 });
