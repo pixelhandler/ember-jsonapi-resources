@@ -112,5 +112,17 @@ test('#_ajax handles 200 (Success) response status', function(assert) {
     assert.ok(this.subject.cacheResource.calledOnce, '#cacheResource method called');
     done();
   }.bind(this));
+});
 
+test('#_getAjaxHeaders', function(assert) {
+  let jqXHR = {
+    getAllResponseHeaders: function() {
+      let resHdr = "Content-Type: application/vnd.api+json\n";
+      resHdr += "Cache-Control: max-age=0, private, must-revalidate\n";
+      return resHdr;
+    }
+  };
+  let headers = this.subject._getAjaxHeaders(jqXHR);
+  assert.equal(headers['Content-Type'], 'application/vnd.api+json', 'JSAON API header ok');
+  assert.equal(headers['Cache-Control'], 'max-age=0, private, must-revalidate', 'Catch control header ok');
 });
