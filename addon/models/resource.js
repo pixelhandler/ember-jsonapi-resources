@@ -8,6 +8,7 @@ import { pluralize, singularize } from 'ember-inflector';
 import attr from 'ember-jsonapi-resources/utils/attr';
 import hasOne from 'ember-jsonapi-resources/utils/has-one';
 import hasMany from 'ember-jsonapi-resources/utils/has-many';
+import { isType } from 'ember-jsonapi-resources/utils/is';
 
 /**
   A Resource class to create JSON API resource objects
@@ -117,6 +118,64 @@ const Resource = Ember.Object.extend({
   },
 
   /**
+    Update a relation by adding or removing using a list, id, or null. When
+    adding an id for a to-many relation send one or more ids, include the
+    existing ids as well. When removing from a to-many relation pass the ids
+    that should remain, missing ids will be removed, or remove all with an empty
+    array. When operating on a to-one relation just use the id to change the
+    relation, or null to remove.
+
+    This is not a replace operation, but rather support for editing as a set.
+
+    @method updateRelationship
+    @param {String} relation
+    @param {Array|String|null} ids
+  */
+  updateRelationship(relation, ids) {
+    let relationshipData = 'relationships.' + relation + '.data';
+    let existing;
+    if (!Array.isArray(ids)) {
+      existing = this.get(relationshipData).id;
+      this.removeRelationship(relation, existing);
+      if (isType('string', ids)) {
+        this.addRelationship(relation, ids);
+      }
+    } else {
+      existing = this.get(relationshipData).map(function(rel) { return rel.id; });
+      if (!existing.length) {
+        this.addRelations(relation, ids);
+      } else if (ids.length > existing.length) {
+        this.addRelationships(relation, unique(ids, existing));
+      } else if (existing.length > ids.length) {
+        this.removeRelationships(relation, unique(existing, ids));
+      }
+    }
+    return this.get('service').patchRelationship(this, relation);
+  },
+
+  /**
+    @method addRelationships
+    @param {String} related - resource name
+    @param {Array} ids
+  */
+  addRelationships(related, ids) {
+    for (let i = 0; i < ids.length; i++) {
+      this.addRelationship(related, ids[i]);
+    }
+  },
+
+  /**
+    @method removeRelationships
+    @param {String} related - resource name
+    @param {Array} ids
+  */
+  removeRelationships(related, ids) {
+    for (let i = 0; i < ids.length; i++) {
+      this.removeRelationship(related, ids[i]);
+    }
+  },
+
+  /**
     Adds related links object on the relationship hash
 
     @method addRelationship
@@ -129,7 +188,7 @@ const Resource = Ember.Object.extend({
     const type = pluralize(related);
     const linkage = { type: type, id: id };
     if (Array.isArray(data)) {
-      data.pushObject(linkage);
+      data.push(linkage);
     } else {
       data = linkage;
     }
@@ -335,4 +394,14 @@ function setupRelationship(relation, data = null) {
   if (!this.relationships[relation].data) {
     this.relationships[relation].data = data;
   }
+}
+
+function unique(superSet, subSet) {
+  let intersection = superSet.filter(function (item) {
+    return subSet.indexOf(item) !== -1;
+  });
+  let _unique = superSet.filter(function (item) {
+    return intersection.indexOf(item) === -1;
+  });
+  return (unique.length) ? _unique : subSet;
 }
