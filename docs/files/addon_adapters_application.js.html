@@ -41,7 +41,7 @@
                                 <li><a href="../classes/ApplicationAdapter.html">ApplicationAdapter</a></li>
                                 <li><a href="../classes/ApplicationSerializer.html">ApplicationSerializer</a></li>
                                 <li><a href="../classes/AuthorizationMixin.html">AuthorizationMixin</a></li>
-                                <li><a href="../classes/Fetch.html">Fetch</a></li>
+                                <li><a href="../classes/FetchMixin.html">FetchMixin</a></li>
                                 <li><a href="../classes/RelatedProxyUtil.html">RelatedProxyUtil</a></li>
                                 <li><a href="../classes/Resource.html">Resource</a></li>
                                 <li><a href="../classes/ServiceCacheMixin.html">ServiceCacheMixin</a></li>
@@ -265,7 +265,7 @@ export default Ember.Object.extend(FetchMixin, Ember.Evented, {
     Patch a relationship, either add or remove, sends a PATCH request
 
     Adds with payload: &#x60;{ &quot;data&quot;: { &quot;type&quot;: &quot;comments&quot;, &quot;id&quot;: &quot;12&quot; } }&#x60;
-    Removes with payload: &#x60;{ &quot;data&quot;: null }&#x60;
+    Removes with payload: &#x60;{ &quot;data&quot;: null }&#x60; for to-one or &#x60;{ &quot;data&quot;: [] }&#x60; for to-many
 
     @method patchRelationship
     @param {Resource} the resource instance, has URLs via it&#x27;s relationships property
@@ -346,6 +346,7 @@ export default Ember.Object.extend(FetchMixin, Ember.Evented, {
   fetchOptions(options) {
     let isUpdate;
     options.headers = options.headers || { &#x27;Content-Type&#x27;: &#x27;application/vnd.api+json&#x27; };
+    options.credentials = options.credentials || &#x27;same-origin&#x27;;
     this.fetchAuthorizationHeader(options);
     if (typeof options.update === &#x27;boolean&#x27;) {
       isUpdate = options.update;

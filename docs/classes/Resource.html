@@ -41,7 +41,7 @@
                                 <li><a href="../classes/ApplicationAdapter.html">ApplicationAdapter</a></li>
                                 <li><a href="../classes/ApplicationSerializer.html">ApplicationSerializer</a></li>
                                 <li><a href="../classes/AuthorizationMixin.html">AuthorizationMixin</a></li>
-                                <li><a href="../classes/Fetch.html">Fetch</a></li>
+                                <li><a href="../classes/FetchMixin.html">FetchMixin</a></li>
                                 <li><a href="../classes/RelatedProxyUtil.html">RelatedProxyUtil</a></li>
                                 <li><a href="../classes/Resource.html">Resource</a></li>
                                 <li><a href="../classes/ServiceCacheMixin.html">ServiceCacheMixin</a></li>
@@ -100,7 +100,7 @@
 
 
         <div class="foundat">
-            Defined in: <a href="../files/addon_models_resource.js.html#l12"><code>addon&#x2F;models&#x2F;resource.js:12</code></a>
+            Defined in: <a href="../files/addon_models_resource.js.html#l13"><code>addon&#x2F;models&#x2F;resource.js:13</code></a>
         </div>
 
             Module: <a href="../modules/resource.html">resource</a><br>
@@ -137,6 +137,10 @@
 
                             </li>
                             <li class="index-item method">
+                                <a href="#method_addRelationships">addRelationships</a>
+
+                            </li>
+                            <li class="index-item method">
                                 <a href="#method_changedAttributes">changedAttributes</a>
 
                             </li>
@@ -161,7 +165,15 @@
 
                             </li>
                             <li class="index-item method">
+                                <a href="#method_removeRelationships">removeRelationships</a>
+
+                            </li>
+                            <li class="index-item method">
                                 <a href="#method_toString">toString</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_updateRelationship">updateRelationship</a>
 
                             </li>
                     </ul>
@@ -248,7 +260,7 @@
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l119"><code>addon&#x2F;models&#x2F;resource.js:119</code></a>
+        <a href="../files/addon_models_resource.js.html#l178"><code>addon&#x2F;models&#x2F;resource.js:178</code></a>
         </p>
 
 
@@ -293,6 +305,74 @@
 
 
 </div>
+<div id="method_addRelationships" class="method item">
+    <h3 class="name"><code>addRelationships</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>related</code>
+                </li>
+                <li class="arg">
+                        <code>ids</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/addon_models_resource.js.html#l156"><code>addon&#x2F;models&#x2F;resource.js:156</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">related</code>
+                        <span class="type">String</span>
+
+
+                    <div class="param-description">
+                        <ul>
+<li>resource name</li>
+</ul>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">ids</code>
+                        <span class="type">Array</span>
+
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+
+
+</div>
 <div id="method_changedAttributes" class="method item">
     <h3 class="name"><code>changedAttributes</code></h3>
 
@@ -311,7 +391,7 @@
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l160"><code>addon&#x2F;models&#x2F;resource.js:160</code></a>
+        <a href="../files/addon_models_resource.js.html#l219"><code>addon&#x2F;models&#x2F;resource.js:219</code></a>
         </p>
 
 
@@ -353,7 +433,7 @@
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l244"><code>addon&#x2F;models&#x2F;resource.js:244</code></a>
+        <a href="../files/addon_models_resource.js.html#l303"><code>addon&#x2F;models&#x2F;resource.js:303</code></a>
         </p>
 
 
@@ -419,7 +499,7 @@ object prior to adding a relationship.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l208"><code>addon&#x2F;models&#x2F;resource.js:208</code></a>
+        <a href="../files/addon_models_resource.js.html#l267"><code>addon&#x2F;models&#x2F;resource.js:267</code></a>
         </p>
 
 
@@ -467,7 +547,7 @@ object prior to adding a relationship.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l196"><code>addon&#x2F;models&#x2F;resource.js:196</code></a>
+        <a href="../files/addon_models_resource.js.html#l255"><code>addon&#x2F;models&#x2F;resource.js:255</code></a>
         </p>
 
 
@@ -501,7 +581,7 @@ object prior to adding a relationship.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l178"><code>addon&#x2F;models&#x2F;resource.js:178</code></a>
+        <a href="../files/addon_models_resource.js.html#l237"><code>addon&#x2F;models&#x2F;resource.js:237</code></a>
         </p>
 
 
@@ -549,7 +629,7 @@ object prior to adding a relationship.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l139"><code>addon&#x2F;models&#x2F;resource.js:139</code></a>
+        <a href="../files/addon_models_resource.js.html#l198"><code>addon&#x2F;models&#x2F;resource.js:198</code></a>
         </p>
 
 
@@ -594,6 +674,74 @@ object prior to adding a relationship.</p>
 
 
 </div>
+<div id="method_removeRelationships" class="method item">
+    <h3 class="name"><code>removeRelationships</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>related</code>
+                </li>
+                <li class="arg">
+                        <code>ids</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/addon_models_resource.js.html#l167"><code>addon&#x2F;models&#x2F;resource.js:167</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">related</code>
+                        <span class="type">String</span>
+
+
+                    <div class="param-description">
+                        <ul>
+<li>resource name</li>
+</ul>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">ids</code>
+                        <span class="type">Array</span>
+
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+
+
+</div>
 <div id="method_toString" class="method item">
     <h3 class="name"><code>toString</code></h3>
 
@@ -609,7 +757,7 @@ object prior to adding a relationship.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l108"><code>addon&#x2F;models&#x2F;resource.js:108</code></a>
+        <a href="../files/addon_models_resource.js.html#l109"><code>addon&#x2F;models&#x2F;resource.js:109</code></a>
         </p>
 
 
@@ -621,6 +769,78 @@ object prior to adding a relationship.</p>
 
     </div>
 
+
+
+
+</div>
+<div id="method_updateRelationship" class="method item">
+    <h3 class="name"><code>updateRelationship</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>relation</code>
+                </li>
+                <li class="arg">
+                        <code>ids</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/addon_models_resource.js.html#l120"><code>addon&#x2F;models&#x2F;resource.js:120</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Update a relation by adding or removing using a list, id, or null. When
+adding an id for a to-many relation send one or more ids, include the
+existing ids as well. When removing from a to-many relation pass the ids
+that should remain, missing ids will be removed, or remove all with an empty
+array. When operating on a to-one relation just use the id to change the
+relation, or null to remove.</p>
+<p>This is not a replace operation, but rather support for editing as a set.</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">relation</code>
+                        <span class="type">String</span>
+
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">ids</code>
+                        <span class="type">Array | String | Null</span>
+
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                </li>
+            </ul>
+        </div>
 
 
 
@@ -642,7 +862,7 @@ object prior to adding a relationship.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l91"><code>addon&#x2F;models&#x2F;resource.js:91</code></a>
+        <a href="../files/addon_models_resource.js.html#l92"><code>addon&#x2F;models&#x2F;resource.js:92</code></a>
         </p>
 
 
@@ -668,7 +888,7 @@ object prior to adding a relationship.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l50"><code>addon&#x2F;models&#x2F;resource.js:50</code></a>
+        <a href="../files/addon_models_resource.js.html#l51"><code>addon&#x2F;models&#x2F;resource.js:51</code></a>
         </p>
 
 
@@ -696,7 +916,7 @@ Use this as a refence for creating computed properties</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l224"><code>addon&#x2F;models&#x2F;resource.js:224</code></a>
+        <a href="../files/addon_models_resource.js.html#l283"><code>addon&#x2F;models&#x2F;resource.js:283</code></a>
         </p>
 
 
@@ -721,7 +941,7 @@ Use this as a refence for creating computed properties</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l41"><code>addon&#x2F;models&#x2F;resource.js:41</code></a>
+        <a href="../files/addon_models_resource.js.html#l42"><code>addon&#x2F;models&#x2F;resource.js:42</code></a>
         </p>
 
 
@@ -746,7 +966,7 @@ Use this as a refence for creating computed properties</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l232"><code>addon&#x2F;models&#x2F;resource.js:232</code></a>
+        <a href="../files/addon_models_resource.js.html#l291"><code>addon&#x2F;models&#x2F;resource.js:291</code></a>
         </p>
 
 
@@ -770,7 +990,7 @@ Use this as a refence for creating computed properties</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l100"><code>addon&#x2F;models&#x2F;resource.js:100</code></a>
+        <a href="../files/addon_models_resource.js.html#l101"><code>addon&#x2F;models&#x2F;resource.js:101</code></a>
         </p>
 
 
@@ -796,7 +1016,7 @@ Use this as a refence for creating computed properties</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l73"><code>addon&#x2F;models&#x2F;resource.js:73</code></a>
+        <a href="../files/addon_models_resource.js.html#l74"><code>addon&#x2F;models&#x2F;resource.js:74</code></a>
         </p>
 
 
@@ -822,7 +1042,7 @@ Use this as a refence for creating computed properties</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l82"><code>addon&#x2F;models&#x2F;resource.js:82</code></a>
+        <a href="../files/addon_models_resource.js.html#l83"><code>addon&#x2F;models&#x2F;resource.js:83</code></a>
         </p>
 
 
@@ -848,7 +1068,7 @@ Use this as a refence for creating computed properties</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l64"><code>addon&#x2F;models&#x2F;resource.js:64</code></a>
+        <a href="../files/addon_models_resource.js.html#l65"><code>addon&#x2F;models&#x2F;resource.js:65</code></a>
         </p>
 
 
@@ -873,7 +1093,7 @@ Use this as a refence for creating computed properties</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l23"><code>addon&#x2F;models&#x2F;resource.js:23</code></a>
+        <a href="../files/addon_models_resource.js.html#l24"><code>addon&#x2F;models&#x2F;resource.js:24</code></a>
         </p>
 
 
@@ -898,7 +1118,7 @@ Use this as a refence for creating computed properties</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l32"><code>addon&#x2F;models&#x2F;resource.js:32</code></a>
+        <a href="../files/addon_models_resource.js.html#l33"><code>addon&#x2F;models&#x2F;resource.js:33</code></a>
         </p>
 
 

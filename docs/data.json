@@ -43,7 +43,7 @@
                 "fetch": 1
             },
             "classes": {
-                "Fetch": 1
+                "FetchMixin": 1
             },
             "fors": {},
             "namespaces": {}
@@ -168,7 +168,7 @@
             "classes": {
                 "ApplicationAdapter": 1,
                 "AuthorizationMixin": 1,
-                "Fetch": 1,
+                "FetchMixin": 1,
                 "ServiceCacheMixin": 1,
                 "TransformsMixin": 1,
                 "Resource": 1,
@@ -235,7 +235,7 @@
             "submodules": {},
             "elements": {},
             "classes": {
-                "Fetch": 1
+                "FetchMixin": 1
             },
             "fors": {},
             "is_submodule": 1,
@@ -291,7 +291,7 @@
             "module": "ember-jsonapi-resources",
             "namespace": "",
             "file": "addon/models/resource.js",
-            "line": 12,
+            "line": 13,
             "description": "A Resource class to create JSON API resource objects\n\nSee <http://jsonapi.org/format/#document-resource-objects>"
         },
         "serializer": {
@@ -366,9 +366,9 @@
             "line": 8,
             "description": "A Mixin class for storage of credential/token uses with a HTTP Authorization request-header\n\nThe default solution is to use localStorage['AuthorizationHeader'] for the credential"
         },
-        "Fetch": {
-            "name": "Fetch",
-            "shortname": "Fetch",
+        "FetchMixin": {
+            "name": "FetchMixin",
+            "shortname": "FetchMixin",
             "classitems": [],
             "plugins": [],
             "extensions": [],
@@ -426,7 +426,7 @@
             "submodule": "resource",
             "namespace": "",
             "file": "addon/models/resource.js",
-            "line": 12,
+            "line": 13,
             "description": "A Resource class to create JSON API resource objects\n\nSee <http://jsonapi.org/format/#document-resource-objects>",
             "requires": [
                 "Ember.Inflector"
@@ -676,7 +676,7 @@
         {
             "file": "addon/adapters/application.js",
             "line": 163,
-            "description": "Patch a relationship, either add or remove, sends a PATCH request\n\nAdds with payload: `{ \"data\": { \"type\": \"comments\", \"id\": \"12\" } }`\nRemoves with payload: `{ \"data\": null }`",
+            "description": "Patch a relationship, either add or remove, sends a PATCH request\n\nAdds with payload: `{ \"data\": { \"type\": \"comments\", \"id\": \"12\" } }`\nRemoves with payload: `{ \"data\": null }` for to-one or `{ \"data\": [] }` for to-many",
             "itemtype": "method",
             "name": "patchRelationship",
             "params": [
@@ -790,7 +790,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 256,
+            "line": 257,
             "description": "Sets Authorization header if accessible in the `authorizationCredential` property",
             "itemtype": "method",
             "name": "fetchAuthorizationHeader",
@@ -807,7 +807,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 273,
+            "line": 274,
             "description": "Authentication credentials/token used with HTTP authentication\nThis property should be added by an Authorization Mixin",
             "itemtype": "property",
             "name": "authorizationCredential",
@@ -818,7 +818,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 282,
+            "line": 283,
             "description": "The name of the Authorization request-header field\nThis property should be added by an Authorization Mixin",
             "itemtype": "property",
             "name": "authorizationHeaderField",
@@ -829,7 +829,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 291,
+            "line": 292,
             "description": "Noop as a hook for defining how deserialized resource objects are cached,\ne.g. in memory",
             "itemtype": "method",
             "name": "cacheResource",
@@ -846,7 +846,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 300,
+            "line": 301,
             "description": "Noop as a hook for defining how to handle cache after updating a resource",
             "itemtype": "method",
             "name": "cacheUpdate",
@@ -863,7 +863,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 308,
+            "line": 309,
             "description": "Initialize events to communicate on the resource instances' service reference.\nListens for resource objects trigging `attributeChanged` events",
             "itemtype": "method",
             "name": "initEvents",
@@ -923,6 +923,16 @@
         {
             "file": "addon/mixins/authorization.js",
             "line": 54,
+            "description": "When using the FetchMixin and using ajax instead of fetch, setup XHR\nbeforeSend with Authorization Header",
+            "itemtype": "method",
+            "name": "ajaxPrefilter",
+            "class": "AuthorizationMixin",
+            "module": "ember-jsonapi-resources",
+            "submodule": "authorization"
+        },
+        {
+            "file": "addon/mixins/authorization.js",
+            "line": 73,
             "description": "Storage type localStorage or sessionStorage",
             "itemtype": "property",
             "name": "_storage",
@@ -940,7 +950,7 @@
             "itemtype": "property",
             "name": "useFetch",
             "type": "Boolean",
-            "class": "Fetch",
+            "class": "FetchMixin",
             "module": "ember-jsonapi-resources",
             "submodule": "fetch"
         },
@@ -951,7 +961,7 @@
             "itemtype": "property",
             "name": "useAjax",
             "type": "Boolean",
-            "class": "Fetch",
+            "class": "FetchMixin",
             "module": "ember-jsonapi-resources",
             "submodule": "fetch"
         },
@@ -984,7 +994,7 @@
                 "description": "",
                 "type": "Ember.RSVP.Promise"
             },
-            "class": "Fetch",
+            "class": "FetchMixin",
             "module": "ember-jsonapi-resources",
             "submodule": "fetch"
         },
@@ -1020,13 +1030,13 @@
             "requires": [
                 "jQuery"
             ],
-            "class": "Fetch",
+            "class": "FetchMixin",
             "module": "ember-jsonapi-resources",
             "submodule": "fetch"
         },
         {
             "file": "addon/mixins/fetch.js",
-            "line": 128,
+            "line": 133,
             "access": "private",
             "tagname": "",
             "itemtype": "method",
@@ -1042,7 +1052,7 @@
                 "description": "",
                 "type": "Object"
             },
-            "class": "Fetch",
+            "class": "FetchMixin",
             "module": "ember-jsonapi-resources",
             "submodule": "fetch"
         },
@@ -1220,7 +1230,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 23,
+            "line": 24,
             "description": "The service object for the entity (adapter with cache and serializer)",
             "itemtype": "property",
             "name": "service",
@@ -1232,7 +1242,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 32,
+            "line": 33,
             "description": "Extending Prototypes Must define a `type` value for the entity, e.g. `posts`",
             "itemtype": "property",
             "name": "type",
@@ -1244,7 +1254,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 41,
+            "line": 42,
             "description": "Persisted resource ID value",
             "itemtype": "property",
             "name": "id",
@@ -1256,7 +1266,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 50,
+            "line": 51,
             "description": "An optional `attributes` property of for a JSON API Resource object, setup in create()\n\nThis object will keep the values from the response object and may be mutable\nUse this as a refence for creating computed properties\n\nFor example the `attr()` helper sets up a properties based on this content",
             "access": "protected",
             "tagname": "",
@@ -1269,7 +1279,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 64,
+            "line": 65,
             "description": "An optional `relationships` property of for a JSON API Resource object, setup in create()",
             "access": "protected",
             "tagname": "",
@@ -1282,7 +1292,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 73,
+            "line": 74,
             "description": "An optional `links` property of for a JSON API Resource object, setup in create()",
             "access": "protected",
             "tagname": "",
@@ -1295,7 +1305,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 82,
+            "line": 83,
             "description": "An optional property of for a JSON API Resource object, setup in create()",
             "access": "protected",
             "tagname": "",
@@ -1308,7 +1318,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 91,
+            "line": 92,
             "description": "Hash of attributes for changed/previous values",
             "access": "private",
             "tagname": "",
@@ -1321,7 +1331,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 100,
+            "line": 101,
             "description": "Flag for new instance, e.g. not peristed",
             "itemtype": "property",
             "name": "isNew",
@@ -1332,7 +1342,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 108,
+            "line": 109,
             "description": "Custom `toString` method used for clarity that the instance is a JSON API Resource kind of object",
             "itemtype": "method",
             "name": "toString",
@@ -1342,7 +1352,71 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 119,
+            "line": 120,
+            "description": "Update a relation by adding or removing using a list, id, or null. When\nadding an id for a to-many relation send one or more ids, include the\nexisting ids as well. When removing from a to-many relation pass the ids\nthat should remain, missing ids will be removed, or remove all with an empty\narray. When operating on a to-one relation just use the id to change the\nrelation, or null to remove.\n\nThis is not a replace operation, but rather support for editing as a set.",
+            "itemtype": "method",
+            "name": "updateRelationship",
+            "params": [
+                {
+                    "name": "relation",
+                    "description": "",
+                    "type": "String"
+                },
+                {
+                    "name": "ids",
+                    "description": "",
+                    "type": "Array|String|null"
+                }
+            ],
+            "class": "Resource",
+            "module": "ember-jsonapi-resources",
+            "submodule": "resource"
+        },
+        {
+            "file": "addon/models/resource.js",
+            "line": 156,
+            "itemtype": "method",
+            "name": "addRelationships",
+            "params": [
+                {
+                    "name": "related",
+                    "description": "- resource name",
+                    "type": "String"
+                },
+                {
+                    "name": "ids",
+                    "description": "",
+                    "type": "Array"
+                }
+            ],
+            "class": "Resource",
+            "module": "ember-jsonapi-resources",
+            "submodule": "resource"
+        },
+        {
+            "file": "addon/models/resource.js",
+            "line": 167,
+            "itemtype": "method",
+            "name": "removeRelationships",
+            "params": [
+                {
+                    "name": "related",
+                    "description": "- resource name",
+                    "type": "String"
+                },
+                {
+                    "name": "ids",
+                    "description": "",
+                    "type": "Array"
+                }
+            ],
+            "class": "Resource",
+            "module": "ember-jsonapi-resources",
+            "submodule": "resource"
+        },
+        {
+            "file": "addon/models/resource.js",
+            "line": 178,
             "description": "Adds related links object on the relationship hash",
             "itemtype": "method",
             "name": "addRelationship",
@@ -1364,7 +1438,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 139,
+            "line": 198,
             "description": "Remove related links object on the relationship hash to have `null` data",
             "itemtype": "method",
             "name": "removeRelationship",
@@ -1386,7 +1460,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 160,
+            "line": 219,
             "itemtype": "method",
             "name": "changedAttributes",
             "return": {
@@ -1399,7 +1473,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 178,
+            "line": 237,
             "itemtype": "method",
             "name": "previousAttributes",
             "return": {
@@ -1412,7 +1486,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 196,
+            "line": 255,
             "description": "Initialize events to communicate with the service object, listen for `didUpdateResource`",
             "itemtype": "method",
             "name": "initEvents",
@@ -1422,7 +1496,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 208,
+            "line": 267,
             "description": "Handler for `didUpdateResource` event, resets private _attributes used for changed/previous tracking",
             "itemtype": "method",
             "name": "didUpdateResource",
@@ -1438,7 +1512,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 224,
+            "line": 283,
             "description": "A local cache duration, to minimize duplicate fetch requests",
             "itemtype": "property",
             "name": "cacheDuration",
@@ -1449,7 +1523,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 232,
+            "line": 291,
             "itemtype": "property",
             "name": "isCacheExpired",
             "type": "Boolean",
@@ -1459,7 +1533,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 244,
+            "line": 303,
             "description": "To protect the JSON API Resource properties for attributes, links and\nrelationships these objects are setup during create(). This has to be\ndefined since the attr() helper needs to have new objects for each instance,\nto project from keeping a reference on the prototype.\n\nThe create method should only be called after looking up a factory from the\ncontainer, for example in a route's model hook:\n\n```\nmodel() {\n  return this.container.lookupFactory('model:posts').create({\n    attributes: {\n      title: 'The JSON API 1.0 Spec Rocks!'\n    }\n  });\n}\n```\n\nThe create method uses the container to lookup the factory's prototype and\nfind the computed properties used for relations to setup the relationships\nfor the Resource instance you create. Calling Resource#create without using\nthe factory lookup will result in an instance without a reference to the\napplication's container and you will have to manually setup the relationships\nobject prior to adding a relationship.",
             "itemtype": "method",
             "name": "create",
@@ -1798,13 +1872,13 @@
                     "type": "String"
                 },
                 {
-                    "name": "the",
-                    "description": "resource instance, has URLs via it's relationships property",
+                    "name": "resource",
+                    "description": "- model instance, has URLs via it's relationships property",
                     "type": "Resource"
                 },
                 {
-                    "name": "resource",
-                    "description": "name (plural) to find the url from the resource instance",
+                    "name": "relationship",
+                    "description": "- resource name (plural) to find the url from the resource instance",
                     "type": "String"
                 }
             ],
@@ -1996,6 +2070,31 @@
                     "type": "Resource"
                 },
                 {
+                    "name": "kind",
+                    "description": "'many' or 'one'",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "proxy instance, new resource uses mock relations",
+                "type": "PromiseProxy|ObjectProxy|ArrayProxy"
+            },
+            "class": "RelatedProxyUtil",
+            "module": "ember-jsonapi-resources",
+            "submodule": "utils"
+        },
+        {
+            "file": "addon/utils/related-proxy.js",
+            "line": 73,
+            "itemtype": "method",
+            "name": "proxySetup",
+            "params": [
+                {
+                    "name": "resource",
+                    "description": "",
+                    "type": "Resource"
+                },
+                {
                     "name": "proxyFactory",
                     "description": "",
                     "type": "Ember.ObjectProxy|Ember.ArrayProxy"
@@ -2011,7 +2110,27 @@
         },
         {
             "file": "addon/utils/related-proxy.js",
-            "line": 79,
+            "line": 92,
+            "itemtype": "method",
+            "name": "proxyResolution",
+            "params": [
+                {
+                    "name": "resource",
+                    "description": "",
+                    "type": "Proxy"
+                }
+            ],
+            "return": {
+                "description": "proxy",
+                "type": "PromiseProxy"
+            },
+            "class": "RelatedProxyUtil",
+            "module": "ember-jsonapi-resources",
+            "submodule": "utils"
+        },
+        {
+            "file": "addon/utils/related-proxy.js",
+            "line": 110,
             "description": "Proxy url to fetch for the resource's relation",
             "itemtype": "method",
             "name": "proxyUrl",
@@ -2037,7 +2156,7 @@
         },
         {
             "file": "addon/utils/related-proxy.js",
-            "line": 96,
+            "line": 127,
             "description": "Lookup relation from service cache and pomisify result",
             "itemtype": "method",
             "name": "promiseFromCache",
@@ -2068,7 +2187,7 @@
         },
         {
             "file": "addon/utils/related-proxy.js",
-            "line": 123,
+            "line": 154,
             "description": "Lookup data in service cache",
             "itemtype": "method",
             "name": "serviceCacheLookup",

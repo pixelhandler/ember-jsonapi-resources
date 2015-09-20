@@ -41,7 +41,7 @@
                                 <li><a href="../classes/ApplicationAdapter.html">ApplicationAdapter</a></li>
                                 <li><a href="../classes/ApplicationSerializer.html">ApplicationSerializer</a></li>
                                 <li><a href="../classes/AuthorizationMixin.html">AuthorizationMixin</a></li>
-                                <li><a href="../classes/Fetch.html">Fetch</a></li>
+                                <li><a href="../classes/FetchMixin.html">FetchMixin</a></li>
                                 <li><a href="../classes/RelatedProxyUtil.html">RelatedProxyUtil</a></li>
                                 <li><a href="../classes/Resource.html">Resource</a></li>
                                 <li><a href="../classes/ServiceCacheMixin.html">ServiceCacheMixin</a></li>
@@ -109,7 +109,7 @@ import Ember from &#x27;ember&#x27;;
   Fetch/Ajax methods for use with an Adapter calls &#x60;cacheUpdate&#x60;, &#x60;cacheResource&#x60;
   methods and a &#x60;serializer&#x60; injection.
 
-  @class Fetch
+  @class FetchMixin
 */
 export default Ember.Mixin.create({
   /**
@@ -119,7 +119,7 @@ export default Ember.Mixin.create({
     @type Boolean
   */
   useFetch: Ember.computed(&#x27;useAjax&#x27;, function () {
-    let notFirefox = navigator.userAgent.indexOf(&quot;Firefox&quot;) === -1;
+    let notFirefox = window.navigator.userAgent.indexOf(&quot;Firefox&quot;) === -1;
     return !this.get(&#x27;useAjax&#x27;) &amp;&amp; window.fetch &amp;&amp; notFirefox;
   }),
 
@@ -190,16 +190,12 @@ export default Ember.Mixin.create({
     @requires jQuery
   */
   _ajax(url, options, isUpdate) {
+    options.data = options.body;
+    delete options.body;
     let _this = this;
     return new Ember.RSVP.Promise(function(resolve, reject) {
       Ember.$.ajax(url, options).done(function(json, textStatus, jqXHR) {
-        if (jqXHR.status &gt;= 500) {
-          let msg = &#x27;The Service responded with &#x27; + textStatus + &#x27; &#x27; + jqXHR.status;
-          reject(new ServerError(msg, json));
-        } else if (jqXHR.status &gt;= 400) {
-          let msg = &#x27;The API responded with a &#x27;+ jqXHR.status +&#x27; error.&#x27;;
-          reject(new ClientError(msg, json));
-        } else if (jqXHR.status === 204) {
+        if (jqXHR.status === 204) {
           resolve(&#x27;&#x27;);
         } else {
           let headers = _this._getAjaxHeaders(jqXHR);
@@ -215,13 +211,22 @@ export default Ember.Mixin.create({
           }
         }
       }).fail(function(jqXHR, textStatus, errorThrown) {
-        let msg = (errorThrown) ? errorThrown : &#x27;Unable to Fetch resource(s)&#x27;;
-        reject(new FetchError(msg, {
-          code: jqXHR.status,
-          message: errorThrown,
-          &#x27;status&#x27;: textStatus,
-          response: jqXHR.responseText
-        }));
+        let msg;
+        if (jqXHR.status &gt;= 500) {
+          msg = &#x27;The Service responded with &#x27; + textStatus + &#x27; &#x27; + jqXHR.status;
+          reject(new ServerError(msg, jqXHR.responseJSON || jqXHR.responseText));
+        } else if (jqXHR.status &gt;= 400) {
+          msg = &#x27;The API responded with a &#x27;+ jqXHR.status +&#x27; error.&#x27;;
+          reject(new ClientError(msg, jqXHR.responseJSON || jqXHR.responseText));
+        } else {
+          msg = (errorThrown) ? errorThrown : &#x27;Unable to Fetch resource(s)&#x27;;
+          reject(new FetchError(msg, {
+            code: jqXHR.status,
+            message: errorThrown,
+            &#x27;status&#x27;: textStatus,
+            response: jqXHR.responseText
+          }));
+        }
       });
     });
   },

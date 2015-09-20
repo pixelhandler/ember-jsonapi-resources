@@ -4,7 +4,7 @@ YUI.add("yuidoc-meta", function(Y) {
         "ApplicationAdapter",
         "ApplicationSerializer",
         "AuthorizationMixin",
-        "Fetch",
+        "FetchMixin",
         "RelatedProxyUtil",
         "Resource",
         "ServiceCacheMixin",

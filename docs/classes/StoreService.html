@@ -41,7 +41,7 @@
                                 <li><a href="../classes/ApplicationAdapter.html">ApplicationAdapter</a></li>
                                 <li><a href="../classes/ApplicationSerializer.html">ApplicationSerializer</a></li>
                                 <li><a href="../classes/AuthorizationMixin.html">AuthorizationMixin</a></li>
-                                <li><a href="../classes/Fetch.html">Fetch</a></li>
+                                <li><a href="../classes/FetchMixin.html">FetchMixin</a></li>
                                 <li><a href="../classes/RelatedProxyUtil.html">RelatedProxyUtil</a></li>
                                 <li><a href="../classes/Resource.html">Resource</a></li>
                                 <li><a href="../classes/ServiceCacheMixin.html">ServiceCacheMixin</a></li>
@@ -538,10 +538,10 @@
                         <code>type</code>
                 </li>
                 <li class="arg">
-                        <code>the</code>
+                        <code>resource</code>
                 </li>
                 <li class="arg">
-                        <code>resource</code>
+                        <code>relationship</code>
                 </li>
             </ul><span class="paren">)</span>
         </div>
@@ -591,23 +591,27 @@ Removes with payload: <code>{ &quot;data&quot;: null }</code></p>
 
                 </li>
                 <li class="param">
-                        <code class="param-name">the</code>
+                        <code class="param-name">resource</code>
                         <span class="type"><a href="../classes/Resource.html" class="crosslink">Resource</a></span>
 
 
                     <div class="param-description">
-                        <p>resource instance, has URLs via it's relationships property</p>
+                        <ul>
+<li>model instance, has URLs via it's relationships property</li>
+</ul>
 
                     </div>
 
                 </li>
                 <li class="param">
-                        <code class="param-name">resource</code>
+                        <code class="param-name">relationship</code>
                         <span class="type">String</span>
 
 
                     <div class="param-description">
-                        <p>name (plural) to find the url from the resource instance</p>
+                        <ul>
+<li>resource name (plural) to find the url from the resource instance</li>
+</ul>
 
                     </div>
 

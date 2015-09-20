@@ -41,7 +41,7 @@
                                 <li><a href="../classes/ApplicationAdapter.html">ApplicationAdapter</a></li>
                                 <li><a href="../classes/ApplicationSerializer.html">ApplicationSerializer</a></li>
                                 <li><a href="../classes/AuthorizationMixin.html">AuthorizationMixin</a></li>
-                                <li><a href="../classes/Fetch.html">Fetch</a></li>
+                                <li><a href="../classes/FetchMixin.html">FetchMixin</a></li>
                                 <li><a href="../classes/RelatedProxyUtil.html">RelatedProxyUtil</a></li>
                                 <li><a href="../classes/Resource.html">Resource</a></li>
                                 <li><a href="../classes/ServiceCacheMixin.html">ServiceCacheMixin</a></li>
@@ -250,7 +250,7 @@
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_adapters_application.js.html#l291"><code>addon&#x2F;adapters&#x2F;application.js:291</code></a>
+        <a href="../files/addon_adapters_application.js.html#l292"><code>addon&#x2F;adapters&#x2F;application.js:292</code></a>
         </p>
 
 
@@ -305,7 +305,7 @@ e.g. in memory</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_adapters_application.js.html#l300"><code>addon&#x2F;adapters&#x2F;application.js:300</code></a>
+        <a href="../files/addon_adapters_application.js.html#l301"><code>addon&#x2F;adapters&#x2F;application.js:301</code></a>
         </p>
 
 
@@ -566,7 +566,7 @@ e.g. in memory</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_adapters_application.js.html#l256"><code>addon&#x2F;adapters&#x2F;application.js:256</code></a>
+        <a href="../files/addon_adapters_application.js.html#l257"><code>addon&#x2F;adapters&#x2F;application.js:257</code></a>
         </p>
 
 
@@ -1053,7 +1053,7 @@ to swap a portion of the domain to make a request on the same domain.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_adapters_application.js.html#l308"><code>addon&#x2F;adapters&#x2F;application.js:308</code></a>
+        <a href="../files/addon_adapters_application.js.html#l309"><code>addon&#x2F;adapters&#x2F;application.js:309</code></a>
         </p>
 
 
@@ -1107,7 +1107,7 @@ Listens for resource objects trigging <code>attributeChanged</code> events</p>
     <div class="description">
         <p>Patch a relationship, either add or remove, sends a PATCH request</p>
 <p>Adds with payload: <code>{ &quot;data&quot;: { &quot;type&quot;: &quot;comments&quot;, &quot;id&quot;: &quot;12&quot; } }</code>
-Removes with payload: <code>{ &quot;data&quot;: null }</code></p>
+Removes with payload: <code>{ &quot;data&quot;: null }</code> for to-one or <code>{ &quot;data&quot;: [] }</code> for to-many</p>
 
     </div>
 
@@ -1232,7 +1232,7 @@ the <code>didUpdateResource</code> event is triggered, given an error response a
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_adapters_application.js.html#l273"><code>addon&#x2F;adapters&#x2F;application.js:273</code></a>
+        <a href="../files/addon_adapters_application.js.html#l274"><code>addon&#x2F;adapters&#x2F;application.js:274</code></a>
         </p>
 
 
@@ -1258,7 +1258,7 @@ This property should be added by an Authorization Mixin</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_adapters_application.js.html#l282"><code>addon&#x2F;adapters&#x2F;application.js:282</code></a>
+        <a href="../files/addon_adapters_application.js.html#l283"><code>addon&#x2F;adapters&#x2F;application.js:283</code></a>
         </p>
 
 
