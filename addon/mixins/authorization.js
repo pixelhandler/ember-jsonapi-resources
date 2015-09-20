@@ -52,6 +52,25 @@ export default Ember.Mixin.create({
   }),
 
   /**
+    When using the FetchMixin and using ajax instead of fetch, setup XHR
+    beforeSend with Authorization Header
+
+    @method ajaxPrefilter
+  */
+  ajaxPrefilter: Ember.on('init', function () {
+    if (!this.get('useAjax') || this.get('useFetch')) { return; }
+    Ember.$.ajaxPrefilter(function(options) {
+      let key = this.get('authorizationHeaderStorageKey');
+      let field = this.get('authorizationHeaderField');
+      let token = window[this._storage].getItem(key);
+      options.xhrFields = { withCredentials: true };
+      options.beforeSend = function (xhr) {
+        xhr.setRequestHeader(field, token);
+      };
+    }.bind(this));
+  }),
+
+  /**
     Storage type localStorage or sessionStorage
 
     @property _storage

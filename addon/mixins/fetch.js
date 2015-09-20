@@ -89,6 +89,8 @@ export default Ember.Mixin.create({
     @requires jQuery
   */
   _ajax(url, options, isUpdate) {
+    options.data = options.body;
+    delete options.body;
     let _this = this;
     return new Ember.RSVP.Promise(function(resolve, reject) {
       Ember.$.ajax(url, options).done(function(json, textStatus, jqXHR) {
