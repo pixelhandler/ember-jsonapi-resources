@@ -45,8 +45,9 @@ and running.
 * You must use Ember CLI to use ember-jsonapi-resources, it's an addon
   * You'll need to uninstall Ember Data from the generated application
     and configure your app, see the 'usage' section below.
-* [Fetch API] instead of XMLHttpRequest, see [Introduction to fetch()]
-  * A polyfill is included in this addon
+* Uses [Fetch API] see [Introduction to fetch()] and falls back to XMLHttpRequest
+  * A `fetch` polyfill is included with this addon
+  * A `FetchMixin` provides an option to `useAjax` if you choose
 
 
 ## Other Ember.js JSON API Implementations
@@ -304,22 +305,19 @@ Example config settings: [tests/dummy/config/environment.js](tests/dummy/config/
 ```javascript
 var ENV = {
 // …
-  EmberENV: {
-    MODEL_FACTORY_INJECTIONS: true
-  },
   APP: {
     API_HOST: '/',
     API_HOST_PROXY: 'http://api.pixelhandler.com/',
     API_PATH: 'api/v1',
   },
   contentSecurityPolicy: {
-    'connect-src': "'self' api.pixelhandler.com",
+    'connect-src': "'self' api.pixelhandler.com localhost:3000",
   }
 // …
 };
 ```
 
-`MODEL_FACTORY_INJECTIONS` may be already set to `true` in the app/app.js file.
+`MODEL_FACTORY_INJECTIONS` should be set to `true` in the app/app.js file.
 
 Also, once you've generated a `resource` you can assign the URL.
 
