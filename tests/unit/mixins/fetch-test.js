@@ -11,7 +11,12 @@ function RSVPonerror(error) {
 module('Unit | Mixin | fetch', {
   beforeEach() {
     sandbox = window.sinon.sandbox.create();
-    this.server = window.sinon.fakeServer.create();
+    this.server = sandbox.useFakeServer();
+    this.server.xhr.useFilters = true;
+    // Filtered requests will not be faked
+    this.server.xhr.addFilter( function( method, url ) {
+      return url.match(/\/write-blanket-coverage/);
+    });
     this.server.autoRespond = true;
     Ember.RSVP.configure('onerror', RSVPonerror);
     window.localStorage.removeItem('AuthorizationHeader');
@@ -38,8 +43,8 @@ test('#useFetch default value is true', function(assert) {
 test('#_ajax handles 5xx (Server Error)', function(assert) {
   assert.expect(2);
   const done = assert.async();
-  this.server.respondWith([500, {}, ""]);
-  let promise = this.subject._ajax('/posts', { method: 'POST', body: 'json string here' }, false);
+  this.server.respondWith('GET', '/posts', [500, {}, ""]);
+  let promise = this.subject._ajax('/posts', { method: 'GET' }, false);
   assert.ok(typeof promise.then === 'function', 'returns a thenable');
   promise.catch(function(error) {
     assert.equal(error.name, 'ServerError', '5xx response throws a custom error');
@@ -50,7 +55,7 @@ test('#_ajax handles 5xx (Server Error)', function(assert) {
 test('#_ajax handles 4xx (Client Error)', function(assert) {
   assert.expect(4);
   const done = assert.async();
-  this.server.respondWith([
+  this.server.respondWith('GET', '/posts/101', [
     404,
     {'Content-Type':'application/vnd.api+json'},
     JSON.stringify({
@@ -62,7 +67,7 @@ test('#_ajax handles 4xx (Client Error)', function(assert) {
       }]
     })
   ]);
-  let promise = this.subject._ajax('/posts/101', { method: 'POST', body: 'json string here' }, false);
+  let promise = this.subject._ajax('/posts/101', { method: 'GET' }, false);
   assert.ok(typeof promise.then === 'function', 'returns a thenable');
   promise.catch(function(error) {
     assert.ok(error.name, 'Client Error', '4xx response throws a custom error');
@@ -75,8 +80,8 @@ test('#_ajax handles 4xx (Client Error)', function(assert) {
 test('#_ajax handles 3xx error', function(assert) {
   assert.expect(3);
   const done = assert.async();
-  this.server.respondWith([302, {}, ""]);
-  let promise = this.subject._ajax('/posts', { method: 'POST', body: 'json string here' }, false);
+  this.server.respondWith('GET', '/posts', [302, {}, ""]);
+  let promise = this.subject._ajax('/posts', { method: 'GET' }, false);
   assert.ok(typeof promise.then === 'function', 'returns a thenable');
   promise.catch(function(error) {
     assert.equal(error.name, 'FetchError', 'unknown error response throws a custom error');
@@ -88,7 +93,7 @@ test('#_ajax handles 3xx error', function(assert) {
 test('#_ajax handles 204 (Success, no content)', function(assert) {
   assert.expect(2);
   const done = assert.async();
-  this.server.respondWith([204, {}, ""]);
+  this.server.respondWith('PATCH', '/posts/101', [204, {}, ""]);
   let promise = this.subject._ajax('/posts/101', { method: 'PATCH', body: 'json string here' }, false);
   assert.ok(typeof promise.then === 'function', 'returns a thenable');
   promise.then(function(res) {
@@ -100,12 +105,14 @@ test('#_ajax handles 204 (Success, no content)', function(assert) {
 test('#_ajax handles 200 (Success) response status', function(assert) {
   assert.expect(3);
   const done = assert.async();
-  this.server.respondWith([200, {'Content-Type':'application/vnd.api+json'}, JSON.stringify({
-    data: { id: 101, attributes: { name: 'Yo Post' }}
-  })]);
+  this.server.respondWith('GET', '/posts/101', [
+    200, {'Content-Type':'application/vnd.api+json'}, JSON.stringify({
+      data: { id: 101, attributes: { name: 'Yo Post' }}
+    })
+  ]);
   this.subject.serializer = { deserialize: function(res) { return res.data; }, deserializeIncluded: Ember.K };
   this.subject.cacheResource = sandbox.spy();
-  let promise = this.subject._ajax('/posts/101', { method: 'PATCH', body: 'json string here' }, false);
+  let promise = this.subject._ajax('/posts/101', { method: 'GET' }, false);
   assert.ok(typeof promise.then === 'function', 'returns a thenable');
   promise.then(function(res) {
     assert.equal(res.id, 101, 'has data content in the response');
