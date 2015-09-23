@@ -143,7 +143,7 @@ const Resource = Ember.Object.extend({
     } else {
       existing = this.get(relationshipData).map(function(rel) { return rel.id; });
       if (!existing.length) {
-        this.addRelationship(relation, ids);
+        this.addRelationships(relation, ids);
       } else if (ids.length > existing.length) {
         this.addRelationships(relation, unique(ids, existing));
       } else if (existing.length > ids.length) {
