@@ -3,7 +3,8 @@ import Model from '../models/picture';
 import Adapter from '../adapters/picture';
 import Serializer from '../serializers/picture';
 
-export function initialize(container, application) {
+export function initialize() {
+  let application = arguments[1] || arguments[0];
   application.register('model:pictures', Model, { instantiate: false, singleton: false });
   application.register('service:pictures', Service);
   application.register('adapter:pictures', Adapter);
