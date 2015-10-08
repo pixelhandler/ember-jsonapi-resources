@@ -11,7 +11,9 @@ import StoreService from 'ember-jsonapi-resources/services/store';
   @method initialize
   @requires StoreService
 */
-export function initialize(container, application) {
+export function initialize() {
+  // see http://emberjs.com/deprecations/v2.x/#toc_initializer-arity
+  let application = arguments[1] || arguments[0];
   const store = 'service:store';
   application.register(store, StoreService);
   application.inject('route', 'store', store);

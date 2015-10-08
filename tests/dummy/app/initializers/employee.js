@@ -3,7 +3,8 @@ import Model from '../models/employee';
 import Adapter from '../adapters/employee';
 import Serializer from '../serializers/employee';
 
-export function initialize(container, application) {
+export function initialize() {
+  let application = arguments[1] || arguments[0];
   application.register('model:employees', Model, { instantiate: false, singleton: false });
   application.register('service:employees', Service);
   application.register('adapter:employees', Adapter);

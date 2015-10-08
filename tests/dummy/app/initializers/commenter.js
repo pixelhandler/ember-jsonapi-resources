@@ -3,7 +3,8 @@ import Model from '../models/commenter';
 import Adapter from '../adapters/commenter';
 import Serializer from '../serializers/commenter';
 
-export function initialize(container, application) {
+export function initialize() {
+  let application = arguments[1] || arguments[0];
   application.register('model:commenters', Model, { instantiate: false, singleton: false });
   application.register('service:commenters', Service);
   application.register('adapter:commenters', Adapter);
