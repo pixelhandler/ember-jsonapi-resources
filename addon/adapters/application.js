@@ -121,7 +121,8 @@ export default Ember.Object.extend(FetchMixin, Ember.Evented, {
   },
 
   /**
-    Create a new resource, sends a POST request
+    Create a new resource, sends a POST request, updates resource instance
+    with persisted data, and updates cache with persisted resource
 
     @method createResource
     @param {Resource} the resource instance to serialize
@@ -133,7 +134,17 @@ export default Ember.Object.extend(FetchMixin, Ember.Evented, {
     return this.fetch(url, {
       method: 'POST',
       body: JSON.stringify(json)
-    });
+    }).then(function(resp) {
+      if (resource.toString().match('JSONAPIResource') === null) {
+        return resp;
+      } else {
+        resource.set('id', resp.get('id') );
+        let json = resp.getProperties('attributes', 'relationships', 'links', 'meta', 'type', 'isNew');
+        resource.didUpdateResource(json);
+        this.cacheUpdate({ data: resource });
+        return resource;
+      }
+    }.bind(this));
   },
 
   /**
