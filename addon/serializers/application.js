@@ -33,12 +33,30 @@ export default Ember.Object.extend({
 
     @method serialize
     @param {Resource|Array} resource - object to serialize
-    @return {Object} json
+    @return {Object|Array}
   */
   serialize(resources) {
     const json = { data: null };
-    json.data = this.serializeResource(resources);
+    if (Array.isArray(resources)) {
+      json.data = this.serializeResources(resources);
+    } else if (typeof resources === 'object') {
+      json.data = this.serializeResource(resources);
+    } else {
+      json.data = {};
+    }
     return json;
+  },
+
+  /**
+    @method serializeResources
+    @param {Array} collection
+    @return {Array}
+  */
+  serializeResources(collection) {
+    for (let i = 0; i < collection.length; i++) {
+      collection[i] = this.serializeResource(collection[i]);
+    }
+    return collection;
   },
 
   /**
