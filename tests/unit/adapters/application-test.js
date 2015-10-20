@@ -135,14 +135,27 @@ test('#findRelated can be called with optional type for the resource', function 
 });
 
 test('#createResource', function(assert) {
+  assert.expect(6);
+  let done = assert.async();
   const adapter = this.subject({type: 'posts', url: '/posts'});
-  adapter.serializer = { serialize: function () { return postMock; } };
-  sandbox.stub(adapter, 'fetch', function () { return Ember.RSVP.Promise.resolve(null); });
-  let promise = adapter.createResource({ type: 'b0gus, not testing serializer' });
+  let postFactory = this.container.lookupFactory('model:posts');
+  let data = JSON.parse(JSON.stringify(postMock.data));
+  delete data.id;
+  let newResource = postFactory.create(data);
+  assert.equal(newResource.get('id'), null, 'new resource does not have an id');
+  adapter.serializer = { serialize: function () { return data; } };
+  let persistedResource = postFactory.create(postMock.data);
+  sandbox.stub(adapter, 'fetch', function () { return Ember.RSVP.Promise.resolve(persistedResource); });
+  let promise = adapter.createResource(newResource);
   assert.ok(typeof promise.then === 'function', 'returns a thenable');
   assert.ok(adapter.fetch.calledOnce, '#fetch method called');
   let msg = '#fetch called with url and options with data';
-  assert.ok(adapter.fetch.calledWith('/posts', { method: 'POST', body: JSON.stringify(postMock) }), msg);
+  assert.ok(adapter.fetch.calledWith('/posts', { method: 'POST', body: JSON.stringify(data) }), msg);
+  promise.then(function(resp) {
+    assert.ok(resp === newResource, 'response is the same resource instance sent as an arg');
+    assert.equal(resp.get('id'), postMock.data.id, 'new resource now has an id');
+    done();
+  });
 });
 
 test('#updateResource', function(assert) {
