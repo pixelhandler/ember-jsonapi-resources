@@ -166,6 +166,14 @@ test('#cacheControl', function(assert) {
   assert.equal(resource.get('meta.etag'), headers.get('etag'), 'header etag added to resource meta');
 });
 
+test('#cacheRemove', function(assert) {
+  let resource = Post.create({ id: '1', attributes: { title: testTitle() } });
+  subject.cache.data.pushObject(resource);
+  assert.equal(subject.cache.data.get('length'), 1, 'one item in cache before calling cacheRemove');
+  subject.cacheRemove(resource);
+  assert.equal(subject.cache.data.get('length'), 0, 'zero items in cache after calling cacheRemove');
+});
+
 function testTitle(idx = 0) {
   return [
     'JSON API paints my bikeshed!',
