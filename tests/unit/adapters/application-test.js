@@ -238,6 +238,17 @@ test('#deleteResource can be called with a resource having a self link, and call
   assert.ok(adapter.fetch.calledWith(selfURL, { method: 'DELETE' }), msg);
 });
 
+test('when called with resource argument, #deleteResource calls #cacheRemove', function(assert) {
+  const adapter = this.subject({type: 'posts', url: '/posts'});
+  sandbox.stub(adapter, 'fetch', function () { return Ember.RSVP.Promise.resolve(null); });
+  let resource = this.container.lookupFactory('model:posts').create(postMock.data);
+  sandbox.stub(adapter, 'cacheRemove', function () {});
+  Ember.run(function() {
+    adapter.deleteResource(resource);
+  });
+  assert.ok(adapter.cacheRemove.calledOnce, 'adapter#cacheRemove called');
+});
+
 test('#fetch calls #fetchURL to customize if needed', function(assert) {
   const adapter = this.subject({type: 'posts', url: '/posts'});
   sandbox.stub(adapter, 'fetchUrl', function () {});

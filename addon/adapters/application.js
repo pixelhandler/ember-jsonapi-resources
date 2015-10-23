@@ -208,6 +208,7 @@ export default Ember.Object.extend(FetchMixin, Ember.Evented, {
       url += resource;
     } else {
       url = resource.get('links.self') || url + resource.get('id');
+      this.cacheRemove(resource);
       resource.destroy();
     }
     return this.fetch(url, { method: 'DELETE' });
@@ -316,6 +317,14 @@ export default Ember.Object.extend(FetchMixin, Ember.Evented, {
     @param {Object} resp w/ props: {Object} meta, {Array|Object} data, & {Object} headers
   */
   cacheUpdate(/*resp*/) {},
+
+  /**
+    Noop as a hook to remove a resource from cached data
+
+    @method cacheRemove
+    @param {Resource} resource
+  */
+  cacheRemove(/*resource*/) {},
 
   /**
     Initialize events to communicate on the resource instances' service reference.

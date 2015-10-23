@@ -155,5 +155,15 @@ export default Ember.Mixin.create({
       }
       return resource.get('id') === id && !isExpired;
     }.bind(this));
+  },
+
+  /**
+    Remove a resource from cached data
+
+    @method cacheRemove
+    @param {Resource} resource
+  */
+  cacheRemove(resource) {
+    this.cache.data.removeObject(resource);
   }
 });
