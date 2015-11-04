@@ -10,6 +10,7 @@ moduleFor('model:<%= entity %>', 'Unit | Model | <%= entity %>', {
   },
   afterEach() {
     delete Resource.prototype.container;
+    this.registry.unregister('model:<%= resource %>');
   }
 });
 
