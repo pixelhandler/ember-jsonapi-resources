@@ -16,7 +16,7 @@ module.exports = function(defaults) {
 
   var buildTrees = [];
 
-  if (process.env.EMBER_ENV === 'test') {
+  if (app.tests) {
 
     app.import({
       development: app.bowerDirectory + '/es5-shim/es5-shim.js',

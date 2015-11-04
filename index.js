@@ -5,7 +5,7 @@ module.exports = {
   name: 'ember-jsonapi-resources',
 
   included: function(app) {
-    this._super.included(app);
+    this._super.included.apply(this, arguments);
 
     app.import({
       development: app.bowerDirectory + '/es6-promise/promise.js',
