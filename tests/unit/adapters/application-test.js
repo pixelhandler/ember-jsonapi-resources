@@ -335,7 +335,10 @@ test('#cacheUpdate called after #updateResource success', function(assert) {
       }
     }
   };
-  adapter.serializer = { serializeChanged: function () { return payload; } };
+  adapter.serializer = {
+    serializeChanged: function () { return payload; },
+    transformAttributes: function(json) { return json; }
+  };
   let resource = this.container.lookupFactory('model:posts').create(postMock.data);
   let promise = adapter.updateResource(resource);
   assert.ok(typeof promise.then === 'function', 'returns a thenable');
