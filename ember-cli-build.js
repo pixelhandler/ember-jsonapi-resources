@@ -1,11 +1,13 @@
 /* global require, module */
-var EmberApp = require('ember-cli/lib/broccoli/ember-addon');
+var EmberAddon = require('ember-cli/lib/broccoli/ember-addon');
 var pickFiles = require('broccoli-static-compiler');
 var compileES6 = require('broccoli-es6-concatenator');
 var jsonToModule = require('./lib/json-to-module');
 
 module.exports = function(defaults) {
-  var app = new EmberApp(defaults);
+  var app = new EmberAddon(defaults, {
+    // Add options here
+  });
 
   /*
     This build file specifes the options for the dummy test app of this
