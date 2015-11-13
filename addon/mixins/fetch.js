@@ -154,31 +154,44 @@ export default Ember.Mixin.create({
 });
 
 function ServerError(message = 'Server Error', response = null) {
-  this.name = 'ServerError';
-  this.message = message;
-  this.response = response;
-  this.errors = response.errors || null;
-}
-ServerError.prototype = Object.create(Error.prototype);
-ServerError.prototype.constructor = ServerError;
+  let _error = Error.prototype.constructor.call(this, message);
+  _error.name = this.name = 'ServerError';
+  this.stack = _error.stack;
+  this.message = _error.message;
 
-function ClientError(message = 'Client Error', response = null) {
-  this.name = 'ClientError';
-  this.message = message;
   this.response = response;
-  this.errors = response.errors || null;
   this.errors = (response) ? response.errors || null : null;
 }
-ClientError.prototype = Object.create(Error.prototype);
-ClientError.prototype.constructor = ClientError;
+ServerError.prototype = errorProtoFactory(ServerError);
+
+function ClientError(message = 'Client Error', response = null) {
+  let _error = Error.prototype.constructor.call(this, message);
+  _error.name = this.name = 'ClientError';
+  this.stack = _error.stack;
+  this.message = _error.message;
+
+  this.response = response;
+  this.errors = (response) ? response.errors || null : null;
+}
+ClientError.prototype = errorProtoFactory(ClientError);
 
 function FetchError(message = 'Fetch Error', error = null, response = null) {
-  this.name = 'FetchError';
-  this.message = message;
-  this.stack = (error) ? error.stack || null : null;
+  let _error = Error.prototype.constructor.call(this, message);
+  _error.name = this.name = 'FetchError';
+  this.stack = (error && error.stack) ? error.stack : _error.stack;
+  this.message = (error && error.message) ? error.message : _error.message;
 
-  this.error = error;
   this.response = response;
+  this.error = error || _error;
 }
-FetchError.prototype = Object.create(Error.prototype);
-FetchError.prototype.constructor = FetchError;
+FetchError.prototype = errorProtoFactory(FetchError);
+
+function errorProtoFactory(ctor) {
+  return Object.create(Error.prototype, {
+    constructor: {
+      value: ctor,
+      writable: true,
+      configurable: true
+    }
+  });
+}
