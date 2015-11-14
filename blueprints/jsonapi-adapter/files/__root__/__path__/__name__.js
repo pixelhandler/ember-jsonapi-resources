@@ -1,10 +1,10 @@
-import ApplicationAdapter from './application';
-//import config from '<%= dasherizedPackageName %>/config/environment';
+<%= importStatement %>
+import config from '<%= dasherizedPackageName %>/config/environment';
 
-export default ApplicationAdapter.extend({
+export default <%= baseClass %>.extend({
   type: '<%= entity %>',
 
-  url: /*config.APP.API_PATH + */ '/<%= resource %>',
+  url: config.APP.API_PATH + '/<%= resource %>',
 
   /*fetchUrl: function(url) {
     const proxy = config.APP.API_HOST_PROXY;
