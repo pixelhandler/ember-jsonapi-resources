@@ -1,8 +1,8 @@
 /*jshint node:true*/
-var inflector   = require('inflection');
-var stringUtil  = require('ember-cli-string-utils');
+var inflector = require('inflection');
+var stringUtil = require('ember-cli-string-utils');
 var SilentError = require('silent-error');
-var pathUtil    = require('ember-cli-path-utils');
+var pathUtil = require('ember-cli-path-utils');
 
 module.exports = {
   description: 'Generates an (ember-jsonapi-resource) adapter following the JSON API 1.0 spec.',
@@ -47,8 +47,8 @@ module.exports = {
         return moduleName;
       },
       __path__: function(options) {
-        var moduleName = options.dasherizedModuleName.replace('jsonapi-', '');
         if (options.pod && options.hasPathToken) {
+          var moduleName = options.dasherizedModuleName.replace('jsonapi-', '');
           return path.join(options.podPath, moduleName);
         }
         var blueprintName = options.originBlueprintName.replace('jsonapi-', '');
