@@ -1,7 +1,7 @@
-import Service from '../services/<%= resource %>';
-import Model from '../models/<%= entity %>';
-import Adapter from '../adapters/<%= entity %>';
-import Serializer from '../serializers/<%= entity %>';
+import Service from '<%= servicePath %>';
+import Model from '<%= modelPath %>';
+import Adapter from '<%= adapterPath %>';
+import Serializer from '<%= serializerPath %>';
 
 export function initialize() {
   // see http://emberjs.com/deprecations/v2.x/#toc_initializer-arity

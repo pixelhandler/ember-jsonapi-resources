@@ -28,6 +28,7 @@
     "ember-cli-blanket": "~0.5.4",
     "ember-cli-content-security-policy": "0.4.0",
     "ember-cli-dependency-checker": "^1.1.0",
+    "ember-cli-get-dependency-depth": "^1.0.0",
     "ember-cli-htmlbars": "^1.0.1",
     "ember-cli-htmlbars-inline-precompile": "^0.3.1",
     "ember-cli-ic-ajax": "0.2.4",

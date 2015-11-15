@@ -12,19 +12,19 @@ module.exports = {
   ],
 
   locals: function(options) {
-    var relativePath = pathUtil.getRelativePath(options.entity.name);
+    var resource = options.entity.name || options.args[1];
+    var relativePath = pathUtil.getRelativePath(resource);
     if (options.pod && options.podPath) {
-      relativePath = pathUtil.getRelativePath(options.podPath + options.entity.name);
+      relativePath = pathUtil.getRelativePath(options.podPath + resource);
     }
 
     options.baseClass = options.baseClass || 'application';
-    if (options.baseClass === options.entity.name) {
+    if (options.baseClass === resource) {
       throw new SilentError('Adapters cannot extend from themself. To resolve this, remove the `--base-class` option or change to a different base-class.');
     }
 
     var baseClass = stringUtil.classify(options.baseClass.replace('\/', '-')) + 'Adapter';
     var importStatement = 'import ' + baseClass + ' from \'' + relativePath + options.baseClass + '\';';
-    var resource = options.entity.name || options.args[1];
 
     // TOOD use isAddon to set path for importing confing from dasherizedPackageName or dummy app
     // var isAddon = options.inRepoAddon || options.project.isEmberCLIAddon();

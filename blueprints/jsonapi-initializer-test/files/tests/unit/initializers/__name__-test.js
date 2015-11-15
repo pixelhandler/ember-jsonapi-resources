@@ -1,8 +1,8 @@
 import Ember from 'ember';
-import { initialize } from '<%= dependencyDepth %>/initializers/<%= dasherizedModuleName %>';
+import <%= classifiedModuleName %>Initializer from '<%= dependencyDepth %>/initializers/<%= dasherizedModuleName %>';
 import { module, test } from 'qunit';
 
-var registry, application, factories, injections;
+let registry, application, factories, injections;
 
 module('<%= friendlyTestName %>', {
   beforeEach: function() {
@@ -22,7 +22,7 @@ module('<%= friendlyTestName %>', {
 });
 
 test('it registers <%= resource %> factories: model, service, adapter, serializer; injects: service, serializer', function(assert) {
-  initialize(registry, application);
+  <%= classifiedModuleName %>Initializer.initialize(registry, application);
 
   let registered = Ember.A(factories.mapBy('name'));
   assert.ok(registered.contains('model:<%= resource %>'), 'model:<%= resource %> registered');
