@@ -1,4 +1,4 @@
-import Adapter from '../adapters/<%= entity %>';
+import Adapter from '<%= adapterPath %>';
 import ServiceCache from '../mixins/service-cache';
 
 Adapter.reopenClass({ isServiceFactory: true });

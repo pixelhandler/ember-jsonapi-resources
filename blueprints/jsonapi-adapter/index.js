@@ -17,14 +17,15 @@ module.exports = {
     if (options.pod && options.podPath) {
       relativePath = pathUtil.getRelativePath(options.podPath + resource);
     }
-
     options.baseClass = options.baseClass || 'application';
-    if (options.baseClass === resource) {
-      throw new SilentError('Adapters cannot extend from themself. To resolve this, remove the `--base-class` option or change to a different base-class.');
-    }
 
     var baseClass = stringUtil.classify(options.baseClass.replace('\/', '-')) + 'Adapter';
     var importStatement = 'import ' + baseClass + ' from \'' + relativePath + options.baseClass + '\';';
+    if (resource === 'application') {
+      importStatement = 'import ' + baseClass + ' from \'ember-jsonapi-resources/adapters/application\';';
+    } else if (options.baseClass === resource) {
+      throw new SilentError('Adapters cannot extend from themself. To resolve this, remove the `--base-class` option or change to a different base-class.');
+    }
 
     // TOOD use isAddon to set path for importing confing from dasherizedPackageName or dummy app
     // var isAddon = options.inRepoAddon || options.project.isEmberCLIAddon();
