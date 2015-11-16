@@ -37,6 +37,9 @@ module.exports = {
           return path.join(options.podPath, moduleName);
         }
         var blueprintName = options.originBlueprintName.replace('jsonapi-', '');
+        if (blueprintName === 'resource') {
+          blueprintName = 'serializer';
+        }
         return inflector.pluralize(blueprintName);
       }
     };

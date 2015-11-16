@@ -76,6 +76,9 @@ module.exports = {
           return [ options.podPath, moduleName ].join('/');
         }
         var blueprintName = options.originBlueprintName.replace('jsonapi-', '');
+        if (blueprintName === 'resource') {
+          blueprintName = 'model';
+        }
         return inflection.pluralize(blueprintName);
       }
     };

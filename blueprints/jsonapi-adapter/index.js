@@ -3,6 +3,7 @@ var inflector = require('inflection');
 var stringUtil = require('ember-cli-string-utils');
 var SilentError = require('silent-error');
 var pathUtil = require('ember-cli-path-utils');
+var path = require('path');
 
 module.exports = {
   description: 'Generates an (ember-jsonapi-resource) adapter following the JSON API 1.0 spec.',
@@ -14,9 +15,6 @@ module.exports = {
   locals: function(options) {
     var resource = options.entity.name || options.args[1];
     var relativePath = pathUtil.getRelativePath(resource);
-    if (options.pod && options.podPath) {
-      relativePath = pathUtil.getRelativePath(options.podPath + resource);
-    }
     options.baseClass = options.baseClass || 'application';
 
     var baseClass = stringUtil.classify(options.baseClass.replace('\/', '-')) + 'Adapter';
@@ -25,6 +23,9 @@ module.exports = {
       importStatement = 'import ' + baseClass + ' from \'ember-jsonapi-resources/adapters/application\';';
     } else if (options.baseClass === resource) {
       throw new SilentError('Adapters cannot extend from themself. To resolve this, remove the `--base-class` option or change to a different base-class.');
+    } else if (options.pod) {
+      relativePath = pathUtil.getRelativeParentPath(resource);
+      importStatement = 'import ' + baseClass + ' from \'' + relativePath + ['adapters', options.baseClass].join('/') + '\';';
     }
 
     // TOOD use isAddon to set path for importing confing from dasherizedPackageName or dummy app
@@ -53,6 +54,9 @@ module.exports = {
           return path.join(options.podPath, moduleName);
         }
         var blueprintName = options.originBlueprintName.replace('jsonapi-', '');
+        if (blueprintName === 'resource') {
+          blueprintName = 'adapter';
+        }
         return inflector.pluralize(blueprintName);
       }
     };

@@ -25,7 +25,7 @@ module.exports = {
         return 'service-test';
       }
       var moduleName = options.dasherizedModuleName;
-      return moduleName + '-test';
+      return inflector.pluralize(moduleName) + '-test';
     };
 
     return tokens;
