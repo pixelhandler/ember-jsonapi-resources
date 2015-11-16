@@ -31,7 +31,7 @@ the domain of your API server. The addon code is rather concise; borrow at will.
 
 This addon is under active development.
 
-**This is a NEW project there may be bugs depending on your use of the addon.** 
+This is a NEW project there may be bugs depending on your use of the addon.
 Please do file an issue if you run into a bug.
 
 
@@ -183,16 +183,27 @@ Remove ember-data from both bower.json and package.json then:
 
 Generate a resource (model with associated adapter, serializer and service):
 
-    ember generate resource entityName
+    ember generate jsonapi-resource entityName
 
 Use the singular form of the name for your resource (entityName).
 
-The blueprint for a `resource` re-defines the Ember CLI `resource` generator.
-So you'll need to generate an associated route like so:
+The blueprint for a `jsonapi-resource` does not generate a route.
+You can generate a route using the same name or use a different name that
+represents the user interface:
 
     ember generate route entityName
 
-For generated code exampels, see the [tests/dummy/app](tests/dummy/app) in this repo.
+The arguments are passed to the `jsonapi-model` blueprint so that `attr`,
+`has-one`, and `has-many` computed properties can be generated.
+
+    ember generate jsonapi-resource article title:string version:number author:has-one:user
+
+If you are using the pod file structure in your ember-cli project use the `--pod`
+argument with your generator.
+
+    ember generate jsonapi-resource user name:string articles:has-many:articles --pod
+
+For generated code examples, see the [tests/dummy/app](tests/dummy/app) in this repo.
 
 ### Store Service
 
@@ -266,7 +277,7 @@ export default Resource.extend({
   type: '<%= resource %>',
   service: Ember.inject.service('<%= resource %>'),
 
-  /*
+  /* You can generate properties using arguments to the jsonapi-model blueprint…
   title: attr('string'),
   published: attr('date'),
   tags: attr('array'),
@@ -319,12 +330,12 @@ var ENV = {
 
 `MODEL_FACTORY_INJECTIONS` should be set to `true` in the app/app.js file.
 
-Also, once you've generated a `resource` you can assign the URL.
+Also, once you've generated a `jsonapi-adapter` you can customize the URL.
 
 See this example: [tests/dummy/app/adapters/post.js](tests/dummy/app/adapters/post.js)
 
 ```javascript
-import ApplicationAdapter from 'ember-jsonapi-resources/adapters/application';
+import ApplicationAdapter from './application';
 import config from '../config/environment';
 
 export default ApplicationAdapter.extend({
