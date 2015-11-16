@@ -1,6 +1,7 @@
 /*jshint node:true*/
 var inflection = require('inflection');
 var stringUtils = require('ember-cli-string-utils');
+var pathUtil = require('ember-cli-path-utils');
 var EOL = require('os').EOL;
 
 module.exports = {
@@ -53,11 +54,19 @@ module.exports = {
     attrs = attrs.join(',' + EOL + '  ');
     needs = '  needs: [' + needsDeduplicated.join(', ') + '],';
 
+    var relativePath = pathUtil.getRelativePath(resource);
+    var baseResourcePath = relativePath + 'resource';
+    if (options.pod) {
+      relativePath = pathUtil.getRelativeParentPath(resource);
+      baseResourcePath = relativePath + ['models', 'resource'].join('/');
+    }
+
     return {
       attrs: attrs,
       needs: needs,
       entity: stringUtils.dasherize(inflection.singularize(resource)),
-      resource: stringUtils.dasherize(inflection.pluralize(resource))
+      resource: stringUtils.dasherize(inflection.pluralize(resource)),
+      resourcePath: baseResourcePath
     };
   },
 

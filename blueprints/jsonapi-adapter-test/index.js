@@ -13,6 +13,16 @@ module.exports = {
   },
 
   fileMapTokens: function() {
-    return AdapterBlueprint.fileMapTokens.apply(this, arguments);
+    var tokens = AdapterBlueprint.fileMapTokens.apply(this, arguments);
+
+    tokens['__test__'] = function (options) {
+      if (options.pod) {
+        return 'adapter-test';
+      }
+      var moduleName = options.dasherizedModuleName;
+      return moduleName + '-test';
+    };
+
+    return tokens;
   }
 };

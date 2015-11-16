@@ -1,5 +1,6 @@
 import Ember from 'ember';
-import { Resource, attr, hasOne, hasMany } from 'ember-jsonapi-resources/models/resource';
+import Resource from '<%= resourcePath %>';
+import { attr, hasOne, hasMany } from 'ember-jsonapi-resources/models/resource';
 
 export default Resource.extend({
   type: '<%= resource %>',
