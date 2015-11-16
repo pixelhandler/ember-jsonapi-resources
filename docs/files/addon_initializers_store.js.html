@@ -47,6 +47,7 @@
                                 <li><a href="../classes/ServiceCacheMixin.html">ServiceCacheMixin</a></li>
                                 <li><a href="../classes/StoreService.html">StoreService</a></li>
                                 <li><a href="../classes/TransformDateAttribute.html">TransformDateAttribute</a></li>
+                                <li><a href="../classes/TransformMap.html">TransformMap</a></li>
                                 <li><a href="../classes/TransformsMixin.html">TransformsMixin</a></li>
                             </ul>
                 
@@ -60,6 +61,7 @@
                                 <li><a href="../modules/resource.html">resource</a></li>
                                 <li><a href="../modules/serializer.html">serializer</a></li>
                                 <li><a href="../modules/store.html">store</a></li>
+                                <li><a href="../modules/transform-map.html">transform-map</a></li>
                                 <li><a href="../modules/transforms.html">transforms</a></li>
                                 <li><a href="../modules/utils.html">utils</a></li>
                             </ul>
@@ -112,7 +114,9 @@ import StoreService from &#x27;ember-jsonapi-resources/services/store&#x27;;
   @method initialize
   @requires StoreService
 */
-export function initialize(container, application) {
+export function initialize() {
+  // see http://emberjs.com/deprecations/v2.x/#toc_initializer-arity
+  let application = arguments[1] || arguments[0];
   const store = &#x27;service:store&#x27;;
   application.register(store, StoreService);
   application.inject(&#x27;route&#x27;, &#x27;store&#x27;, store);

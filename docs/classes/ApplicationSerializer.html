@@ -47,6 +47,7 @@
                                 <li><a href="../classes/ServiceCacheMixin.html">ServiceCacheMixin</a></li>
                                 <li><a href="../classes/StoreService.html">StoreService</a></li>
                                 <li><a href="../classes/TransformDateAttribute.html">TransformDateAttribute</a></li>
+                                <li><a href="../classes/TransformMap.html">TransformMap</a></li>
                                 <li><a href="../classes/TransformsMixin.html">TransformsMixin</a></li>
                             </ul>
                 
@@ -60,6 +61,7 @@
                                 <li><a href="../modules/resource.html">resource</a></li>
                                 <li><a href="../modules/serializer.html">serializer</a></li>
                                 <li><a href="../modules/store.html">store</a></li>
+                                <li><a href="../modules/transform-map.html">transform-map</a></li>
                                 <li><a href="../modules/transforms.html">transforms</a></li>
                                 <li><a href="../modules/utils.html">utils</a></li>
                             </ul>
@@ -180,6 +182,10 @@ instead of any transform methods based on the type of the attribute.</li>
 
                             </li>
                             <li class="index-item method">
+                                <a href="#method_serializeResources">serializeResources</a>
+
+                            </li>
+                            <li class="index-item method">
                                 <a href="#method_transformAttributes">transformAttributes</a>
 
                             </li>
@@ -218,7 +224,7 @@ instead of any transform methods based on the type of the attribute.</li>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_serializers_application.js.html#l189"><code>addon&#x2F;serializers&#x2F;application.js:189</code></a>
+        <a href="../files/addon_serializers_application.js.html#l207"><code>addon&#x2F;serializers&#x2F;application.js:207</code></a>
         </p>
 
 
@@ -284,7 +290,7 @@ instead of any transform methods based on the type of the attribute.</li>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_serializers_application.js.html#l216"><code>addon&#x2F;serializers&#x2F;application.js:216</code></a>
+        <a href="../files/addon_serializers_application.js.html#l234"><code>addon&#x2F;serializers&#x2F;application.js:234</code></a>
         </p>
 
 
@@ -348,7 +354,7 @@ instead of any transform methods based on the type of the attribute.</li>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_serializers_application.js.html#l86"><code>addon&#x2F;serializers&#x2F;application.js:86</code></a>
+        <a href="../files/addon_serializers_application.js.html#l104"><code>addon&#x2F;serializers&#x2F;application.js:104</code></a>
         </p>
 
 
@@ -414,7 +420,7 @@ instead of any transform methods based on the type of the attribute.</li>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_serializers_application.js.html#l129"><code>addon&#x2F;serializers&#x2F;application.js:129</code></a>
+        <a href="../files/addon_serializers_application.js.html#l147"><code>addon&#x2F;serializers&#x2F;application.js:147</code></a>
         </p>
 
 
@@ -481,7 +487,7 @@ instead of any transform methods based on the type of the attribute.</li>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_serializers_application.js.html#l117"><code>addon&#x2F;serializers&#x2F;application.js:117</code></a>
+        <a href="../files/addon_serializers_application.js.html#l135"><code>addon&#x2F;serializers&#x2F;application.js:135</code></a>
         </p>
 
 
@@ -544,7 +550,7 @@ instead of any transform methods based on the type of the attribute.</li>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_serializers_application.js.html#l103"><code>addon&#x2F;serializers&#x2F;application.js:103</code></a>
+        <a href="../files/addon_serializers_application.js.html#l121"><code>addon&#x2F;serializers&#x2F;application.js:121</code></a>
         </p>
 
 
@@ -595,7 +601,7 @@ instead of any transform methods based on the type of the attribute.</li>
         </div>
 
         <span class="returns-inline">
-            <span class="type">Object</span>
+            <span class="type">Object | Array</span>
         </span>
 
 
@@ -643,9 +649,7 @@ instead of any transform methods based on the type of the attribute.</li>
             <h4>Returns:</h4>
 
             <div class="returns-description">
-                        <span class="type">Object</span>:
-                    <p>json</p>
-
+                        <span class="type">Object | Array</span>:
             </div>
         </div>
 
@@ -675,7 +679,7 @@ instead of any transform methods based on the type of the attribute.</li>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_serializers_application.js.html#l65"><code>addon&#x2F;serializers&#x2F;application.js:65</code></a>
+        <a href="../files/addon_serializers_application.js.html#l83"><code>addon&#x2F;serializers&#x2F;application.js:83</code></a>
         </p>
 
 
@@ -739,7 +743,7 @@ instead of any transform methods based on the type of the attribute.</li>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_serializers_application.js.html#l44"><code>addon&#x2F;serializers&#x2F;application.js:44</code></a>
+        <a href="../files/addon_serializers_application.js.html#l62"><code>addon&#x2F;serializers&#x2F;application.js:62</code></a>
         </p>
 
 
@@ -779,6 +783,68 @@ instead of any transform methods based on the type of the attribute.</li>
 
 
 </div>
+<div id="method_serializeResources" class="method item">
+    <h3 class="name"><code>serializeResources</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>collection</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">Array</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/addon_serializers_application.js.html#l50"><code>addon&#x2F;serializers&#x2F;application.js:50</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">collection</code>
+                        <span class="type">Array</span>
+
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Array</span>:
+            </div>
+        </div>
+
+
+</div>
 <div id="method_transformAttributes" class="method item">
     <h3 class="name"><code>transformAttributes</code></h3>
 
@@ -806,7 +872,7 @@ instead of any transform methods based on the type of the attribute.</li>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_serializers_application.js.html#l148"><code>addon&#x2F;serializers&#x2F;application.js:148</code></a>
+        <a href="../files/addon_serializers_application.js.html#l166"><code>addon&#x2F;serializers&#x2F;application.js:166</code></a>
         </p>
 
 

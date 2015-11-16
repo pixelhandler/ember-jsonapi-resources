@@ -47,6 +47,7 @@
                                 <li><a href="../classes/ServiceCacheMixin.html">ServiceCacheMixin</a></li>
                                 <li><a href="../classes/StoreService.html">StoreService</a></li>
                                 <li><a href="../classes/TransformDateAttribute.html">TransformDateAttribute</a></li>
+                                <li><a href="../classes/TransformMap.html">TransformMap</a></li>
                                 <li><a href="../classes/TransformsMixin.html">TransformsMixin</a></li>
                             </ul>
                 
@@ -60,6 +61,7 @@
                                 <li><a href="../modules/resource.html">resource</a></li>
                                 <li><a href="../modules/serializer.html">serializer</a></li>
                                 <li><a href="../modules/store.html">store</a></li>
+                                <li><a href="../modules/transform-map.html">transform-map</a></li>
                                 <li><a href="../modules/transforms.html">transforms</a></li>
                                 <li><a href="../modules/utils.html">utils</a></li>
                             </ul>
@@ -255,34 +257,47 @@ export default Ember.Mixin.create({
 });
 
 function ServerError(message = &#x27;Server Error&#x27;, response = null) {
-  this.name = &#x27;ServerError&#x27;;
-  this.message = message;
-  this.response = response;
-  this.errors = response.errors || null;
-}
-ServerError.prototype = Object.create(Error.prototype);
-ServerError.prototype.constructor = ServerError;
+  let _error = Error.prototype.constructor.call(this, message);
+  _error.name = this.name = &#x27;ServerError&#x27;;
+  this.stack = _error.stack;
+  this.message = _error.message;
 
-function ClientError(message = &#x27;Client Error&#x27;, response = null) {
-  this.name = &#x27;ClientError&#x27;;
-  this.message = message;
   this.response = response;
-  this.errors = response.errors || null;
   this.errors = (response) ? response.errors || null : null;
 }
-ClientError.prototype = Object.create(Error.prototype);
-ClientError.prototype.constructor = ClientError;
+ServerError.prototype = errorProtoFactory(ServerError);
+
+function ClientError(message = &#x27;Client Error&#x27;, response = null) {
+  let _error = Error.prototype.constructor.call(this, message);
+  _error.name = this.name = &#x27;ClientError&#x27;;
+  this.stack = _error.stack;
+  this.message = _error.message;
+
+  this.response = response;
+  this.errors = (response) ? response.errors || null : null;
+}
+ClientError.prototype = errorProtoFactory(ClientError);
 
 function FetchError(message = &#x27;Fetch Error&#x27;, error = null, response = null) {
-  this.name = &#x27;FetchError&#x27;;
-  this.message = message;
-  this.stack = (error) ? error.stack || null : null;
+  let _error = Error.prototype.constructor.call(this, message);
+  _error.name = this.name = &#x27;FetchError&#x27;;
+  this.stack = (error &amp;&amp; error.stack) ? error.stack : _error.stack;
+  this.message = (error &amp;&amp; error.message) ? error.message : _error.message;
 
-  this.error = error;
   this.response = response;
+  this.error = error || _error;
 }
-FetchError.prototype = Object.create(Error.prototype);
-FetchError.prototype.constructor = FetchError;
+FetchError.prototype = errorProtoFactory(FetchError);
+
+function errorProtoFactory(ctor) {
+  return Object.create(Error.prototype, {
+    constructor: {
+      value: ctor,
+      writable: true,
+      configurable: true
+    }
+  });
+}
 
     </pre>
 </div>

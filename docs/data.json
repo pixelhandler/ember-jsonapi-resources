@@ -140,6 +140,17 @@
             "fors": {},
             "namespaces": {}
         },
+        "addon/utils/transform-map.js": {
+            "name": "addon/utils/transform-map.js",
+            "modules": {
+                "transform-map": 1
+            },
+            "classes": {
+                "TransformMap": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
         "addon/utils/transforms.js": {
             "name": "addon/utils/transforms.js",
             "modules": {},
@@ -312,10 +323,13 @@
         },
         "utils": {
             "name": "utils",
-            "submodules": {},
+            "submodules": {
+                "transform-map": 1
+            },
             "elements": {},
             "classes": {
                 "RelatedProxyUtil": 1,
+                "TransformMap": 1,
                 "TransformDateAttribute": 1
             },
             "fors": {},
@@ -326,6 +340,22 @@
             "file": "addon/utils/transforms.js",
             "line": 8,
             "description": "Utility for creating promise proxy objects for related resources"
+        },
+        "transform-map": {
+            "name": "transform-map",
+            "submodules": {},
+            "elements": {},
+            "classes": {
+                "TransformMap": 1
+            },
+            "fors": {},
+            "is_submodule": 1,
+            "namespaces": {},
+            "module": "utils",
+            "namespace": "",
+            "file": "addon/utils/transform-map.js",
+            "line": 7,
+            "description": "Abstract class to transform mapped data structures"
         }
     },
     "classes": {
@@ -484,6 +514,21 @@
             "description": "Utility for creating promise proxy objects for related resources",
             "static": 1
         },
+        "TransformMap": {
+            "name": "TransformMap",
+            "shortname": "TransformMap",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "utils",
+            "submodule": "transform-map",
+            "namespace": "",
+            "file": "addon/utils/transform-map.js",
+            "line": 7,
+            "description": "Abstract class to transform mapped data structures"
+        },
         "TransformDateAttribute": {
             "name": "TransformDateAttribute",
             "shortname": "TransformDateAttribute",
@@ -634,7 +679,7 @@
         {
             "file": "addon/adapters/application.js",
             "line": 123,
-            "description": "Create a new resource, sends a POST request",
+            "description": "Create a new resource, sends a POST request, updates resource instance\nwith persisted data, and updates cache with persisted resource",
             "itemtype": "method",
             "name": "createResource",
             "params": [
@@ -654,7 +699,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 139,
+            "line": 150,
             "description": "Patch an existing resource, sends a PATCH request. After promise is resolved\nthe `didUpdateResource` event is triggered, given an error response a event\n`resourceError` is triggered. A resource may listen on its `service` reference.",
             "itemtype": "method",
             "name": "updateResource",
@@ -675,7 +720,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 163,
+            "line": 174,
             "description": "Patch a relationship, either add or remove, sends a PATCH request\n\nAdds with payload: `{ \"data\": { \"type\": \"comments\", \"id\": \"12\" } }`\nRemoves with payload: `{ \"data\": null }` for to-one or `{ \"data\": [] }` for to-many",
             "itemtype": "method",
             "name": "patchRelationship",
@@ -701,7 +746,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 187,
+            "line": 198,
             "description": "Delete an existing resource, sends a DELETE request",
             "itemtype": "method",
             "name": "deleteResource",
@@ -722,7 +767,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 205,
+            "line": 217,
             "description": "Fetches data using Fetch API or XMLHttpRequest",
             "itemtype": "method",
             "name": "fetch",
@@ -748,7 +793,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 223,
+            "line": 235,
             "description": "Hook to customize the URL, e.g. if your API is behind a proxy and you need\nto swap a portion of the domain to make a request on the same domain.",
             "itemtype": "method",
             "name": "fetchUrl",
@@ -769,7 +814,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 235,
+            "line": 247,
             "description": "Adds params and headers or Fetch request.\n\n- The HTTP Header is set for Content-Type: application/vnd.api+json\n- Sets Authorization header if accessible in the `authorizationCredential` property",
             "itemtype": "method",
             "name": "fetchOptions",
@@ -790,7 +835,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 257,
+            "line": 269,
             "description": "Sets Authorization header if accessible in the `authorizationCredential` property",
             "itemtype": "method",
             "name": "fetchAuthorizationHeader",
@@ -807,7 +852,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 274,
+            "line": 286,
             "description": "Authentication credentials/token used with HTTP authentication\nThis property should be added by an Authorization Mixin",
             "itemtype": "property",
             "name": "authorizationCredential",
@@ -818,7 +863,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 283,
+            "line": 295,
             "description": "The name of the Authorization request-header field\nThis property should be added by an Authorization Mixin",
             "itemtype": "property",
             "name": "authorizationHeaderField",
@@ -829,7 +874,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 292,
+            "line": 304,
             "description": "Noop as a hook for defining how deserialized resource objects are cached,\ne.g. in memory",
             "itemtype": "method",
             "name": "cacheResource",
@@ -846,7 +891,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 301,
+            "line": 313,
             "description": "Noop as a hook for defining how to handle cache after updating a resource",
             "itemtype": "method",
             "name": "cacheUpdate",
@@ -863,7 +908,24 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 309,
+            "line": 321,
+            "description": "Noop as a hook to remove a resource from cached data",
+            "itemtype": "method",
+            "name": "cacheRemove",
+            "params": [
+                {
+                    "name": "resource",
+                    "description": "",
+                    "type": "Resource"
+                }
+            ],
+            "class": "ApplicationAdapter",
+            "module": "ember-jsonapi-resources",
+            "submodule": "adapter"
+        },
+        {
+            "file": "addon/adapters/application.js",
+            "line": 329,
             "description": "Initialize events to communicate on the resource instances' service reference.\nListens for resource objects trigging `attributeChanged` events",
             "itemtype": "method",
             "name": "initEvents",
@@ -1184,6 +1246,23 @@
                 "description": "",
                 "type": "Resource|undefined"
             },
+            "class": "ServiceCacheMixin",
+            "module": "ember-jsonapi-resources",
+            "submodule": "cache"
+        },
+        {
+            "file": "addon/mixins/service-cache.js",
+            "line": 160,
+            "description": "Remove a resource from cached data",
+            "itemtype": "method",
+            "name": "cacheRemove",
+            "params": [
+                {
+                    "name": "resource",
+                    "description": "",
+                    "type": "Resource"
+                }
+            ],
             "class": "ServiceCacheMixin",
             "module": "ember-jsonapi-resources",
             "submodule": "cache"
@@ -1559,8 +1638,8 @@
                 }
             ],
             "return": {
-                "description": "json",
-                "type": "Object"
+                "description": "",
+                "type": "Object|Array"
             },
             "class": "ApplicationSerializer",
             "module": "ember-jsonapi-resources",
@@ -1568,7 +1647,27 @@
         },
         {
             "file": "addon/serializers/application.js",
-            "line": 44,
+            "line": 50,
+            "itemtype": "method",
+            "name": "serializeResources",
+            "params": [
+                {
+                    "name": "collection",
+                    "description": "",
+                    "type": "Array"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Array"
+            },
+            "class": "ApplicationSerializer",
+            "module": "ember-jsonapi-resources",
+            "submodule": "serializer"
+        },
+        {
+            "file": "addon/serializers/application.js",
+            "line": 62,
             "description": "Serialize a resource object",
             "itemtype": "method",
             "name": "serializeResource",
@@ -1589,7 +1688,7 @@
         },
         {
             "file": "addon/serializers/application.js",
-            "line": 65,
+            "line": 83,
             "description": "Serialize a resource object, but only the changed attributes",
             "itemtype": "method",
             "name": "serializeChanged",
@@ -1610,7 +1709,7 @@
         },
         {
             "file": "addon/serializers/application.js",
-            "line": 86,
+            "line": 104,
             "description": "Deserialize response objects from the request payload",
             "itemtype": "method",
             "name": "deserialize",
@@ -1631,7 +1730,7 @@
         },
         {
             "file": "addon/serializers/application.js",
-            "line": 103,
+            "line": 121,
             "description": "Deserialize response objects in the payload data",
             "itemtype": "method",
             "name": "deserializeResources",
@@ -1652,7 +1751,7 @@
         },
         {
             "file": "addon/serializers/application.js",
-            "line": 117,
+            "line": 135,
             "description": "Deserialize response an object in the payload data",
             "itemtype": "method",
             "name": "deserializeResource",
@@ -1673,7 +1772,7 @@
         },
         {
             "file": "addon/serializers/application.js",
-            "line": 129,
+            "line": 147,
             "description": "Deserialize optional included array of payload and add to service cache",
             "itemtype": "method",
             "name": "deserializeIncluded",
@@ -1695,7 +1794,7 @@
         },
         {
             "file": "addon/serializers/application.js",
-            "line": 148,
+            "line": 166,
             "description": "Transform attributes, serialize or deserialize by specified method or\nper type of attribute, e.g. date.\n\nYour serializer may define a specific method for a type of attribute,\ni.e. `serializeDateAttribute` and/or `deserializeDateAttribute`. Likewise,\nyour serializer may define a specific method for the name of an attribute,\nlike `serializeUpdatedAtAttribute` and `deserializeUpdatedAtAttribute`.\n\nDuring transformation a method based on the name of the attribute takes\npriority over a transform method based on the type of attribute, e.g. date.",
             "itemtype": "method",
             "name": "transformAttributes",
@@ -1723,7 +1822,7 @@
         },
         {
             "file": "addon/serializers/application.js",
-            "line": 189,
+            "line": 207,
             "description": "Create a Resource from a JSON API Resource Object\n\nSee <http://jsonapi.org/format/#document-resource-objects>",
             "access": "private",
             "tagname": "",
@@ -1745,7 +1844,7 @@
         },
         {
             "file": "addon/serializers/application.js",
-            "line": 216,
+            "line": 234,
             "access": "private",
             "tagname": "",
             "itemtype": "method",
@@ -2212,6 +2311,51 @@
             "submodule": "utils"
         },
         {
+            "file": "addon/utils/transform-map.js",
+            "line": 14,
+            "itemtype": "method",
+            "name": "constructor",
+            "params": [
+                {
+                    "name": "map",
+                    "description": "created with `null` as prototype",
+                    "type": "Object",
+                    "optional": true
+                }
+            ],
+            "class": "TransformMap",
+            "module": "utils",
+            "submodule": "transform-map"
+        },
+        {
+            "file": "addon/utils/transform-map.js",
+            "line": 37,
+            "itemtype": "method",
+            "name": "lookup",
+            "params": [
+                {
+                    "name": "value",
+                    "description": "",
+                    "type": "String",
+                    "optional": true
+                },
+                {
+                    "name": "use",
+                    "description": "keys or values",
+                    "type": "String",
+                    "optional": true,
+                    "optdefault": "'keys'"
+                }
+            ],
+            "return": {
+                "description": "[value] name or null",
+                "type": "String|Null"
+            },
+            "class": "TransformMap",
+            "module": "utils",
+            "submodule": "transform-map"
+        },
+        {
             "file": "addon/utils/transforms.js",
             "line": 13,
             "itemtype": "method",
@@ -2252,5 +2396,10 @@
             "submodule": "utils"
         }
     ],
-    "warnings": []
+    "warnings": [
+        {
+            "message": "replacing incorrect tag: parm with param",
+            "line": " addon/utils/transform-map.js:37"
+        }
+    ]
 }

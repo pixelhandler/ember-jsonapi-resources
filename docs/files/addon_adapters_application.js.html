@@ -47,6 +47,7 @@
                                 <li><a href="../classes/ServiceCacheMixin.html">ServiceCacheMixin</a></li>
                                 <li><a href="../classes/StoreService.html">StoreService</a></li>
                                 <li><a href="../classes/TransformDateAttribute.html">TransformDateAttribute</a></li>
+                                <li><a href="../classes/TransformMap.html">TransformMap</a></li>
                                 <li><a href="../classes/TransformsMixin.html">TransformsMixin</a></li>
                             </ul>
                 
@@ -60,6 +61,7 @@
                                 <li><a href="../modules/resource.html">resource</a></li>
                                 <li><a href="../modules/serializer.html">serializer</a></li>
                                 <li><a href="../modules/store.html">store</a></li>
+                                <li><a href="../modules/transform-map.html">transform-map</a></li>
                                 <li><a href="../modules/transforms.html">transforms</a></li>
                                 <li><a href="../modules/utils.html">utils</a></li>
                             </ul>
@@ -222,7 +224,8 @@ export default Ember.Object.extend(FetchMixin, Ember.Evented, {
   },
 
   /**
-    Create a new resource, sends a POST request
+    Create a new resource, sends a POST request, updates resource instance
+    with persisted data, and updates cache with persisted resource
 
     @method createResource
     @param {Resource} the resource instance to serialize
@@ -234,7 +237,17 @@ export default Ember.Object.extend(FetchMixin, Ember.Evented, {
     return this.fetch(url, {
       method: &#x27;POST&#x27;,
       body: JSON.stringify(json)
-    });
+    }).then(function(resp) {
+      if (resource.toString().match(&#x27;JSONAPIResource&#x27;) === null) {
+        return resp;
+      } else {
+        resource.set(&#x27;id&#x27;, resp.get(&#x27;id&#x27;) );
+        let json = resp.getProperties(&#x27;attributes&#x27;, &#x27;relationships&#x27;, &#x27;links&#x27;, &#x27;meta&#x27;, &#x27;type&#x27;, &#x27;isNew&#x27;);
+        resource.didUpdateResource(json);
+        this.cacheUpdate({ data: resource });
+        return resource;
+      }
+    }.bind(this));
   },
 
   /**
@@ -298,6 +311,7 @@ export default Ember.Object.extend(FetchMixin, Ember.Evented, {
       url += resource;
     } else {
       url = resource.get(&#x27;links.self&#x27;) || url + resource.get(&#x27;id&#x27;);
+      this.cacheRemove(resource);
       resource.destroy();
     }
     return this.fetch(url, { method: &#x27;DELETE&#x27; });
@@ -406,6 +420,14 @@ export default Ember.Object.extend(FetchMixin, Ember.Evented, {
     @param {Object} resp w/ props: {Object} meta, {Array|Object} data, &amp; {Object} headers
   */
   cacheUpdate(/*resp*/) {},
+
+  /**
+    Noop as a hook to remove a resource from cached data
+
+    @method cacheRemove
+    @param {Resource} resource
+  */
+  cacheRemove(/*resource*/) {},
 
   /**
     Initialize events to communicate on the resource instances&#x27; service reference.

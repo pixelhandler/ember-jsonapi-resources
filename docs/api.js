@@ -10,6 +10,7 @@ YUI.add("yuidoc-meta", function(Y) {
         "ServiceCacheMixin",
         "StoreService",
         "TransformDateAttribute",
+        "TransformMap",
         "TransformsMixin"
     ],
     "modules": [
@@ -63,6 +64,11 @@ YUI.add("yuidoc-meta", function(Y) {
             "displayName": "store",
             "name": "store",
             "description": "Service for a JSON API endpoint a facade to your resource adapter"
+        },
+        {
+            "displayName": "transform-map",
+            "name": "transform-map",
+            "description": "Abstract class to transform mapped data structures"
         },
         {
             "displayName": "transforms",

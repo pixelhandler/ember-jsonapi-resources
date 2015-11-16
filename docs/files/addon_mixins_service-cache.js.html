@@ -47,6 +47,7 @@
                                 <li><a href="../classes/ServiceCacheMixin.html">ServiceCacheMixin</a></li>
                                 <li><a href="../classes/StoreService.html">StoreService</a></li>
                                 <li><a href="../classes/TransformDateAttribute.html">TransformDateAttribute</a></li>
+                                <li><a href="../classes/TransformMap.html">TransformMap</a></li>
                                 <li><a href="../classes/TransformsMixin.html">TransformsMixin</a></li>
                             </ul>
                 
@@ -60,6 +61,7 @@
                                 <li><a href="../modules/resource.html">resource</a></li>
                                 <li><a href="../modules/serializer.html">serializer</a></li>
                                 <li><a href="../modules/store.html">store</a></li>
+                                <li><a href="../modules/transform-map.html">transform-map</a></li>
                                 <li><a href="../modules/transforms.html">transforms</a></li>
                                 <li><a href="../modules/utils.html">utils</a></li>
                             </ul>
@@ -256,6 +258,16 @@ export default Ember.Mixin.create({
       }
       return resource.get(&#x27;id&#x27;) === id &amp;&amp; !isExpired;
     }.bind(this));
+  },
+
+  /**
+    Remove a resource from cached data
+
+    @method cacheRemove
+    @param {Resource} resource
+  */
+  cacheRemove(resource) {
+    this.cache.data.removeObject(resource);
   }
 });
 
