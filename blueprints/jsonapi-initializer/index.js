@@ -12,7 +12,7 @@ module.exports = {
     var resourcePlural = inflector.pluralize(resource);
     var relativePath = pathUtil.getRelativeParentPath(resource);
 
-    var servicePath = relativePath + [ 'services', resourceSingular ].join('/');
+    var servicePath = relativePath + [ 'services', resourcePlural ].join('/');
     var modelPath = relativePath + [ 'models', resourceSingular ].join('/');
     var adapterPath = relativePath + [ 'adapters', resourceSingular ].join('/');
     var serializerPath = relativePath + [ 'serializers', resourceSingular ].join('/');
