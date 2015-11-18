@@ -1,7 +1,7 @@
 import { moduleFor, test } from 'ember-qunit';
 import Resource from '<%= modelPath %>';
 
-moduleFor('serializer:<%= resource %>', '<%= friendlyTestDescription %>', {
+moduleFor('serializer:<%= entity %>', '<%= friendlyTestDescription %>', {
   beforeEach() {
     Resource.prototype.container = this.container;
     let opts = { instantiate: false, singleton: false };
