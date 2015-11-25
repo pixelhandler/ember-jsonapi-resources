@@ -50,17 +50,23 @@ export default Ember.Mixin.create({
           let msg = 'The Service responded with a '+ resp.status +' error.';
           reject(new ServerError(msg, resp));
         } else if (resp.status >= 400) {
-          resp.json().then(function(_resp) {
-            let msg = 'The API responded with a '+ resp.status +' error.';
-            reject(new ClientError(msg, _resp));
+          resp.text().then(function(_resp) {
+            let json, msg = 'The API responded with a '+ resp.status +' error.';
+            try {
+              json = JSON.parse(_resp);
+            } catch (e) {
+              Ember.Logger.error(e);
+              json = { "errors": [ { "status": resp.status } ] };
+            }
+            reject(new ClientError(msg, json));
           });
         } else if (resp.status === 204) {
           resolve('');
         } else {
           return resp.json().then(function(json) {
             if (isUpdate) {
-              _this.cacheUpdate({ meta: json.meta, data: json.data, headers: resp.headers });
               json.data = _this.serializer.transformAttributes(json.data);
+              _this.cacheUpdate({ meta: json.meta, data: json.data, headers: resp.headers });
               resolve(json.data);
             } else {
               let resource = _this.serializer.deserialize(json);
@@ -99,8 +105,8 @@ export default Ember.Mixin.create({
         } else {
           let headers = _this._getAjaxHeaders(jqXHR);
           if (isUpdate) {
-            _this.cacheUpdate({ meta: json.meta, data: json.data, headers: headers });
             json.data = _this.serializer.transformAttributes(json.data);
+            _this.cacheUpdate({ meta: json.meta, data: json.data, headers: headers });
             resolve(json.data);
           } else {
             let resource = _this.serializer.deserialize(json);
@@ -116,7 +122,11 @@ export default Ember.Mixin.create({
           reject(new ServerError(msg, jqXHR.responseJSON || jqXHR.responseText));
         } else if (jqXHR.status >= 400) {
           msg = 'The API responded with a '+ jqXHR.status +' error.';
-          reject(new ClientError(msg, jqXHR.responseJSON || jqXHR.responseText));
+          let json = jqXHR.responseJSON;
+          if (!json) {
+            json = { "errors": [ { "status": jqXHR.status, "detail": jqXHR.responseText } ] };
+          }
+          reject(new ClientError(msg, json));
         } else {
           msg = (errorThrown) ? errorThrown : 'Unable to Fetch resource(s)';
           reject(new FetchError(msg, {

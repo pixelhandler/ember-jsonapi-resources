@@ -56,14 +56,6 @@ test('it has properties for changed/previous attributes', function(assert) {
   });
 });
 
-test('it has methods for communication on an event bus with service', function(assert) {
-  const resource = this.subject();
-  let methods = Ember.String.w('initEvents didUpdateResource');
-  methods.forEach(function (method) {
-    assert.ok(typeof resource[method] === 'function', 'resource#' + method + ' is a function');
-  });
-});
-
 test('it needs a reference to an injected service object', function(assert) {
   const resource = this.subject();
   assert.ok(resource.get('service') === null, 'resource#service is null by default');

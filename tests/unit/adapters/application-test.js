@@ -396,8 +396,8 @@ test('#fetch handles 4xx (Client Error) response status', function(assert) {
   sandbox.stub(window, 'fetch', function () {
     return Ember.RSVP.Promise.resolve({
       "status": 404,
-      "json": function() {
-        return Ember.RSVP.Promise.resolve({ errors: [ { code: 404 } ] });
+      "text": function() {
+        return Ember.RSVP.Promise.resolve("{ errors: [ { status: 404 } ] }");
       }
     });
   });
@@ -406,7 +406,7 @@ test('#fetch handles 4xx (Client Error) response status', function(assert) {
   promise.catch(function(error) {
     assert.ok(error.name, 'Client Error', '4xx response throws a custom error');
     assert.ok(Array.isArray(error.errors), '4xx error includes errors');
-    assert.equal(error.errors[0].code, 404, '404 error code is in errors list');
+    assert.equal(error.errors[0].status, 404, '404 error status is in errors list');
     done();
   });
 });

@@ -148,9 +148,7 @@ export default Ember.Object.extend(FetchMixin, Ember.Evented, {
   },
 
   /**
-    Patch an existing resource, sends a PATCH request. After promise is resolved
-    the `didUpdateResource` event is triggered, given an error response a event
-    `resourceError` is triggered. A resource may listen on its `service` reference.
+    Patch an existing resource, sends a PATCH request.
 
     @method updateResource
     @param {Resource} the resource instance to serialize the changed attributes
@@ -164,11 +162,7 @@ export default Ember.Object.extend(FetchMixin, Ember.Evented, {
       method: 'PATCH',
       body: JSON.stringify(json),
       update: true
-    }).then(function(json) {
-      this.trigger('didUpdateResource', json);
-    }.bind(this)).catch(function(resp) {
-      this.trigger('resourceError', resp);
-    }.bind(this));
+    });
   },
 
   /**
@@ -190,9 +184,7 @@ export default Ember.Object.extend(FetchMixin, Ember.Evented, {
     return this.fetch(url, {
       method: 'PATCH',
       body: JSON.stringify(data)
-    }).then(function(json) {
-      this.trigger('didUpdateRelationship', json);
-    }.bind(this));
+    });
   },
 
   /**
