@@ -21,8 +21,6 @@ the domain of your API server. The addon code is rather concise; borrow at will.
 
 [![Build Status](https://travis-ci.org/pixelhandler/ember-jsonapi-resources.svg?branch=master)](https://travis-ci.org/pixelhandler/ember-jsonapi-resources)
 [![Ember Observer Score](http://emberobserver.com/badges/ember-jsonapi-resources.svg)](http://emberobserver.com/addons/ember-jsonapi-resources)
-[![Code Climate](https://codeclimate.com/github/pixelhandler/ember-jsonapi-resources/badges/gpa.svg)](https://codeclimate.com/github/pixelhandler/ember-jsonapi-resources)
-[![Test Coverage](https://codeclimate.com/github/pixelhandler/ember-jsonapi-resources/badges/coverage.svg)](https://codeclimate.com/github/pixelhandler/ember-jsonapi-resources/coverage)
 [![npm](https://img.shields.io/npm/dm/ember-jsonapi-resources.svg)](https://www.npmjs.com/package/ember-jsonapi-resources)
 [![npm](https://img.shields.io/npm/v/ember-jsonapi-resources.svg)](https://www.npmjs.com/package/ember-jsonapi-resources)
 [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/pixelhandler/ember-jsonapi-resources?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
