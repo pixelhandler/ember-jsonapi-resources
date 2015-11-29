@@ -16,6 +16,9 @@ a {
   a:hover {
     text-decoration: underline; }
 
+.cursive {
+  font-family: 'Pacifico', cursive; }
+
 .btn {
   display: inline-block;
   margin-bottom: 1rem;
@@ -46,10 +49,11 @@ a {
 
 @media screen and (max-width: 42em) {
   .btn {
-    display: block;
-    width: 100%;
-    padding: 0.75rem;
-    font-size: 0.9rem; }
+    display: inline-block;
+    width: 30%;
+    padding: 0.65rem;
+    margin-bottom: 0.5rem;
+    font-size: 0.85rem; }
     .btn + .btn {
       margin-top: 1rem;
       margin-left: 0; } }
@@ -65,7 +69,7 @@ a {
 
 @media screen and (min-width: 64em) {
   .page-header {
-    padding: 2.5rem 6rem; } }
+    padding: 2rem 6rem 1rem 6rem; } }
 
 @media screen and (min-width: 42em) and (max-width: 64em) {
   .page-header {
@@ -75,8 +79,52 @@ a {
   .page-header {
     padding: 1rem 1rem; } }
 
+.page-header .project-name {
+  text-shadow: 2px 2px 2px #000; }
+
+.page-header .project-name .tilted {
+  display: inline-block;
+  -webkit-transform: rotate(-2deg);
+  -moz-transform: rotate(-2deg);
+  -ms-transform: rotate(-2deg);
+  -o-transform: rotate(-2deg);
+  filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=0.2);
+  transform: rotate(-2deg); }
+
+.page-header .project-name .tilted:hover {
+  -ms-transform: rotate(0deg);
+  filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=0); }
+
+.page-header .project-name .tilted:hover {
+  -webkit-animation: twist-it .5s infinite; /* Safari 4+ */
+  -moz-animation:    twist-it .5s infinite; /* Fx 5+ */
+  -o-animation:      twist-it .5s infinite; /* Opera 12+ */
+  animation:         twist-it .5s infinite; /* IE 10+, Fx 29+ */
+}
+
+@-webkit-keyframes twist-it {
+  0%   { -webkit-transform: rotate(-2deg); }
+  100% { -webkit-transform: rotate(0deg); } }
+
+@-moz-keyframes twist-it {
+  0%   { -moz-transform: rotate(-2deg); }
+  100% { -moz-transform: rotate(0deg); } }
+
+@-o-keyframes twist-it {
+  0%   { -o-transform: rotate(-2deg); }
+  100% { -o-transform: rotate(0deg); } }
+
+@keyframes twist-it {
+  0%   { transform: rotate(-2deg); }
+  100% { transform: rotate(0deg); } }
+
+.page-header .project-name .cursive {
+  text-transform: lowercase;
+  margin: 0 .5rem;
+  font-size: 110%; }
+
 .details .page-header {
-  padding: 2rem 6em; }
+  padding: 1rem 3em; }
 
 .project-name {
   color: #fecd0b;
@@ -89,25 +137,18 @@ a {
 
 @media screen and (min-width: 42em) and (max-width: 64em) {
   .project-name {
-    font-size: 2.25rem; } }
+    font-size: 2rem; } }
 
 @media screen and (max-width: 42em) {
   .project-name {
-    font-size: 1.75rem; } }
-
-.details .page-header .project-name {
-  font-size: 1.75rem;
-  text-align: left;
-  top: 16px;
-  left: 10%;
-  position: absolute; }
+    font-size: 1.25rem; } }
 
 .details .page-header .project-name a {
   text-decoration: none;
   color: #fecd0b; }
 
 .project-tagline {
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
   font-weight: normal;
   opacity: 0.7; }
 
@@ -117,23 +158,26 @@ a {
 
 @media screen and (min-width: 42em) and (max-width: 64em) {
   .project-tagline {
+    margin-bottom: 1rem;
     font-size: 1.15rem; } }
 
 @media screen and (max-width: 42em) {
   .project-tagline {
-    font-size: 1rem; } }
+    margin-bottom: 0.5rem;
+    font-size: .8rem; } }
 
-.details .page-header .project-tagline {
-  font-size: 1rem;
-  text-align: right;
-  top: 15px;
-  right: 10%;
-  position: absolute; }
+.details .project-tagline {
+  margin-bottom: 0.5rem; }
+
+@media screen and (max-width: 42em) {
+  .details .page-header .project-tagline {
+    display: none; } }
 
 .main-content :first-child {
   margin-top: 0; }
 
 .main-content nav {
+  text-transform: lowercase;
   color: #d0a809; }
 
 .main-content nav a {

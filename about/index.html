@@ -5,17 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="../stylesheets/normalize.css" media="screen">
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Pacifico' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" type="text/css" href="../stylesheets/stylesheet.css" media="screen">
     <link rel="stylesheet" type="text/css" href="../stylesheets/github-light.css" media="screen">
   </head>
   <body class="details">
     <section class="page-header">
-      <h1 class="project-name"><a href="/">Ember JSONAPI Resources</a></h1>
-      <h2 class="project-tagline">Lightweight persistence for an Ember CLI app following the JSON API 1.0 spec</h2>
+      <h1 class="project-name">
+        <span class="cursive">Ember</span> <span class="tilted">JSONAPI Resources</span>
+      </h1>
+      <h2 class="project-tagline">Data persistence utilizing the JSON API 1.0 spec</h2>
     </section>
 
     <section class="main-content">
-      <nav>
+      <nav class="cursive">
         <a href="/">Home</a> |
         <a href="/about">About</a> |
         <a href="/questions/">Questions</a> |
@@ -25,58 +28,9 @@
       </nav>
 
       <h2>
-        <a id="status" class="anchor" href="#status" aria-hidden="true"><span class="octicon octicon-link"></span></a>Status
-      </h2>
-
-      <p>This addon is under active development.</p>
-
-      <p>This is a NEW project there may be bugs depending on your use of the addon.
-Please do file an issue if you run into a bug.</p>
-
-      <h2>
-        <a id="requirements" class="anchor" href="#requirements" aria-hidden="true"><span class="octicon octicon-link"></span></a>Requirements
-      </h2>
-
-      <p>This data persistence solution for an Ember.js application is a simple approach;
-      however, there are a few things you'll need to understand in order to get up
-      and running.</p>
-
-      <ul>
-        <li>Familiarity with <a href="http://emberjs.com">Ember.js</a>, <a href="http://www.ember-cli.com">Ember CLI</a> and <a href="http://jsonapi.org">JSON API</a>
-        </li>
-        <li>You must use Ember CLI to use ember-jsonapi-resources, it's an addon
-          <ul>
-            <li>You'll need to uninstall Ember Data from the generated application
-      and configure your app, see the 'usage' section below.</li>
-          </ul>
-        </li>
-        <li>Uses <a href="https://fetch.spec.whatwg.org">Fetch API</a> see <a href="http://updates.html5rocks.com/2015/03/introduction-to-fetch">Introduction to fetch()</a> and falls back to XMLHttpRequest
-          <ul>
-            <li>A <code>fetch</code> polyfill is included with this addon</li>
-            <li>A <code>FetchMixin</code> provides an option to <code>useAjax</code> if you choose</li>
-          </ul>
-        </li>
-      </ul>
-
-      <h2>
-        <a id="other-emberjs-json-api-implementations" class="anchor" href="#other-emberjs-json-api-implementations" aria-hidden="true">
-          <span class="octicon octicon-link"></span>
-        </a>Other Ember.js JSON API Implementations
-      </h2>
-
-      <ul>
-        <li>
-          <a href="https://github.com/orbitjs/ember-orbit">Ember Orbit</a> with <a href="https://github.com/orbitjs/orbit.js">Orbit.js</a>
-        </li>
-        <li>Ember Data with
-          <a href="https://github.com/kurko/ember-json-api">JSON API Adapter</a>
-        </li>
-      </ul>
-
-      <h2>
         <a id="why-a-stand-alone-solution" class="anchor" href="#why-a-stand-alone-solution" aria-hidden="true">
           <span class="octicon octicon-link"></span>
-        </a>Why a Stand-Alone Solution?
+        </a>About
       </h2>
 
       <p>This is a simple solution for an Ember app that utilizes resources following
@@ -99,6 +53,55 @@ Ember.js app.</p>
 receives a representation of a resource from a server, the client should be able
 to expire that cached object (in the browser application) based on the response
 headers; or by whatever means the developer chooses.</p>
+
+      <h3>
+        <a id="status" class="anchor" href="#status" aria-hidden="true"><span class="octicon octicon-link"></span></a>Status
+      </h3>
+
+      <p>This addon is under active development.</p>
+
+      <p>This is a NEW project there may be bugs depending on your use of the addon.
+Please do file an issue if you run into a bug.</p>
+
+      <h3>
+        <a id="requirements" class="anchor" href="#requirements" aria-hidden="true"><span class="octicon octicon-link"></span></a>Requirements
+      </h3>
+
+      <p>This data persistence solution for an Ember.js application is a simple approach;
+      however, there are a few things you'll need to understand in order to get up
+      and running.</p>
+
+      <ul>
+        <li>Familiarity with <a href="http://emberjs.com">Ember.js</a>, <a href="http://www.ember-cli.com">Ember CLI</a> and <a href="http://jsonapi.org">JSON API</a>
+        </li>
+        <li>You must use Ember CLI to use ember-jsonapi-resources, it's an addon
+          <ul>
+            <li>You'll need to uninstall Ember Data from the generated application
+      and configure your app, see the 'usage' section below.</li>
+          </ul>
+        </li>
+        <li>Uses <a href="https://fetch.spec.whatwg.org">Fetch API</a> see <a href="http://updates.html5rocks.com/2015/03/introduction-to-fetch">Introduction to fetch()</a> and falls back to XMLHttpRequest
+          <ul>
+            <li>A <code>fetch</code> polyfill is included with this addon</li>
+            <li>A <code>FetchMixin</code> provides an option to <code>useAjax</code> if you choose</li>
+          </ul>
+        </li>
+      </ul>
+
+      <h3>
+        <a id="other-emberjs-json-api-implementations" class="anchor" href="#other-emberjs-json-api-implementations" aria-hidden="true">
+          <span class="octicon octicon-link"></span>
+        </a>Other Ember.js JSON API Implementations
+      </h3>
+
+      <ul>
+        <li>
+          <a href="https://github.com/orbitjs/ember-orbit">Ember Orbit</a> with <a href="https://github.com/orbitjs/orbit.js">Orbit.js</a>
+        </li>
+        <li>Ember Data with
+          <a href="https://github.com/kurko/ember-json-api">JSON API Adapter</a>
+        </li>
+      </ul>
 
       <footer class="site-footer">
         <span class="site-footer-owner"><a href="https://github.com/pixelhandler/ember-jsonapi-resources">Ember JSONAPI Resources</a> is maintained by <a href="https://github.com/pixelhandler">pixelhandler</a>.</span>
