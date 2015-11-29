@@ -197,6 +197,9 @@ a {
 .main-content p {
   margin-bottom: 1em; }
 
+.main-content p.badges {
+  text-align: center; }
+
 .main-content code {
   padding: 2px 4px;
   font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace;
@@ -323,13 +326,16 @@ a {
 .site-footer {
   padding-top: 2rem;
   margin-top: 2rem;
-  border-top: solid 1px #eff0f1; }
+  border-top: solid 1px #eff0f1;
+  text-align: center; }
 
 .site-footer-owner {
+  font-size: 0.9rem;
   display: block;
-  font-weight: bold; }
+  color: #819198; }
 
 .site-footer-credits {
+  font-size: 0.9rem;
   color: #819198; }
 
 @media screen and (min-width: 64em) {
