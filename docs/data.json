@@ -700,7 +700,7 @@
         {
             "file": "addon/adapters/application.js",
             "line": 150,
-            "description": "Patch an existing resource, sends a PATCH request. After promise is resolved\nthe `didUpdateResource` event is triggered, given an error response a event\n`resourceError` is triggered. A resource may listen on its `service` reference.",
+            "description": "Patch an existing resource, sends a PATCH request.",
             "itemtype": "method",
             "name": "updateResource",
             "params": [
@@ -720,7 +720,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 174,
+            "line": 168,
             "description": "Patch a relationship, either add or remove, sends a PATCH request\n\nAdds with payload: `{ \"data\": { \"type\": \"comments\", \"id\": \"12\" } }`\nRemoves with payload: `{ \"data\": null }` for to-one or `{ \"data\": [] }` for to-many",
             "itemtype": "method",
             "name": "patchRelationship",
@@ -746,7 +746,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 198,
+            "line": 190,
             "description": "Delete an existing resource, sends a DELETE request",
             "itemtype": "method",
             "name": "deleteResource",
@@ -767,7 +767,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 217,
+            "line": 209,
             "description": "Fetches data using Fetch API or XMLHttpRequest",
             "itemtype": "method",
             "name": "fetch",
@@ -793,7 +793,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 235,
+            "line": 227,
             "description": "Hook to customize the URL, e.g. if your API is behind a proxy and you need\nto swap a portion of the domain to make a request on the same domain.",
             "itemtype": "method",
             "name": "fetchUrl",
@@ -814,7 +814,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 247,
+            "line": 239,
             "description": "Adds params and headers or Fetch request.\n\n- The HTTP Header is set for Content-Type: application/vnd.api+json\n- Sets Authorization header if accessible in the `authorizationCredential` property",
             "itemtype": "method",
             "name": "fetchOptions",
@@ -835,7 +835,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 269,
+            "line": 261,
             "description": "Sets Authorization header if accessible in the `authorizationCredential` property",
             "itemtype": "method",
             "name": "fetchAuthorizationHeader",
@@ -852,7 +852,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 286,
+            "line": 278,
             "description": "Authentication credentials/token used with HTTP authentication\nThis property should be added by an Authorization Mixin",
             "itemtype": "property",
             "name": "authorizationCredential",
@@ -863,7 +863,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 295,
+            "line": 287,
             "description": "The name of the Authorization request-header field\nThis property should be added by an Authorization Mixin",
             "itemtype": "property",
             "name": "authorizationHeaderField",
@@ -874,7 +874,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 304,
+            "line": 296,
             "description": "Noop as a hook for defining how deserialized resource objects are cached,\ne.g. in memory",
             "itemtype": "method",
             "name": "cacheResource",
@@ -891,7 +891,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 313,
+            "line": 305,
             "description": "Noop as a hook for defining how to handle cache after updating a resource",
             "itemtype": "method",
             "name": "cacheUpdate",
@@ -908,7 +908,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 321,
+            "line": 313,
             "description": "Noop as a hook to remove a resource from cached data",
             "itemtype": "method",
             "name": "cacheRemove",
@@ -925,7 +925,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 329,
+            "line": 321,
             "description": "Initialize events to communicate on the resource instances' service reference.\nListens for resource objects trigging `attributeChanged` events",
             "itemtype": "method",
             "name": "initEvents",
@@ -1062,7 +1062,7 @@
         },
         {
             "file": "addon/mixins/fetch.js",
-            "line": 80,
+            "line": 86,
             "description": "Makes an XHR request via $.ajax",
             "access": "private",
             "tagname": "",
@@ -1098,7 +1098,7 @@
         },
         {
             "file": "addon/mixins/fetch.js",
-            "line": 133,
+            "line": 143,
             "access": "private",
             "tagname": "",
             "itemtype": "method",
@@ -1209,7 +1209,7 @@
         },
         {
             "file": "addon/mixins/service-cache.js",
-            "line": 116,
+            "line": 118,
             "description": "Store meta from headers on resource meta, window.fetch includes\na headers object in the response use `headers.get` to lookup data\nfrom the headers for cache-control, date, and etag.",
             "itemtype": "method",
             "name": "cacheControl",
@@ -1231,7 +1231,7 @@
         },
         {
             "file": "addon/mixins/service-cache.js",
-            "line": 143,
+            "line": 145,
             "description": "Lookup a resource from cached data",
             "itemtype": "method",
             "name": "cacheLookup",
@@ -1252,7 +1252,7 @@
         },
         {
             "file": "addon/mixins/service-cache.js",
-            "line": 160,
+            "line": 162,
             "description": "Remove a resource from cached data",
             "itemtype": "method",
             "name": "cacheRemove",
@@ -1566,17 +1566,7 @@
         {
             "file": "addon/models/resource.js",
             "line": 255,
-            "description": "Initialize events to communicate with the service object, listen for `didUpdateResource`",
-            "itemtype": "method",
-            "name": "initEvents",
-            "class": "Resource",
-            "module": "ember-jsonapi-resources",
-            "submodule": "resource"
-        },
-        {
-            "file": "addon/models/resource.js",
-            "line": 267,
-            "description": "Handler for `didUpdateResource` event, resets private _attributes used for changed/previous tracking",
+            "description": "Sets all payload properties on the resource and resets private _attributes\nused for changed/previous tracking",
             "itemtype": "method",
             "name": "didUpdateResource",
             "params": [
@@ -1591,7 +1581,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 283,
+            "line": 272,
             "description": "A local cache duration, to minimize duplicate fetch requests",
             "itemtype": "property",
             "name": "cacheDuration",
@@ -1602,7 +1592,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 291,
+            "line": 280,
             "itemtype": "property",
             "name": "isCacheExpired",
             "type": "Boolean",
@@ -1612,7 +1602,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 303,
+            "line": 292,
             "description": "To protect the JSON API Resource properties for attributes, links and\nrelationships these objects are setup during create(). This has to be\ndefined since the attr() helper needs to have new objects for each instance,\nto project from keeping a reference on the prototype.\n\nThe create method should only be called after looking up a factory from the\ncontainer, for example in a route's model hook:\n\n```\nmodel() {\n  return this.container.lookupFactory('model:posts').create({\n    attributes: {\n      title: 'The JSON API 1.0 Spec Rocks!'\n    }\n  });\n}\n```\n\nThe create method uses the container to lookup the factory's prototype and\nfind the computed properties used for relations to setup the relationships\nfor the Resource instance you create. Calling Resource#create without using\nthe factory lookup will result in an instance without a reference to the\napplication's container and you will have to manually setup the relationships\nobject prior to adding a relationship.",
             "itemtype": "method",
             "name": "create",

@@ -356,19 +356,8 @@ const Resource = Ember.Object.extend({
   }).volatile(),
 
   /**
-    Initialize events to communicate with the service object, listen for &#x60;didUpdateResource&#x60;
-
-    @method initEvents
-  */
-  initEvents: Ember.on(&#x27;init&#x27;, function () {
-    const service = this.get(&#x27;service&#x27;);
-    if (service) {
-      service.on(&#x27;didUpdateResource&#x27;, this, this.didUpdateResource);
-    }
-  }),
-
-  /**
-    Handler for &#x60;didUpdateResource&#x60; event, resets private _attributes used for changed/previous tracking
+    Sets all payload properties on the resource and resets private _attributes
+    used for changed/previous tracking
 
     @method didUpdateResource
     @param json the updated data for the resource

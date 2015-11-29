@@ -201,18 +201,20 @@ export default Ember.Mixin.create({
     if (!Array.isArray(resp.data) &amp;&amp; typeof resp.data === &#x27;object&#x27;) {
       resp.data = [ resp.data ];
     }
-    let index, id;
+    let index, id, item, isResourceType;
     for (let i = 0; i &lt; resp.data.length; i++) {
       id = resp.data[i].id || resp.data[i].get(&#x27;id&#x27;);
       index = ids.indexOf(id);
-      if (resp.data[i].toString().indexOf(&#x27;JSONAPIResource&#x27;) &gt; -1) {
-        if (index === -1) {
-          this.cache.data.pushObject(resp.data[i]);
-        } else {
-          this.cache.data.replaceContent(index, 1, resp.data[i]);
-        }
+      isResourceType = resp.data[i].toString().indexOf(&#x27;JSONAPIResource&#x27;) &gt; -1;
+      if (index === -1 &amp;&amp; isResourceType) {
+        this.cache.data.pushObject(resp.data[i]);
+      } else if (isResourceType) {
+        this.cache.data.replaceContent(index, 1, resp.data[i]);
+      } else if (index &gt; -1) {
+        item = this.cache.data.findBy(&#x27;id&#x27;, id);
+        item.didUpdateResource(resp.data[i]);
       }
-      this.cacheControl(this.cache.data.findBy(&#x27;id&#x27;, id), resp.headers);
+      this.cacheControl(item || this.cache.data.findBy(&#x27;id&#x27;, id), resp.headers);
     }
   },
 
