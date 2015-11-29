@@ -1,0 +1,324 @@
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>Ember JSONAPI Resources by pixelhandler</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="../stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="../stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="../stylesheets/github-light.css" media="screen">
+  </head>
+  <body class="details">
+    <section class="page-header">
+      <h1 class="project-name"><a href="/">Ember JSONAPI Resources</a></h1>
+      <h2 class="project-tagline">Lightweight persistence for an Ember CLI app following the JSON API 1.0 spec</h2>
+    </section>
+
+    <section class="main-content">
+      <nav>
+        <a href="/">Home</a> |
+        <a href="/about">About</a> |
+        <a href="/questions/">Questions</a> |
+        <a href="/usage/">Usage</a> |
+        <a href="/example/">Example App</a>
+        <hr>
+      </nav>
+
+      <h2>
+        <a id="usage" class="anchor" href="#usage" aria-hidden="true">
+          <span class="octicon octicon-link"></span>
+        </a>Usage
+      </h2>
+
+      <p>Below are notes on using the ember-jsonapi-resources addon…</p>
+
+      <h3>
+      <a id="installation" class="anchor" href="#installation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Installation</h3>
+
+      <p>You will need to remove another dependency that injects a <code>store</code> service.</p>
+
+      <p>To consume this addon in an Ember CLI application:</p>
+
+<pre><code>ember install ember-jsonapi-resources
+</code></pre>
+
+      <p>Remove dependency for Ember Data in your ember-cli app:</p>
+
+<pre><code>npm rm ember-data --save-dev
+bower uninstall ember-data --save
+</code></pre>
+
+      <p>Remove ember-data from both bower.json and package.json then:</p>
+
+<pre><code>bower install
+npm install
+</code></pre>
+
+      <h3>
+        <a id="resource-generator" class="anchor" href="#resource-generator" aria-hidden="true">
+          <span class="octicon octicon-link"></span>
+        </a>Resource Generator
+      </h3>
+
+      <p>Generate a resource (model with associated adapter, serializer and service):</p>
+
+<pre><code>ember generate jsonapi-resource entityName
+</code></pre>
+
+      <p>Use the singular form of the name for your resource (entityName).</p>
+
+      <p>The blueprint for a <code>jsonapi-resource</code> does not generate a route.
+      You can generate a route using the same name or use a different name that
+      represents the user interface:</p>
+
+<pre><code>ember generate route entityName
+</code></pre>
+
+      <p>The arguments are passed to the <code>jsonapi-model</code> blueprint so that <code>attr</code>,
+      <code>has-one</code>, and <code>has-many</code> computed properties can be generated.</p>
+
+<pre><code>ember generate jsonapi-resource article title:string version:number author:has-one:user
+</code></pre>
+
+      <p>If you are using the pod file structure in your ember-cli project use the <code>--pod</code>
+      argument with your generator.</p>
+
+<pre><code>ember generate jsonapi-resource user name:string articles:has-many:articles --pod
+</code></pre>
+
+      <p>For generated code examples, see the <a href="tests/dummy/app">tests/dummy/app</a> in this repo.</p>
+
+      <h3>
+        <a id="store-service" class="anchor" href="#store-service" aria-hidden="true">
+          <span class="octicon octicon-link"></span>
+        </a>Store Service
+      </h3>
+
+      <p>A <code>store</code> service is injected into the routes. This is similar to how
+      <a href="https://github.com/emberjs/data">Ember Data</a> uses a <code>store</code>, but the <code>resource</code>
+      is referenced in the plural form (like your API endpoint).</p>
+
+      <p><a href="/addon/services/store.js">This is the interface for the <code>store</code></a> which is a facade 
+      for the service for a specific <code>resource</code>. Basically you call the <code>store</code> methods
+      and pass in the <code>resource</code> name, e.g. 'posts' which interacts with the service for 
+      your <code>resource</code>.</p>
+
+      <p>An example <code>route</code>:</p>
+
+<div class="highlight highlight-source-js"><pre><span class="pl-k">import</span> <span class="pl-smi">Ember</span> <span class="pl-k">from</span> <span class="pl-s"><span class="pl-pds">'</span>ember<span class="pl-pds">'</span></span>;
+
+<span class="pl-k">export</span> <span class="pl-v">default</span> <span class="pl-smi">Ember</span>.<span class="pl-c1">R</span>oute.<span class="pl-en">extend</span>({
+  <span class="pl-en">model</span>() {
+    <span class="pl-k">return</span> <span class="pl-smi">this</span>.<span class="pl-smi">store</span>.<span class="pl-c1">find</span>(<span class="pl-s"><span class="pl-pds">'</span>post<span class="pl-pds">'</span></span>);
+  }
+});</pre></div>
+
+      <p>The store object will pluralize the type to lookup the resources' service objects.</p>
+
+      <h3>
+        <a id="resource-services" class="anchor" href="#resource-services" aria-hidden="true">
+          <span class="octicon octicon-link"></span>
+        </a>Resource Services
+      </h3>
+
+      <p>Each <code>resource</code> has an associated service that is used by the <code>store</code>.</p>
+
+      <p>A <code>resource</code> service is a combination of an <code>adapter</code>, <code>serializer</code> and <code>cache</code> 
+      object. The <code>service</code> is also injected into the <code>resource</code> (model) objects.</p>
+
+      <p>The caching plan for a service is simply a mixin that can be easily customized.
+      To begin with, the <code>resource</code> (model) prototype and the <code>service-cache</code> mixin
+      work together to provide a basic plan.</p>
+
+      <p>The services are "evented" to facilitate close to real time updates.</p>
+
+      <p>An <code>attr</code> of the resource is a computed property to the actual attribute in an 
+      <code>attributes</code> hash on the <code>resource</code> (model) instance. Using <code>attr()</code> supports
+      any type, and an optional <code>type</code> (String) argument can be used to enforce
+      setting and getting with a specific type. <code>'string'</code>, <code>'number'</code>, <code>'boolean'</code>,
+      <code>'date'</code>, <code>'object'</code>, and <code>'array'</code> are all valid types for attributes.</p>
+
+      <p>When an <code>attr</code> is <code>set</code> and the value has changed an <code>attributeChanged</code> event
+      is triggered on the <code>resource</code>'s service object. By default, the adapter listens
+      to this event and handles it with a call to <code>updateResource</code>.</p>
+
+      <p>The <code>resource</code> <code>adapter</code>'s <code>updateResource</code> method sends a PATCH request with
+      only the data for the changed attributes.</p>
+
+      <p>You might want to buffer changes on the resource that is passed into a component 
+      using <a href="https://github.com/stefanpenner/ember-state-services">ember-state-services</a> and <a href="https://github.com/yapplabs/ember-buffered-proxy">ember-buffered-proxy</a>, or you could just
+      re-define the <code>resource</code>'s <code>adapter</code> prototype so that <code>initEvents</code> returns
+      a noop instead of listening for the <code>attributeChanged</code> event.</p>
+
+      <h3>
+        <a id="resource-model" class="anchor" href="#resource-model" aria-hidden="true">
+          <span class="octicon octicon-link"></span>
+        </a>Resource (Model)
+      </h3>
+
+      <p>Here is the blueprint for a <code>resource</code> (model) prototype:</p>
+
+<div class="highlight highlight-source-js"><pre><span class="pl-k">import</span> <span class="pl-smi">Ember</span> <span class="pl-k">from</span> <span class="pl-s"><span class="pl-pds">'</span>ember<span class="pl-pds">'</span></span>;
+<span class="pl-k">import</span> <span class="pl-smi">Resource</span> <span class="pl-k">from</span> <span class="pl-s"><span class="pl-pds">'</span>./resource<span class="pl-pds">'</span></span>;
+<span class="pl-k">import</span> { <span class="pl-smi">attr</span>, <span class="pl-smi">hasOne</span>, <span class="pl-smi">hasMany</span> } <span class="pl-k">from</span> <span class="pl-s"><span class="pl-pds">'</span>ember-jsonapi-resources/models/resource<span class="pl-pds">'</span></span>;
+
+<span class="pl-k">export</span> <span class="pl-v">default</span> <span class="pl-smi">Resource</span>.<span class="pl-en">extend</span>({
+  type<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>&lt;%= resource %&gt;<span class="pl-pds">'</span></span>,
+  service<span class="pl-k">:</span> <span class="pl-smi">Ember</span>.<span class="pl-smi">inject</span>.<span class="pl-en">service</span>(<span class="pl-s"><span class="pl-pds">'</span>&lt;%= resource %&gt;<span class="pl-pds">'</span></span>),
+
+  <span class="pl-c">/* You can generate properties using arguments to the jsonapi-model blueprint…</span>
+<span class="pl-c">  title: attr('string'),</span>
+<span class="pl-c">  published: attr('date'),</span>
+<span class="pl-c">  tags: attr('array'),</span>
+<span class="pl-c">  footnotes: attr('object'),</span>
+<span class="pl-c">  revisions: attr()</span>
+<span class="pl-c">  version: attr('number'),</span>
+<span class="pl-c">  "is-approved": attr('boolean'),</span>
+<span class="pl-c"></span>
+<span class="pl-c">  author: hasOne('author'),</span>
+<span class="pl-c">  comments: hasMany('comments')</span>
+<span class="pl-c">  */</span>
+});</pre></div>
+
+      <p>The commented out code includes an example of how to setup the relationships
+      and define your attributes. <code>attr()</code> can be used for any valid type, or you can
+      specify a type, e.g. <code>attr('string')</code> or <code>attr('date')</code>. An attribute that is
+      defined as a <code>'date'</code> type has a built in transform method to serialize and
+      deserialize the date value. Typically the JSON value for a Date object is
+      communicated in ISO format, e.g. "2015-08-25T22:05:37.393Z". The application
+      serializer has methods for [de]serializing the date values between client and
+      server. You can add your own transform methods based on the type of the
+      attribute or based on the name of the attribute, the transform methods based on
+      the name of the attribute will be called instead of any transform methods based
+      on the type of the attribute.</p>
+
+      <p>The relationships are async using promise proxy objects. So when a template accesses 
+      the <code>resource</code>'s relationship a request is made for the relation.</p>
+
+      <h3>
+        <a id="configuration" class="anchor" href="#configuration" aria-hidden="true">
+          <span class="octicon octicon-link"></span>
+        </a>Configuration
+      </h3>
+
+      <p>You may need configure some paths for calling your API server.</p>
+
+      <p>Example config settings: <a href="tests/dummy/config/environment.js">tests/dummy/config/environment.js</a></p>
+
+<div class="highlight highlight-source-js"><pre><span class="pl-k">var</span> <span class="pl-c1">ENV</span> <span class="pl-k">=</span> {
+<span class="pl-c">// …</span>
+  APP<span class="pl-k">:</span> {
+    API_HOST<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>/<span class="pl-pds">'</span></span>,
+    API_HOST_PROXY<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>http://api.pixelhandler.com/<span class="pl-pds">'</span></span>,
+    API_PATH<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>api/v1<span class="pl-pds">'</span></span>,
+  },
+  contentSecurityPolicy<span class="pl-k">:</span> {
+    <span class="pl-s"><span class="pl-pds">'</span>connect-src<span class="pl-pds">'</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>'self' api.pixelhandler.com localhost:3000<span class="pl-pds">"</span></span>,
+  }
+<span class="pl-c">// …</span>
+};</pre></div>
+
+      <p><code>MODEL_FACTORY_INJECTIONS</code> should be set to <code>true</code> in the app/app.js file.</p>
+
+      <p>Also, once you've generated a <code>jsonapi-adapter</code> you can customize the URL.</p>
+
+      <p>See this example: <a href="tests/dummy/app/adapters/post.js">tests/dummy/app/adapters/post.js</a></p>
+
+<div class="highlight highlight-source-js"><pre><span class="pl-k">import</span> <span class="pl-smi">ApplicationAdapter</span> <span class="pl-k">from</span> <span class="pl-s"><span class="pl-pds">'</span>./application<span class="pl-pds">'</span></span>;
+<span class="pl-k">import</span> <span class="pl-smi">config</span> <span class="pl-k">from</span> <span class="pl-s"><span class="pl-pds">'</span>../config/environment<span class="pl-pds">'</span></span>;
+
+<span class="pl-k">export</span> <span class="pl-v">default</span> <span class="pl-smi">ApplicationAdapter</span>.<span class="pl-en">extend</span>({
+  type<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>post<span class="pl-pds">'</span></span>,
+
+  url<span class="pl-k">:</span> <span class="pl-smi">config</span>.<span class="pl-c1">APP</span>.<span class="pl-c1">API_PATH</span> <span class="pl-k">+</span> <span class="pl-s"><span class="pl-pds">'</span>/posts<span class="pl-pds">'</span></span>,
+
+  <span class="pl-en">fetchUrl</span><span class="pl-k">:</span> <span class="pl-k">function</span>(<span class="pl-smi">url</span>) {
+    <span class="pl-k">const</span> <span class="pl-c1">proxy</span> <span class="pl-k">=</span> <span class="pl-smi">config</span>.<span class="pl-c1">APP</span>.<span class="pl-c1">API_HOST_PROXY</span>;
+    <span class="pl-k">const</span> <span class="pl-c1">host</span> <span class="pl-k">=</span> <span class="pl-smi">config</span>.<span class="pl-c1">APP</span>.<span class="pl-c1">API_HOST</span>;
+    <span class="pl-k">if</span> (proxy <span class="pl-k">&amp;&amp;</span> host) {
+      url <span class="pl-k">=</span> <span class="pl-smi">url</span>.<span class="pl-c1">replace</span>(proxy, host);
+    }
+    <span class="pl-k">return</span> url;
+  }
+});</pre></div>
+
+      <p>The example above also includes a customized method for the url. In the case where 
+      your API server is running on it's own domain and you use a proxy with your nginx 
+      server to access the API server on your same domain at <code>/api</code> then the JSON documents 
+      may have it's own link references to the original server so you can replace the URL 
+      as needed to act as if the API server is running on your same domain.</p>
+
+      <h4>
+        <a id="authorization" class="anchor" href="#authorization" aria-hidden="true">
+          <span class="octicon octicon-link"></span>
+        </a>Authorization
+      </h4>
+
+      <p>By default credentials stored at <code>localStorage['AuthorizationHeader']</code> will be used.
+      If you'd like to change this, for instance to make it work with <code>ember-simple-auth</code>,
+      there's a <a href="https://github.com/pixelhandler/ember-jsonapi-resources/wiki/Authorization">configurable mixin available</a>.</p>
+
+      <h4>
+        <a id="example-json-api-10-document" class="anchor" href="#example-json-api-10-document" aria-hidden="true">
+          <span class="octicon octicon-link"></span>
+        </a>Example JSON API 1.0 Document
+      </h4>
+
+<div class="highlight highlight-source-js"><pre>{
+  <span class="pl-s"><span class="pl-pds">"</span>data<span class="pl-pds">"</span></span><span class="pl-k">:</span> [{
+    <span class="pl-s"><span class="pl-pds">"</span>type<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>articles<span class="pl-pds">"</span></span>,
+    <span class="pl-s"><span class="pl-pds">"</span>id<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>1<span class="pl-pds">"</span></span>,
+    <span class="pl-s"><span class="pl-pds">"</span>attributes<span class="pl-pds">"</span></span><span class="pl-k">:</span> {
+      <span class="pl-s"><span class="pl-pds">"</span>title<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>JSON API paints my bikeshed!<span class="pl-pds">"</span></span>
+    },
+    <span class="pl-s"><span class="pl-pds">"</span>links<span class="pl-pds">"</span></span><span class="pl-k">:</span> {
+      <span class="pl-s"><span class="pl-pds">"</span>self<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>http://example.com/articles/1<span class="pl-pds">"</span></span>
+    },
+    <span class="pl-s"><span class="pl-pds">"</span>relationships<span class="pl-pds">"</span></span><span class="pl-k">:</span> {
+      <span class="pl-s"><span class="pl-pds">"</span>author<span class="pl-pds">"</span></span><span class="pl-k">:</span> {
+        <span class="pl-s"><span class="pl-pds">"</span>links<span class="pl-pds">"</span></span><span class="pl-k">:</span> {
+          <span class="pl-s"><span class="pl-pds">"</span>self<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>http://example.com/articles/1/relationships/author<span class="pl-pds">"</span></span>,
+          <span class="pl-s"><span class="pl-pds">"</span>related<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>http://example.com/articles/1/author<span class="pl-pds">"</span></span>
+        },
+        <span class="pl-s"><span class="pl-pds">"</span>data<span class="pl-pds">"</span></span><span class="pl-k">:</span> { <span class="pl-s"><span class="pl-pds">"</span>type<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>people<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>id<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>9<span class="pl-pds">"</span></span> }
+      },
+      <span class="pl-s"><span class="pl-pds">"</span>comments<span class="pl-pds">"</span></span><span class="pl-k">:</span> {
+        <span class="pl-s"><span class="pl-pds">"</span>links<span class="pl-pds">"</span></span><span class="pl-k">:</span> {
+          <span class="pl-s"><span class="pl-pds">"</span>self<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>http://example.com/articles/1/relationships/comments<span class="pl-pds">"</span></span>,
+          <span class="pl-s"><span class="pl-pds">"</span>related<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>http://example.com/articles/1/comments<span class="pl-pds">"</span></span>
+        },
+        <span class="pl-s"><span class="pl-pds">"</span>data<span class="pl-pds">"</span></span><span class="pl-k">:</span> [
+          { <span class="pl-s"><span class="pl-pds">"</span>type<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>comments<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>id<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>5<span class="pl-pds">"</span></span> },
+          { <span class="pl-s"><span class="pl-pds">"</span>type<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>comments<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>id<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>12<span class="pl-pds">"</span></span> }
+        ]
+      }
+    }
+  }]
+}</pre></div>
+
+      <p>For more examples see my API's resources:</p>
+
+      <ul>
+        <li>GET <a href="http://api.pixelhandler.com/api/v1/posts">http://api.pixelhandler.com/api/v1/posts</a>
+        </li>
+        <li>GET <a href="http://api.pixelhandler.com/api/v1/comments">http://api.pixelhandler.com/api/v1/comments</a>
+        </li>
+        <li>GET <a href="http://api.pixelhandler.com/api/v1/authors">http://api.pixelhandler.com/api/v1/authors</a>
+        </li>
+        <li>GET <a href="http://api.pixelhandler.com/api/v1/posts?sort=-date&amp;fields%5Bposts%5D=title,date&amp;page%5Boffset%5D=0&amp;page%5Blimit%5D=20">http://api.pixelhandler.com/api/v1/posts?sort=-date&amp;fields[posts]=title,date&amp;page[offset]=0&amp;page[limit]=20</a>
+        </li>
+      </ul>
+
+      <p>The api.pixelhandler.com server is running the <a href="https://github.com/cerebris/jsonapi-resources">JSONAPI::Resources</a> gem. It
+      follows the <a href="http://jsonapi.org">JSON API 1.0 spec</a>.</p>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/pixelhandler/ember-jsonapi-resources">Ember JSONAPI Resources</a> is maintained by <a href="https://github.com/pixelhandler">pixelhandler</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>
+
+  </body>
+</html>

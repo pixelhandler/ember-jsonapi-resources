@@ -1,0 +1,112 @@
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>Ember JSONAPI Resources by pixelhandler</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="../stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="../stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="../stylesheets/github-light.css" media="screen">
+  </head>
+  <body class="details">
+    <section class="page-header">
+      <h1 class="project-name"><a href="/">Ember JSONAPI Resources</a></h1>
+      <h2 class="project-tagline">Lightweight persistence for an Ember CLI app following the JSON API 1.0 spec</h2>
+    </section>
+
+    <section class="main-content">
+      <nav>
+        <a href="/">Home</a> |
+        <a href="/about">About</a> |
+        <a href="/questions/">Questions</a> |
+        <a href="/usage/">Usage</a> |
+        <a href="/example/">Example App</a>
+        <hr>
+      </nav>
+
+      <h2>
+        <a id="status" class="anchor" href="#status" aria-hidden="true"><span class="octicon octicon-link"></span></a>Status
+      </h2>
+
+      <p>This addon is under active development.</p>
+
+      <p>This is a NEW project there may be bugs depending on your use of the addon.
+Please do file an issue if you run into a bug.</p>
+
+      <h2>
+        <a id="requirements" class="anchor" href="#requirements" aria-hidden="true"><span class="octicon octicon-link"></span></a>Requirements
+      </h2>
+
+      <p>This data persistence solution for an Ember.js application is a simple approach;
+      however, there are a few things you'll need to understand in order to get up
+      and running.</p>
+
+      <ul>
+        <li>Familiarity with <a href="http://emberjs.com">Ember.js</a>, <a href="http://www.ember-cli.com">Ember CLI</a> and <a href="http://jsonapi.org">JSON API</a>
+        </li>
+        <li>You must use Ember CLI to use ember-jsonapi-resources, it's an addon
+          <ul>
+            <li>You'll need to uninstall Ember Data from the generated application
+      and configure your app, see the 'usage' section below.</li>
+          </ul>
+        </li>
+        <li>Uses <a href="https://fetch.spec.whatwg.org">Fetch API</a> see <a href="http://updates.html5rocks.com/2015/03/introduction-to-fetch">Introduction to fetch()</a> and falls back to XMLHttpRequest
+          <ul>
+            <li>A <code>fetch</code> polyfill is included with this addon</li>
+            <li>A <code>FetchMixin</code> provides an option to <code>useAjax</code> if you choose</li>
+          </ul>
+        </li>
+      </ul>
+
+      <h2>
+        <a id="other-emberjs-json-api-implementations" class="anchor" href="#other-emberjs-json-api-implementations" aria-hidden="true">
+          <span class="octicon octicon-link"></span>
+        </a>Other Ember.js JSON API Implementations
+      </h2>
+
+      <ul>
+        <li>
+          <a href="https://github.com/orbitjs/ember-orbit">Ember Orbit</a> with <a href="https://github.com/orbitjs/orbit.js">Orbit.js</a>
+        </li>
+        <li>Ember Data with
+          <a href="https://github.com/kurko/ember-json-api">JSON API Adapter</a>
+        </li>
+      </ul>
+
+      <h2>
+        <a id="why-a-stand-alone-solution" class="anchor" href="#why-a-stand-alone-solution" aria-hidden="true">
+          <span class="octicon octicon-link"></span>
+        </a>Why a Stand-Alone Solution?
+      </h2>
+
+      <p>This is a simple solution for an Ember app that utilizes resources following
+the JSON API 1.0 specification. It operates on the idea that the objects in the
+app (resource/model, adapter, serializer, services) simply follow the spec.</p>
+
+      <p>URL's are first class in the JSON API 1.0 specification and first class
+in the <a href="http://emberjs.com">Ember.js</a> Router. Why not make them first class in your persistence
+solution too?</p>
+
+      <p>The <a href="http://jsonapi.org">JSON API</a> specification defines relationships including <code>links</code> objects that
+providing URLs for <code>related</code> and <code>self</code>, making your API server discoverable.</p>
+
+      <p>This implementation takes the posture that your application's resources do not
+need a complex abstraction but a simple implemenation of a solid specification.
+So, this project is great for getting started with using the JSON API spec in your
+Ember.js app.</p>
+
+      <p>Also, managing a distributed cache requires flexibility. When a client application
+receives a representation of a resource from a server, the client should be able
+to expire that cached object (in the browser application) based on the response
+headers; or by whatever means the developer chooses.</p>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/pixelhandler/ember-jsonapi-resources">Ember JSONAPI Resources</a> is maintained by <a href="https://github.com/pixelhandler">pixelhandler</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>
+
+  </body>
+</html>
