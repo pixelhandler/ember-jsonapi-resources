@@ -178,6 +178,7 @@ a {
 
 .main-content nav {
   text-transform: lowercase;
+  text-align: center;
   color: #d0a809; }
 
 .main-content nav a {
