@@ -29,14 +29,15 @@ module.exports = {
       var dasherizedType = stringUtils.dasherize(type);
       var dasherizedForeignModel = stringUtils.dasherize(foreignModel);
       var dasherizedForeignModelSingular = inflection.singularize(dasherizedForeignModel);
+      var dasherizedForeignModelPlural = inflection.pluralize(dasherizedForeignModel);
 
       var attr;
       if (/has-many/.test(dasherizedType)) {
         var dasherizedNamePlural = inflection.pluralize(dasherizedName);
-        attr = resourceAttr(dasherizedForeignModelSingular, dasherizedType);
+        attr = resourceAttr(dasherizedForeignModelPlural, dasherizedType);
         attrs.push('"' + dasherizedNamePlural + '": ' + attr);
       } else if (/has-one/.test(dasherizedType)) {
-        attr = resourceAttr(dasherizedForeignModel, dasherizedType);
+        attr = resourceAttr(dasherizedForeignModelSingular, dasherizedType);
         attrs.push('"' + dasherizedName + '": ' + attr);
       } else {
         attr = resourceAttr(dasherizedName, dasherizedType);

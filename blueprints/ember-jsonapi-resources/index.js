@@ -4,8 +4,9 @@ module.exports = {
   normalizeEntityName: function () {},
 
   afterInstall: function () {
-    return this.addBowerPackageToProject('fetch').then(function() {
-      return this.addBowerPackageToProject('es6-promise');
-    }.bind(this));
+    return this.addBowerPackagesToProject([
+      { name: 'fetch' },
+      { name: 'es6-promise' }
+    ]);
   }
 };

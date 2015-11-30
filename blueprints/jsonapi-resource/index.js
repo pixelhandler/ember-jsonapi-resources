@@ -17,22 +17,6 @@ module.exports = {
     return this._process('uninstall', options);
   },
 
-  /*locals: function(options) {
-    var resource = options.entity.name || options.args[1];
-    return {
-      entity: stringUtil.dasherize(inflection.singularize(resource)),
-      resource: stringUtil.dasherize(inflection.pluralize(resource))
-    };
-  },
-
-  fileMapTokens: function() {
-    return {
-      __resource__: function(options) {
-        return inflection.pluralize(options.locals.resource);
-      }
-    };
-  },*/
-
   _processBlueprint: function(type, name, options) {
     var mainBlueprint = Blueprint.lookup(name, {
       ui: this.ui,
