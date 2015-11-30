@@ -44,7 +44,7 @@ argument with your generator.
 
     ember generate jsonapi-resource user name:string articles:has-many:articles --pod
 
-For generated code examples, see the [tests/dummy/app](tests/dummy/app) in this repo.
+For generated code examples, see the [tests/dummy/app](https://github.com/pixelhandler/ember-jsonapi-resources/tree/master/tests/dummy/app) in this repo.
 
 ### Store Service
 
@@ -152,7 +152,7 @@ the `resource`'s relationship a request is made for the relation.
 
 You may need configure some paths for calling your API server.
 
-Example config settings: [tests/dummy/config/environment.js](tests/dummy/config/environment.js)
+Example config settings: [tests/dummy/config/environment.js](https://github.com/pixelhandler/ember-jsonapi-resources/tree/master/tests/dummy/config/environment.js)
 
 ```javascript
 var ENV = {
@@ -173,7 +173,7 @@ var ENV = {
 
 Also, once you've generated a `jsonapi-adapter` you can customize the URL.
 
-See this example: [tests/dummy/app/adapters/post.js](tests/dummy/app/adapters/post.js)
+See this example: [tests/dummy/app/adapters/post.js](https://github.com/pixelhandler/ember-jsonapi-resources/tree/master/tests/dummy/app/adapters/post.js)
 
 ```javascript
 import ApplicationAdapter from './application';

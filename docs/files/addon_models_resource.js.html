@@ -403,7 +403,7 @@ Resource.reopenClass({
 
     &#x60;&#x60;&#x60;
     model() {
-      return this.container.lookupFactory(&#x27;model:posts&#x27;).create({
+      return this.container.lookupFactory(&#x27;model:post&#x27;).create({
         attributes: {
           title: &#x27;The JSON API 1.0 Spec Rocks!&#x27;
         }
@@ -432,8 +432,8 @@ Resource.reopenClass({
     if (properties) {
       instance.setProperties(properties);
     }
-    let type = instance.get(&#x27;type&#x27;);
-    let msg = (type) ? Ember.String.capitalize(singularize(type)) : &#x27;Resource&#x27;;
+    let type = singularize(instance.get(&#x27;type&#x27;));
+    let msg = (type) ? Ember.String.capitalize(type) : &#x27;Resource&#x27;;
     let factory = &#x27;model:&#x27; + type;
     if (!type) {
       Ember.Logger.warn(msg + &#x27;#create called, instead you should first use &#x27; + msg + &#x27;.extend({type:&quot;entity&quot;})&#x27;);

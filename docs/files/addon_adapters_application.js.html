@@ -242,7 +242,7 @@ export default Ember.Object.extend(FetchMixin, Ember.Evented, {
         return resp;
       } else {
         resource.set(&#x27;id&#x27;, resp.get(&#x27;id&#x27;) );
-        let json = resp.getProperties(&#x27;attributes&#x27;, &#x27;relationships&#x27;, &#x27;links&#x27;, &#x27;meta&#x27;, &#x27;type&#x27;, &#x27;isNew&#x27;);
+        let json = resp.getProperties(&#x27;attributes&#x27;, &#x27;relationships&#x27;, &#x27;links&#x27;, &#x27;meta&#x27;, &#x27;type&#x27;, &#x27;isNew&#x27;, &#x27;id&#x27;);
         resource.didUpdateResource(json);
         this.cacheUpdate({ data: resource });
         return resource;
