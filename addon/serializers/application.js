@@ -4,7 +4,7 @@
 **/
 
 import Ember from 'ember';
-import { pluralize } from 'ember-inflector';
+import { singularize, pluralize } from 'ember-inflector';
 
 /**
   Serializer/Deserializer for a JSON API resource object, used by adapter.
@@ -238,7 +238,7 @@ export default Ember.Object.extend({
     @return {Function} factory for creating resource instances
   */
   _lookupFactory(type) {
-    return this.container.lookupFactory('model:' + type);
+    return this.container.lookupFactory('model:' + singularize(type));
   }
 });
 

@@ -139,7 +139,7 @@ export default Ember.Object.extend(FetchMixin, Ember.Evented, {
         return resp;
       } else {
         resource.set('id', resp.get('id') );
-        let json = resp.getProperties('attributes', 'relationships', 'links', 'meta', 'type', 'isNew');
+        let json = resp.getProperties('attributes', 'relationships', 'links', 'meta', 'type', 'isNew', 'id');
         resource.didUpdateResource(json);
         this.cacheUpdate({ data: resource });
         return resource;
