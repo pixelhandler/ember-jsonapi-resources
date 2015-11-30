@@ -301,16 +301,22 @@ npm install
 
       <p>For more examples see my API's resources:</p>
 
-      <ul>
-        <li>GET <a href="http://api.pixelhandler.com/api/v1/posts">http://api.pixelhandler.com/api/v1/posts</a>
-        </li>
-        <li>GET <a href="http://api.pixelhandler.com/api/v1/comments">http://api.pixelhandler.com/api/v1/comments</a>
-        </li>
-        <li>GET <a href="http://api.pixelhandler.com/api/v1/authors">http://api.pixelhandler.com/api/v1/authors</a>
-        </li>
-        <li>GET <a href="http://api.pixelhandler.com/api/v1/posts?sort=-date&amp;fields%5Bposts%5D=title,date&amp;page%5Boffset%5D=0&amp;page%5Blimit%5D=20">http://api.pixelhandler.com/api/v1/posts?sort=-date&amp;fields[posts]=title,date&amp;page[offset]=0&amp;page[limit]=20</a>
-        </li>
-      </ul>
+      
+      <p>GET /api/v1/posts</p>
+
+      <div class="highlight highlight-source-shell"><pre>curl -i -H <span class="pl-s"><span class="pl-pds">"</span>Accept: application/vnd.api+json<span class="pl-pds">"</span></span> -H <span class="pl-s"><span class="pl-pds">"</span>Content-Type: application/vnd.api+json<span class="pl-pds">"</span></span> -X GET http://api.pixelhandler.com/api/v1/posts</pre></div>
+
+      <p>GET /api/v1/comments</p>
+
+      <div class="highlight highlight-source-shell"><pre>curl -i -H <span class="pl-s"><span class="pl-pds">"</span>Accept: application/vnd.api+json<span class="pl-pds">"</span></span> -H <span class="pl-s"><span class="pl-pds">"</span>Content-Type: application/vnd.api+json<span class="pl-pds">"</span></span> -X GET http://api.pixelhandler.com/api/v1/comments</pre></div>
+
+      <p>GET /api/v1/authors</p>
+
+      <div class="highlight highlight-source-shell"><pre>curl -i -H <span class="pl-s"><span class="pl-pds">"</span>Accept: application/vnd.api+json<span class="pl-pds">"</span></span> -H <span class="pl-s"><span class="pl-pds">"</span>Content-Type: application/vnd.api+json<span class="pl-pds">"</span></span> -X GET http://api.pixelhandler.com/api/v1/authors</pre></div>
+
+      <p>GET /api/v1/posts with params for sort, fields, pagination</p>
+
+      <div class="highlight highlight-source-shell"><pre>curl -i -H <span class="pl-s"><span class="pl-pds">"</span>Accept: application/vnd.api+json<span class="pl-pds">"</span></span> -H <span class="pl-s"><span class="pl-pds">"</span>Content-Type: application/vnd.api+json<span class="pl-pds">"</span></span> -X GET <span class="pl-s"><span class="pl-pds">"</span>http://api.pixelhandler.com/api/v1/posts?sort=-date&amp;amp;fields%5Bposts%5D=title,date&amp;amp;page%5Boffset%5D=0&amp;amp;page%5Blimit%5D=5<span class="pl-pds">"</span></span></pre></div>
 
       <p>The api.pixelhandler.com server is running the <a href="https://github.com/cerebris/jsonapi-resources">JSONAPI::Resources</a> gem. It
       follows the <a href="http://jsonapi.org">JSON API 1.0 spec</a>.</p>
