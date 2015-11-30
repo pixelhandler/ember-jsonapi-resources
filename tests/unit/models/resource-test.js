@@ -62,7 +62,7 @@ test('it needs a reference to an injected service object', function(assert) {
 });
 
 test('attr() uses the attributes hash for computed model attributes', function(assert) {
-  let post = this.container.lookupFactory('model:posts').create({
+  let post = this.container.lookupFactory('model:post').create({
     id: '1', attributes: {title: 'Wyatt Earp', excerpt: 'Was a gambler.'}
   });
   assert.equal(post.get('title'), 'Wyatt Earp', 'name is set to "Wyatt Earp"');
@@ -98,7 +98,7 @@ test('attr() helper creates a computed property using a unique (protected) attri
 });
 
 test('#changedAttributes', function(assert) {
-  let post = this.container.lookupFactory('model:posts').create({
+  let post = this.container.lookupFactory('model:post').create({
     attributes: {id: '1', title: 'Wyatt Earp', excerpt: 'Was a gambler.'}
   });
   assert.equal(post.get('excerpt'), 'Was a gambler.', 'excerpt is set "Was a gambler."');
@@ -111,7 +111,7 @@ test('#changedAttributes', function(assert) {
 });
 
 test('#previousAttributes', function(assert) {
-  let post = this.container.lookupFactory('model:posts').create({
+  let post = this.container.lookupFactory('model:post').create({
     id: '1', attributes: {title: 'Wyatt Earp', excerpt: 'Was a gambler.'}
   });
   assert.equal(post.get('excerpt'), 'Was a gambler.', 'title is set toGambler');
@@ -124,7 +124,7 @@ test('#previousAttributes', function(assert) {
 });
 
 test('#didUpdateResource empties the resource _attributes hash when resource id matches json arg id value', function(assert) {
-  let post = this.container.lookupFactory('model:posts').create({
+  let post = this.container.lookupFactory('model:post').create({
     id: '1', attributes: {title: 'Wyatt Earp', excerpt: 'Was a gambler.'}
   });
   post.set('excerpt', 'became a deputy.');
@@ -134,7 +134,7 @@ test('#didUpdateResource empties the resource _attributes hash when resource id 
 });
 
 test('#didUpdateResource does nothing if json argument has an id that does not match the resource id', function(assert) {
-  let post = this.container.lookupFactory('model:posts').create({
+  let post = this.container.lookupFactory('model:post').create({
     id: '1', attributes: {title: 'Wyatt Earp', excerpt: 'Was a gambler.'}
   });
   post.set('excerpt', 'became a deputy.');
@@ -144,13 +144,13 @@ test('#didUpdateResource does nothing if json argument has an id that does not m
 });
 
 test('#addRelationship', function(assert) {
-  let post = this.container.lookupFactory('model:posts').create({
+  let post = this.container.lookupFactory('model:post').create({
     id: '1', attributes: {title: 'Wyatt Earp', excerpt: 'Was a gambler.'}
   });
   post.addRelationship('author', '2');
   let authorRelation = '{"author":{"links":{},"data":{"type":"authors","id":"2"}},"comments":{"links":{},"data":[]}}';
   assert.equal(JSON.stringify(post.get('relationships')), authorRelation, 'added relationship for author');
-  let comment = this.container.lookupFactory('model:comments').create({
+  let comment = this.container.lookupFactory('model:comment').create({
     id: '4',  attributes: {body: 'Wyatt become a deputy too.' },
     relationships: { commenter: { data: { type: 'commenter', id: '3' } } }
   });
@@ -163,26 +163,26 @@ test('#addRelationship', function(assert) {
 });
 
 test('#removeRelationship', function(assert) {
-  let post = this.container.lookupFactory('model:posts').create({
+  let post = this.container.lookupFactory('model:post').create({
     id: '1', attributes: {title: 'Wyatt Earp', excerpt: 'Was a gambler.'},
     relationships: {
       author: { data: { type: 'authors', id: '2' } },
       comments: { data: [{ type: 'comments', id: '4' }] }
     }
   });
-  let author = this.container.lookupFactory('model:authors').create({
+  let author = this.container.lookupFactory('model:author').create({
     id: '2', attributes: { name: 'Bill' },
     relationships: {
       posts: { data: [{ type: 'posts', id: '1' }] }
     }
   });
-  let commenter = this.container.lookupFactory('model:commenters').create({
+  let commenter = this.container.lookupFactory('model:commenter').create({
     id: '3', attributes: { name: 'Virgil Erp' },
     relationships: {
       comments: { data: [{ type: 'comments', id: '4' }] }
     }
   });
-  let comment = this.container.lookupFactory('model:comments').create({
+  let comment = this.container.lookupFactory('model:comment').create({
     id: '4', attributes: { body: 'Wyatt become a deputy too.' },
     relationships: {
       commenter: { data: { type: 'commenter', id: '3' } },
@@ -227,7 +227,7 @@ test('#removeRelationship', function(assert) {
 });
 
 test('#addRelationships', function(assert) {
-  let post = this.container.lookupFactory('model:posts').create({
+  let post = this.container.lookupFactory('model:post').create({
     id: '1', attributes: {title: 'Wyatt Earp', excerpt: 'Was a gambler.'}
   });
   post.addRelationships('comments', ['4', '5']);
@@ -243,7 +243,7 @@ test('#addRelationships', function(assert) {
 });
 
 test('#removeRelationships', function(assert) {
-  let post = this.container.lookupFactory('model:posts').create({
+  let post = this.container.lookupFactory('model:post').create({
     id: '1', attributes: {title: 'Wyatt Earp', excerpt: 'Was a gambler.'},
     relationships: {
       author: { data: { type: 'authors', id: '2' } },
@@ -260,7 +260,7 @@ test('#removeRelationships', function(assert) {
 
 test('#updateRelationship', function(assert) {
   let serviceOp = this.sandbox.spy();
-  let post = this.container.lookupFactory('model:posts').create({
+  let post = this.container.lookupFactory('model:post').create({
     id: '1', attributes: {title: 'Wyatt Earp', excerpt: 'Was a gambler.'},
     relationships: {
       author: { data: { type: 'authors', id: '2' } },
@@ -301,7 +301,7 @@ test('#updateRelationship', function(assert) {
 
 test('#isNew resource uses relations without proxied content', function(assert) {
   let serviceOp = this.sandbox.spy();
-  let post = this.container.lookupFactory('model:posts').create({
+  let post = this.container.lookupFactory('model:post').create({
     id: '1', attributes: {title: 'Wyatt Earp', excerpt: 'Was a gambler.'},
     isNew: true,
     // mock service
@@ -327,7 +327,7 @@ test('#isNew resource uses relations without proxied content', function(assert) 
 QUnit.skip('#initEvents', function(assert) {
   const proto = Resource.PrototypeMixin.mixins[1].properties;
   window.sinon.stub(proto, 'initEvents', function () { return; });
-  let Factory = this.container.lookupFactory('model:posts');
+  let Factory = this.container.lookupFactory('model:post');
   Factory.create({ attributes: { id: '1', title: 'Wyatt Earp', excerpt: 'Was a gambler.'} });
   assert.ok(proto.initEvents.calledOnce, 'initEvents called');
 });

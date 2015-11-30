@@ -32,7 +32,7 @@ moduleFor('model:resource', 'Unit | Utility | hasOne', {
 });
 
 test('hasOne() helper sets up a promise proxy to a related resource', function(assert) {
-  let post = this.container.lookupFactory('model:posts').create({
+  let post = this.container.lookupFactory('model:post').create({
     id: '1', attributes: { title: 'Wyatt Earp', excerpt: 'Was a gambler.'},
     relationships: {
       author: {
@@ -44,7 +44,7 @@ test('hasOne() helper sets up a promise proxy to a related resource', function(a
       },
     }
   });
-  this.container.lookupFactory('model:authors').create({
+  this.container.lookupFactory('model:author').create({
     id: '2', attributes: { name: 'Bill' },
     relationships: {
       posts: {

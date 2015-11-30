@@ -8,7 +8,7 @@ export default Ember.Route.extend({
   },
 
   model() {
-    return this.container.lookup('model:posts').create({
+    return this.container.lookup('model:post').create({
       isNew: true,
       attributes: { date: new Date() }
     });
@@ -23,8 +23,10 @@ export default Ember.Route.extend({
   actions: {
     save(resource) {
       this.store.createResource('posts', resource).then(function(resp) {
-        this.modelFor('admin.index').addObject(resp);
-        this.modelFor('index').addObject(resp);
+        let collection = this.modelFor('admin.index');
+        if (collection) { collection.addObject(resp); }
+        collection = this.modelFor('index');
+        if (collection) { collection.addObject(resp); }
         this.transitionTo('admin.index');
       }.bind(this));
     },

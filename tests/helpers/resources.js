@@ -48,19 +48,19 @@ export const Supervisor = Employee.extend({
 export function setup() {
   const opts = { instantiate: false, singleton: false };
   Post.prototype.container = this.container;
-  this.registry.register('model:posts', Post, opts);
+  this.registry.register('model:post', Post, opts);
   Author.prototype.container = this.container;
-  this.registry.register('model:authors', Author, opts);
+  this.registry.register('model:author', Author, opts);
   Comment.prototype.container = this.container;
-  this.registry.register('model:comments', Comment, opts);
+  this.registry.register('model:comment', Comment, opts);
   Commenter.prototype.container = this.container;
-  this.registry.register('model:commenters', Commenter, opts);
+  this.registry.register('model:commenter', Commenter, opts);
   Person.prototype.container = this.container;
-  this.registry.register('model:persons', Person, opts);
+  this.registry.register('model:person', Person, opts);
   Employee.prototype.container = this.container;
-  this.registry.register('model:employees', Employee, opts);
+  this.registry.register('model:employee', Employee, opts);
   Supervisor.prototype.container = this.container;
-  this.registry.register('model:supervisors', Supervisor, opts);
+  this.registry.register('model:supervisor', Supervisor, opts);
 }
 
 export function teardown() {

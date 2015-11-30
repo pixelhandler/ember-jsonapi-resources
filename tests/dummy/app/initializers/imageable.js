@@ -1,15 +1,8 @@
-import Service from '../services/imageables';
-import Adapter from '../adapters/imageable';
-import Serializer from '../serializers/application';
-
 export function initialize() {
   let application = arguments[1] || arguments[0];
-  application.register('service:imageables', Service);
-  application.register('adapter:imageables', Adapter);
-  application.register('serializer:imageables', Serializer);
 
   application.inject('service:store', 'imageables', 'service:imageables');
-  application.inject('service:imageables', 'serializer', 'serializer:imageables');
+  application.inject('service:imageables', 'serializer', 'serializer:imageable');
 }
 
 export default {

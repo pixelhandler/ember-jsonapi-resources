@@ -329,8 +329,8 @@ Resource.reopenClass({
     if (properties) {
       instance.setProperties(properties);
     }
-    let type = instance.get('type');
-    let msg = (type) ? Ember.String.capitalize(singularize(type)) : 'Resource';
+    let type = singularize(instance.get('type'));
+    let msg = (type) ? Ember.String.capitalize(type) : 'Resource';
     let factory = 'model:' + type;
     if (!type) {
       Ember.Logger.warn(msg + '#create called, instead you should first use ' + msg + '.extend({type:"entity"})');
