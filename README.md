@@ -4,7 +4,7 @@ An [Ember CLI] Addon… a lightweight solution for data persistence in an [Ember
 application following the [JSON API] 1.0 specification (your anti-bikeshedding
 weapon for API development).
 
-See http://ember-jsonapi-resources.com
+See [ember-jsonapi-resources.com](http://ember-jsonapi-resources.com)
 
 * [API Docs][generated docs]
 * [Example App](https://github.com/pixelhandler/jr-test)
