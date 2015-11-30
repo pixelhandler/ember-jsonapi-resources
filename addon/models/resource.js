@@ -300,7 +300,7 @@ Resource.reopenClass({
 
     ```
     model() {
-      return this.container.lookupFactory('model:posts').create({
+      return this.container.lookupFactory('model:post').create({
         attributes: {
           title: 'The JSON API 1.0 Spec Rocks!'
         }
