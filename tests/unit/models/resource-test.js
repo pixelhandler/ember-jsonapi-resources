@@ -114,13 +114,31 @@ test('#previousAttributes', function(assert) {
   let post = this.container.lookupFactory('model:post').create({
     id: '1', attributes: {title: 'Wyatt Earp', excerpt: 'Was a gambler.'}
   });
-  assert.equal(post.get('excerpt'), 'Was a gambler.', 'title is set toGambler');
+  assert.equal(post.get('excerpt'), 'Was a gambler.', 'excerpt is set to "Was a gambler."');
   post.set('excerpt', 'Became a deputy.');
   assert.equal(post.get('excerpt'), 'Became a deputy.', 'excerpt is set to "Became a deputy."');
 
   let previous = post.get('previousAttributes');
   assert.equal(Ember.keys(previous).join(''), 'excerpt', 'previous attributes include only excerpt');
-  assert.equal(previous.excerpt, 'Was a gambler.', 'previous excerpt value is "Became a deputy."');
+  assert.equal(previous.excerpt, 'Was a gambler.', 'previous excerpt value is "Was a gambler."');
+});
+
+test('#rollback resets attributes based on #previousAttributes', function(assert) {
+  let post = this.container.lookupFactory('model:post').create({
+    id: '1', attributes: {title: 'Wyatt Earp', excerpt: 'Was a gambler.'}
+  });
+  assert.equal(post.get('excerpt'), 'Was a gambler.', 'excerpt is set to "Was a gambler."');
+  post.set('excerpt', 'Became a deputy.');
+  assert.equal(post.get('excerpt'), 'Became a deputy.', 'excerpt is set to "Became a deputy."');
+  let previous = post.get('previousAttributes');
+  assert.equal(previous.excerpt, 'Was a gambler.', 'previous excerpt value is "Was a gambler."');
+  assert.equal(Object.keys(previous).length, 1, 'previous attribues have one change tracked');
+
+  post.rollback();
+
+  previous = post.get('previousAttributes');
+  assert.equal(post.get('excerpt'), 'Was a gambler.', 'excerpt is set to "Was a gambler."');
+  assert.equal(Object.keys(previous).length, 0, 'previous attribues are empty');
 });
 
 test('#didUpdateResource empties the resource _attributes hash when resource id matches json arg id value', function(assert) {
