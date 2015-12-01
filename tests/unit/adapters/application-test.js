@@ -6,7 +6,7 @@ import { setup, teardown } from 'dummy/tests/helpers/resources';
 import postMock from 'fixtures/api/posts/1';
 import postsMock from 'fixtures/api/posts';
 
-let sandbox, skip = QUnit.skip;
+let sandbox;
 
 function RSVPonerror(error) {
   throw new Error(error);
@@ -503,12 +503,4 @@ test('re-opening AuthorizationMixin can customize the settings for Authorization
     })
   });
   assert.equal(adapter.get('authorizationCredential'), 'Bearer SecretToken');
-});
-
-// This may only intermittently pass
-skip('#initEvents', function(assert) {
-  const proto = Adapter.PrototypeMixin.mixins[2].properties;
-  sandbox.stub(proto, 'initEvents', function () { return; });
-  this.subject();
-  assert.ok(proto.initEvents.calledOnce, 'initEvents called');
 });
