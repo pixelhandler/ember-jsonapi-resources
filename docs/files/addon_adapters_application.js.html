@@ -419,17 +419,7 @@ export default Ember.Object.extend(FetchMixin, Ember.Evented, {
     @method cacheRemove
     @param {Resource} resource
   */
-  cacheRemove(/*resource*/) {},
-
-  /**
-    Initialize events to communicate on the resource instances&#x27; service reference.
-    Listens for resource objects trigging &#x60;attributeChanged&#x60; events
-
-    @method initEvents
-  */
-  initEvents: Ember.on(&#x27;init&#x27;, function () {
-    this.on(&#x27;attributeChanged&#x27;, this, this.updateResource);
-  })
+  cacheRemove(/*resource*/) {}
 });
 
     </pre>

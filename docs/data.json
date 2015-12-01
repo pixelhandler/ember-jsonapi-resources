@@ -924,16 +924,6 @@
             "submodule": "adapter"
         },
         {
-            "file": "addon/adapters/application.js",
-            "line": 321,
-            "description": "Initialize events to communicate on the resource instances' service reference.\nListens for resource objects trigging `attributeChanged` events",
-            "itemtype": "method",
-            "name": "initEvents",
-            "class": "ApplicationAdapter",
-            "module": "ember-jsonapi-resources",
-            "submodule": "adapter"
-        },
-        {
             "file": "addon/initializers/store.js",
             "line": 8,
             "description": "Initializer for the store service, injects into the route and controller",
@@ -1566,6 +1556,28 @@
         {
             "file": "addon/models/resource.js",
             "line": 255,
+            "description": "Revert to previous attributes",
+            "itemtype": "method",
+            "name": "rollback",
+            "class": "Resource",
+            "module": "ember-jsonapi-resources",
+            "submodule": "resource"
+        },
+        {
+            "file": "addon/models/resource.js",
+            "line": 271,
+            "description": "Reset tracked changed/previous attrs",
+            "access": "private",
+            "tagname": "",
+            "itemtype": "method",
+            "name": "_resetAttributes",
+            "class": "Resource",
+            "module": "ember-jsonapi-resources",
+            "submodule": "resource"
+        },
+        {
+            "file": "addon/models/resource.js",
+            "line": 285,
             "description": "Sets all payload properties on the resource and resets private _attributes\nused for changed/previous tracking",
             "itemtype": "method",
             "name": "didUpdateResource",
@@ -1581,7 +1593,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 272,
+            "line": 298,
             "description": "A local cache duration, to minimize duplicate fetch requests",
             "itemtype": "property",
             "name": "cacheDuration",
@@ -1592,7 +1604,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 280,
+            "line": 306,
             "itemtype": "property",
             "name": "isCacheExpired",
             "type": "Boolean",
@@ -1602,7 +1614,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 292,
+            "line": 318,
             "description": "To protect the JSON API Resource properties for attributes, links and\nrelationships these objects are setup during create(). This has to be\ndefined since the attr() helper needs to have new objects for each instance,\nto project from keeping a reference on the prototype.\n\nThe create method should only be called after looking up a factory from the\ncontainer, for example in a route's model hook:\n\n```\nmodel() {\n  return this.container.lookupFactory('model:post').create({\n    attributes: {\n      title: 'The JSON API 1.0 Spec Rocks!'\n    }\n  });\n}\n```\n\nThe create method uses the container to lookup the factory's prototype and\nfind the computed properties used for relations to setup the relationships\nfor the Resource instance you create. Calling Resource#create without using\nthe factory lookup will result in an instance without a reference to the\napplication's container and you will have to manually setup the relationships\nobject prior to adding a relationship.",
             "itemtype": "method",
             "name": "create",
