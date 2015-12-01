@@ -253,6 +253,36 @@ const Resource = Ember.Object.extend({
   }).volatile(),
 
   /**
+    Revert to previous attributes
+
+    @method rollback
+  */
+  rollback() {
+    let attrs = this.get('previousAttributes');
+    for (let prop in attrs) {
+      if (attrs.hasOwnProperty(prop)) {
+        this.set(`attributes.${prop}`, attrs[prop]);
+        this.notifyPropertyChange(prop);
+      }
+    }
+    this._resetAttributes();
+  },
+
+  /**
+    Reset tracked changed/previous attrs
+
+    @private
+    @method _resetAttributes
+  */
+  _resetAttributes() {
+    for (let attr in this._attributes) {
+      if (this._attributes.hasOwnProperty(attr)) {
+        delete this._attributes[attr];
+      }
+    }
+  },
+
+  /**
     Sets all payload properties on the resource and resets private _attributes
     used for changed/previous tracking
 
@@ -262,11 +292,7 @@ const Resource = Ember.Object.extend({
   didUpdateResource(json) {
     if (this.get('id') !== json.id) { return; }
     this.setProperties(json);
-    for (let attr in this._attributes) {
-      if (this._attributes.hasOwnProperty(attr)) {
-        delete this._attributes[attr];
-      }
-    }
+    this._resetAttributes();
   },
 
   /**
