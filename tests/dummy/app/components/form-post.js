@@ -14,6 +14,10 @@ export default Ember.Component.extend({
   focusOut() {
     if (!this.get('isNew')) {
       this.get('resource').applyChanges();
+      this.set('isEditing', false);
+      this.get('on-edit')(this.get('post')).finally(function() {
+        this.set('isEditing', true);
+      }.bind(this));
     }
   },
 
