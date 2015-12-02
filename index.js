@@ -7,11 +7,14 @@ module.exports = {
   included: function(app) {
     this._super.included.apply(this, arguments);
 
-    app.import({
-      development: app.bowerDirectory + '/es6-promise/promise.js',
-      production: app.bowerDirectory + '/es6-promise/promise.min.js'
-    });
+    // addon passed as an app doesn't define app.import
+    if (typeof app.import === 'function') {
+      app.import({
+        development: app.bowerDirectory + '/es6-promise/promise.js',
+        production: app.bowerDirectory + '/es6-promise/promise.min.js'
+      });
 
-    app.import(app.bowerDirectory + '/fetch/fetch.js');
+      app.import(app.bowerDirectory + '/fetch/fetch.js');
+    }
   }
 };
