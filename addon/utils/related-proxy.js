@@ -50,33 +50,34 @@ const RelatedProxyUtil = Ember.Object.extend({
 
     @method createProxy
     @param {Resource} resource
-    @param {String} kind 'many' or 'one'
+    @param {String} kind 'hasMany' or 'hasOne'
     @return {PromiseProxy|ObjectProxy|ArrayProxy} proxy instance, new resource uses mock relations
   */
   createProxy(resource, kind) {
     let mockRelation, proxyFactory;
-    if (kind === 'many') {
+    if (kind === 'hasMany') {
       mockRelation = Ember.A([]);
       proxyFactory = Ember.ArrayProxy;
-    } else if (kind === 'one') {
+    } else if (kind === 'hasOne') {
       mockRelation = Ember.Object.create();
       proxyFactory = Ember.ObjectProxy;
     }
     if (resource.get('isNew')) {
       return mockRelation;
     } else {
-      let proxy = this.proxySetup(resource, proxyFactory);
-      return this.proxyResolution(proxy);
+      let proxy = this.proxySetup(resource, kind, proxyFactory);
+      return this.proxyResolution(resource, proxy);
     }
   },
 
   /**
     @method proxySetup
     @param {Resource} resource
+    @param {String} kind 'hasMany' or 'hasOne'
     @param {Ember.ObjectProxy|Ember.ArrayProxy} proxyFactory
     @return {PromiseProxy} proxy
   */
-  proxySetup(resource, proxyFactory) {
+  proxySetup(resource, kind, proxyFactory) {
     let relation = this.get('relationship');
     let type = this.get('type');
     let url = this.proxyUrl(resource, relation);
@@ -84,7 +85,7 @@ const RelatedProxyUtil = Ember.Object.extend({
     let promise = this.promiseFromCache(resource, relation, service);
     promise = promise || service.findRelated({'resource': relation, 'type': type}, url);
     let proxyProto = proxyFactory.extend(Ember.PromiseProxyMixin, {
-      'promise': promise, 'type': relation
+      'promise': promise, 'type': relation, 'kind': kind
     });
     return proxyProto.create();
   },
@@ -94,10 +95,14 @@ const RelatedProxyUtil = Ember.Object.extend({
     @param {proxy} resource
     @return {PromiseProxy} proxy
   */
-  proxyResolution(proxy) {
+  proxyResolution(resource, proxy) {
     proxy.then(
       function (resources) {
         proxy.set('content', resources);
+        let relation = proxy.get('type');
+        let kind = proxy.get('kind');
+        resource.didResolveProxyRelation(relation, kind, resources);
+        return resources;
       },
       function (error) {
         Ember.Logger.error(error);
@@ -148,7 +153,7 @@ const RelatedProxyUtil = Ember.Object.extend({
     } else {
       content = this.serviceCacheLookup(service, data);
     }
-    return (content) ? Ember.RSVP.Promise.resolve(content) : null;
+    return (content && content.length > 0) ? Ember.RSVP.Promise.resolve(content) : null;
   },
 
   /**

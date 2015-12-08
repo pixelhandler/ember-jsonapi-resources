@@ -317,6 +317,33 @@ test('#updateRelationship', function(assert) {
   assert.equal(author, null, 'author removed');
 });
 
+test('#didResolveProxyRelation', function(assert) {
+  let post = this.container.lookupFactory('model:post').create({
+    id: '1', attributes: {title: 'Wyatt Earp', excerpt: 'Was a gambler.'},
+    relationships: {
+      author: { data: { type: 'authors', id: '2'} }
+    }
+  });
+  let author = this.container.lookupFactory('model:author').create({
+    id: '2', attributes: { name: 'Bill' },
+    relationships: {
+      posts: { data: [{ type: 'posts', id: '1' }] }
+    }
+  });
+
+  post.didResolveProxyRelation('author', 'hasOne', author);
+
+  assert.ok(post.get('relationships.author.data'), 'author data is setup');
+  assert.equal(post.get('relationships.author.data.type'), 'authors', 'relation data set for authors type');
+  assert.equal(post.get('relationships.author.data.id'), '2', 'relation data set with author id: 2');
+
+  author.didResolveProxyRelation('posts', 'hasMany', post);
+
+  assert.ok(author.get('relationships.posts.data'), 'post data is setup');
+  assert.equal(author.get('relationships.posts.data')[0].type, 'posts', 'relation data set for posts type');
+  assert.equal(author.get('relationships.posts.data')[0].id, '1', 'relation data set with post id: 1');
+});
+
 test('#isNew resource uses relations without proxied content', function(assert) {
   let serviceOp = this.sandbox.spy();
   let post = this.container.lookupFactory('model:post').create({
@@ -339,15 +366,6 @@ test('#isNew resource uses relations without proxied content', function(assert) 
   assert.equal(author.id, undefined, 'author id is undefined');
   author = post.get('relationships.author.data');
   assert.equal(author.id, 2, 'author data id is 2');
-});
-
-// This may only intermittently pass
-QUnit.skip('#initEvents', function(assert) {
-  const proto = Resource.PrototypeMixin.mixins[1].properties;
-  window.sinon.stub(proto, 'initEvents', function () { return; });
-  let Factory = this.container.lookupFactory('model:post');
-  Factory.create({ attributes: { id: '1', title: 'Wyatt Earp', excerpt: 'Was a gambler.'} });
-  assert.ok(proto.initEvents.calledOnce, 'initEvents called');
 });
 
 test('#cacheDuration default value is 7 minutes', function(assert) {
