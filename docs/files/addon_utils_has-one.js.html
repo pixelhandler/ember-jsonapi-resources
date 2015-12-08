@@ -148,11 +148,12 @@ export default function hasOne(relation) {
     relation = relation.resource;
   }
   assertDasherizedHasOneRelation(type);
-  let util = RelatedProxyUtil.create({&#x27;relationship&#x27;: relation, &#x27;type&#x27;: type});
+  let kind = &#x27;hasOne&#x27;;
+  let util = RelatedProxyUtil.create({relationship: relation, type: type, kind: kind});
   let path = linksPath(relation);
   return Ember.computed(path, function () {
-    return util.createProxy(this, &#x27;one&#x27;);
-  }).meta({relation: relation, type: type, kind: &#x27;hasOne&#x27;});
+    return util.createProxy(this, kind);
+  }).meta({relation: relation, type: type, kind: kind});
 }
 
 function assertResourceAndTypeProps(relation) {

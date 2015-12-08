@@ -149,11 +149,12 @@ export default function hasMany(relation) {
     relation = relation.resource;
   }
   assertDasherizedHasManyRelation(relation);
-  let util = RelatedProxyUtil.create({&#x27;relationship&#x27;: relation, &#x27;type&#x27;: type});
+  let kind = &#x27;hasMany&#x27;;
+  let util = RelatedProxyUtil.create({&#x27;relationship&#x27;: relation, &#x27;type&#x27;: type, kind: kind});
   let path = linksPath(relation);
   return Ember.computed(path, function () {
-    return util.createProxy(this, &#x27;many&#x27;);
-  }).meta({relation: relation, type: type, kind: &#x27;hasMany&#x27;});
+    return util.createProxy(this, kind);
+  }).meta({relation: relation, type: type, kind: kind});
 }
 
 function assertResourceAndTypeProps(relation) {

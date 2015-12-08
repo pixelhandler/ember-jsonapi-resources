@@ -1443,7 +1443,30 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 156,
+            "line": 139,
+            "access": "private",
+            "tagname": "",
+            "itemtype": "method",
+            "name": "_updateRelationshipsData",
+            "params": [
+                {
+                    "name": "relation",
+                    "description": "",
+                    "type": "String"
+                },
+                {
+                    "name": "ids",
+                    "description": "",
+                    "type": "Array|String|null"
+                }
+            ],
+            "class": "Resource",
+            "module": "ember-jsonapi-resources",
+            "submodule": "resource"
+        },
+        {
+            "file": "addon/models/resource.js",
+            "line": 166,
             "itemtype": "method",
             "name": "addRelationships",
             "params": [
@@ -1464,7 +1487,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 167,
+            "line": 177,
             "itemtype": "method",
             "name": "removeRelationships",
             "params": [
@@ -1485,7 +1508,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 178,
+            "line": 188,
             "description": "Adds related links object on the relationship hash",
             "itemtype": "method",
             "name": "addRelationship",
@@ -1507,7 +1530,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 198,
+            "line": 208,
             "description": "Remove related links object on the relationship hash to have `null` data",
             "itemtype": "method",
             "name": "removeRelationship",
@@ -1529,7 +1552,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 219,
+            "line": 229,
             "itemtype": "method",
             "name": "changedAttributes",
             "return": {
@@ -1542,7 +1565,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 237,
+            "line": 247,
             "itemtype": "method",
             "name": "previousAttributes",
             "return": {
@@ -1555,7 +1578,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 255,
+            "line": 265,
             "description": "Revert to previous attributes",
             "itemtype": "method",
             "name": "rollback",
@@ -1565,7 +1588,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 271,
+            "line": 281,
             "description": "Reset tracked changed/previous attrs",
             "access": "private",
             "tagname": "",
@@ -1577,14 +1600,15 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 285,
+            "line": 295,
             "description": "Sets all payload properties on the resource and resets private _attributes\nused for changed/previous tracking",
             "itemtype": "method",
             "name": "didUpdateResource",
             "params": [
                 {
                     "name": "json",
-                    "description": "the updated data for the resource"
+                    "description": "the updated data for the resource",
+                    "type": "Object"
                 }
             ],
             "class": "Resource",
@@ -1593,7 +1617,34 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 298,
+            "line": 308,
+            "description": "Sets the relationships data, used after the promise proxy resolves by\nhasOne and hasMany helpers",
+            "itemtype": "method",
+            "name": "didResolveProxyRelation",
+            "params": [
+                {
+                    "name": "relation",
+                    "description": "name",
+                    "type": "String"
+                },
+                {
+                    "name": "kind",
+                    "description": "of relation hasOne or hasMany",
+                    "type": "String"
+                },
+                {
+                    "name": "related",
+                    "description": "resource(s)",
+                    "type": "Array|Object"
+                }
+            ],
+            "class": "Resource",
+            "module": "ember-jsonapi-resources",
+            "submodule": "resource"
+        },
+        {
+            "file": "addon/models/resource.js",
+            "line": 338,
             "description": "A local cache duration, to minimize duplicate fetch requests",
             "itemtype": "property",
             "name": "cacheDuration",
@@ -1604,7 +1655,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 306,
+            "line": 346,
             "itemtype": "property",
             "name": "isCacheExpired",
             "type": "Boolean",
@@ -1614,7 +1665,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 318,
+            "line": 358,
             "description": "To protect the JSON API Resource properties for attributes, links and\nrelationships these objects are setup during create(). This has to be\ndefined since the attr() helper needs to have new objects for each instance,\nto project from keeping a reference on the prototype.\n\nThe create method should only be called after looking up a factory from the\ncontainer, for example in a route's model hook:\n\n```\nmodel() {\n  return this.container.lookupFactory('model:post').create({\n    attributes: {\n      title: 'The JSON API 1.0 Spec Rocks!'\n    }\n  });\n}\n```\n\nThe create method uses the container to lookup the factory's prototype and\nfind the computed properties used for relations to setup the relationships\nfor the Resource instance you create. Calling Resource#create without using\nthe factory lookup will result in an instance without a reference to the\napplication's container and you will have to manually setup the relationships\nobject prior to adding a relationship.",
             "itemtype": "method",
             "name": "create",
@@ -2172,7 +2223,7 @@
                 },
                 {
                     "name": "kind",
-                    "description": "'many' or 'one'",
+                    "description": "'hasMany' or 'hasOne'",
                     "type": "String"
                 }
             ],
@@ -2196,6 +2247,11 @@
                     "type": "Resource"
                 },
                 {
+                    "name": "kind",
+                    "description": "'hasMany' or 'hasOne'",
+                    "type": "String"
+                },
+                {
                     "name": "proxyFactory",
                     "description": "",
                     "type": "Ember.ObjectProxy|Ember.ArrayProxy"
@@ -2211,7 +2267,7 @@
         },
         {
             "file": "addon/utils/related-proxy.js",
-            "line": 92,
+            "line": 93,
             "itemtype": "method",
             "name": "proxyResolution",
             "params": [
@@ -2231,7 +2287,7 @@
         },
         {
             "file": "addon/utils/related-proxy.js",
-            "line": 110,
+            "line": 115,
             "description": "Proxy url to fetch for the resource's relation",
             "itemtype": "method",
             "name": "proxyUrl",
@@ -2257,7 +2313,7 @@
         },
         {
             "file": "addon/utils/related-proxy.js",
-            "line": 127,
+            "line": 132,
             "description": "Lookup relation from service cache and pomisify result",
             "itemtype": "method",
             "name": "promiseFromCache",
@@ -2288,7 +2344,7 @@
         },
         {
             "file": "addon/utils/related-proxy.js",
-            "line": 154,
+            "line": 159,
             "description": "Lookup data in service cache",
             "itemtype": "method",
             "name": "serviceCacheLookup",

@@ -138,6 +138,10 @@
                                 <a href="#method__resetAttributes">_resetAttributes</a>
 
                             </li>
+                            <li class="index-item method private">
+                                <a href="#method__updateRelationshipsData">_updateRelationshipsData</a>
+
+                            </li>
                             <li class="index-item method">
                                 <a href="#method_addRelationship">addRelationship</a>
 
@@ -152,6 +156,10 @@
                             </li>
                             <li class="index-item method">
                                 <a href="#method_create">create</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_didResolveProxyRelation">didResolveProxyRelation</a>
 
                             </li>
                             <li class="index-item method">
@@ -258,7 +266,7 @@
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l271"><code>addon&#x2F;models&#x2F;resource.js:271</code></a>
+        <a href="../files/addon_models_resource.js.html#l281"><code>addon&#x2F;models&#x2F;resource.js:281</code></a>
         </p>
 
 
@@ -270,6 +278,72 @@
 
     </div>
 
+
+
+
+</div>
+<div id="method__updateRelationshipsData" class="method item private">
+    <h3 class="name"><code>_updateRelationshipsData</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>relation</code>
+                </li>
+                <li class="arg">
+                        <code>ids</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+
+
+        <span class="flag private">private</span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/addon_models_resource.js.html#l139"><code>addon&#x2F;models&#x2F;resource.js:139</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">relation</code>
+                        <span class="type">String</span>
+
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">ids</code>
+                        <span class="type">Array | String | Null</span>
+
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                </li>
+            </ul>
+        </div>
 
 
 
@@ -298,7 +372,7 @@
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l178"><code>addon&#x2F;models&#x2F;resource.js:178</code></a>
+        <a href="../files/addon_models_resource.js.html#l188"><code>addon&#x2F;models&#x2F;resource.js:188</code></a>
         </p>
 
 
@@ -367,7 +441,7 @@
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l156"><code>addon&#x2F;models&#x2F;resource.js:156</code></a>
+        <a href="../files/addon_models_resource.js.html#l166"><code>addon&#x2F;models&#x2F;resource.js:166</code></a>
         </p>
 
 
@@ -429,7 +503,7 @@
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l219"><code>addon&#x2F;models&#x2F;resource.js:219</code></a>
+        <a href="../files/addon_models_resource.js.html#l229"><code>addon&#x2F;models&#x2F;resource.js:229</code></a>
         </p>
 
 
@@ -471,7 +545,7 @@
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l318"><code>addon&#x2F;models&#x2F;resource.js:318</code></a>
+        <a href="../files/addon_models_resource.js.html#l358"><code>addon&#x2F;models&#x2F;resource.js:358</code></a>
         </p>
 
 
@@ -516,6 +590,89 @@ object prior to adding a relationship.</p>
 
 
 </div>
+<div id="method_didResolveProxyRelation" class="method item">
+    <h3 class="name"><code>didResolveProxyRelation</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>relation</code>
+                </li>
+                <li class="arg">
+                        <code>kind</code>
+                </li>
+                <li class="arg">
+                        <code>related</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/addon_models_resource.js.html#l308"><code>addon&#x2F;models&#x2F;resource.js:308</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Sets the relationships data, used after the promise proxy resolves by
+hasOne and hasMany helpers</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">relation</code>
+                        <span class="type">String</span>
+
+
+                    <div class="param-description">
+                        <p>name</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">kind</code>
+                        <span class="type">String</span>
+
+
+                    <div class="param-description">
+                        <p>of relation hasOne or hasMany</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">related</code>
+                        <span class="type">Array | Object</span>
+
+
+                    <div class="param-description">
+                        <p>resource(s)</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+
+
+</div>
 <div id="method_didUpdateResource" class="method item">
     <h3 class="name"><code>didUpdateResource</code></h3>
 
@@ -537,7 +694,7 @@ object prior to adding a relationship.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l285"><code>addon&#x2F;models&#x2F;resource.js:285</code></a>
+        <a href="../files/addon_models_resource.js.html#l295"><code>addon&#x2F;models&#x2F;resource.js:295</code></a>
         </p>
 
 
@@ -589,7 +746,7 @@ used for changed/previous tracking</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l237"><code>addon&#x2F;models&#x2F;resource.js:237</code></a>
+        <a href="../files/addon_models_resource.js.html#l247"><code>addon&#x2F;models&#x2F;resource.js:247</code></a>
         </p>
 
 
@@ -637,7 +794,7 @@ used for changed/previous tracking</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l198"><code>addon&#x2F;models&#x2F;resource.js:198</code></a>
+        <a href="../files/addon_models_resource.js.html#l208"><code>addon&#x2F;models&#x2F;resource.js:208</code></a>
         </p>
 
 
@@ -706,7 +863,7 @@ used for changed/previous tracking</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l167"><code>addon&#x2F;models&#x2F;resource.js:167</code></a>
+        <a href="../files/addon_models_resource.js.html#l177"><code>addon&#x2F;models&#x2F;resource.js:177</code></a>
         </p>
 
 
@@ -765,7 +922,7 @@ used for changed/previous tracking</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l255"><code>addon&#x2F;models&#x2F;resource.js:255</code></a>
+        <a href="../files/addon_models_resource.js.html#l265"><code>addon&#x2F;models&#x2F;resource.js:265</code></a>
         </p>
 
 
@@ -955,7 +1112,7 @@ Use this as a refence for creating computed properties</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l298"><code>addon&#x2F;models&#x2F;resource.js:298</code></a>
+        <a href="../files/addon_models_resource.js.html#l338"><code>addon&#x2F;models&#x2F;resource.js:338</code></a>
         </p>
 
 
@@ -1005,7 +1162,7 @@ Use this as a refence for creating computed properties</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l306"><code>addon&#x2F;models&#x2F;resource.js:306</code></a>
+        <a href="../files/addon_models_resource.js.html#l346"><code>addon&#x2F;models&#x2F;resource.js:346</code></a>
         </p>
 
 

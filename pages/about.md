@@ -24,10 +24,10 @@ headers; or by whatever means the developer chooses.
 
 ## Status
 
-This addon is under active development.
+This addon has a 1.0.0 BETA release, and is under active development.
 
-This is a NEW project there may be bugs depending on your use of the addon.
-Please do file an issue if you run into a bug.
+There may be bugs depending on your use of the addon. Please do file an issue
+if you run into a bug.
 
 
 ## Requirements
