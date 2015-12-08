@@ -5,6 +5,7 @@ import { setup, teardown } from 'dummy/tests/helpers/resources';
 
 import postMock from 'fixtures/api/posts/1';
 import postsMock from 'fixtures/api/posts';
+import authorMock from 'fixtures/api/authors/1';
 
 let sandbox;
 
@@ -96,7 +97,8 @@ test('#findRelated', function(assert) {
   let url = resource.get( ['relationships', 'author', 'links', 'related'].join('.') );
   const adapter = this.subject({type: 'posts', url: '/posts'});
   let service = this.container.lookup('service:authors');
-  sandbox.stub(service, 'fetch', function () { return Ember.RSVP.Promise.resolve(null); });
+  let related = this.container.lookupFactory('model:author').create(authorMock.data);
+  sandbox.stub(service, 'fetch', function () { return Ember.RSVP.Promise.resolve(related); });
   let promise = adapter.findRelated('author', url);
   assert.ok(typeof promise.then === 'function', 'returns a thenable');
   assert.ok(service.fetch.calledOnce, 'authors service#fetch method called');
@@ -111,7 +113,21 @@ test('#findRelated can be called with optional type for the resource', function 
   PersonAdapter.reopenClass({ isServiceFactory: true });
   this.registry.register('service:people', PersonAdapter.extend());
   let service = this.container.lookup('service:people');
-  let stub = sandbox.stub(service, 'findRelated', function () { return Ember.RSVP.Promise.resolve(null); });
+  let supervisor = this.container.lookupFactory('model:employee').create({
+    type: 'supervisors',
+    id: 1000000,
+    name: 'The Boss',
+    relationships: {
+      employees: {
+        links: {
+          related: 'http://locahost:3000/api/v1/supervisor/1000000/employees'
+        }
+      }
+    }
+  });
+  let stub = sandbox.stub(service, 'findRelated', function () {
+    return Ember.RSVP.Promise.resolve(supervisor);
+  });
   let resource = this.container.lookupFactory('model:employee').create({
     type: 'employees',
     id: 1000001,
@@ -119,7 +135,7 @@ test('#findRelated can be called with optional type for the resource', function 
     relationships: {
       supervisor: {
         links: {
-          related: 'http://locahost:3000/api/v1/employees/1/supervisor'
+          related: 'http://locahost:3000/api/v1/employees/1000001/supervisor'
         }
       }
     }

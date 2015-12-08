@@ -46,11 +46,12 @@ export default function hasMany(relation) {
     relation = relation.resource;
   }
   assertDasherizedHasManyRelation(relation);
-  let util = RelatedProxyUtil.create({'relationship': relation, 'type': type});
+  let kind = 'hasMany';
+  let util = RelatedProxyUtil.create({'relationship': relation, 'type': type, kind: kind});
   let path = linksPath(relation);
   return Ember.computed(path, function () {
-    return util.createProxy(this, 'many');
-  }).meta({relation: relation, type: type, kind: 'hasMany'});
+    return util.createProxy(this, kind);
+  }).meta({relation: relation, type: type, kind: kind});
 }
 
 function assertResourceAndTypeProps(relation) {

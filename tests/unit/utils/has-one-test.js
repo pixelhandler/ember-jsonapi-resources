@@ -7,8 +7,8 @@ let mockServices;
 const mockService = function () {
   let sandbox = this.sandbox;
   return Ember.Service.extend({
-    findRelated: sandbox.spy(function () { return Ember.RSVP.Promise.resolve(null); }),
-    cacheLookup: sandbox.spy(function () { return []; })
+    findRelated: sandbox.spy(function () { return Ember.RSVP.Promise.resolve(Ember.Object.create({id: 1})); }),
+    cacheLookup: sandbox.spy(function () { return Ember.A([]); })
   });
 };
 let entities = ['post', 'author'];

@@ -132,6 +132,17 @@ const Resource = Ember.Object.extend({
     @param {Array|String|null} ids
   */
   updateRelationship(relation, ids) {
+    this._updateRelationshipsData(relation, ids);
+    return this.get('service').patchRelationship(this, relation);
+  },
+
+  /**
+    @private
+    @method _updateRelationshipsData
+    @param {String} relation
+    @param {Array|String|null} ids
+  */
+  _updateRelationshipsData(relation, ids) {
     let relationshipData = 'relationships.' + relation + '.data';
     let existing;
     if (!Array.isArray(ids)) {
@@ -150,7 +161,6 @@ const Resource = Ember.Object.extend({
         this.removeRelationships(relation, unique(existing, ids));
       }
     }
-    return this.get('service').patchRelationship(this, relation);
   },
 
   /**
@@ -287,12 +297,42 @@ const Resource = Ember.Object.extend({
     used for changed/previous tracking
 
     @method didUpdateResource
-    @param json the updated data for the resource
+    @param {Object} json the updated data for the resource
   */
   didUpdateResource(json) {
     if (this.get('id') !== json.id) { return; }
     this.setProperties(json);
     this._resetAttributes();
+  },
+
+  /**
+    Sets the relationships data, used after the promise proxy resolves by
+    hasOne and hasMany helpers
+
+    @method didResolveProxyRelation
+    @param {String} relation name
+    @param {String} kind of relation hasOne or hasMany
+    @param {Array|Object} related resource(s)
+  */
+  didResolveProxyRelation(relation, kind, related) {
+    let ids;
+    if (Array.isArray(related)) {
+      ids = related.mapBy('id');
+    } else if (related) {
+      ids = related.get('id');
+    } else {
+      return;
+    }
+    let relationshipData = 'relationships.' + relation + '.data';
+    let data = this.get(relationshipData);
+    if (!data) {
+      if (kind === 'hasOne') {
+        this.set(relationshipData, {});
+      } else if (kind === 'hasMany') {
+        this.set(relationshipData, Ember.A([]));
+      }
+    }
+    this._updateRelationshipsData(relation, ids);
   },
 
   /**
