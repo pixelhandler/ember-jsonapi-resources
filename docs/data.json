@@ -1060,8 +1060,9 @@
         {
             "file": "addon/mixins/fetch.js",
             "line": 64,
+            "description": "Fetch server error handler ~ status >= 500",
             "itemtype": "method",
-            "name": "fetchServerErrorHandler - Server Error status >= 500",
+            "name": "fetchServerErrorHandler",
             "params": [
                 {
                     "name": "response",
@@ -1080,51 +1081,54 @@
         },
         {
             "file": "addon/mixins/fetch.js",
-            "line": 74,
-            "itemtype": "method",
-            "name": "fetchClientErrorHandler - Client Error status >= 400",
-            "params": [
-                {
-                    "name": "response",
-                    "description": "- Fetch response",
-                    "type": "Response"
-                },
-                {
-                    "name": "reject",
-                    "description": "- Promise reject handler",
-                    "type": "Function"
-                }
-            ],
-            "class": "FetchMixin",
-            "module": "ember-jsonapi-resources",
-            "submodule": "fetch"
-        },
-        {
-            "file": "addon/mixins/fetch.js",
-            "line": 92,
-            "itemtype": "method",
-            "name": "fetchErrorHandler - Generic error handler",
-            "params": [
-                {
-                    "name": "response",
-                    "description": "- Fetch response",
-                    "type": "Response"
-                },
-                {
-                    "name": "reject",
-                    "description": "- Promise reject handler",
-                    "type": "Function"
-                }
-            ],
-            "class": "FetchMixin",
-            "module": "ember-jsonapi-resources",
-            "submodule": "fetch"
-        },
-        {
-            "file": "addon/mixins/fetch.js",
-            "line": 102,
+            "line": 76,
+            "description": "Fetch client error handler ~ status >= 400",
             "itemtype": "method",
             "name": "fetchClientErrorHandler",
+            "params": [
+                {
+                    "name": "response",
+                    "description": "- Fetch response",
+                    "type": "Response"
+                },
+                {
+                    "name": "reject",
+                    "description": "- Promise reject handler",
+                    "type": "Function"
+                }
+            ],
+            "class": "FetchMixin",
+            "module": "ember-jsonapi-resources",
+            "submodule": "fetch"
+        },
+        {
+            "file": "addon/mixins/fetch.js",
+            "line": 96,
+            "description": "Fetch generic error handler",
+            "itemtype": "method",
+            "name": "fetchErrorHandler",
+            "params": [
+                {
+                    "name": "response",
+                    "description": "- Fetch response",
+                    "type": "Response"
+                },
+                {
+                    "name": "reject",
+                    "description": "- Promise reject handler",
+                    "type": "Function"
+                }
+            ],
+            "class": "FetchMixin",
+            "module": "ember-jsonapi-resources",
+            "submodule": "fetch"
+        },
+        {
+            "file": "addon/mixins/fetch.js",
+            "line": 108,
+            "description": "Fetch 204 No Content handler",
+            "itemtype": "method",
+            "name": "fetchNoContentHandler",
             "params": [
                 {
                     "name": "response",
@@ -1143,7 +1147,8 @@
         },
         {
             "file": "addon/mixins/fetch.js",
-            "line": 113,
+            "line": 121,
+            "description": "Fetch 20x Success handler",
             "itemtype": "method",
             "name": "fetchSuccessHandler",
             "params": [
@@ -1169,7 +1174,7 @@
         },
         {
             "file": "addon/mixins/fetch.js",
-            "line": 134,
+            "line": 144,
             "description": "Makes an XHR request via $.ajax",
             "access": "private",
             "tagname": "",
@@ -1205,7 +1210,7 @@
         },
         {
             "file": "addon/mixins/fetch.js",
-            "line": 155,
+            "line": 165,
             "itemtype": "method",
             "name": "ajaxDoneHandler",
             "params": [
@@ -1225,7 +1230,7 @@
         },
         {
             "file": "addon/mixins/fetch.js",
-            "line": 178,
+            "line": 188,
             "itemtype": "method",
             "name": "ajaxDoneHandler",
             "params": [
@@ -1250,9 +1255,10 @@
         },
         {
             "file": "addon/mixins/fetch.js",
-            "line": 200,
+            "line": 210,
+            "description": "Ajax server error handler ~ status >= 500",
             "itemtype": "method",
-            "name": "ajaxServerErrorHandler - Server error status >= 500",
+            "name": "ajaxServerErrorHandler",
             "params": [
                 {
                     "name": "jqXHR",
@@ -1281,9 +1287,10 @@
         },
         {
             "file": "addon/mixins/fetch.js",
-            "line": 212,
+            "line": 224,
+            "description": "Ajax client error handler ~ status >= 400",
             "itemtype": "method",
-            "name": "ajaxClientErrorHandler - Client Error status >= 400",
+            "name": "ajaxClientErrorHandler",
             "params": [
                 {
                     "name": "jqXHR",
@@ -1312,9 +1319,10 @@
         },
         {
             "file": "addon/mixins/fetch.js",
-            "line": 236,
+            "line": 250,
+            "description": "Ajax Generic error handler",
             "itemtype": "method",
-            "name": "ajaxErrorHandler - Generic error handler",
+            "name": "ajaxErrorHandler",
             "params": [
                 {
                     "name": "jqXHR",
@@ -1343,7 +1351,8 @@
         },
         {
             "file": "addon/mixins/fetch.js",
-            "line": 253,
+            "line": 269,
+            "description": "Ajax 204 No Content handler",
             "itemtype": "method",
             "name": "ajaxNoContentHandler",
             "params": [
@@ -1374,7 +1383,8 @@
         },
         {
             "file": "addon/mixins/fetch.js",
-            "line": 264,
+            "line": 282,
+            "description": "Ajax 20x Success handler",
             "itemtype": "method",
             "name": "ajaxSuccessHandler",
             "params": [
@@ -1410,7 +1420,7 @@
         },
         {
             "file": "addon/mixins/fetch.js",
-            "line": 286,
+            "line": 306,
             "access": "private",
             "tagname": "",
             "itemtype": "method",
