@@ -6,7 +6,9 @@ export default Ember.Route.extend({
     const options = {
       query: {
         sort: '-date',
-        include: 'author'
+        include: 'author',
+        'page[offset]': 0,
+        'page[limit]': 5
       }
     };
     return this.store.find('posts', options);
