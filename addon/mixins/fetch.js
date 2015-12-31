@@ -62,7 +62,9 @@ export default Ember.Mixin.create({
   },
 
   /**
-    @method fetchServerErrorHandler - Server Error status >= 500
+    Fetch server error handler ~ status >= 500
+
+    @method fetchServerErrorHandler
     @param {Response} response - Fetch response
     @param {Function} reject - Promise reject handler
   */
@@ -72,7 +74,9 @@ export default Ember.Mixin.create({
   },
 
   /**
-    @method fetchClientErrorHandler - Client Error status >= 400
+    Fetch client error handler ~ status >= 400
+
+    @method fetchClientErrorHandler
     @param {Response} response - Fetch response
     @param {Function} reject - Promise reject handler
   */
@@ -90,7 +94,9 @@ export default Ember.Mixin.create({
   },
 
   /**
-    @method fetchErrorHandler - Generic error handler
+    Fetch generic error handler
+
+    @method fetchErrorHandler
     @param {Response} response - Fetch response
     @param {Function} reject - Promise reject handler
   */
@@ -100,7 +106,9 @@ export default Ember.Mixin.create({
   },
 
   /**
-    @method fetchClientErrorHandler
+    Fetch 204 No Content handler
+
+    @method fetchNoContentHandler
     @param {Response} response - Fetch response
     @param {Function} resolve - Promise resolve handler
   */
@@ -111,6 +119,8 @@ export default Ember.Mixin.create({
   },
 
   /**
+    Fetch 20x Success handler
+
     @method fetchSuccessHandler
     @param {Response} response - Fetch response
     @param {Function} resolve - Promise resolve handler
@@ -198,7 +208,9 @@ export default Ember.Mixin.create({
   },
 
   /**
-    @method ajaxServerErrorHandler - Server error status >= 500
+    Ajax server error handler ~ status >= 500
+
+    @method ajaxServerErrorHandler
     @param {Object} jqXHR
     @param {String} textStatus
     @param {String} errorThrown
@@ -210,7 +222,9 @@ export default Ember.Mixin.create({
   },
 
   /**
-    @method ajaxClientErrorHandler - Client Error status >= 400
+    Ajax client error handler ~ status >= 400
+
+    @method ajaxClientErrorHandler
     @param {Object} jqXHR
     @param {String} textStatus
     @param {String} errorThrown
@@ -234,7 +248,9 @@ export default Ember.Mixin.create({
   },
 
   /**
-    @method ajaxErrorHandler - Generic error handler
+    Ajax Generic error handler
+
+    @method ajaxErrorHandler
     @param {Object} jqXHR
     @param {String} textStatus
     @param {String} errorThrown
@@ -251,6 +267,8 @@ export default Ember.Mixin.create({
   },
 
   /**
+    Ajax 204 No Content handler
+
     @method ajaxNoContentHandler
     @param {Object} json - payload should be empty
     @param {String} textStatus
@@ -262,6 +280,8 @@ export default Ember.Mixin.create({
   },
 
   /**
+    Ajax 20x Success handler
+
     @method ajaxSuccessHandler
     @param {Object} json - payload
     @param {String} textStatus
