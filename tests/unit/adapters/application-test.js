@@ -268,7 +268,12 @@ test('when called with resource argument, #deleteResource calls #cacheRemove', f
 test('#fetch calls #fetchURL to customize if needed', function(assert) {
   const adapter = this.subject({type: 'posts', url: '/posts'});
   sandbox.stub(adapter, 'fetchUrl', function () {});
-  sandbox.stub(window, 'fetch', function () { return Ember.RSVP.Promise.resolve({ "status": 204 }); });
+  sandbox.stub(window, 'fetch', function () {
+    return Ember.RSVP.Promise.resolve({
+      "status": 204,
+      "text": function() { return Ember.RSVP.Promise.resolve(''); }
+    });
+  });
   let promise = adapter.fetch('/posts', { method: 'PATCH', body: 'json string here' });
   assert.ok(typeof promise.then === 'function', 'returns a thenable');
   assert.ok(adapter.fetchUrl.calledWith('/posts'), '#fetchUrl called with url');
@@ -433,7 +438,7 @@ test('#fetch handles 204 (Success, no content) response status w/o calling deser
   sandbox.stub(window, 'fetch', function () {
     return Ember.RSVP.Promise.resolve({
       "status": 204,
-      "json": function() { return Ember.RSVP.Promise.resolve(''); }
+      "text": function() { return Ember.RSVP.Promise.resolve(''); }
     });
   });
   sandbox.stub(adapter, 'cacheResource', function () {});
