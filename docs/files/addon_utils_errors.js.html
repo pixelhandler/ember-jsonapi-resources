@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>fetch - Ember JSON API Resources</title>
+    <title>addon/utils/errors.js - Ember JSON API Resources</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -97,40 +97,78 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-<h1>fetch Module</h1>
-<div class="box clearfix meta">
+<h1 class="file-heading">File: addon/utils/errors.js</h1>
 
+<div class="file">
+    <pre class="code prettyprint linenums">
+/**
+  @module ember-jsonapi-resources
+  @submodule utils
+**/
 
-        <div class="foundat">
-            Defined in: <a href="../files/addon_mixins_fetch.js.html#l8"><code>addon&#x2F;mixins&#x2F;fetch.js:8</code></a>
-        </div>
+/**
+  @constructor ServerError
+  @param {String} message
+  @param {Object} response
+  @return {Error}
+*/
+export function ServerError(message = &#x27;Server Error&#x27;, response = null) {
+  let _error = Error.prototype.constructor.call(this, message);
+  _error.name = this.name = &#x27;ServerError&#x27;;
+  this.stack = _error.stack;
+  this.message = _error.message;
 
-</div>
+  this.response = response;
+  this.errors = (response) ? response.errors || null : null;
+}
+ServerError.prototype = errorProtoFactory(ServerError);
 
+/**
+  @constructor ClientError
+  @param {String} message
+  @param {Object} response
+  @return {Error}
+*/
+export function ClientError(message = &#x27;Client Error&#x27;, response = null) {
+  let _error = Error.prototype.constructor.call(this, message);
+  _error.name = this.name = &#x27;ClientError&#x27;;
+  this.stack = _error.stack;
+  this.message = _error.message;
 
-<div class="box intro">
-    <p>Fetch/Ajax methods for use with an Adapter calls <code>cacheUpdate</code>, <code>cacheResource</code>
-methods and a <code>serializer</code> injection.</p>
+  this.response = response;
+  this.errors = (response) ? response.errors || null : null;
+}
+ClientError.prototype = errorProtoFactory(ClientError);
 
-</div>
+/**
+  @constructor FetchError
+  @param {String} message
+  @param {Error} error
+  @param {Object} response
+  @return {Error}
+*/
+export function FetchError(message = &#x27;Fetch Error&#x27;, error = null, response = null) {
+  let _error = Error.prototype.constructor.call(this, message);
+  _error.name = this.name = &#x27;FetchError&#x27;;
+  this.stack = (error &amp;&amp; error.stack) ? error.stack : _error.stack;
+  this.message = (error &amp;&amp; error.message) ? error.message : _error.message;
 
+  this.response = response;
+  this.error = error || _error;
+}
+FetchError.prototype = errorProtoFactory(FetchError);
 
-<div class="yui3-g">
-    <div class="yui3-u-1-2">
-            <p>This module provides the following classes:</p>
+function errorProtoFactory(ctor) {
+  return Object.create(Error.prototype, {
+    constructor: {
+      value: ctor,
+      writable: true,
+      configurable: true
+    }
+  });
+}
 
-            <ul class="module-classes">
-                <li class="module-class">
-                    <a href="../classes/FetchMixin.html">
-                        FetchMixin
-                    </a>
-                </li>
-            </ul>
-    </div>
-
-
-    <div class="yui3-u-1-2">
-    </div>
+    </pre>
 </div>
                     </div>
                 </div>

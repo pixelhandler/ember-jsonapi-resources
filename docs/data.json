@@ -110,6 +110,13 @@
             "fors": {},
             "namespaces": {}
         },
+        "addon/utils/errors.js": {
+            "name": "addon/utils/errors.js",
+            "modules": {},
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        },
         "addon/utils/has-many.js": {
             "name": "addon/utils/has-many.js",
             "modules": {},
@@ -254,7 +261,7 @@
             "module": "ember-jsonapi-resources",
             "namespace": "",
             "file": "addon/mixins/fetch.js",
-            "line": 7,
+            "line": 8,
             "description": "Fetch/Ajax methods for use with an Adapter calls `cacheUpdate`, `cacheResource`\nmethods and a `serializer` injection."
         },
         "cache": {
@@ -408,7 +415,7 @@
             "submodule": "fetch",
             "namespace": "",
             "file": "addon/mixins/fetch.js",
-            "line": 7,
+            "line": 8,
             "description": "Fetch/Ajax methods for use with an Adapter calls `cacheUpdate`, `cacheResource`\nmethods and a `serializer` injection."
         },
         "ServiceCacheMixin": {
@@ -997,7 +1004,7 @@
         },
         {
             "file": "addon/mixins/fetch.js",
-            "line": 14,
+            "line": 15,
             "description": "Flag indicates whether to use window.fetch or not",
             "itemtype": "property",
             "name": "useFetch",
@@ -1008,7 +1015,7 @@
         },
         {
             "file": "addon/mixins/fetch.js",
-            "line": 25,
+            "line": 26,
             "description": "Flag to use $.ajax instead of window.fetch",
             "itemtype": "property",
             "name": "useAjax",
@@ -1019,8 +1026,8 @@
         },
         {
             "file": "addon/mixins/fetch.js",
-            "line": 33,
-            "description": "Makes a fetch request via Fetch API (may use polyfill)\n\nsee http://updates.html5rocks.com/2015/03/introduction-to-fetch",
+            "line": 34,
+            "description": "Makes a fetch request via Fetch API (may use polyfill)\n\nSee http://updates.html5rocks.com/2015/03/introduction-to-fetch",
             "access": "private",
             "tagname": "",
             "itemtype": "method",
@@ -1033,7 +1040,7 @@
                 },
                 {
                     "name": "options",
-                    "description": "- may include a query object or an update flag",
+                    "description": "- May include a query object or an update flag",
                     "type": "Object"
                 },
                 {
@@ -1052,7 +1059,117 @@
         },
         {
             "file": "addon/mixins/fetch.js",
-            "line": 86,
+            "line": 64,
+            "itemtype": "method",
+            "name": "fetchServerErrorHandler - Server Error status >= 500",
+            "params": [
+                {
+                    "name": "response",
+                    "description": "- Fetch response",
+                    "type": "Response"
+                },
+                {
+                    "name": "reject",
+                    "description": "- Promise reject handler",
+                    "type": "Function"
+                }
+            ],
+            "class": "FetchMixin",
+            "module": "ember-jsonapi-resources",
+            "submodule": "fetch"
+        },
+        {
+            "file": "addon/mixins/fetch.js",
+            "line": 74,
+            "itemtype": "method",
+            "name": "fetchClientErrorHandler - Client Error status >= 400",
+            "params": [
+                {
+                    "name": "response",
+                    "description": "- Fetch response",
+                    "type": "Response"
+                },
+                {
+                    "name": "reject",
+                    "description": "- Promise reject handler",
+                    "type": "Function"
+                }
+            ],
+            "class": "FetchMixin",
+            "module": "ember-jsonapi-resources",
+            "submodule": "fetch"
+        },
+        {
+            "file": "addon/mixins/fetch.js",
+            "line": 92,
+            "itemtype": "method",
+            "name": "fetchErrorHandler - Generic error handler",
+            "params": [
+                {
+                    "name": "response",
+                    "description": "- Fetch response",
+                    "type": "Response"
+                },
+                {
+                    "name": "reject",
+                    "description": "- Promise reject handler",
+                    "type": "Function"
+                }
+            ],
+            "class": "FetchMixin",
+            "module": "ember-jsonapi-resources",
+            "submodule": "fetch"
+        },
+        {
+            "file": "addon/mixins/fetch.js",
+            "line": 102,
+            "itemtype": "method",
+            "name": "fetchClientErrorHandler",
+            "params": [
+                {
+                    "name": "response",
+                    "description": "- Fetch response",
+                    "type": "Response"
+                },
+                {
+                    "name": "resolve",
+                    "description": "- Promise resolve handler",
+                    "type": "Function"
+                }
+            ],
+            "class": "FetchMixin",
+            "module": "ember-jsonapi-resources",
+            "submodule": "fetch"
+        },
+        {
+            "file": "addon/mixins/fetch.js",
+            "line": 113,
+            "itemtype": "method",
+            "name": "fetchSuccessHandler",
+            "params": [
+                {
+                    "name": "response",
+                    "description": "- Fetch response",
+                    "type": "Response"
+                },
+                {
+                    "name": "resolve",
+                    "description": "- Promise resolve handler",
+                    "type": "Function"
+                },
+                {
+                    "name": "isUpdate",
+                    "description": "- Used with patch to update a resource",
+                    "type": "Boolean"
+                }
+            ],
+            "class": "FetchMixin",
+            "module": "ember-jsonapi-resources",
+            "submodule": "fetch"
+        },
+        {
+            "file": "addon/mixins/fetch.js",
+            "line": 134,
             "description": "Makes an XHR request via $.ajax",
             "access": "private",
             "tagname": "",
@@ -1088,7 +1205,212 @@
         },
         {
             "file": "addon/mixins/fetch.js",
-            "line": 143,
+            "line": 155,
+            "itemtype": "method",
+            "name": "ajaxDoneHandler",
+            "params": [
+                {
+                    "name": "reject",
+                    "description": "- Promise reject handler",
+                    "type": "Function"
+                }
+            ],
+            "return": {
+                "description": "closure with reject handler",
+                "type": "Function"
+            },
+            "class": "FetchMixin",
+            "module": "ember-jsonapi-resources",
+            "submodule": "fetch"
+        },
+        {
+            "file": "addon/mixins/fetch.js",
+            "line": 178,
+            "itemtype": "method",
+            "name": "ajaxDoneHandler",
+            "params": [
+                {
+                    "name": "resolve",
+                    "description": "- Promise resolve handler",
+                    "type": "Function"
+                },
+                {
+                    "name": "isUpdate",
+                    "description": "- Used with patch to update a resource",
+                    "type": "Boolean"
+                }
+            ],
+            "return": {
+                "description": "closure with resolve handler",
+                "type": "Function"
+            },
+            "class": "FetchMixin",
+            "module": "ember-jsonapi-resources",
+            "submodule": "fetch"
+        },
+        {
+            "file": "addon/mixins/fetch.js",
+            "line": 200,
+            "itemtype": "method",
+            "name": "ajaxServerErrorHandler - Server error status >= 500",
+            "params": [
+                {
+                    "name": "jqXHR",
+                    "description": "",
+                    "type": "Object"
+                },
+                {
+                    "name": "textStatus",
+                    "description": "",
+                    "type": "String"
+                },
+                {
+                    "name": "errorThrown",
+                    "description": "",
+                    "type": "String"
+                },
+                {
+                    "name": "reject",
+                    "description": "- Promise reject handler",
+                    "type": "Function"
+                }
+            ],
+            "class": "FetchMixin",
+            "module": "ember-jsonapi-resources",
+            "submodule": "fetch"
+        },
+        {
+            "file": "addon/mixins/fetch.js",
+            "line": 212,
+            "itemtype": "method",
+            "name": "ajaxClientErrorHandler - Client Error status >= 400",
+            "params": [
+                {
+                    "name": "jqXHR",
+                    "description": "",
+                    "type": "Object"
+                },
+                {
+                    "name": "textStatus",
+                    "description": "",
+                    "type": "String"
+                },
+                {
+                    "name": "errorThrown",
+                    "description": "",
+                    "type": "String"
+                },
+                {
+                    "name": "reject",
+                    "description": "- Promise reject handler",
+                    "type": "Function"
+                }
+            ],
+            "class": "FetchMixin",
+            "module": "ember-jsonapi-resources",
+            "submodule": "fetch"
+        },
+        {
+            "file": "addon/mixins/fetch.js",
+            "line": 236,
+            "itemtype": "method",
+            "name": "ajaxErrorHandler - Generic error handler",
+            "params": [
+                {
+                    "name": "jqXHR",
+                    "description": "",
+                    "type": "Object"
+                },
+                {
+                    "name": "textStatus",
+                    "description": "",
+                    "type": "String"
+                },
+                {
+                    "name": "errorThrown",
+                    "description": "",
+                    "type": "String"
+                },
+                {
+                    "name": "reject",
+                    "description": "- Promise reject handler",
+                    "type": "Function"
+                }
+            ],
+            "class": "FetchMixin",
+            "module": "ember-jsonapi-resources",
+            "submodule": "fetch"
+        },
+        {
+            "file": "addon/mixins/fetch.js",
+            "line": 253,
+            "itemtype": "method",
+            "name": "ajaxNoContentHandler",
+            "params": [
+                {
+                    "name": "json",
+                    "description": "- payload should be empty",
+                    "type": "Object"
+                },
+                {
+                    "name": "textStatus",
+                    "description": "",
+                    "type": "String"
+                },
+                {
+                    "name": "jqXHR",
+                    "description": "",
+                    "type": "JqXHR"
+                },
+                {
+                    "name": "resolve",
+                    "description": "- Promise resolve handler",
+                    "type": "Function"
+                }
+            ],
+            "class": "FetchMixin",
+            "module": "ember-jsonapi-resources",
+            "submodule": "fetch"
+        },
+        {
+            "file": "addon/mixins/fetch.js",
+            "line": 264,
+            "itemtype": "method",
+            "name": "ajaxSuccessHandler",
+            "params": [
+                {
+                    "name": "json",
+                    "description": "- payload",
+                    "type": "Object"
+                },
+                {
+                    "name": "textStatus",
+                    "description": "",
+                    "type": "String"
+                },
+                {
+                    "name": "jqXHR",
+                    "description": "",
+                    "type": "JqXHR"
+                },
+                {
+                    "name": "resolve",
+                    "description": "- Promise resolve handler",
+                    "type": "Function"
+                },
+                {
+                    "name": "isUpdate",
+                    "description": "- Used with patch to update a resource",
+                    "type": "Boolean"
+                }
+            ],
+            "class": "FetchMixin",
+            "module": "ember-jsonapi-resources",
+            "submodule": "fetch"
+        },
+        {
+            "file": "addon/mixins/fetch.js",
+            "line": 286,
             "access": "private",
             "tagname": "",
             "itemtype": "method",
@@ -2118,6 +2440,83 @@
             "submodule": "utils"
         },
         {
+            "file": "addon/utils/errors.js",
+            "line": 6,
+            "is_constructor": 1,
+            "params": [
+                {
+                    "name": "message",
+                    "description": "",
+                    "type": "String"
+                },
+                {
+                    "name": "response",
+                    "description": "",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Error"
+            },
+            "class": "RelatedProxyUtil",
+            "module": "ember-jsonapi-resources",
+            "submodule": "utils"
+        },
+        {
+            "file": "addon/utils/errors.js",
+            "line": 23,
+            "is_constructor": 1,
+            "params": [
+                {
+                    "name": "message",
+                    "description": "",
+                    "type": "String"
+                },
+                {
+                    "name": "response",
+                    "description": "",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Error"
+            },
+            "class": "RelatedProxyUtil",
+            "module": "ember-jsonapi-resources",
+            "submodule": "utils"
+        },
+        {
+            "file": "addon/utils/errors.js",
+            "line": 40,
+            "is_constructor": 1,
+            "params": [
+                {
+                    "name": "message",
+                    "description": "",
+                    "type": "String"
+                },
+                {
+                    "name": "error",
+                    "description": "",
+                    "type": "Error"
+                },
+                {
+                    "name": "response",
+                    "description": "",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Error"
+            },
+            "class": "RelatedProxyUtil",
+            "module": "ember-jsonapi-resources",
+            "submodule": "utils"
+        },
+        {
             "file": "addon/utils/has-many.js",
             "line": 11,
             "description": "Helper to setup a has many relationship to another resource\n\n```js\nlet Author = Resource.extend({\n  type: 'authors',\n  name: attr(),\n  posts: hasMany('posts')\n});\n```\n\nOr, with an optional type to use instead of the resource's service\n\n```js\nlet Person = Resource.extend({\n  type: 'people',\n  name: attr()\n});\n\nlet Supervisor = Person.extend({\n  type: 'supervisors',\n  directReports: hasMany({ resource: 'employees', type: 'people' })\n});\n```",
@@ -2458,6 +2857,18 @@
         {
             "message": "replacing incorrect tag: parm with param",
             "line": " addon/utils/transform-map.js:37"
+        },
+        {
+            "message": "Missing item type",
+            "line": " addon/utils/errors.js:6"
+        },
+        {
+            "message": "Missing item type",
+            "line": " addon/utils/errors.js:23"
+        },
+        {
+            "message": "Missing item type",
+            "line": " addon/utils/errors.js:40"
         }
     ]
 }
