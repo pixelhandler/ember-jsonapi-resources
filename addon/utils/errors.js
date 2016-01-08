@@ -14,7 +14,7 @@ export function ServerError(message = 'Server Error', response = null) {
   _error.name = this.name = 'ServerError';
   this.stack = _error.stack;
   this.message = _error.message;
-
+  this.name = 'ServerError';
   this.response = response;
   this.errors = (response) ? response.errors || null : null;
 }
@@ -31,7 +31,7 @@ export function ClientError(message = 'Client Error', response = null) {
   _error.name = this.name = 'ClientError';
   this.stack = _error.stack;
   this.message = _error.message;
-
+  this.name = 'ClientError';
   this.response = response;
   this.errors = (response) ? response.errors || null : null;
 }
@@ -49,7 +49,7 @@ export function FetchError(message = 'Fetch Error', error = null, response = nul
   _error.name = this.name = 'FetchError';
   this.stack = (error && error.stack) ? error.stack : _error.stack;
   this.message = (error && error.message) ? error.message : _error.message;
-
+  this.name = 'FetchError';
   this.response = response;
   this.error = error || _error;
 }
