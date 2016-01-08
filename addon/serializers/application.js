@@ -1,6 +1,6 @@
 /**
   @module ember-jsonapi-resources
-  @submodule serializer
+  @submodule serializers
 **/
 
 import Ember from 'ember';

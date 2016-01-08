@@ -1,6 +1,6 @@
 /**
   @module ember-jsonapi-resources
-  @submodule store
+  @submodule initializers
 **/
 
 import StoreService from 'ember-jsonapi-resources/services/store';
@@ -9,6 +9,7 @@ import StoreService from 'ember-jsonapi-resources/services/store';
   Initializer for the store service, injects into the route and controller
 
   @method initialize
+  @for StoreService
   @requires StoreService
 */
 export function initialize() {

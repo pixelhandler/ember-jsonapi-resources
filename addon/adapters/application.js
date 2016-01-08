@@ -1,6 +1,6 @@
 /**
   @module ember-jsonapi-resources
-  @submodule adapter
+  @submodule adapters
 **/
 
 import Ember from 'ember';

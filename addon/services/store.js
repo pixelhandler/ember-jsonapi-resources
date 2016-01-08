@@ -3,7 +3,6 @@
   @submodule store
 **/
 
-
 import Ember from 'ember';
 import { pluralize } from 'ember-inflector';
 
