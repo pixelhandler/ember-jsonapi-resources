@@ -10,6 +10,8 @@ import hasOne from 'ember-jsonapi-resources/utils/has-one';
 import hasMany from 'ember-jsonapi-resources/utils/has-many';
 import { isType } from 'ember-jsonapi-resources/utils/is';
 
+const { computed, Logger } = Ember;
+
 /**
   A Resource class to create JSON API resource objects
 
@@ -230,7 +232,7 @@ const Resource = Ember.Object.extend({
     @method changedAttributes
     @return {Object} the changed attributes
   */
-  changedAttributes: Ember.computed('attributes', {
+  changedAttributes: computed('attributes', {
     get: function () {
       const attrs = {};
       for (let key in this._attributes) {
@@ -248,7 +250,7 @@ const Resource = Ember.Object.extend({
     @method previousAttributes
     @return {Object} the previous attributes
   */
-  previousAttributes: Ember.computed('attributes', {
+  previousAttributes: computed('attributes', {
     get: function () {
       const attrs = {};
       for (let key in this._attributes) {
@@ -347,7 +349,7 @@ const Resource = Ember.Object.extend({
     @property isCacheExpired
     @type Boolean
   */
-  isCacheExpired: Ember.computed('meta.timeStamps.local', 'cacheDuration', function () {
+  isCacheExpired: computed('meta.timeStamps.local', 'cacheDuration', function () {
     const localTime = this.get('meta.timeStamps.local');
     const expiresTime = localTime + this.get('cacheDuration');
     return (localTime) ? Date.now() >= expiresTime : false;
@@ -366,7 +368,8 @@ Resource.reopenClass({
 
     ```
     model() {
-      return this.container.lookupFactory('model:post').create({
+      let owner = (typeof Ember.getOwner === 'function') ? Ember.getOwner(this) : this.container;
+      return owner.lookup('model:post').create({
         attributes: {
           title: 'The JSON API 1.0 Spec Rocks!'
         }
@@ -399,14 +402,16 @@ Resource.reopenClass({
     let msg = (type) ? Ember.String.capitalize(type) : 'Resource';
     let factory = 'model:' + type;
     if (!type) {
-      Ember.Logger.warn(msg + '#create called, instead you should first use ' + msg + '.extend({type:"entity"})');
+      Logger.warn(msg + '#create called, instead you should first use ' + msg + '.extend({type:"entity"})');
     } else {
-      if (instance.container) {
-        useComputedPropsMetaToSetupRelationships(factory, instance);
+      let owner = (typeof Ember.getOwner === 'function') ? Ember.getOwner(instance) : instance.container;
+      if (owner) {
+        useComputedPropsMetaToSetupRelationships(owner, factory, instance);
       } else {
-        msg += '#create should only be called from a container lookup (relationships not setup) ';
-        msg += 'use this.container.lookupFactory("' + factory + '").create() instead.';
-        Ember.Logger.warn(msg);
+        msg += '#create should only be called from a container lookup (relationships not setup), instead use: \n';
+        msg += "`let owner = (typeof Ember.getOwner === 'function') ? Ember.getOwner(this) : this.container; \n";
+        msg += 'owner.lookup("' + factory + '").create()`';
+        Logger.warn(msg);
       }
     }
     return instance;
@@ -420,8 +425,8 @@ export { attr, hasOne, hasMany };
 let _rp = 'service type id attributes relationships links meta _attributes isNew cacheDuration isCacheExpired';
 const ignoredMetaProps = _rp.split(' ');
 
-function useComputedPropsMetaToSetupRelationships(factory, instance) {
-  factory = instance.container.lookupFactory(factory);
+function useComputedPropsMetaToSetupRelationships(owner, factory, instance) {
+  factory = owner.lookup(factory);
   factory.eachComputedProperty(function(prop) {
     if (ignoredMetaProps.indexOf(prop) > -1) { return; }
     try {

@@ -1,18 +1,22 @@
 import Ember from 'ember';
 import ServiceCacheMixin from '../../../mixins/service-cache';
-import { module, test } from 'qunit';
-import { Post } from 'dummy/tests/helpers/resources';
+import { moduleFor, test } from 'ember-qunit';
+import { setup, teardown } from 'dummy/tests/helpers/resources';
 
-let sandbox, subject;
+let sandbox, subject, Post;
 
-module('Unit | Mixin | service cache', {
+moduleFor('mixin:service-cache', 'Unit | Mixin | service-cache', {
   beforeEach() {
     sandbox = window.sinon.sandbox.create();
     let ServiceCacheObject = Ember.Object.extend(ServiceCacheMixin);
     subject = ServiceCacheObject.create();
+    setup.call(this);
+    Post = this.container.lookup('model:post');
   },
   afterEach() {
     sandbox.restore();
+    teardown.call(this);
+    Post = null;
   }
 });
 

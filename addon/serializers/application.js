@@ -155,7 +155,8 @@ export default Ember.Object.extend({
     if (!related) { return; }
     let resource, service;
     for (let i = 0; i < related.length; i++) {
-      service = this.container.lookup('service:' + pluralize(related[i].type));
+      let owner = (typeof Ember.getOwner === 'function') ? Ember.getOwner(this) : this.container;
+      service = owner.lookup('service:' + pluralize(related[i].type));
       if (service && service.cache && service.cache.data) {
         resource = service.serializer.deserializeResource(related[i]);
         service.cacheResource({ meta: resp.meta, data: resource, headers: resp.headers});
@@ -238,7 +239,8 @@ export default Ember.Object.extend({
     @return {Function} factory for creating resource instances
   */
   _lookupFactory(type) {
-    return this.container.lookupFactory('model:' + singularize(type));
+    let owner = (typeof Ember.getOwner === 'function') ? Ember.getOwner(this) : this.container;
+    return owner.lookup('model:' + singularize(type));
   }
 });
 

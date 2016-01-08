@@ -93,11 +93,11 @@ test('#findQuery calls #fetch url including a query', function(assert) {
 
 test('#findRelated', function(assert) {
   this.registry.register('service:authors', Adapter.extend({type: 'authors', url: '/authors'}));
-  let resource = this.container.lookupFactory('model:post').create(postMock.data);
+  let resource = this.container.lookup('model:post').create(postMock.data);
   let url = resource.get( ['relationships', 'author', 'links', 'related'].join('.') );
   const adapter = this.subject({type: 'posts', url: '/posts'});
   let service = this.container.lookup('service:authors');
-  let related = this.container.lookupFactory('model:author').create(authorMock.data);
+  let related = this.container.lookup('model:author').create(authorMock.data);
   sandbox.stub(service, 'fetch', function () { return Ember.RSVP.Promise.resolve(related); });
   let promise = adapter.findRelated('author', url);
   assert.ok(typeof promise.then === 'function', 'returns a thenable');
@@ -113,7 +113,7 @@ test('#findRelated can be called with optional type for the resource', function 
   PersonAdapter.reopenClass({ isServiceFactory: true });
   this.registry.register('service:people', PersonAdapter.extend());
   let service = this.container.lookup('service:people');
-  let supervisor = this.container.lookupFactory('model:employee').create({
+  let supervisor = this.container.lookup('model:employee').create({
     type: 'supervisors',
     id: 1000000,
     name: 'The Boss',
@@ -128,7 +128,7 @@ test('#findRelated can be called with optional type for the resource', function 
   let stub = sandbox.stub(service, 'findRelated', function () {
     return Ember.RSVP.Promise.resolve(supervisor);
   });
-  let resource = this.container.lookupFactory('model:employee').create({
+  let resource = this.container.lookup('model:employee').create({
     type: 'employees',
     id: 1000001,
     name: 'The Special',
@@ -154,7 +154,7 @@ test('#createResource', function(assert) {
   assert.expect(6);
   let done = assert.async();
   const adapter = this.subject({type: 'posts', url: '/posts'});
-  let postFactory = this.container.lookupFactory('model:post');
+  let postFactory = this.container.lookup('model:post');
   let data = JSON.parse(JSON.stringify(postMock.data));
   delete data.id;
   let newResource = postFactory.create(data);
@@ -187,7 +187,7 @@ test('#updateResource', function(assert) {
   };
   adapter.serializer = { serializeChanged: function () { return payload; } };
   sandbox.stub(adapter, 'fetch', function () { return Ember.RSVP.Promise.resolve(null); });
-  let resource = this.container.lookupFactory('model:post').create(postMock.data);
+  let resource = this.container.lookup('model:post').create(postMock.data);
   let promise = adapter.updateResource(resource);
   assert.ok(typeof promise.then === 'function', 'returns a thenable');
   assert.ok(adapter.fetch.calledOnce, '#fetch method called');
@@ -200,7 +200,7 @@ test('#updateResource returns null when serializer returns null (nothing changed
   const adapter = this.subject({type: 'posts', url: '/posts'});
   adapter.serializer = { serializeChanged: function () { return null; } };
   sandbox.stub(adapter, 'fetch', function () { return Ember.RSVP.Promise.resolve(null); });
-  let resource = this.container.lookupFactory('model:post').create(postMock.data);
+  let resource = this.container.lookup('model:post').create(postMock.data);
   let promise = adapter.updateResource(resource);
   assert.equal(promise, null, 'null returned instead of promise');
   assert.ok(!adapter.fetch.calledOnce, '#fetch method NOT called');
@@ -209,7 +209,7 @@ test('#updateResource returns null when serializer returns null (nothing changed
 test('#patchRelationship (to-many)', function(assert) {
   const adapter = this.subject({type: 'posts', url: '/posts'});
   sandbox.stub(adapter, 'fetch', function () { return Ember.RSVP.Promise.resolve(null); });
-  let resource = this.container.lookupFactory('model:post').create(postMock.data);
+  let resource = this.container.lookup('model:post').create(postMock.data);
   resource.addRelationship('comments', '1');
   let promise = adapter.patchRelationship(resource, 'comments');
   assert.ok(typeof promise.then === 'function', 'returns a thenable');
@@ -222,7 +222,7 @@ test('#patchRelationship (to-many)', function(assert) {
 test('#patchRelationship (to-one)', function(assert) {
   const adapter = this.subject({type: 'posts', url: '/posts'});
   sandbox.stub(adapter, 'fetch', function () { return Ember.RSVP.Promise.resolve(null); });
-  let resource = this.container.lookupFactory('model:post').create(postMock.data);
+  let resource = this.container.lookup('model:post').create(postMock.data);
   resource.addRelationship('author', '1');
   let promise = adapter.patchRelationship(resource, 'author');
   assert.ok(typeof promise.then === 'function', 'returns a thenable');
@@ -244,7 +244,7 @@ test('#deleteResource can be called with a string as the id for the resource', f
 test('#deleteResource can be called with a resource having a self link, and calls resource#destroy', function(assert) {
   const adapter = this.subject({type: 'posts', url: '/posts'});
   sandbox.stub(adapter, 'fetch', function () { return Ember.RSVP.Promise.resolve(null); });
-  let resource = this.container.lookupFactory('model:post').create(postMock.data);
+  let resource = this.container.lookup('model:post').create(postMock.data);
   sandbox.stub(resource, 'destroy', function () {});
   let promise = adapter.deleteResource(resource);
   assert.ok(typeof promise.then === 'function', 'returns a thenable');
@@ -257,7 +257,7 @@ test('#deleteResource can be called with a resource having a self link, and call
 test('when called with resource argument, #deleteResource calls #cacheRemove', function(assert) {
   const adapter = this.subject({type: 'posts', url: '/posts'});
   sandbox.stub(adapter, 'fetch', function () { return Ember.RSVP.Promise.resolve(null); });
-  let resource = this.container.lookupFactory('model:post').create(postMock.data);
+  let resource = this.container.lookup('model:post').create(postMock.data);
   sandbox.stub(adapter, 'cacheRemove', function () {});
   Ember.run(function() {
     adapter.deleteResource(resource);
@@ -360,7 +360,7 @@ test('#cacheUpdate called after #updateResource success', function(assert) {
     serializeChanged: function () { return payload; },
     transformAttributes: function(json) { return json; }
   };
-  let resource = this.container.lookupFactory('model:post').create(postMock.data);
+  let resource = this.container.lookup('model:post').create(postMock.data);
   let promise = adapter.updateResource(resource);
   assert.ok(typeof promise.then === 'function', 'returns a thenable');
   promise.then(function() {
@@ -418,7 +418,7 @@ test('#fetch handles 4xx (Client Error) response status', function(assert) {
     return Ember.RSVP.Promise.resolve({
       "status": 404,
       "text": function() {
-        return Ember.RSVP.Promise.resolve("{ errors: [ { status: 404 } ] }");
+        return Ember.RSVP.Promise.resolve('{ "errors": [ { "status": 404 } ] }');
       }
     });
   });

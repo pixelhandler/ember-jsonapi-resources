@@ -1,5 +1,6 @@
 import Resource from 'ember-jsonapi-resources/models/resource';
 import { attr, hasOne, hasMany } from 'ember-jsonapi-resources/models/resource';
+import Ember from 'ember';
 
 export const Post = Resource.extend({
   type: 'posts',
@@ -47,23 +48,39 @@ export const Supervisor = Employee.extend({
 
 export function setup() {
   const opts = { instantiate: false, singleton: false };
-  Post.prototype.container = this.container;
+  setupOwner.call(this);
   this.registry.register('model:post', Post, opts);
-  Author.prototype.container = this.container;
   this.registry.register('model:author', Author, opts);
-  Comment.prototype.container = this.container;
   this.registry.register('model:comment', Comment, opts);
-  Commenter.prototype.container = this.container;
   this.registry.register('model:commenter', Commenter, opts);
-  Person.prototype.container = this.container;
   this.registry.register('model:person', Person, opts);
-  Employee.prototype.container = this.container;
   this.registry.register('model:employee', Employee, opts);
-  Supervisor.prototype.container = this.container;
   this.registry.register('model:supervisor', Supervisor, opts);
 }
 
+function setupOwner() {
+  this._ogContainer = this.container;
+  let ogLookup, ogLookupFactory;
+  if (typeof Ember.getOwner === 'function') {
+    this.container = this.owner || Ember.getOwner(this);
+    ogLookup = this.container.lookup;
+    ogLookupFactory = this.container._lookupFactory;
+  } else {
+    ogLookup = this._ogContainer.lookup;
+    ogLookupFactory = this._ogContainer.lookupFactory;
+  }
+  this.container.lookup = function(factory) {
+    if (factory.match(/^model/) !== null) {
+      return ogLookupFactory.call(this, factory);
+    } else {
+      return ogLookup.call(this, factory);
+    }
+  };
+}
+
 export function teardown() {
+  this.container = this._ogContainer;
+  delete this._ogContainer;
   delete Post.prototype.container;
   delete Author.prototype.container;
   delete Comment.prototype.container;

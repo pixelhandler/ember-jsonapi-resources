@@ -1,5 +1,4 @@
 import { moduleFor, test } from 'ember-qunit';
-import Ember from 'ember';
 import { setup, teardown } from 'dummy/tests/helpers/resources';
 
 import authorMock from 'fixtures/api/authors/1';
@@ -37,7 +36,7 @@ test('#serialize calls serializeResource', function(assert) {
 
 test('#serializeResource with only attributes data', function(assert) {
   const serializer = this.subject();
-  let resource = this.container.lookupFactory('model:author').create({
+  let resource = this.container.lookup('model:author').create({
     attributes: authorMock.data.attributes
   });
   let data = serializer.serializeResource(resource);
@@ -54,7 +53,7 @@ test('#serializeResource with only attributes data', function(assert) {
 
 test('#serializeResource with attributes and relationship', function(assert) {
   const serializer = this.subject();
-  let resource = this.container.lookupFactory('model:post').create({
+  let resource = this.container.lookup('model:post').create({
     attributes: postMock.data.attributes
   });
   resource.addRelationship('author', '1');
@@ -75,13 +74,13 @@ test('#serializeResource with attributes and relationship', function(assert) {
 
 test('#serializeChanged', function(assert) {
   const serializer = this.subject();
-  let resource = this.container.lookupFactory('model:post').create(postMock.data);
+  let resource = this.container.lookup('model:post').create(postMock.data);
   let changedTitle = postMock.data.attributes.title + ' changed';
   resource.set('title', changedTitle);
   let serialized = serializer.serializeChanged(resource);
-  let actual = Ember.keys(serialized.data.attributes).length;
+  let actual = Object.keys(serialized.data.attributes).length;
   assert.equal(actual, 1, 'only 1 attribute is serialized.');
-  actual = Ember.keys(serialized.data.attributes)[0];
+  actual = Object.keys(serialized.data.attributes)[0];
   assert.equal(actual, 'title', 'only the changed title is serialized.');
   actual = serialized.data.attributes.title;
   assert.equal(actual, changedTitle, 'title is serialized with changed value');
@@ -89,7 +88,7 @@ test('#serializeChanged', function(assert) {
 
 test('when #serializedChanged has nothing to return', function(assert) {
   const serializer = this.subject();
-  let resource = this.container.lookupFactory('model:post').create(postMock.data);
+  let resource = this.container.lookup('model:post').create(postMock.data);
   let serialized = serializer.serializeChanged(resource);
   assert.equal(serialized, null, 'null is returned when there are no changed attributes');
 });

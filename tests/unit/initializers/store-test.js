@@ -2,7 +2,7 @@ import Ember from 'ember';
 import { initialize } from '../../../initializers/store';
 import { module, test } from 'qunit';
 
-var registry, application, factories, injections;
+let registry, application, factories, injections;
 
 module('Unit | Initializer | store', {
   beforeEach: function() {
@@ -10,8 +10,8 @@ module('Unit | Initializer | store', {
       application = Ember.Application.create();
       registry = application.registry;
       application.deferReadiness();
+      application = stub(application);
     });
-    application = stub(application);
   },
   afterEach: function() {
     factories = null;

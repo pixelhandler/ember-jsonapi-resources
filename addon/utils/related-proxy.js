@@ -81,7 +81,8 @@ const RelatedProxyUtil = Ember.Object.extend({
     let relation = this.get('relationship');
     let type = this.get('type');
     let url = this.proxyUrl(resource, relation);
-    let service = resource.container.lookup('service:' + pluralize(type));
+    let owner = (typeof Ember.getOwner === 'function') ? Ember.getOwner(resource) : resource.container;
+    let service = owner.lookup('service:' + pluralize(type));
     let promise = this.promiseFromCache(resource, relation, service);
     promise = promise || service.findRelated({'resource': relation, 'type': type}, url);
     let proxyProto = proxyFactory.extend(Ember.PromiseProxyMixin, {

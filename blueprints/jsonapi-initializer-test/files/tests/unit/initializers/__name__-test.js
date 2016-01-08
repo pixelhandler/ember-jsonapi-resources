@@ -21,15 +21,12 @@ module('<%= friendlyTestName %>', {
   }
 });
 
-test('it registers <%= resource %> factories: model, service, adapter, serializer; injects: service, serializer', function(assert) {
+test('it registers <%= resource %> factory: model, injects into: service, serializer', function(assert) {
   <%= classifiedModuleName %>Initializer.initialize(registry, application);
 
   let registered = Ember.A(factories.mapBy('name'));
-  assert.ok(registered.contains('model:<%= resource %>'), 'model:<%= resource %> registered');
-  assert.ok(registered.contains('service:<%= resource %>'), 'service:<%= resource %> registered');
-  assert.ok(registered.contains('adapter:<%= resource %>'), 'adapter:<%= resource %> registered');
-  assert.ok(registered.contains('serializer:<%= resource %>'), 'serializer:<%= resource %> registered');
-  let msg = 'briefs injected into service:store';
+  assert.ok(registered.contains('model:<%= entity %>'), 'model:<%= entity %> registered');
+  let msg = '<%= resource %> injected into service:store';
   assert.equal(injections.findBy('factory', 'service:store').property, '<%= resource %>', msg);
   msg = 'serializer injected into service:<%= resource %>';
   assert.equal(injections.findBy('factory', 'service:<%= resource %>').property, 'serializer', msg);
