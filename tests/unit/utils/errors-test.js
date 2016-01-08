@@ -8,8 +8,8 @@ test('ServerError', function(assert) {
     function() {
       throw new ServerError();
     },
-    ServerError,
-    "raised error is an instance of ServerError"
+    Error,
+    "raised ServerError is an instance of Error"
   );
 });
 
@@ -18,8 +18,8 @@ test('ClientError', function(assert) {
     function() {
       throw new ClientError();
     },
-    ClientError,
-    "raised error is an instance of ClientError"
+    Error,
+    "raised ClientError is an instance of Error"
   );
 });
 
@@ -28,7 +28,7 @@ test('FetchError', function(assert) {
     function() {
       throw new FetchError();
     },
-    FetchError,
-    "raised error is an instance of FetchError"
+    Error,
+    "raised FetchError is an instance of Error"
   );
 });
