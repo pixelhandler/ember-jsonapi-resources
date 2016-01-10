@@ -1,13 +1,16 @@
 /**
-  @module utils
-  @submodule transform-map
-*/
+  @module ember-jsonapi-resources
+  @submodule utils
+**/
+
 import { isBlank, isType } from './is';
 
 /**
   Abstract class to transform mapped data structures
 
   @class TransformMap
+  @constructor
+  @main TransformMap
 **/
 export default class TransformMap {
 

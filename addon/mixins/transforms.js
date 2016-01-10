@@ -17,6 +17,7 @@ import { dateTransform } from 'ember-jsonapi-resources/utils/transforms';
   e.g. attr('array')
 
   @class TransformsMixin
+  @static
 */
 export default Ember.Mixin.create({
   /**

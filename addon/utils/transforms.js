@@ -7,6 +7,7 @@ import { isBlank, isType } from 'ember-jsonapi-resources/utils/is';
 
 /**
   @class TransformDateAttribute
+  @constructor
 */
 class TransformDateAttribute {
 
@@ -42,4 +43,7 @@ class TransformDateAttribute {
 
 }
 
+/**
+  @main dateTransform
+*/
 export let dateTransform = new TransformDateAttribute();

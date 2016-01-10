@@ -10,10 +10,11 @@ import { ServerError, ClientError, FetchError } from 'ember-jsonapi-resources/ut
   methods and a `serializer` injection.
 
   @class FetchMixin
+  @static
 */
 export default Ember.Mixin.create({
   /**
-    Flag indicates whether to use window.fetch or not
+    Flag indicates whether to use window.fetch or not, computed from `useAjax`
 
     @property useFetch
     @type Boolean
@@ -163,7 +164,7 @@ export default Ember.Mixin.create({
   },
 
   /**
-    @method ajaxDoneHandler
+    @method ajaxFailHandler
     @param {Function} reject - Promise reject handler
     @return {Function} closure with reject handler
   */

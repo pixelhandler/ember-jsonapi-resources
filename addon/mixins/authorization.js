@@ -11,6 +11,7 @@ import Ember from 'ember';
   The default solution is to use localStorage['AuthorizationHeader'] for the credential
 
   @class AuthorizationMixin
+  @static
 */
 export default Ember.Mixin.create({
 

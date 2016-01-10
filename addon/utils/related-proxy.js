@@ -172,6 +172,11 @@ const RelatedProxyUtil = Ember.Object.extend({
 
 export default RelatedProxyUtil;
 
+/**
+  @method linksPath
+  @param {String} relation
+  @return {String} path to the related link
+*/
 export function linksPath(relation) {
   return ['relationships', relation, 'links', 'related'].join('.');
 }

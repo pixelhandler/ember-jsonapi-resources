@@ -37,6 +37,8 @@ import { isDasherized } from 'ember-jsonapi-resources/utils/is';
   @param {String|Object} relation the name of the relationship
   @param {String} relation.resource the name of the relationship
   @param {String} relation.type the name of the type or service to use
+  @return {Object} computed property
+  @main hasMany
 */
 export default function hasMany(relation) {
   let type = relation;

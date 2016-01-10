@@ -13,7 +13,16 @@ import { isType } from 'ember-jsonapi-resources/utils/is';
 const { computed, Logger } = Ember;
 
 /**
-  A Resource class to create JSON API resource objects
+  A Resource class to create JSON API resource objects. This is abstract, first
+  define a prototype using `Resource.extend({ type: entity })`. Model prototypes
+  are registered in the container as factories, they use the options:
+  `{ instantiate: false, singleton: false }`. So, to create a model instance
+  use the owner API or the container to `lookup` the factory, for exampe:
+
+  ```js
+  let owner = Ember.getOwner(this) || this.container;
+  owner.lookup('model:entity').create({ attributes: { key: value } });
+  ```
 
   See <http://jsonapi.org/format/#document-resource-objects>
 
@@ -385,6 +394,7 @@ Resource.reopenClass({
     object prior to adding a relationship.
 
     @method create
+    @static
     @return {Resource} instance with protected objects:
       `attributes`, `links` and `relationships`
   */

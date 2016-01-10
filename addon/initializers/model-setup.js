@@ -11,7 +11,8 @@
 */
 export function initialize(application) {
   if (typeof application.registerOptionsForType === 'function') {
-    application.registerOptionsForType('model', { instantiate: false });
+    let options = { instantiate: false, singleton: false };
+    application.registerOptionsForType('model', options);
   }
 }
 

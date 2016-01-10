@@ -10,6 +10,7 @@ import Ember from 'ember';
 
   @class ServiceCacheMixin
   @requires Ember.Inflector
+  @static
 */
 export default Ember.Mixin.create({
 
