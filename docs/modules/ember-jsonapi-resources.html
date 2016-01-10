@@ -263,11 +263,11 @@ methods and a <code>serializer</code> injection.
 define a prototype using <code>Resource.extend({ type: entity })</code>. Model prototypes
 are registered in the container as factories, they use the options:
 <code>{ instantiate: false, singleton: false }</code>. So, to create a model instance
-use the owner API or the container to <code>lookup</code> the factory, for exampe:
+use the owner API or the container to <code>lookup</code> the factory, for example:
 
 <code>&#x60;</code>js
-let owner = Ember.getOwner(this) || this.container;
-owner.lookup('model:entity').create({ attributes: { key: value } });
+let owner = (typeof Ember.getOwner === 'function') ? Ember.getOwner(this) : this.container;
+let model = owner.lookup('model:entity').create({ attributes: { key: value } });
 <code>&#x60;</code>
 
 See <http://jsonapi.org/format/#document-resource-objects>
