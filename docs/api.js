@@ -14,21 +14,22 @@ YUI.add("yuidoc-meta", function(Y) {
         "TransformsMixin"
     ],
     "modules": [
-        "adapter",
+        "adapters",
         "authorization",
         "cache",
         "ember-jsonapi-resources",
         "fetch",
+        "initializers",
         "resource",
-        "serializer",
+        "serializers",
         "store",
         "transforms",
         "utils"
     ],
     "allModules": [
         {
-            "displayName": "adapter",
-            "name": "adapter",
+            "displayName": "adapters",
+            "name": "adapters",
             "description": "Adapter for a JSON API endpoint, use as a service for your backend"
         },
         {
@@ -51,13 +52,17 @@ YUI.add("yuidoc-meta", function(Y) {
             "description": "Fetch/Ajax methods for use with an Adapter calls `cacheUpdate`, `cacheResource`\nmethods and a `serializer` injection."
         },
         {
+            "displayName": "initializers",
+            "name": "initializers"
+        },
+        {
             "displayName": "resource",
             "name": "resource",
             "description": "A Resource class to create JSON API resource objects\n\nSee <http://jsonapi.org/format/#document-resource-objects>"
         },
         {
-            "displayName": "serializer",
-            "name": "serializer",
+            "displayName": "serializers",
+            "name": "serializers",
             "description": "Serializer/Deserializer for a JSON API resource object, used by adapter.\n\nWhen extending use a mixin or define transform methods to serialize and/or\ndeserializer attributes based on the name or the type of attribute.\n\nThe methods use a naming convention:\n\n  - '[de]serialize' + 'AttrName' or 'TypeName' + 'Attribute'\n  - E.g. use `serializeNameAttribute` and `deserializeNameAttribute` in\n    a generated serializer for use with `name: attr()`\n  - Or, redefine `serializeDateAttribute` and `deserializeDateAttribute`\n    to use your own data transformation with `attr('date')` the default,\n    Date type [de]serialize methods transfrom to/from ISO Format.\n  - Transform methods based on the name of the attribute will be called\n    instead of any transform methods based on the type of the attribute."
         },
         {

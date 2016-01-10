@@ -53,13 +53,14 @@
                 
                 
                             <ul id="api-modules" class="apis modules">
-                                <li><a href="../modules/adapter.html">adapter</a></li>
+                                <li><a href="../modules/adapters.html">adapters</a></li>
                                 <li><a href="../modules/authorization.html">authorization</a></li>
                                 <li><a href="../modules/cache.html">cache</a></li>
                                 <li><a href="../modules/ember-jsonapi-resources.html">ember-jsonapi-resources</a></li>
                                 <li><a href="../modules/fetch.html">fetch</a></li>
+                                <li><a href="../modules/initializers.html">initializers</a></li>
                                 <li><a href="../modules/resource.html">resource</a></li>
-                                <li><a href="../modules/serializer.html">serializer</a></li>
+                                <li><a href="../modules/serializers.html">serializers</a></li>
                                 <li><a href="../modules/store.html">store</a></li>
                                 <li><a href="../modules/transform-map.html">transform-map</a></li>
                                 <li><a href="../modules/transforms.html">transforms</a></li>
@@ -103,7 +104,7 @@
     <pre class="code prettyprint linenums">
 /**
   @module ember-jsonapi-resources
-  @submodule serializer
+  @submodule serializers
 **/
 
 import Ember from &#x27;ember&#x27;;
@@ -258,7 +259,8 @@ export default Ember.Object.extend({
     if (!related) { return; }
     let resource, service;
     for (let i = 0; i &lt; related.length; i++) {
-      service = this.container.lookup(&#x27;service:&#x27; + pluralize(related[i].type));
+      let owner = (typeof Ember.getOwner === &#x27;function&#x27;) ? Ember.getOwner(this) : this.container;
+      service = owner.lookup(&#x27;service:&#x27; + pluralize(related[i].type));
       if (service &amp;&amp; service.cache &amp;&amp; service.cache.data) {
         resource = service.serializer.deserializeResource(related[i]);
         service.cacheResource({ meta: resp.meta, data: resource, headers: resp.headers});
@@ -341,7 +343,8 @@ export default Ember.Object.extend({
     @return {Function} factory for creating resource instances
   */
   _lookupFactory(type) {
-    return this.container.lookupFactory(&#x27;model:&#x27; + singularize(type));
+    let owner = (typeof Ember.getOwner === &#x27;function&#x27;) ? Ember.getOwner(this) : this.container;
+    return owner.lookup(&#x27;model:&#x27; + singularize(type));
   }
 });
 

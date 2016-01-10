@@ -9,7 +9,7 @@
         "addon/adapters/application.js": {
             "name": "addon/adapters/application.js",
             "modules": {
-                "adapter": 1
+                "adapters": 1
             },
             "classes": {
                 "ApplicationAdapter": 1
@@ -17,13 +17,24 @@
             "fors": {},
             "namespaces": {}
         },
-        "addon/initializers/store.js": {
-            "name": "addon/initializers/store.js",
+        "addon/initializers/model-setup.js": {
+            "name": "addon/initializers/model-setup.js",
             "modules": {
-                "store": 1
+                "initializers": 1
             },
             "classes": {},
-            "fors": {},
+            "fors": {
+                "Resource": 1
+            },
+            "namespaces": {}
+        },
+        "addon/initializers/store.js": {
+            "name": "addon/initializers/store.js",
+            "modules": {},
+            "classes": {},
+            "fors": {
+                "StoreService": 1
+            },
             "namespaces": {}
         },
         "addon/mixins/authorization.js": {
@@ -84,7 +95,7 @@
         "addon/serializers/application.js": {
             "name": "addon/serializers/application.js",
             "modules": {
-                "serializer": 1
+                "serializers": 1
             },
             "classes": {
                 "ApplicationSerializer": 1
@@ -94,7 +105,9 @@
         },
         "addon/services/store.js": {
             "name": "addon/services/store.js",
-            "modules": {},
+            "modules": {
+                "store": 1
+            },
             "classes": {
                 "StoreService": 1
             },
@@ -172,36 +185,40 @@
         "ember-jsonapi-resources": {
             "name": "ember-jsonapi-resources",
             "submodules": {
-                "adapter": 1,
-                "store": 1,
+                "adapters": 1,
+                "initializers": 1,
                 "authorization": 1,
                 "fetch": 1,
                 "cache": 1,
                 "transforms": 1,
                 "resource": 1,
-                "serializer": 1,
+                "serializers": 1,
+                "store": 1,
                 "utils": 1
             },
             "elements": {},
             "classes": {
                 "ApplicationAdapter": 1,
+                "Resource": 1,
+                "StoreService": 1,
                 "AuthorizationMixin": 1,
                 "FetchMixin": 1,
                 "ServiceCacheMixin": 1,
                 "TransformsMixin": 1,
-                "Resource": 1,
                 "ApplicationSerializer": 1,
-                "StoreService": 1,
                 "RelatedProxyUtil": 1,
                 "TransformDateAttribute": 1
             },
-            "fors": {},
+            "fors": {
+                "Resource": 1,
+                "StoreService": 1
+            },
             "namespaces": {},
             "file": "addon/utils/transforms.js",
             "line": 8
         },
-        "adapter": {
-            "name": "adapter",
+        "adapters": {
+            "name": "adapters",
             "submodules": {},
             "elements": {},
             "classes": {
@@ -216,21 +233,21 @@
             "line": 10,
             "description": "Adapter for a JSON API endpoint, use as a service for your backend"
         },
-        "store": {
-            "name": "store",
+        "initializers": {
+            "name": "initializers",
             "submodules": {},
             "elements": {},
-            "classes": {
+            "classes": {},
+            "fors": {
+                "Resource": 1,
                 "StoreService": 1
             },
-            "fors": {},
             "is_submodule": 1,
             "namespaces": {},
             "module": "ember-jsonapi-resources",
             "namespace": "",
-            "file": "addon/services/store.js",
-            "line": 10,
-            "description": "Service for a JSON API endpoint a facade to your resource adapter"
+            "file": "addon/initializers/model-setup.js",
+            "line": 1
         },
         "authorization": {
             "name": "authorization",
@@ -309,11 +326,11 @@
             "module": "ember-jsonapi-resources",
             "namespace": "",
             "file": "addon/models/resource.js",
-            "line": 13,
+            "line": 15,
             "description": "A Resource class to create JSON API resource objects\n\nSee <http://jsonapi.org/format/#document-resource-objects>"
         },
-        "serializer": {
-            "name": "serializer",
+        "serializers": {
+            "name": "serializers",
             "submodules": {},
             "elements": {},
             "classes": {
@@ -327,6 +344,22 @@
             "file": "addon/serializers/application.js",
             "line": 9,
             "description": "Serializer/Deserializer for a JSON API resource object, used by adapter.\n\nWhen extending use a mixin or define transform methods to serialize and/or\ndeserializer attributes based on the name or the type of attribute.\n\nThe methods use a naming convention:\n\n  - '[de]serialize' + 'AttrName' or 'TypeName' + 'Attribute'\n  - E.g. use `serializeNameAttribute` and `deserializeNameAttribute` in\n    a generated serializer for use with `name: attr()`\n  - Or, redefine `serializeDateAttribute` and `deserializeDateAttribute`\n    to use your own data transformation with `attr('date')` the default,\n    Date type [de]serialize methods transfrom to/from ISO Format.\n  - Transform methods based on the name of the attribute will be called\n    instead of any transform methods based on the type of the attribute."
+        },
+        "store": {
+            "name": "store",
+            "submodules": {},
+            "elements": {},
+            "classes": {
+                "StoreService": 1
+            },
+            "fors": {},
+            "is_submodule": 1,
+            "namespaces": {},
+            "module": "ember-jsonapi-resources",
+            "namespace": "",
+            "file": "addon/services/store.js",
+            "line": 9,
+            "description": "Service for a JSON API endpoint a facade to your resource adapter"
         },
         "utils": {
             "name": "utils",
@@ -375,7 +408,7 @@
             "plugin_for": [],
             "extension_for": [],
             "module": "ember-jsonapi-resources",
-            "submodule": "adapter",
+            "submodule": "adapters",
             "namespace": "",
             "file": "addon/adapters/application.js",
             "line": 10,
@@ -385,6 +418,44 @@
             ],
             "uses": [
                 "Ember.Evented"
+            ],
+            "static": 1
+        },
+        "Resource": {
+            "name": "Resource",
+            "shortname": "Resource",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "ember-jsonapi-resources",
+            "submodule": "resource",
+            "namespace": "",
+            "file": "addon/models/resource.js",
+            "line": 15,
+            "description": "A Resource class to create JSON API resource objects\n\nSee <http://jsonapi.org/format/#document-resource-objects>",
+            "requires": [
+                "Ember.Inflector"
+            ],
+            "static": 1
+        },
+        "StoreService": {
+            "name": "StoreService",
+            "shortname": "StoreService",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "ember-jsonapi-resources",
+            "submodule": "store",
+            "namespace": "",
+            "file": "addon/services/store.js",
+            "line": 9,
+            "description": "Service for a JSON API endpoint a facade to your resource adapter",
+            "requires": [
+                "Ember.Inflector"
             ],
             "static": 1
         },
@@ -451,25 +522,6 @@
             "line": 9,
             "description": "A Mixin class for methods to transform resource attributes, includes date\nattribute methods to serialize and deserialize the date(time) to/from\nISO Format for use with `attr('date')`\n\nAny valid attribute type (string, boolean, number, object, array, date) can\nbe added to your app, just generate a transforms mixin and define other\ntypes if needed, and use the type when defining a resource attribute,\ne.g. attr('array')"
         },
-        "Resource": {
-            "name": "Resource",
-            "shortname": "Resource",
-            "classitems": [],
-            "plugins": [],
-            "extensions": [],
-            "plugin_for": [],
-            "extension_for": [],
-            "module": "ember-jsonapi-resources",
-            "submodule": "resource",
-            "namespace": "",
-            "file": "addon/models/resource.js",
-            "line": 13,
-            "description": "A Resource class to create JSON API resource objects\n\nSee <http://jsonapi.org/format/#document-resource-objects>",
-            "requires": [
-                "Ember.Inflector"
-            ],
-            "static": 1
-        },
         "ApplicationSerializer": {
             "name": "ApplicationSerializer",
             "shortname": "ApplicationSerializer",
@@ -479,30 +531,11 @@
             "plugin_for": [],
             "extension_for": [],
             "module": "ember-jsonapi-resources",
-            "submodule": "serializer",
+            "submodule": "serializers",
             "namespace": "",
             "file": "addon/serializers/application.js",
             "line": 9,
             "description": "Serializer/Deserializer for a JSON API resource object, used by adapter.\n\nWhen extending use a mixin or define transform methods to serialize and/or\ndeserializer attributes based on the name or the type of attribute.\n\nThe methods use a naming convention:\n\n  - '[de]serialize' + 'AttrName' or 'TypeName' + 'Attribute'\n  - E.g. use `serializeNameAttribute` and `deserializeNameAttribute` in\n    a generated serializer for use with `name: attr()`\n  - Or, redefine `serializeDateAttribute` and `deserializeDateAttribute`\n    to use your own data transformation with `attr('date')` the default,\n    Date type [de]serialize methods transfrom to/from ISO Format.\n  - Transform methods based on the name of the attribute will be called\n    instead of any transform methods based on the type of the attribute.",
-            "static": 1
-        },
-        "StoreService": {
-            "name": "StoreService",
-            "shortname": "StoreService",
-            "classitems": [],
-            "plugins": [],
-            "extensions": [],
-            "plugin_for": [],
-            "extension_for": [],
-            "module": "ember-jsonapi-resources",
-            "submodule": "store",
-            "namespace": "",
-            "file": "addon/services/store.js",
-            "line": 10,
-            "description": "Service for a JSON API endpoint a facade to your resource adapter",
-            "requires": [
-                "Ember.Inflector"
-            ],
             "static": 1
         },
         "RelatedProxyUtil": {
@@ -563,7 +596,7 @@
             "required": 1,
             "class": "ApplicationAdapter",
             "module": "ember-jsonapi-resources",
-            "submodule": "adapter"
+            "submodule": "adapters"
         },
         {
             "file": "addon/adapters/application.js",
@@ -575,7 +608,7 @@
             "required": 1,
             "class": "ApplicationAdapter",
             "module": "ember-jsonapi-resources",
-            "submodule": "adapter"
+            "submodule": "adapters"
         },
         {
             "file": "addon/adapters/application.js",
@@ -596,7 +629,7 @@
             },
             "class": "ApplicationAdapter",
             "module": "ember-jsonapi-resources",
-            "submodule": "adapter"
+            "submodule": "adapters"
         },
         {
             "file": "addon/adapters/application.js",
@@ -622,7 +655,7 @@
             },
             "class": "ApplicationAdapter",
             "module": "ember-jsonapi-resources",
-            "submodule": "adapter"
+            "submodule": "adapters"
         },
         {
             "file": "addon/adapters/application.js",
@@ -643,7 +676,7 @@
             },
             "class": "ApplicationAdapter",
             "module": "ember-jsonapi-resources",
-            "submodule": "adapter"
+            "submodule": "adapters"
         },
         {
             "file": "addon/adapters/application.js",
@@ -681,11 +714,11 @@
             },
             "class": "ApplicationAdapter",
             "module": "ember-jsonapi-resources",
-            "submodule": "adapter"
+            "submodule": "adapters"
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 123,
+            "line": 124,
             "description": "Create a new resource, sends a POST request, updates resource instance\nwith persisted data, and updates cache with persisted resource",
             "itemtype": "method",
             "name": "createResource",
@@ -702,11 +735,11 @@
             },
             "class": "ApplicationAdapter",
             "module": "ember-jsonapi-resources",
-            "submodule": "adapter"
+            "submodule": "adapters"
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 150,
+            "line": 151,
             "description": "Patch an existing resource, sends a PATCH request.",
             "itemtype": "method",
             "name": "updateResource",
@@ -723,11 +756,11 @@
             },
             "class": "ApplicationAdapter",
             "module": "ember-jsonapi-resources",
-            "submodule": "adapter"
+            "submodule": "adapters"
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 168,
+            "line": 169,
             "description": "Patch a relationship, either add or remove, sends a PATCH request\n\nAdds with payload: `{ \"data\": { \"type\": \"comments\", \"id\": \"12\" } }`\nRemoves with payload: `{ \"data\": null }` for to-one or `{ \"data\": [] }` for to-many",
             "itemtype": "method",
             "name": "patchRelationship",
@@ -749,11 +782,11 @@
             },
             "class": "ApplicationAdapter",
             "module": "ember-jsonapi-resources",
-            "submodule": "adapter"
+            "submodule": "adapters"
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 190,
+            "line": 191,
             "description": "Delete an existing resource, sends a DELETE request",
             "itemtype": "method",
             "name": "deleteResource",
@@ -770,11 +803,11 @@
             },
             "class": "ApplicationAdapter",
             "module": "ember-jsonapi-resources",
-            "submodule": "adapter"
+            "submodule": "adapters"
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 209,
+            "line": 210,
             "description": "Fetches data using Fetch API or XMLHttpRequest",
             "itemtype": "method",
             "name": "fetch",
@@ -796,11 +829,11 @@
             },
             "class": "ApplicationAdapter",
             "module": "ember-jsonapi-resources",
-            "submodule": "adapter"
+            "submodule": "adapters"
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 227,
+            "line": 228,
             "description": "Hook to customize the URL, e.g. if your API is behind a proxy and you need\nto swap a portion of the domain to make a request on the same domain.",
             "itemtype": "method",
             "name": "fetchUrl",
@@ -817,11 +850,11 @@
             },
             "class": "ApplicationAdapter",
             "module": "ember-jsonapi-resources",
-            "submodule": "adapter"
+            "submodule": "adapters"
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 239,
+            "line": 240,
             "description": "Adds params and headers or Fetch request.\n\n- The HTTP Header is set for Content-Type: application/vnd.api+json\n- Sets Authorization header if accessible in the `authorizationCredential` property",
             "itemtype": "method",
             "name": "fetchOptions",
@@ -838,11 +871,11 @@
             },
             "class": "ApplicationAdapter",
             "module": "ember-jsonapi-resources",
-            "submodule": "adapter"
+            "submodule": "adapters"
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 261,
+            "line": 262,
             "description": "Sets Authorization header if accessible in the `authorizationCredential` property",
             "itemtype": "method",
             "name": "fetchAuthorizationHeader",
@@ -855,33 +888,33 @@
             ],
             "class": "ApplicationAdapter",
             "module": "ember-jsonapi-resources",
-            "submodule": "adapter"
+            "submodule": "adapters"
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 278,
+            "line": 279,
             "description": "Authentication credentials/token used with HTTP authentication\nThis property should be added by an Authorization Mixin",
             "itemtype": "property",
             "name": "authorizationCredential",
             "type": "String",
             "class": "ApplicationAdapter",
             "module": "ember-jsonapi-resources",
-            "submodule": "adapter"
+            "submodule": "adapters"
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 287,
+            "line": 288,
             "description": "The name of the Authorization request-header field\nThis property should be added by an Authorization Mixin",
             "itemtype": "property",
             "name": "authorizationHeaderField",
             "type": "String",
             "class": "ApplicationAdapter",
             "module": "ember-jsonapi-resources",
-            "submodule": "adapter"
+            "submodule": "adapters"
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 296,
+            "line": 297,
             "description": "Noop as a hook for defining how deserialized resource objects are cached,\ne.g. in memory",
             "itemtype": "method",
             "name": "cacheResource",
@@ -894,11 +927,11 @@
             ],
             "class": "ApplicationAdapter",
             "module": "ember-jsonapi-resources",
-            "submodule": "adapter"
+            "submodule": "adapters"
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 305,
+            "line": 306,
             "description": "Noop as a hook for defining how to handle cache after updating a resource",
             "itemtype": "method",
             "name": "cacheUpdate",
@@ -911,11 +944,11 @@
             ],
             "class": "ApplicationAdapter",
             "module": "ember-jsonapi-resources",
-            "submodule": "adapter"
+            "submodule": "adapters"
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 313,
+            "line": 314,
             "description": "Noop as a hook to remove a resource from cached data",
             "itemtype": "method",
             "name": "cacheRemove",
@@ -928,7 +961,17 @@
             ],
             "class": "ApplicationAdapter",
             "module": "ember-jsonapi-resources",
-            "submodule": "adapter"
+            "submodule": "adapters"
+        },
+        {
+            "file": "addon/initializers/model-setup.js",
+            "line": 6,
+            "description": "Initializer for the model factories, registers option to not initialize",
+            "itemtype": "method",
+            "name": "initialize",
+            "class": "Resource",
+            "module": "ember-jsonapi-resources",
+            "submodule": "initializers"
         },
         {
             "file": "addon/initializers/store.js",
@@ -939,9 +982,9 @@
             "requires": [
                 "StoreService"
             ],
-            "class": "AuthorizationMixin",
+            "class": "StoreService",
             "module": "ember-jsonapi-resources",
-            "submodule": "store"
+            "submodule": "initializers"
         },
         {
             "file": "addon/mixins/authorization.js",
@@ -1631,7 +1674,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 24,
+            "line": 26,
             "description": "The service object for the entity (adapter with cache and serializer)",
             "itemtype": "property",
             "name": "service",
@@ -1643,7 +1686,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 33,
+            "line": 35,
             "description": "Extending Prototypes Must define a `type` value for the entity, e.g. `posts`",
             "itemtype": "property",
             "name": "type",
@@ -1655,7 +1698,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 42,
+            "line": 44,
             "description": "Persisted resource ID value",
             "itemtype": "property",
             "name": "id",
@@ -1667,7 +1710,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 51,
+            "line": 53,
             "description": "An optional `attributes` property of for a JSON API Resource object, setup in create()\n\nThis object will keep the values from the response object and may be mutable\nUse this as a refence for creating computed properties\n\nFor example the `attr()` helper sets up a properties based on this content",
             "access": "protected",
             "tagname": "",
@@ -1680,7 +1723,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 65,
+            "line": 67,
             "description": "An optional `relationships` property of for a JSON API Resource object, setup in create()",
             "access": "protected",
             "tagname": "",
@@ -1693,7 +1736,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 74,
+            "line": 76,
             "description": "An optional `links` property of for a JSON API Resource object, setup in create()",
             "access": "protected",
             "tagname": "",
@@ -1706,7 +1749,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 83,
+            "line": 85,
             "description": "An optional property of for a JSON API Resource object, setup in create()",
             "access": "protected",
             "tagname": "",
@@ -1719,7 +1762,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 92,
+            "line": 94,
             "description": "Hash of attributes for changed/previous values",
             "access": "private",
             "tagname": "",
@@ -1732,7 +1775,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 101,
+            "line": 103,
             "description": "Flag for new instance, e.g. not peristed",
             "itemtype": "property",
             "name": "isNew",
@@ -1743,7 +1786,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 109,
+            "line": 111,
             "description": "Custom `toString` method used for clarity that the instance is a JSON API Resource kind of object",
             "itemtype": "method",
             "name": "toString",
@@ -1753,7 +1796,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 120,
+            "line": 122,
             "description": "Update a relation by adding or removing using a list, id, or null. When\nadding an id for a to-many relation send one or more ids, include the\nexisting ids as well. When removing from a to-many relation pass the ids\nthat should remain, missing ids will be removed, or remove all with an empty\narray. When operating on a to-one relation just use the id to change the\nrelation, or null to remove.\n\nThis is not a replace operation, but rather support for editing as a set.",
             "itemtype": "method",
             "name": "updateRelationship",
@@ -1775,7 +1818,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 139,
+            "line": 141,
             "access": "private",
             "tagname": "",
             "itemtype": "method",
@@ -1798,7 +1841,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 166,
+            "line": 168,
             "itemtype": "method",
             "name": "addRelationships",
             "params": [
@@ -1819,7 +1862,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 177,
+            "line": 179,
             "itemtype": "method",
             "name": "removeRelationships",
             "params": [
@@ -1840,7 +1883,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 188,
+            "line": 190,
             "description": "Adds related links object on the relationship hash",
             "itemtype": "method",
             "name": "addRelationship",
@@ -1862,7 +1905,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 208,
+            "line": 210,
             "description": "Remove related links object on the relationship hash to have `null` data",
             "itemtype": "method",
             "name": "removeRelationship",
@@ -1884,7 +1927,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 229,
+            "line": 231,
             "itemtype": "method",
             "name": "changedAttributes",
             "return": {
@@ -1897,7 +1940,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 247,
+            "line": 249,
             "itemtype": "method",
             "name": "previousAttributes",
             "return": {
@@ -1910,7 +1953,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 265,
+            "line": 267,
             "description": "Revert to previous attributes",
             "itemtype": "method",
             "name": "rollback",
@@ -1920,7 +1963,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 281,
+            "line": 283,
             "description": "Reset tracked changed/previous attrs",
             "access": "private",
             "tagname": "",
@@ -1932,7 +1975,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 295,
+            "line": 297,
             "description": "Sets all payload properties on the resource and resets private _attributes\nused for changed/previous tracking",
             "itemtype": "method",
             "name": "didUpdateResource",
@@ -1949,7 +1992,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 308,
+            "line": 310,
             "description": "Sets the relationships data, used after the promise proxy resolves by\nhasOne and hasMany helpers",
             "itemtype": "method",
             "name": "didResolveProxyRelation",
@@ -1976,7 +2019,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 338,
+            "line": 340,
             "description": "A local cache duration, to minimize duplicate fetch requests",
             "itemtype": "property",
             "name": "cacheDuration",
@@ -1987,7 +2030,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 346,
+            "line": 348,
             "itemtype": "property",
             "name": "isCacheExpired",
             "type": "Boolean",
@@ -1997,8 +2040,8 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 358,
-            "description": "To protect the JSON API Resource properties for attributes, links and\nrelationships these objects are setup during create(). This has to be\ndefined since the attr() helper needs to have new objects for each instance,\nto project from keeping a reference on the prototype.\n\nThe create method should only be called after looking up a factory from the\ncontainer, for example in a route's model hook:\n\n```\nmodel() {\n  return this.container.lookupFactory('model:post').create({\n    attributes: {\n      title: 'The JSON API 1.0 Spec Rocks!'\n    }\n  });\n}\n```\n\nThe create method uses the container to lookup the factory's prototype and\nfind the computed properties used for relations to setup the relationships\nfor the Resource instance you create. Calling Resource#create without using\nthe factory lookup will result in an instance without a reference to the\napplication's container and you will have to manually setup the relationships\nobject prior to adding a relationship.",
+            "line": 360,
+            "description": "To protect the JSON API Resource properties for attributes, links and\nrelationships these objects are setup during create(). This has to be\ndefined since the attr() helper needs to have new objects for each instance,\nto project from keeping a reference on the prototype.\n\nThe create method should only be called after looking up a factory from the\ncontainer, for example in a route's model hook:\n\n```\nmodel() {\n  let owner = (typeof Ember.getOwner === 'function') ? Ember.getOwner(this) : this.container;\n  return owner.lookup('model:post').create({\n    attributes: {\n      title: 'The JSON API 1.0 Spec Rocks!'\n    }\n  });\n}\n```\n\nThe create method uses the container to lookup the factory's prototype and\nfind the computed properties used for relations to setup the relationships\nfor the Resource instance you create. Calling Resource#create without using\nthe factory lookup will result in an instance without a reference to the\napplication's container and you will have to manually setup the relationships\nobject prior to adding a relationship.",
             "itemtype": "method",
             "name": "create",
             "return": {
@@ -2028,7 +2071,7 @@
             },
             "class": "ApplicationSerializer",
             "module": "ember-jsonapi-resources",
-            "submodule": "serializer"
+            "submodule": "serializers"
         },
         {
             "file": "addon/serializers/application.js",
@@ -2048,7 +2091,7 @@
             },
             "class": "ApplicationSerializer",
             "module": "ember-jsonapi-resources",
-            "submodule": "serializer"
+            "submodule": "serializers"
         },
         {
             "file": "addon/serializers/application.js",
@@ -2069,7 +2112,7 @@
             },
             "class": "ApplicationSerializer",
             "module": "ember-jsonapi-resources",
-            "submodule": "serializer"
+            "submodule": "serializers"
         },
         {
             "file": "addon/serializers/application.js",
@@ -2090,7 +2133,7 @@
             },
             "class": "ApplicationSerializer",
             "module": "ember-jsonapi-resources",
-            "submodule": "serializer"
+            "submodule": "serializers"
         },
         {
             "file": "addon/serializers/application.js",
@@ -2111,7 +2154,7 @@
             },
             "class": "ApplicationSerializer",
             "module": "ember-jsonapi-resources",
-            "submodule": "serializer"
+            "submodule": "serializers"
         },
         {
             "file": "addon/serializers/application.js",
@@ -2132,7 +2175,7 @@
             },
             "class": "ApplicationSerializer",
             "module": "ember-jsonapi-resources",
-            "submodule": "serializer"
+            "submodule": "serializers"
         },
         {
             "file": "addon/serializers/application.js",
@@ -2153,7 +2196,7 @@
             },
             "class": "ApplicationSerializer",
             "module": "ember-jsonapi-resources",
-            "submodule": "serializer"
+            "submodule": "serializers"
         },
         {
             "file": "addon/serializers/application.js",
@@ -2175,11 +2218,11 @@
             ],
             "class": "ApplicationSerializer",
             "module": "ember-jsonapi-resources",
-            "submodule": "serializer"
+            "submodule": "serializers"
         },
         {
             "file": "addon/serializers/application.js",
-            "line": 166,
+            "line": 167,
             "description": "Transform attributes, serialize or deserialize by specified method or\nper type of attribute, e.g. date.\n\nYour serializer may define a specific method for a type of attribute,\ni.e. `serializeDateAttribute` and/or `deserializeDateAttribute`. Likewise,\nyour serializer may define a specific method for the name of an attribute,\nlike `serializeUpdatedAtAttribute` and `deserializeUpdatedAtAttribute`.\n\nDuring transformation a method based on the name of the attribute takes\npriority over a transform method based on the type of attribute, e.g. date.",
             "itemtype": "method",
             "name": "transformAttributes",
@@ -2203,11 +2246,11 @@
             },
             "class": "ApplicationSerializer",
             "module": "ember-jsonapi-resources",
-            "submodule": "serializer"
+            "submodule": "serializers"
         },
         {
             "file": "addon/serializers/application.js",
-            "line": 207,
+            "line": 208,
             "description": "Create a Resource from a JSON API Resource Object\n\nSee <http://jsonapi.org/format/#document-resource-objects>",
             "access": "private",
             "tagname": "",
@@ -2225,11 +2268,11 @@
             },
             "class": "ApplicationSerializer",
             "module": "ember-jsonapi-resources",
-            "submodule": "serializer"
+            "submodule": "serializers"
         },
         {
             "file": "addon/serializers/application.js",
-            "line": 234,
+            "line": 235,
             "access": "private",
             "tagname": "",
             "itemtype": "method",
@@ -2247,11 +2290,11 @@
             },
             "class": "ApplicationSerializer",
             "module": "ember-jsonapi-resources",
-            "submodule": "serializer"
+            "submodule": "serializers"
         },
         {
             "file": "addon/services/store.js",
-            "line": 19,
+            "line": 18,
             "description": "Find resource(s) using an id or a using a query `{id: '', query: {}}`",
             "itemtype": "method",
             "name": "find",
@@ -2277,7 +2320,7 @@
         },
         {
             "file": "addon/services/store.js",
-            "line": 32,
+            "line": 31,
             "description": "Access to the cached object",
             "itemtype": "method",
             "name": "all",
@@ -2298,7 +2341,7 @@
         },
         {
             "file": "addon/services/store.js",
-            "line": 44,
+            "line": 43,
             "description": "Create a new resource, sends a POST request",
             "itemtype": "method",
             "name": "createResource",
@@ -2319,7 +2362,7 @@
         },
         {
             "file": "addon/services/store.js",
-            "line": 56,
+            "line": 55,
             "description": "Patch an existing resource",
             "itemtype": "method",
             "name": "updateResource",
@@ -2345,7 +2388,7 @@
         },
         {
             "file": "addon/services/store.js",
-            "line": 69,
+            "line": 68,
             "description": "Patch a relationship, either add or remove, sends a PATCH request\n\nAdds with payload: `{ \"data\": { \"type\": \"comments\", \"id\": \"12\" } }`\nRemoves with payload: `{ \"data\": null }`",
             "itemtype": "method",
             "name": "patchRelationship",
@@ -2376,7 +2419,7 @@
         },
         {
             "file": "addon/services/store.js",
-            "line": 86,
+            "line": 85,
             "description": "Delete an existing resource, sends a DELETE request",
             "itemtype": "method",
             "name": "deleteResource",
@@ -2402,7 +2445,7 @@
         },
         {
             "file": "addon/services/store.js",
-            "line": 99,
+            "line": 98,
             "description": "Lookup the injected service for a resource, pluralize type arg.",
             "access": "private",
             "tagname": "",
@@ -2676,7 +2719,7 @@
         },
         {
             "file": "addon/utils/related-proxy.js",
-            "line": 93,
+            "line": 94,
             "itemtype": "method",
             "name": "proxyResolution",
             "params": [
@@ -2696,7 +2739,7 @@
         },
         {
             "file": "addon/utils/related-proxy.js",
-            "line": 115,
+            "line": 116,
             "description": "Proxy url to fetch for the resource's relation",
             "itemtype": "method",
             "name": "proxyUrl",
@@ -2722,7 +2765,7 @@
         },
         {
             "file": "addon/utils/related-proxy.js",
-            "line": 132,
+            "line": 133,
             "description": "Lookup relation from service cache and pomisify result",
             "itemtype": "method",
             "name": "promiseFromCache",
@@ -2753,7 +2796,7 @@
         },
         {
             "file": "addon/utils/related-proxy.js",
-            "line": 159,
+            "line": 160,
             "description": "Lookup data in service cache",
             "itemtype": "method",
             "name": "serviceCacheLookup",

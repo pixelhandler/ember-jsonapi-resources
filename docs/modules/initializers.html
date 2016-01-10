@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>serializer - Ember JSON API Resources</title>
+    <title>initializers - Ember JSON API Resources</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -53,13 +53,14 @@
                 
                 
                             <ul id="api-modules" class="apis modules">
-                                <li><a href="../modules/adapter.html">adapter</a></li>
+                                <li><a href="../modules/adapters.html">adapters</a></li>
                                 <li><a href="../modules/authorization.html">authorization</a></li>
                                 <li><a href="../modules/cache.html">cache</a></li>
                                 <li><a href="../modules/ember-jsonapi-resources.html">ember-jsonapi-resources</a></li>
                                 <li><a href="../modules/fetch.html">fetch</a></li>
+                                <li><a href="../modules/initializers.html">initializers</a></li>
                                 <li><a href="../modules/resource.html">resource</a></li>
-                                <li><a href="../modules/serializer.html">serializer</a></li>
+                                <li><a href="../modules/serializers.html">serializers</a></li>
                                 <li><a href="../modules/store.html">store</a></li>
                                 <li><a href="../modules/transform-map.html">transform-map</a></li>
                                 <li><a href="../modules/transforms.html">transforms</a></li>
@@ -97,47 +98,24 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-<h1>serializer Module</h1>
+<h1>initializers Module</h1>
 <div class="box clearfix meta">
 
 
         <div class="foundat">
-            Defined in: <a href="../files/addon_serializers_application.js.html#l9"><code>addon&#x2F;serializers&#x2F;application.js:9</code></a>
+            Defined in: <a href="../files/addon_initializers_model-setup.js.html#l1"><code>addon&#x2F;initializers&#x2F;model-setup.js:1</code></a>
         </div>
 
 </div>
 
 
 <div class="box intro">
-    <p>Serializer/Deserializer for a JSON API resource object, used by adapter.</p>
-<p>When extending use a mixin or define transform methods to serialize and/or
-deserializer attributes based on the name or the type of attribute.</p>
-<p>The methods use a naming convention:</p>
-<ul>
-<li>'[de]serialize' + 'AttrName' or 'TypeName' + 'Attribute'</li>
-<li>E.g. use <code>serializeNameAttribute</code> and <code>deserializeNameAttribute</code> in
-a generated serializer for use with <code>name: attr()</code></li>
-<li>Or, redefine <code>serializeDateAttribute</code> and <code>deserializeDateAttribute</code>
-to use your own data transformation with <code>attr('date')</code> the default,
-Date type [de]serialize methods transfrom to/from ISO Format.</li>
-<li>Transform methods based on the name of the attribute will be called
-instead of any transform methods based on the type of the attribute.</li>
-</ul>
-
+    
 </div>
 
 
 <div class="yui3-g">
     <div class="yui3-u-1-2">
-            <p>This module provides the following classes:</p>
-
-            <ul class="module-classes">
-                <li class="module-class">
-                    <a href="../classes/ApplicationSerializer.html">
-                        ApplicationSerializer
-                    </a>
-                </li>
-            </ul>
     </div>
 
 

@@ -53,13 +53,14 @@
                 
                 
                             <ul id="api-modules" class="apis modules">
-                                <li><a href="../modules/adapter.html">adapter</a></li>
+                                <li><a href="../modules/adapters.html">adapters</a></li>
                                 <li><a href="../modules/authorization.html">authorization</a></li>
                                 <li><a href="../modules/cache.html">cache</a></li>
                                 <li><a href="../modules/ember-jsonapi-resources.html">ember-jsonapi-resources</a></li>
                                 <li><a href="../modules/fetch.html">fetch</a></li>
+                                <li><a href="../modules/initializers.html">initializers</a></li>
                                 <li><a href="../modules/resource.html">resource</a></li>
-                                <li><a href="../modules/serializer.html">serializer</a></li>
+                                <li><a href="../modules/serializers.html">serializers</a></li>
                                 <li><a href="../modules/store.html">store</a></li>
                                 <li><a href="../modules/transform-map.html">transform-map</a></li>
                                 <li><a href="../modules/transforms.html">transforms</a></li>
@@ -102,7 +103,7 @@
 
 
         <div class="foundat">
-            Defined in: <a href="../files/addon_models_resource.js.html#l13"><code>addon&#x2F;models&#x2F;resource.js:13</code></a>
+            Defined in: <a href="../files/addon_models_resource.js.html#l15"><code>addon&#x2F;models&#x2F;resource.js:15</code></a>
         </div>
 
             Module: <a href="../modules/resource.html">resource</a><br>
@@ -164,6 +165,10 @@
                             </li>
                             <li class="index-item method">
                                 <a href="#method_didUpdateResource">didUpdateResource</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_initialize">initialize</a>
 
                             </li>
                             <li class="index-item method">
@@ -266,7 +271,7 @@
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l281"><code>addon&#x2F;models&#x2F;resource.js:281</code></a>
+        <a href="../files/addon_models_resource.js.html#l283"><code>addon&#x2F;models&#x2F;resource.js:283</code></a>
         </p>
 
 
@@ -307,7 +312,7 @@
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l139"><code>addon&#x2F;models&#x2F;resource.js:139</code></a>
+        <a href="../files/addon_models_resource.js.html#l141"><code>addon&#x2F;models&#x2F;resource.js:141</code></a>
         </p>
 
 
@@ -372,7 +377,7 @@
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l188"><code>addon&#x2F;models&#x2F;resource.js:188</code></a>
+        <a href="../files/addon_models_resource.js.html#l190"><code>addon&#x2F;models&#x2F;resource.js:190</code></a>
         </p>
 
 
@@ -441,7 +446,7 @@
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l166"><code>addon&#x2F;models&#x2F;resource.js:166</code></a>
+        <a href="../files/addon_models_resource.js.html#l168"><code>addon&#x2F;models&#x2F;resource.js:168</code></a>
         </p>
 
 
@@ -503,7 +508,7 @@
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l229"><code>addon&#x2F;models&#x2F;resource.js:229</code></a>
+        <a href="../files/addon_models_resource.js.html#l231"><code>addon&#x2F;models&#x2F;resource.js:231</code></a>
         </p>
 
 
@@ -545,7 +550,7 @@
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l358"><code>addon&#x2F;models&#x2F;resource.js:358</code></a>
+        <a href="../files/addon_models_resource.js.html#l360"><code>addon&#x2F;models&#x2F;resource.js:360</code></a>
         </p>
 
 
@@ -560,7 +565,8 @@ to project from keeping a reference on the prototype.</p>
 <p>The create method should only be called after looking up a factory from the
 container, for example in a route's model hook:</p>
 <pre class="code prettyprint"><code>model() {
-  return this.container.lookupFactory('model:post').create({
+  let owner = (typeof Ember.getOwner === 'function') ? Ember.getOwner(this) : this.container;
+  return owner.lookup('model:post').create({
     attributes: {
       title: 'The JSON API 1.0 Spec Rocks!'
     }
@@ -617,7 +623,7 @@ object prior to adding a relationship.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l308"><code>addon&#x2F;models&#x2F;resource.js:308</code></a>
+        <a href="../files/addon_models_resource.js.html#l310"><code>addon&#x2F;models&#x2F;resource.js:310</code></a>
         </p>
 
 
@@ -694,7 +700,7 @@ hasOne and hasMany helpers</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l295"><code>addon&#x2F;models&#x2F;resource.js:295</code></a>
+        <a href="../files/addon_models_resource.js.html#l297"><code>addon&#x2F;models&#x2F;resource.js:297</code></a>
         </p>
 
 
@@ -728,6 +734,38 @@ used for changed/previous tracking</p>
 
 
 </div>
+<div id="method_initialize" class="method item">
+    <h3 class="name"><code>initialize</code></h3>
+
+        <span class="paren">()</span>
+
+
+
+
+
+
+
+
+    <div class="meta">
+                    <p>Provided by the <a href="../modules/initializers.html">initializers</a> module.</p>
+                <p>
+                Defined in
+        <a href="../files/addon_initializers_model-setup.js.html#l6"><code>addon&#x2F;initializers&#x2F;model-setup.js:6</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Initializer for the model factories, registers option to not initialize</p>
+
+    </div>
+
+
+
+
+</div>
 <div id="method_previousAttributes" class="method item">
     <h3 class="name"><code>previousAttributes</code></h3>
 
@@ -746,7 +784,7 @@ used for changed/previous tracking</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l247"><code>addon&#x2F;models&#x2F;resource.js:247</code></a>
+        <a href="../files/addon_models_resource.js.html#l249"><code>addon&#x2F;models&#x2F;resource.js:249</code></a>
         </p>
 
 
@@ -794,7 +832,7 @@ used for changed/previous tracking</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l208"><code>addon&#x2F;models&#x2F;resource.js:208</code></a>
+        <a href="../files/addon_models_resource.js.html#l210"><code>addon&#x2F;models&#x2F;resource.js:210</code></a>
         </p>
 
 
@@ -863,7 +901,7 @@ used for changed/previous tracking</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l177"><code>addon&#x2F;models&#x2F;resource.js:177</code></a>
+        <a href="../files/addon_models_resource.js.html#l179"><code>addon&#x2F;models&#x2F;resource.js:179</code></a>
         </p>
 
 
@@ -922,7 +960,7 @@ used for changed/previous tracking</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l265"><code>addon&#x2F;models&#x2F;resource.js:265</code></a>
+        <a href="../files/addon_models_resource.js.html#l267"><code>addon&#x2F;models&#x2F;resource.js:267</code></a>
         </p>
 
 
@@ -953,7 +991,7 @@ used for changed/previous tracking</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l109"><code>addon&#x2F;models&#x2F;resource.js:109</code></a>
+        <a href="../files/addon_models_resource.js.html#l111"><code>addon&#x2F;models&#x2F;resource.js:111</code></a>
         </p>
 
 
@@ -993,7 +1031,7 @@ used for changed/previous tracking</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l120"><code>addon&#x2F;models&#x2F;resource.js:120</code></a>
+        <a href="../files/addon_models_resource.js.html#l122"><code>addon&#x2F;models&#x2F;resource.js:122</code></a>
         </p>
 
 
@@ -1058,7 +1096,7 @@ relation, or null to remove.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l92"><code>addon&#x2F;models&#x2F;resource.js:92</code></a>
+        <a href="../files/addon_models_resource.js.html#l94"><code>addon&#x2F;models&#x2F;resource.js:94</code></a>
         </p>
 
 
@@ -1084,7 +1122,7 @@ relation, or null to remove.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l51"><code>addon&#x2F;models&#x2F;resource.js:51</code></a>
+        <a href="../files/addon_models_resource.js.html#l53"><code>addon&#x2F;models&#x2F;resource.js:53</code></a>
         </p>
 
 
@@ -1112,7 +1150,7 @@ Use this as a refence for creating computed properties</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l338"><code>addon&#x2F;models&#x2F;resource.js:338</code></a>
+        <a href="../files/addon_models_resource.js.html#l340"><code>addon&#x2F;models&#x2F;resource.js:340</code></a>
         </p>
 
 
@@ -1137,7 +1175,7 @@ Use this as a refence for creating computed properties</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l42"><code>addon&#x2F;models&#x2F;resource.js:42</code></a>
+        <a href="../files/addon_models_resource.js.html#l44"><code>addon&#x2F;models&#x2F;resource.js:44</code></a>
         </p>
 
 
@@ -1162,7 +1200,7 @@ Use this as a refence for creating computed properties</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l346"><code>addon&#x2F;models&#x2F;resource.js:346</code></a>
+        <a href="../files/addon_models_resource.js.html#l348"><code>addon&#x2F;models&#x2F;resource.js:348</code></a>
         </p>
 
 
@@ -1186,7 +1224,7 @@ Use this as a refence for creating computed properties</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l101"><code>addon&#x2F;models&#x2F;resource.js:101</code></a>
+        <a href="../files/addon_models_resource.js.html#l103"><code>addon&#x2F;models&#x2F;resource.js:103</code></a>
         </p>
 
 
@@ -1212,7 +1250,7 @@ Use this as a refence for creating computed properties</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l74"><code>addon&#x2F;models&#x2F;resource.js:74</code></a>
+        <a href="../files/addon_models_resource.js.html#l76"><code>addon&#x2F;models&#x2F;resource.js:76</code></a>
         </p>
 
 
@@ -1238,7 +1276,7 @@ Use this as a refence for creating computed properties</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l83"><code>addon&#x2F;models&#x2F;resource.js:83</code></a>
+        <a href="../files/addon_models_resource.js.html#l85"><code>addon&#x2F;models&#x2F;resource.js:85</code></a>
         </p>
 
 
@@ -1264,7 +1302,7 @@ Use this as a refence for creating computed properties</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l65"><code>addon&#x2F;models&#x2F;resource.js:65</code></a>
+        <a href="../files/addon_models_resource.js.html#l67"><code>addon&#x2F;models&#x2F;resource.js:67</code></a>
         </p>
 
 
@@ -1289,7 +1327,7 @@ Use this as a refence for creating computed properties</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l24"><code>addon&#x2F;models&#x2F;resource.js:24</code></a>
+        <a href="../files/addon_models_resource.js.html#l26"><code>addon&#x2F;models&#x2F;resource.js:26</code></a>
         </p>
 
 
@@ -1314,7 +1352,7 @@ Use this as a refence for creating computed properties</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l33"><code>addon&#x2F;models&#x2F;resource.js:33</code></a>
+        <a href="../files/addon_models_resource.js.html#l35"><code>addon&#x2F;models&#x2F;resource.js:35</code></a>
         </p>
 
 
