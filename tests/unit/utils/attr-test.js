@@ -45,75 +45,75 @@ test('using attr("string") throws an assertion error when getting with another t
 
 test('attr("boolean" setting a boolean)', function(assert) {
   let Person = Resource.extend({
-    isCowboy: attr('boolean')
+    "is-cowboy": attr('boolean')
   });
   let person = Person.create();
-  person.set('isCowboy', true);
-  assert.equal(person.get('isCowboy'), true, 'person set with a boolean attribute');
+  person.set("is-cowboy", true);
+  assert.equal(person.get("is-cowboy"), true, 'person set with a boolean attribute');
 });
 
 test('attr("boolean" getting a boolean)', function(assert) {
   let Person = Resource.extend({
-    isCowboy: attr('boolean')
+    "is-cowboy": attr('boolean')
   });
-  let person = Person.create({ attributes: {'isCowboy': true} });
-  assert.equal(person.get('isCowboy'), true, 'person.get("isCowboy") is a boolean attribute');
+  let person = Person.create({ attributes: {"is-cowboy": true} });
+  assert.equal(person.get("is-cowboy"), true, 'person.get("is-cowboy") is a boolean attribute');
 });
 
 test('using attr("boolean") throws an assertion error when setting with another type', function(assert) {
   let Person = Resource.extend({
-    isCowboy: attr('boolean')
+    "is-cowboy": attr('boolean')
   });
   let person = Person.create();
   assert.throws(function() {
-    person.set('isCowboy', 'yep');
-  }, 'Setting isCowboy to `"yep"` throws an assertion error');
+    person.set("is-cowboy", 'yep');
+  }, 'Setting "is-cowboy" to `"yep"` throws an assertion error');
 });
 
 test('using attr("boolean") throws an assertion error when getting with another type', function(assert) {
   let Person = Resource.extend({
-    isCowboy: attr('boolean')
+    "is-cowboy": attr('boolean')
   });
-  let person = Person.create({ attributes: {'isCowboy': 'yep'} });
+  let person = Person.create({ attributes: {"is-cowboy": 'yep'} });
   assert.throws(function() {
-    person.get('isCowboy');
-  }, 'Getting isCowboy already set with a `"yep"` throws an assertion error');
+    person.get("is-cowboy");
+  }, 'Getting "is-cowboy" already set with a `"yep"` throws an assertion error');
 });
 
 test('attr("number") setting a number', function(assert) {
   let Person = Resource.extend({
-    birthYear: attr('number')
+    "birth-year": attr('number')
   });
   let person = Person.create();
-  person.set('birthYear', 1848);
-  assert.equal(person.get('birthYear'), 1848, 'person set with a number attribute');
+  person.set('birth-year', 1848);
+  assert.equal(person.get('birth-year'), 1848, 'person set with a number attribute');
 });
 
 test('attr("number") getting a number', function(assert) {
   let Person = Resource.extend({
-    birthYear: attr('number')
+    "birth-year": attr('number')
   });
-  let person = Person.create({ attributes: {'birthYear': 1848} });
-  assert.equal(person.get('birthYear'), 1848, 'person.get("birthYear") is a number');
+  let person = Person.create({ attributes: {'birth-year': 1848} });
+  assert.equal(person.get('birth-year'), 1848, 'person.get("birthYear") is a number');
 });
 
 test('using attr("number") throws an assertion error when setting with another type', function(assert) {
   let Person = Resource.extend({
-    birthYear: attr('number')
+    "birth-year": attr('number')
   });
   let person = Person.create();
   assert.throws(function() {
-    person.set('birthYear', '1848');
+    person.set('birth-year', '1848');
   }, 'Setting birthYear to `"1848"` throws an assertion error');
 });
 
 test('using attr("number") throws an assertion error when getting with another type', function(assert) {
   let Person = Resource.extend({
-    birthYear: attr('number')
+    "birth-year": attr('number')
   });
-  let person = Person.create({ attributes: {'birthYear': '1848'} });
+  let person = Person.create({ attributes: {'birth-year': '1848'} });
   assert.throws(function() {
-    person.get('birthYear');
+    person.get('birth-year');
   }, 'Getting birthYear already set to `"1848"` throws an assertion error');
 });
 

@@ -20,7 +20,7 @@ module('Acceptance | polymorphic', {
   }
 });
 
-test('visiting /pictures', function(assert) {
+test('visiting /pictures list', function(assert) {
   assert.expect(6);
   setupFetchResonses(this.sandbox);
 

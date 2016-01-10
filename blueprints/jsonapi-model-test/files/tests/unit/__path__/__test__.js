@@ -1,22 +1,21 @@
 import { moduleFor, test } from 'ember-qunit';
 import Model from '<%= modelPath %>';
+import Ember from 'ember';
 
 moduleFor('model:<%= dasherizedModuleName %>', '<%= friendlyDescription %>', {
   // Specify the other units that are required for this test.
 <%= typeof needs !== 'undefined' ? needs : '' %>
   beforeEach() {
-    const opts = { instantiate: false, singleton: false };
-    Model.prototype.container = this.container;
-    // Use a non-standard name, i.e. pluralized instead of singular
-    this.registry.register('model:<%= resource %>', Model, opts);
+    let opts = { instantiate: false, singleton: false };
+    this.registry.register('model:<%= entity %>', Model, opts);
   },
   afterEach() {
-    delete Model.prototype.container;
-    this.registry.unregister('model:<%= resource %>');
+    this.registry.unregister('model:<%= entity %>');
   }
 });
 
 test('<%= resource %> has "type" property set to: <%= resource %>', function(assert) {
-  var model = this.container.lookupFactory('model:<%= resource %>').create();
+  let owner = (typeof Ember.getOwner === 'function') ? Ember.getOwner(this) : this.container;
+  let model = owner.lookup('model:<%= entity %>').create();
   assert.equal(model.get('type'), '<%= resource %>', 'resource has expected type');
 });

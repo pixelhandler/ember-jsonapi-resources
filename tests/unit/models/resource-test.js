@@ -7,31 +7,41 @@ import { setup, teardown } from 'dummy/tests/helpers/resources';
 moduleFor('model:resource', 'Unit | Model | resource', {
   beforeEach() {
     setup.call(this);
+    let owner = this.container;
     this.sandbox = window.sinon.sandbox.create();
+    this.registry.register('model:resource', Resource, { instantiate: false });
+    this._ogSubject = this.subject;
+    this.subject = function(options) {
+      let Factory = owner.lookup('model:resource');
+      Factory = Factory.extend({type: 'resource'});
+      return Factory.create(options);
+    };
   },
   afterEach() {
     teardown();
     this.sandbox.restore();
+    this.registry.unregister('model:resource');
+    this.subject = this._ogSubject;
   }
 });
 
 test('it creates an instance, default flag for isNew is false', function(assert) {
-  const resource = this.subject();
+  let resource = this.subject();
   assert.ok(!!resource);
   assert.equal(resource.get('isNew'), false, 'default value for isNew flag set to `false`');
 });
 
 test('#toString method', function(assert) {
-  const resource = this.subject();
+  let resource = this.subject();
   let stringified = resource.toString();
-  assert.equal(stringified, '[JSONAPIResource|null:null]', 'resource.toString() is ' + stringified);
+  assert.equal(stringified, '[JSONAPIResource|resource:null]', 'resource.toString() is ' + stringified);
   resource.setProperties({id: '1', type: 'post'});
   stringified = resource.toString();
   assert.equal(stringified, '[JSONAPIResource|post:1]', 'resource.toString() is ' + stringified);
 });
 
 test('it has the same attributes as JSON API 1.0 Resource objects', function(assert) {
-  const resource = this.subject();
+  let resource = this.subject();
   let attrs = Ember.String.w('type id attributes relationships links meta');
   attrs.forEach(function (attr) {
     var val = resource.get(attr);
@@ -40,7 +50,7 @@ test('it has the same attributes as JSON API 1.0 Resource objects', function(ass
 });
 
 test('it has methods to add/remove relationships', function(assert) {
-  const resource = this.subject();
+  let resource = this.subject();
   let methods = Ember.String.w('addRelationship removeRelationship');
   methods.forEach(function (method) {
     assert.ok(typeof resource[method] === 'function', 'resource#' + method + ' is a function');
@@ -48,7 +58,7 @@ test('it has methods to add/remove relationships', function(assert) {
 });
 
 test('it has properties for changed/previous attributes', function(assert) {
-  const resource = this.subject();
+  let resource = this.subject();
   let attrs = Ember.String.w('changedAttributes previousAttributes');
   attrs.forEach(function (attr) {
     var val = resource.get(attr);
@@ -57,12 +67,12 @@ test('it has properties for changed/previous attributes', function(assert) {
 });
 
 test('it needs a reference to an injected service object', function(assert) {
-  const resource = this.subject();
+  let resource = this.subject();
   assert.ok(resource.get('service') === null, 'resource#service is null by default');
 });
 
 test('attr() uses the attributes hash for computed model attributes', function(assert) {
-  let post = this.container.lookupFactory('model:post').create({
+  let post = this.container.lookup('model:post').create({
     id: '1', attributes: {title: 'Wyatt Earp', excerpt: 'Was a gambler.'}
   });
   assert.equal(post.get('title'), 'Wyatt Earp', 'name is set to "Wyatt Earp"');
@@ -73,23 +83,22 @@ test('attr() uses the attributes hash for computed model attributes', function(a
 });
 
 test('attr() helper creates a computed property using a unique (protected) attributes hash', function(assert) {
-  const Factory = this.container.lookupFactory('model:resource');
-  const PersonFactory = Factory.extend({ name: attr('string') });
+  const Factory = this.container.lookup('model:resource');
+  const PersonFactory = Factory.extend({ name: attr('string'), type: 'person' });
 
-  let personA = PersonFactory.create({ attributes: { 'name': 'Ricky' } });
+  let personA = PersonFactory.create({ attributes: { 'name': 'Ricky' }});
   assert.equal(personA.get('name'), 'Ricky', 'personA name is set to Ricky');
 
   let personB = PersonFactory.create();
   assert.equal(personB.get('name'), undefined, 'personB name is NOT set to Ricky');
 
-  const PersonResource = Resource.extend({ name: attr() });
-  let personC = PersonResource.create({ attributes: { 'name': 'Lucy' } });
+  let personC = PersonFactory.create({ attributes: { 'name': 'Lucy' }});
   assert.equal(personC.get('name'), 'Lucy', 'personC name is set to Lucy');
 
-  let personD = PersonResource.create();
+  let personD = PersonFactory.create();
   assert.equal(personD.get('name'), undefined, 'personD name is NOT set to Lucy');
 
-  const Actor = PersonResource.extend({ attributes: { show: attr() } });
+  const Actor = PersonFactory.extend({ show: attr(), type: 'person' });
   let lilRicky = Actor.create({ attributes: { 'name': 'Ricky Jr', 'show': 'I love Lucy' } });
   assert.equal(lilRicky.get('name'), 'Ricky Jr', 'lilRicky name is set to Ricky Jr');
 
@@ -98,7 +107,7 @@ test('attr() helper creates a computed property using a unique (protected) attri
 });
 
 test('#changedAttributes', function(assert) {
-  let post = this.container.lookupFactory('model:post').create({
+  let post = this.container.lookup('model:post').create({
     attributes: {id: '1', title: 'Wyatt Earp', excerpt: 'Was a gambler.'}
   });
   assert.equal(post.get('excerpt'), 'Was a gambler.', 'excerpt is set "Was a gambler."');
@@ -106,12 +115,12 @@ test('#changedAttributes', function(assert) {
   assert.equal(post.get('excerpt'), 'Became a deputy.', 'excerpt is set to "Became a deputy."');
 
   let changed = post.get('changedAttributes');
-  assert.equal(Ember.keys(changed).join(''), 'excerpt', 'changed attributes include only excerpt');
+  assert.equal(Object.keys(changed).join(''), 'excerpt', 'changed attributes include only excerpt');
   assert.equal(changed.excerpt, 'Became a deputy.', 'change excerpt value is "Became a deputy."');
 });
 
 test('#previousAttributes', function(assert) {
-  let post = this.container.lookupFactory('model:post').create({
+  let post = this.container.lookup('model:post').create({
     id: '1', attributes: {title: 'Wyatt Earp', excerpt: 'Was a gambler.'}
   });
   assert.equal(post.get('excerpt'), 'Was a gambler.', 'excerpt is set to "Was a gambler."');
@@ -119,12 +128,12 @@ test('#previousAttributes', function(assert) {
   assert.equal(post.get('excerpt'), 'Became a deputy.', 'excerpt is set to "Became a deputy."');
 
   let previous = post.get('previousAttributes');
-  assert.equal(Ember.keys(previous).join(''), 'excerpt', 'previous attributes include only excerpt');
+  assert.equal(Object.keys(previous).join(''), 'excerpt', 'previous attributes include only excerpt');
   assert.equal(previous.excerpt, 'Was a gambler.', 'previous excerpt value is "Was a gambler."');
 });
 
 test('#rollback resets attributes based on #previousAttributes', function(assert) {
-  let post = this.container.lookupFactory('model:post').create({
+  let post = this.container.lookup('model:post').create({
     id: '1', attributes: {title: 'Wyatt Earp', excerpt: 'Was a gambler.'}
   });
   assert.equal(post.get('excerpt'), 'Was a gambler.', 'excerpt is set to "Was a gambler."');
@@ -142,33 +151,33 @@ test('#rollback resets attributes based on #previousAttributes', function(assert
 });
 
 test('#didUpdateResource empties the resource _attributes hash when resource id matches json arg id value', function(assert) {
-  let post = this.container.lookupFactory('model:post').create({
+  let post = this.container.lookup('model:post').create({
     id: '1', attributes: {title: 'Wyatt Earp', excerpt: 'Was a gambler.'}
   });
   post.set('excerpt', 'became a deputy.');
-  assert.equal(Ember.keys(post.get('_attributes')).length, 1, 'one changed attribute present before didUpdateResource called');
+  assert.equal(Object.keys(post.get('_attributes')).length, 1, 'one changed attribute present before didUpdateResource called');
   post.didUpdateResource({id: '1'});
-  assert.equal(Ember.keys(post.get('_attributes')).length, 0, 'no changed attribute present after didUpdateResource called');
+  assert.equal(Object.keys(post.get('_attributes')).length, 0, 'no changed attribute present after didUpdateResource called');
 });
 
 test('#didUpdateResource does nothing if json argument has an id that does not match the resource id', function(assert) {
-  let post = this.container.lookupFactory('model:post').create({
+  let post = this.container.lookup('model:post').create({
     id: '1', attributes: {title: 'Wyatt Earp', excerpt: 'Was a gambler.'}
   });
   post.set('excerpt', 'became a deputy.');
-  assert.equal(Ember.keys(post.get('_attributes')).length, 1, 'one changed attribute present before didUpdateResource called');
+  assert.equal(Object.keys(post.get('_attributes')).length, 1, 'one changed attribute present before didUpdateResource called');
   post.didUpdateResource({id: 'not-1'});
-  assert.equal(Ember.keys(post.get('_attributes')).length, 1, 'one changed attribute still present after didUpdateResource called');
+  assert.equal(Object.keys(post.get('_attributes')).length, 1, 'one changed attribute still present after didUpdateResource called');
 });
 
 test('#addRelationship', function(assert) {
-  let post = this.container.lookupFactory('model:post').create({
+  let post = this.container.lookup('model:post').create({
     id: '1', attributes: {title: 'Wyatt Earp', excerpt: 'Was a gambler.'}
   });
   post.addRelationship('author', '2');
   let authorRelation = '{"author":{"links":{},"data":{"type":"authors","id":"2"}},"comments":{"links":{},"data":[]}}';
   assert.equal(JSON.stringify(post.get('relationships')), authorRelation, 'added relationship for author');
-  let comment = this.container.lookupFactory('model:comment').create({
+  let comment = this.container.lookup('model:comment').create({
     id: '4',  attributes: {body: 'Wyatt become a deputy too.' },
     relationships: { commenter: { data: { type: 'commenter', id: '3' } } }
   });
@@ -181,26 +190,26 @@ test('#addRelationship', function(assert) {
 });
 
 test('#removeRelationship', function(assert) {
-  let post = this.container.lookupFactory('model:post').create({
+  let post = this.container.lookup('model:post').create({
     id: '1', attributes: {title: 'Wyatt Earp', excerpt: 'Was a gambler.'},
     relationships: {
       author: { data: { type: 'authors', id: '2' } },
       comments: { data: [{ type: 'comments', id: '4' }] }
     }
   });
-  let author = this.container.lookupFactory('model:author').create({
+  let author = this.container.lookup('model:author').create({
     id: '2', attributes: { name: 'Bill' },
     relationships: {
       posts: { data: [{ type: 'posts', id: '1' }] }
     }
   });
-  let commenter = this.container.lookupFactory('model:commenter').create({
+  let commenter = this.container.lookup('model:commenter').create({
     id: '3', attributes: { name: 'Virgil Erp' },
     relationships: {
       comments: { data: [{ type: 'comments', id: '4' }] }
     }
   });
-  let comment = this.container.lookupFactory('model:comment').create({
+  let comment = this.container.lookup('model:comment').create({
     id: '4', attributes: { body: 'Wyatt become a deputy too.' },
     relationships: {
       commenter: { data: { type: 'commenter', id: '3' } },
@@ -245,7 +254,7 @@ test('#removeRelationship', function(assert) {
 });
 
 test('#addRelationships', function(assert) {
-  let post = this.container.lookupFactory('model:post').create({
+  let post = this.container.lookup('model:post').create({
     id: '1', attributes: {title: 'Wyatt Earp', excerpt: 'Was a gambler.'}
   });
   post.addRelationships('comments', ['4', '5']);
@@ -261,7 +270,7 @@ test('#addRelationships', function(assert) {
 });
 
 test('#removeRelationships', function(assert) {
-  let post = this.container.lookupFactory('model:post').create({
+  let post = this.container.lookup('model:post').create({
     id: '1', attributes: {title: 'Wyatt Earp', excerpt: 'Was a gambler.'},
     relationships: {
       author: { data: { type: 'authors', id: '2' } },
@@ -278,7 +287,7 @@ test('#removeRelationships', function(assert) {
 
 test('#updateRelationship', function(assert) {
   let serviceOp = this.sandbox.spy();
-  let post = this.container.lookupFactory('model:post').create({
+  let post = this.container.lookup('model:post').create({
     id: '1', attributes: {title: 'Wyatt Earp', excerpt: 'Was a gambler.'},
     relationships: {
       author: { data: { type: 'authors', id: '2' } },
@@ -318,13 +327,13 @@ test('#updateRelationship', function(assert) {
 });
 
 test('#didResolveProxyRelation', function(assert) {
-  let post = this.container.lookupFactory('model:post').create({
+  let post = this.container.lookup('model:post').create({
     id: '1', attributes: {title: 'Wyatt Earp', excerpt: 'Was a gambler.'},
     relationships: {
       author: { data: { type: 'authors', id: '2'} }
     }
   });
-  let author = this.container.lookupFactory('model:author').create({
+  let author = this.container.lookup('model:author').create({
     id: '2', attributes: { name: 'Bill' },
     relationships: {
       posts: { data: [{ type: 'posts', id: '1' }] }
@@ -346,7 +355,7 @@ test('#didResolveProxyRelation', function(assert) {
 
 test('#isNew resource uses relations without proxied content', function(assert) {
   let serviceOp = this.sandbox.spy();
-  let post = this.container.lookupFactory('model:post').create({
+  let post = this.container.lookup('model:post').create({
     id: '1', attributes: {title: 'Wyatt Earp', excerpt: 'Was a gambler.'},
     isNew: true,
     // mock service
@@ -369,12 +378,12 @@ test('#isNew resource uses relations without proxied content', function(assert) 
 });
 
 test('#cacheDuration default value is 7 minutes', function(assert) {
-  const resource = this.subject();
+  let resource = this.subject();
   assert.equal(resource.get('cacheDuration'), 420000, '420000 milliseconds is default cache duration');
 });
 
 test('#isCacheExpired is true when local timestamp plus cacheDuration is now or in the past', function(assert) {
-  const resource = this.subject({
+  let resource = this.subject({
     id: '1',
     meta: { timeStamps: { local: Date.now() - 420000 } },
     cacheDuration: 420000
@@ -383,7 +392,7 @@ test('#isCacheExpired is true when local timestamp plus cacheDuration is now or 
 });
 
 test('#isCacheExpired is false when local timestamp plus cacheDuration is less than now', function(assert) {
-  const resource = this.subject({
+  let resource = this.subject({
     id: '1',
     meta: { timeStamps: { local: Date.now() - 419000 } },
     cacheDuration: 420000

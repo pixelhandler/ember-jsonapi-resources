@@ -115,7 +115,8 @@ export default Ember.Object.extend(FetchMixin, Ember.Evented, {
       type = resource.type;
     }
     // use resource's service if in container, otherwise use this service to fetch
-    let service = this.container.lookup('service:' + pluralize(type)) || this;
+    let owner = (typeof Ember.getOwner === 'function') ? Ember.getOwner(this) : this.container;
+    let service = owner.lookup('service:' + pluralize(type)) || this;
     url = this.fetchUrl(url);
     return service.fetch(url, { method: 'GET' });
   },
