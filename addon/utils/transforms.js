@@ -1,6 +1,7 @@
 /**
   @module ember-jsonapi-resources
   @submodule utils
+  @main dateTransform
 **/
 
 import { isBlank, isType } from 'ember-jsonapi-resources/utils/is';
@@ -44,6 +45,6 @@ class TransformDateAttribute {
 }
 
 /**
-  @main dateTransform
+  @final
 */
 export let dateTransform = new TransformDateAttribute();

@@ -6,6 +6,18 @@
 import Ember from 'ember';
 
 /**
+  Abstract class to transform mapped data structures
+
+  @class Utils
+  @static
+**/
+export default class Utils {
+  isBlank() { return isBlank(); }
+  isDasherized() { return isDasherized(); }
+  isType() { return isType(); }
+}
+
+/**
   @method isBlank
   @param {String} value
   @return {Boolean}

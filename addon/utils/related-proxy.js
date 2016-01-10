@@ -1,6 +1,7 @@
 /**
   @module ember-jsonapi-resources
   @submodule utils
+  @main RelatedProxyUtil
 **/
 
 import Ember from 'ember';
@@ -11,6 +12,7 @@ import { pluralize } from 'ember-inflector';
 
   @class RelatedProxyUtil
   @static
+  @final
 */
 const RelatedProxyUtil = Ember.Object.extend({
 

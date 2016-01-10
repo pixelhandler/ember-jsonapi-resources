@@ -4,7 +4,8 @@
 **/
 
 /**
-  @constructor ServerError
+  @class ServerError
+  @constructor
   @param {String} message
   @param {Object} response
   @return {Error}
@@ -21,7 +22,8 @@ export function ServerError(message = 'Server Error', response = null) {
 ServerError.prototype = errorProtoFactory(ServerError);
 
 /**
-  @constructor ClientError
+  @class ClientError
+  @constructor
   @param {String} message
   @param {Object} response
   @return {Error}
@@ -38,7 +40,8 @@ export function ClientError(message = 'Client Error', response = null) {
 ClientError.prototype = errorProtoFactory(ClientError);
 
 /**
-  @constructor FetchError
+  @class FetchError
+  @constructor
   @param {String} message
   @param {Error} error
   @param {Object} response

@@ -1,6 +1,7 @@
 /**
   @module ember-jsonapi-resources
   @submodule utils
+  @main TransformMap
 **/
 
 import { isBlank, isType } from './is';
@@ -10,7 +11,6 @@ import { isBlank, isType } from './is';
 
   @class TransformMap
   @constructor
-  @main TransformMap
 **/
 export default class TransformMap {
 

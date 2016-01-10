@@ -1,6 +1,7 @@
 /**
   @module ember-jsonapi-resources
   @submodule utils
+  @main attr
 **/
 
 import Ember from 'ember';
@@ -38,11 +39,12 @@ import { isBlank, isDasherized, isType } from 'ember-jsonapi-resources/utils/is'
   ```
 
   @method attr
+  @for Resource
+  @final
   @param {String} [type] an optional param for the type of property, i.e. `string`,
     `number`, `boolean`, `date`, `object`, or `array`
   @param {Boolean} [mutable=true] optional param, defaults to `true` if not passed
   @return {Object} computed property
-  @main attr
 */
 export default function attr(type = 'any', mutable = true) {
   const _mutable = mutable;

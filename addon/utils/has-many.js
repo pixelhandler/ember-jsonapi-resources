@@ -1,6 +1,7 @@
 /**
   @module ember-jsonapi-resources
   @submodule utils
+  @main hasMany
 **/
 
 import Ember from 'ember';
@@ -34,11 +35,12 @@ import { isDasherized } from 'ember-jsonapi-resources/utils/is';
   ```
 
   @method hasMany
+  @for Resource
+  @final
   @param {String|Object} relation the name of the relationship
   @param {String} relation.resource the name of the relationship
   @param {String} relation.type the name of the type or service to use
   @return {Object} computed property
-  @main hasMany
 */
 export default function hasMany(relation) {
   let type = relation;
