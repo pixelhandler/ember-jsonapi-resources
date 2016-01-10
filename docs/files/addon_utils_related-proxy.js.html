@@ -62,7 +62,6 @@
                                 <li><a href="../modules/resource.html">resource</a></li>
                                 <li><a href="../modules/serializers.html">serializers</a></li>
                                 <li><a href="../modules/store.html">store</a></li>
-                                <li><a href="../modules/transform-map.html">transform-map</a></li>
                                 <li><a href="../modules/transforms.html">transforms</a></li>
                                 <li><a href="../modules/utils.html">utils</a></li>
                             </ul>
@@ -276,6 +275,11 @@ const RelatedProxyUtil = Ember.Object.extend({
 
 export default RelatedProxyUtil;
 
+/**
+  @method linksPath
+  @param {String} relation
+  @return {String} path to the related link
+*/
 export function linksPath(relation) {
   return [&#x27;relationships&#x27;, relation, &#x27;links&#x27;, &#x27;related&#x27;].join(&#x27;.&#x27;);
 }

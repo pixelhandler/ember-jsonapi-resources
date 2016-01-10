@@ -58,7 +58,7 @@ YUI.add("yuidoc-meta", function(Y) {
         {
             "displayName": "resource",
             "name": "resource",
-            "description": "A Resource class to create JSON API resource objects\n\nSee <http://jsonapi.org/format/#document-resource-objects>"
+            "description": "A Resource class to create JSON API resource objects. This is abstract, first\ndefine a prototype using `Resource.extend({ type: entity })`. Model prototypes\nare registered in the container as factories, they use the options:\n`{ instantiate: false, singleton: false }`. So, to create a model instance\nuse the owner API or the container to `lookup` the factory, for exampe:\n\n```js\nlet owner = Ember.getOwner(this) || this.container;\nowner.lookup('model:entity').create({ attributes: { key: value } });\n```\n\nSee <http://jsonapi.org/format/#document-resource-objects>"
         },
         {
             "displayName": "serializers",
@@ -69,11 +69,6 @@ YUI.add("yuidoc-meta", function(Y) {
             "displayName": "store",
             "name": "store",
             "description": "Service for a JSON API endpoint a facade to your resource adapter"
-        },
-        {
-            "displayName": "transform-map",
-            "name": "transform-map",
-            "description": "Abstract class to transform mapped data structures"
         },
         {
             "displayName": "transforms",

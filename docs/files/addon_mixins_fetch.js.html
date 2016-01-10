@@ -62,7 +62,6 @@
                                 <li><a href="../modules/resource.html">resource</a></li>
                                 <li><a href="../modules/serializers.html">serializers</a></li>
                                 <li><a href="../modules/store.html">store</a></li>
-                                <li><a href="../modules/transform-map.html">transform-map</a></li>
                                 <li><a href="../modules/transforms.html">transforms</a></li>
                                 <li><a href="../modules/utils.html">utils</a></li>
                             </ul>
@@ -114,10 +113,11 @@ import { ServerError, ClientError, FetchError } from &#x27;ember-jsonapi-resourc
   methods and a &#x60;serializer&#x60; injection.
 
   @class FetchMixin
+  @static
 */
 export default Ember.Mixin.create({
   /**
-    Flag indicates whether to use window.fetch or not
+    Flag indicates whether to use window.fetch or not, computed from &#x60;useAjax&#x60;
 
     @property useFetch
     @type Boolean
@@ -267,7 +267,7 @@ export default Ember.Mixin.create({
   },
 
   /**
-    @method ajaxDoneHandler
+    @method ajaxFailHandler
     @param {Function} reject - Promise reject handler
     @return {Function} closure with reject handler
   */

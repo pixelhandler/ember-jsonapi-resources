@@ -62,7 +62,6 @@
                                 <li><a href="../modules/resource.html">resource</a></li>
                                 <li><a href="../modules/serializers.html">serializers</a></li>
                                 <li><a href="../modules/store.html">store</a></li>
-                                <li><a href="../modules/transform-map.html">transform-map</a></li>
                                 <li><a href="../modules/transforms.html">transforms</a></li>
                                 <li><a href="../modules/utils.html">utils</a></li>
                             </ul>
@@ -135,23 +134,27 @@
 
                     <ul class="index-list methods">
                             <li class="index-item method">
-                                <a href="#method_attr">attr</a>
-
-                            </li>
-                            <li class="index-item method">
                                 <a href="#method_createProxy">createProxy</a>
 
                             </li>
                             <li class="index-item method">
-                                <a href="#method_hasMany">hasMany</a>
-
-                            </li>
-                            <li class="index-item method">
-                                <a href="#method_hasOne">hasOne</a>
-
-                            </li>
-                            <li class="index-item method">
                                 <a href="#method_init">init</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_isBlank">isBlank</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_isDasherized">isDasherized</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_isType">isType</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_linksPath">linksPath</a>
 
                             </li>
                             <li class="index-item method">
@@ -198,101 +201,6 @@
             <div id="methods" class="api-class-tabpanel">
                 <h2 class="off-left">Methods</h2>
 
-<div id="method_attr" class="method item">
-    <h3 class="name"><code>attr</code></h3>
-
-        <div class="args">
-            <span class="paren">(</span><ul class="args-list inline commas">
-                <li class="arg">
-                        <code class="optional">[type]</code>
-                </li>
-                <li class="arg">
-                        <code class="optional">[mutable=true]</code>
-                </li>
-            </ul><span class="paren">)</span>
-        </div>
-
-
-
-
-
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/addon_utils_attr.js.html#l9"><code>addon&#x2F;utils&#x2F;attr.js:9</code></a>
-        </p>
-
-
-
-    </div>
-
-    <div class="description">
-        <p>Utility helper to setup a computed property for a resource attribute, imported and
-exported with the resource submodule.</p>
-<p>An <code>attr</code> of the resource is a computed property to the actual attribute in an
-<code>attributes</code> hash on the <code>resource</code> (model) instance. Using <code>attr()</code> supports
-any type, and an optional <code>type</code> (String) argument can be used to enforce
-setting and getting with a specific type. <code>'string'</code>, <code>'number'</code>, <code>'boolean'</code>,
-<code>'date'</code>, <code>'object'</code>, and <code>'array'</code> are all valid types for attributes.</p>
-<p>Use <code>attr()</code>, with optional type argument, to compose your model attributes, e.g:</p>
-<pre class="code prettyprint"><code class="language-js">import Ember from 'ember';
-import Resource from 'ember-jsonapi-resources/models/resource';
-import { attr, hasOne, hasMany } from 'ember-jsonapi-resources/models/resource';
-
-export default Resource.extend({
-  type: 'articles',
-  service: Ember.inject.service('articles'),
-
-  title: attr('string'),
-  published: attr('date'),
-  tags: attr('array'),
-  footnotes: attr('object'),
-  revisions: attr()
-  version: attr('number'),
-  &quot;is-approved&quot;: attr('boolean')
-});
-</code></pre>
-
-    </div>
-
-        <div class="params">
-            <h4>Parameters:</h4>
-
-            <ul class="params-list">
-                <li class="param">
-                        <code class="param-name optional">[type]</code>
-                        <span class="type">String</span>
-                        <span class="flag optional" title="This parameter is optional.">optional</span>
-
-
-                    <div class="param-description">
-                        <p>an optional param for the type of property, i.e. <code>string</code>,
-<code>number</code>, <code>boolean</code>, <code>date</code>, <code>object</code>, or <code>array</code></p>
-
-                    </div>
-
-                </li>
-                <li class="param">
-                        <code class="param-name optional">[mutable=true]</code>
-                        <span class="type">Boolean</span>
-                        <span class="flag optional" title="This parameter is optional.">optional</span>
-
-
-                    <div class="param-description">
-                        <p>optional param, defaults to <code>true</code> if not passed</p>
-
-                    </div>
-
-                </li>
-            </ul>
-        </div>
-
-
-
-</div>
 <div id="method_createProxy" class="method item">
     <h3 class="name"><code>createProxy</code></h3>
 
@@ -372,191 +280,6 @@ export default Resource.extend({
 
 
 </div>
-<div id="method_hasMany" class="method item">
-    <h3 class="name"><code>hasMany</code></h3>
-
-        <div class="args">
-            <span class="paren">(</span><ul class="args-list inline commas">
-                <li class="arg">
-                        <code>relation</code>
-                </li>
-            </ul><span class="paren">)</span>
-        </div>
-
-
-
-
-
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/addon_utils_has-many.js.html#l11"><code>addon&#x2F;utils&#x2F;has-many.js:11</code></a>
-        </p>
-
-
-
-    </div>
-
-    <div class="description">
-        <p>Helper to setup a has many relationship to another resource</p>
-<pre class="code prettyprint"><code class="language-js">let Author = Resource.extend({
-  type: 'authors',
-  name: attr(),
-  posts: hasMany('posts')
-});
-</code></pre>
-<p>Or, with an optional type to use instead of the resource's service</p>
-<pre class="code prettyprint"><code class="language-js">let Person = Resource.extend({
-  type: 'people',
-  name: attr()
-});
-
-let Supervisor = Person.extend({
-  type: 'supervisors',
-  directReports: hasMany({ resource: 'employees', type: 'people' })
-});
-</code></pre>
-
-    </div>
-
-        <div class="params">
-            <h4>Parameters:</h4>
-
-            <ul class="params-list">
-                <li class="param">
-                        <code class="param-name">relation</code>
-                        <span class="type">String | Object</span>
-
-
-                    <div class="param-description">
-                        <p>the name of the relationship</p>
-
-                    </div>
-
-                        <ul class="params-list">
-                            <li class="param">
-                                    <code class="param-name">resource</code>
-                                    <span class="type">String</span>
-
-                                <div class="param-description">
-                                    <p>the name of the relationship</p>
-
-                                </div>
-
-                            </li>
-                            <li class="param">
-                                    <code class="param-name">type</code>
-                                    <span class="type">String</span>
-
-                                <div class="param-description">
-                                    <p>the name of the type or service to use</p>
-
-                                </div>
-
-                            </li>
-                        </ul>
-                </li>
-            </ul>
-        </div>
-
-
-
-</div>
-<div id="method_hasOne" class="method item">
-    <h3 class="name"><code>hasOne</code></h3>
-
-        <div class="args">
-            <span class="paren">(</span><ul class="args-list inline commas">
-                <li class="arg">
-                        <code>relation</code>
-                </li>
-            </ul><span class="paren">)</span>
-        </div>
-
-
-
-
-
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/addon_utils_has-one.js.html#l11"><code>addon&#x2F;utils&#x2F;has-one.js:11</code></a>
-        </p>
-
-
-
-    </div>
-
-    <div class="description">
-        <p>Helper to setup a has one relationship to another resource</p>
-<pre class="code prettyprint"><code class="language-js">let Employee = Person.extend({
-  type: 'employees',
-  supervisor: hasOne('supervisor')
-});
-</code></pre>
-<p>Or, with an optional type to use instead of the resource's service</p>
-<pre class="code prettyprint"><code class="language-js">let Person = Resource.extend({
-  type: 'people',
-  name: attr()
-});
-
-let Employee = Person.extend({
-  type: 'employees',
-  supervisor: hasOne({ resource: 'supervisor', type: 'people' })
-});
-</code></pre>
-
-    </div>
-
-        <div class="params">
-            <h4>Parameters:</h4>
-
-            <ul class="params-list">
-                <li class="param">
-                        <code class="param-name">relation</code>
-                        <span class="type">String | Object</span>
-
-
-                    <div class="param-description">
-                        <p>the name of the relationship</p>
-
-                    </div>
-
-                        <ul class="params-list">
-                            <li class="param">
-                                    <code class="param-name">resource</code>
-                                    <span class="type">String</span>
-
-                                <div class="param-description">
-                                    <p>the name of the relationship</p>
-
-                                </div>
-
-                            </li>
-                            <li class="param">
-                                    <code class="param-name">type</code>
-                                    <span class="type">String</span>
-
-                                <div class="param-description">
-                                    <p>the name of the type or service to use</p>
-
-                                </div>
-
-                            </li>
-                        </ul>
-                </li>
-            </ul>
-        </div>
-
-
-
-</div>
 <div id="method_init" class="method item">
     <h3 class="name"><code>init</code></h3>
 
@@ -585,6 +308,275 @@ let Employee = Person.extend({
     </div>
 
 
+
+
+</div>
+<div id="method_isBlank" class="method item">
+    <h3 class="name"><code>isBlank</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>value</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">Boolean</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/addon_utils_is.js.html#l8"><code>addon&#x2F;utils&#x2F;is.js:8</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">value</code>
+                        <span class="type">String</span>
+
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Boolean</span>:
+            </div>
+        </div>
+
+
+</div>
+<div id="method_isDasherized" class="method item">
+    <h3 class="name"><code>isDasherized</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>name</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">Boolean</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/addon_utils_is.js.html#l17"><code>addon&#x2F;utils&#x2F;is.js:17</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">name</code>
+                        <span class="type">String</span>
+
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Boolean</span>:
+            </div>
+        </div>
+
+
+</div>
+<div id="method_isType" class="method item">
+    <h3 class="name"><code>isType</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>type</code>
+                </li>
+                <li class="arg">
+                        <code>value</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">Boolean</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/addon_utils_is.js.html#l26"><code>addon&#x2F;utils&#x2F;is.js:26</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">type</code>
+                        <span class="type">String</span>
+
+
+                    <div class="param-description">
+                        <ul>
+<li>e.g. string, date, error, boolean, etc.</li>
+</ul>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">value</code>
+                        <span class="type">Object</span>
+
+
+                    <div class="param-description">
+                        <ul>
+<li>object to test the type</li>
+</ul>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Boolean</span>:
+            </div>
+        </div>
+
+
+</div>
+<div id="method_linksPath" class="method item">
+    <h3 class="name"><code>linksPath</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>relation</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">String</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/addon_utils_related-proxy.js.html#l175"><code>addon&#x2F;utils&#x2F;related-proxy.js:175</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">relation</code>
+                        <span class="type">String</span>
+
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">String</span>:
+                    <p>path to the related link</p>
+
+            </div>
+        </div>
 
 
 </div>

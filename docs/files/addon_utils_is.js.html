@@ -62,7 +62,6 @@
                                 <li><a href="../modules/resource.html">resource</a></li>
                                 <li><a href="../modules/serializers.html">serializers</a></li>
                                 <li><a href="../modules/store.html">store</a></li>
-                                <li><a href="../modules/transform-map.html">transform-map</a></li>
                                 <li><a href="../modules/transforms.html">transforms</a></li>
                                 <li><a href="../modules/utils.html">utils</a></li>
                             </ul>
@@ -109,14 +108,30 @@
 
 import Ember from &#x27;ember&#x27;;
 
+/**
+  @method isBlank
+  @param {String} value
+  @return {Boolean}
+*/
 export function isBlank(value) {
   return value === null || typeof value === &#x27;undefined&#x27;;
 }
 
+/**
+  @method isDasherized
+  @param {String} name
+  @return {Boolean}
+*/
 export function isDasherized(name) {
   return (Ember.String.dasherize(name) === name);
 }
 
+/**
+  @method isType
+  @param {String} type - e.g. string, date, error, boolean, etc.
+  @param {Object} value - object to test the type
+  @return {Boolean}
+*/
 export function isType(type, value) {
   type = Ember.String.capitalize(type);
   type = &#x60;[object ${type}]&#x60;;

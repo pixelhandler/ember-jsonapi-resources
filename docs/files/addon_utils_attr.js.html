@@ -62,7 +62,6 @@
                                 <li><a href="../modules/resource.html">resource</a></li>
                                 <li><a href="../modules/serializers.html">serializers</a></li>
                                 <li><a href="../modules/store.html">store</a></li>
-                                <li><a href="../modules/transform-map.html">transform-map</a></li>
                                 <li><a href="../modules/transforms.html">transforms</a></li>
                                 <li><a href="../modules/utils.html">utils</a></li>
                             </ul>
@@ -145,6 +144,8 @@ import { isBlank, isDasherized, isType } from &#x27;ember-jsonapi-resources/util
   @param {String} [type] an optional param for the type of property, i.e. &#x60;string&#x60;,
     &#x60;number&#x60;, &#x60;boolean&#x60;, &#x60;date&#x60;, &#x60;object&#x60;, or &#x60;array&#x60;
   @param {Boolean} [mutable=true] optional param, defaults to &#x60;true&#x60; if not passed
+  @return {Object} computed property
+  @main attr
 */
 export default function attr(type = &#x27;any&#x27;, mutable = true) {
   const _mutable = mutable;

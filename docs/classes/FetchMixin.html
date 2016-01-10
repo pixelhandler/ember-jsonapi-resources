@@ -62,7 +62,6 @@
                                 <li><a href="../modules/resource.html">resource</a></li>
                                 <li><a href="../modules/serializers.html">serializers</a></li>
                                 <li><a href="../modules/store.html">store</a></li>
-                                <li><a href="../modules/transform-map.html">transform-map</a></li>
                                 <li><a href="../modules/transforms.html">transforms</a></li>
                                 <li><a href="../modules/utils.html">utils</a></li>
                             </ul>
@@ -156,11 +155,11 @@ methods and a <code>serializer</code> injection.</p>
 
                             </li>
                             <li class="index-item method">
-                                <a href="#method_ajaxDoneHandler">ajaxDoneHandler</a>
+                                <a href="#method_ajaxErrorHandler">ajaxErrorHandler</a>
 
                             </li>
                             <li class="index-item method">
-                                <a href="#method_ajaxErrorHandler">ajaxErrorHandler</a>
+                                <a href="#method_ajaxFailHandler">ajaxFailHandler</a>
 
                             </li>
                             <li class="index-item method">
@@ -250,7 +249,7 @@ methods and a <code>serializer</code> injection.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_mixins_fetch.js.html#l144"><code>addon&#x2F;mixins&#x2F;fetch.js:144</code></a>
+        <a href="../files/addon_mixins_fetch.js.html#l145"><code>addon&#x2F;mixins&#x2F;fetch.js:145</code></a>
         </p>
 
 
@@ -343,7 +342,7 @@ methods and a <code>serializer</code> injection.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_mixins_fetch.js.html#l34"><code>addon&#x2F;mixins&#x2F;fetch.js:34</code></a>
+        <a href="../files/addon_mixins_fetch.js.html#l35"><code>addon&#x2F;mixins&#x2F;fetch.js:35</code></a>
         </p>
 
 
@@ -431,7 +430,7 @@ methods and a <code>serializer</code> injection.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_mixins_fetch.js.html#l306"><code>addon&#x2F;mixins&#x2F;fetch.js:306</code></a>
+        <a href="../files/addon_mixins_fetch.js.html#l307"><code>addon&#x2F;mixins&#x2F;fetch.js:307</code></a>
         </p>
 
 
@@ -499,7 +498,7 @@ methods and a <code>serializer</code> injection.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_mixins_fetch.js.html#l224"><code>addon&#x2F;mixins&#x2F;fetch.js:224</code></a>
+        <a href="../files/addon_mixins_fetch.js.html#l225"><code>addon&#x2F;mixins&#x2F;fetch.js:225</code></a>
         </p>
 
 
@@ -570,73 +569,6 @@ methods and a <code>serializer</code> injection.</p>
         <div class="args">
             <span class="paren">(</span><ul class="args-list inline commas">
                 <li class="arg">
-                        <code>reject</code>
-                </li>
-            </ul><span class="paren">)</span>
-        </div>
-
-        <span class="returns-inline">
-            <span class="type">Function</span>
-        </span>
-
-
-
-
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/addon_mixins_fetch.js.html#l165"><code>addon&#x2F;mixins&#x2F;fetch.js:165</code></a>
-        </p>
-
-
-
-    </div>
-
-    <div class="description">
-        
-    </div>
-
-        <div class="params">
-            <h4>Parameters:</h4>
-
-            <ul class="params-list">
-                <li class="param">
-                        <code class="param-name">reject</code>
-                        <span class="type">Function</span>
-
-
-                    <div class="param-description">
-                        <ul>
-<li>Promise reject handler</li>
-</ul>
-
-                    </div>
-
-                </li>
-            </ul>
-        </div>
-
-        <div class="returns">
-            <h4>Returns:</h4>
-
-            <div class="returns-description">
-                        <span class="type">Function</span>:
-                    <p>closure with reject handler</p>
-
-            </div>
-        </div>
-
-
-</div>
-<div id="method_ajaxDoneHandler" class="method item">
-    <h3 class="name"><code>ajaxDoneHandler</code></h3>
-
-        <div class="args">
-            <span class="paren">(</span><ul class="args-list inline commas">
-                <li class="arg">
                         <code>resolve</code>
                 </li>
                 <li class="arg">
@@ -658,7 +590,7 @@ methods and a <code>serializer</code> injection.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_mixins_fetch.js.html#l188"><code>addon&#x2F;mixins&#x2F;fetch.js:188</code></a>
+        <a href="../files/addon_mixins_fetch.js.html#l189"><code>addon&#x2F;mixins&#x2F;fetch.js:189</code></a>
         </p>
 
 
@@ -744,7 +676,7 @@ methods and a <code>serializer</code> injection.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_mixins_fetch.js.html#l250"><code>addon&#x2F;mixins&#x2F;fetch.js:250</code></a>
+        <a href="../files/addon_mixins_fetch.js.html#l251"><code>addon&#x2F;mixins&#x2F;fetch.js:251</code></a>
         </p>
 
 
@@ -809,6 +741,73 @@ methods and a <code>serializer</code> injection.</p>
 
 
 </div>
+<div id="method_ajaxFailHandler" class="method item">
+    <h3 class="name"><code>ajaxFailHandler</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>reject</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">Function</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/addon_mixins_fetch.js.html#l166"><code>addon&#x2F;mixins&#x2F;fetch.js:166</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">reject</code>
+                        <span class="type">Function</span>
+
+
+                    <div class="param-description">
+                        <ul>
+<li>Promise reject handler</li>
+</ul>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Function</span>:
+                    <p>closure with reject handler</p>
+
+            </div>
+        </div>
+
+
+</div>
 <div id="method_ajaxNoContentHandler" class="method item">
     <h3 class="name"><code>ajaxNoContentHandler</code></h3>
 
@@ -839,7 +838,7 @@ methods and a <code>serializer</code> injection.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_mixins_fetch.js.html#l269"><code>addon&#x2F;mixins&#x2F;fetch.js:269</code></a>
+        <a href="../files/addon_mixins_fetch.js.html#l270"><code>addon&#x2F;mixins&#x2F;fetch.js:270</code></a>
         </p>
 
 
@@ -937,7 +936,7 @@ methods and a <code>serializer</code> injection.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_mixins_fetch.js.html#l210"><code>addon&#x2F;mixins&#x2F;fetch.js:210</code></a>
+        <a href="../files/addon_mixins_fetch.js.html#l211"><code>addon&#x2F;mixins&#x2F;fetch.js:211</code></a>
         </p>
 
 
@@ -1035,7 +1034,7 @@ methods and a <code>serializer</code> injection.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_mixins_fetch.js.html#l282"><code>addon&#x2F;mixins&#x2F;fetch.js:282</code></a>
+        <a href="../files/addon_mixins_fetch.js.html#l283"><code>addon&#x2F;mixins&#x2F;fetch.js:283</code></a>
         </p>
 
 
@@ -1140,7 +1139,7 @@ methods and a <code>serializer</code> injection.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_mixins_fetch.js.html#l76"><code>addon&#x2F;mixins&#x2F;fetch.js:76</code></a>
+        <a href="../files/addon_mixins_fetch.js.html#l77"><code>addon&#x2F;mixins&#x2F;fetch.js:77</code></a>
         </p>
 
 
@@ -1212,7 +1211,7 @@ methods and a <code>serializer</code> injection.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_mixins_fetch.js.html#l96"><code>addon&#x2F;mixins&#x2F;fetch.js:96</code></a>
+        <a href="../files/addon_mixins_fetch.js.html#l97"><code>addon&#x2F;mixins&#x2F;fetch.js:97</code></a>
         </p>
 
 
@@ -1284,7 +1283,7 @@ methods and a <code>serializer</code> injection.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_mixins_fetch.js.html#l108"><code>addon&#x2F;mixins&#x2F;fetch.js:108</code></a>
+        <a href="../files/addon_mixins_fetch.js.html#l109"><code>addon&#x2F;mixins&#x2F;fetch.js:109</code></a>
         </p>
 
 
@@ -1356,7 +1355,7 @@ methods and a <code>serializer</code> injection.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_mixins_fetch.js.html#l64"><code>addon&#x2F;mixins&#x2F;fetch.js:64</code></a>
+        <a href="../files/addon_mixins_fetch.js.html#l65"><code>addon&#x2F;mixins&#x2F;fetch.js:65</code></a>
         </p>
 
 
@@ -1431,7 +1430,7 @@ methods and a <code>serializer</code> injection.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_mixins_fetch.js.html#l121"><code>addon&#x2F;mixins&#x2F;fetch.js:121</code></a>
+        <a href="../files/addon_mixins_fetch.js.html#l122"><code>addon&#x2F;mixins&#x2F;fetch.js:122</code></a>
         </p>
 
 
@@ -1508,7 +1507,7 @@ methods and a <code>serializer</code> injection.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_mixins_fetch.js.html#l26"><code>addon&#x2F;mixins&#x2F;fetch.js:26</code></a>
+        <a href="../files/addon_mixins_fetch.js.html#l27"><code>addon&#x2F;mixins&#x2F;fetch.js:27</code></a>
         </p>
 
 
@@ -1533,14 +1532,14 @@ methods and a <code>serializer</code> injection.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_mixins_fetch.js.html#l15"><code>addon&#x2F;mixins&#x2F;fetch.js:15</code></a>
+        <a href="../files/addon_mixins_fetch.js.html#l16"><code>addon&#x2F;mixins&#x2F;fetch.js:16</code></a>
         </p>
 
 
     </div>
 
     <div class="description">
-        <p>Flag indicates whether to use window.fetch or not</p>
+        <p>Flag indicates whether to use window.fetch or not, computed from <code>useAjax</code></p>
 
     </div>
 

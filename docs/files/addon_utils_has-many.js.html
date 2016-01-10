@@ -62,7 +62,6 @@
                                 <li><a href="../modules/resource.html">resource</a></li>
                                 <li><a href="../modules/serializers.html">serializers</a></li>
                                 <li><a href="../modules/store.html">store</a></li>
-                                <li><a href="../modules/transform-map.html">transform-map</a></li>
                                 <li><a href="../modules/transforms.html">transforms</a></li>
                                 <li><a href="../modules/utils.html">utils</a></li>
                             </ul>
@@ -141,6 +140,8 @@ import { isDasherized } from &#x27;ember-jsonapi-resources/utils/is&#x27;;
   @param {String|Object} relation the name of the relationship
   @param {String} relation.resource the name of the relationship
   @param {String} relation.type the name of the type or service to use
+  @return {Object} computed property
+  @main hasMany
 */
 export default function hasMany(relation) {
   let type = relation;
