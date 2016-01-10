@@ -41,14 +41,18 @@
                                 <li><a href="../classes/ApplicationAdapter.html">ApplicationAdapter</a></li>
                                 <li><a href="../classes/ApplicationSerializer.html">ApplicationSerializer</a></li>
                                 <li><a href="../classes/AuthorizationMixin.html">AuthorizationMixin</a></li>
+                                <li><a href="../classes/ClientError.html">ClientError</a></li>
+                                <li><a href="../classes/FetchError.html">FetchError</a></li>
                                 <li><a href="../classes/FetchMixin.html">FetchMixin</a></li>
                                 <li><a href="../classes/RelatedProxyUtil.html">RelatedProxyUtil</a></li>
                                 <li><a href="../classes/Resource.html">Resource</a></li>
+                                <li><a href="../classes/ServerError.html">ServerError</a></li>
                                 <li><a href="../classes/ServiceCacheMixin.html">ServiceCacheMixin</a></li>
                                 <li><a href="../classes/StoreService.html">StoreService</a></li>
                                 <li><a href="../classes/TransformDateAttribute.html">TransformDateAttribute</a></li>
                                 <li><a href="../classes/TransformMap.html">TransformMap</a></li>
                                 <li><a href="../classes/TransformsMixin.html">TransformsMixin</a></li>
+                                <li><a href="../classes/Utils.html">Utils</a></li>
                             </ul>
                 
                 
@@ -104,6 +108,7 @@
 /**
   @module ember-jsonapi-resources
   @submodule utils
+  @main attr
 **/
 
 import Ember from &#x27;ember&#x27;;
@@ -141,11 +146,12 @@ import { isBlank, isDasherized, isType } from &#x27;ember-jsonapi-resources/util
   &#x60;&#x60;&#x60;
 
   @method attr
+  @for Resource
+  @final
   @param {String} [type] an optional param for the type of property, i.e. &#x60;string&#x60;,
     &#x60;number&#x60;, &#x60;boolean&#x60;, &#x60;date&#x60;, &#x60;object&#x60;, or &#x60;array&#x60;
   @param {Boolean} [mutable=true] optional param, defaults to &#x60;true&#x60; if not passed
   @return {Object} computed property
-  @main attr
 */
 export default function attr(type = &#x27;any&#x27;, mutable = true) {
   const _mutable = mutable;

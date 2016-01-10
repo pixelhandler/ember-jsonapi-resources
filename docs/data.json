@@ -120,13 +120,19 @@
                 "utils": 1
             },
             "classes": {},
-            "fors": {},
+            "fors": {
+                "Resource": 1
+            },
             "namespaces": {}
         },
         "addon/utils/errors.js": {
             "name": "addon/utils/errors.js",
             "modules": {},
-            "classes": {},
+            "classes": {
+                "ServerError": 1,
+                "ClientError": 1,
+                "FetchError": 1
+            },
             "fors": {},
             "namespaces": {}
         },
@@ -134,20 +140,26 @@
             "name": "addon/utils/has-many.js",
             "modules": {},
             "classes": {},
-            "fors": {},
+            "fors": {
+                "Resource": 1
+            },
             "namespaces": {}
         },
         "addon/utils/has-one.js": {
             "name": "addon/utils/has-one.js",
             "modules": {},
             "classes": {},
-            "fors": {},
+            "fors": {
+                "Resource": 1
+            },
             "namespaces": {}
         },
         "addon/utils/is.js": {
             "name": "addon/utils/is.js",
             "modules": {},
-            "classes": {},
+            "classes": {
+                "Utils": 1
+            },
             "fors": {},
             "namespaces": {}
         },
@@ -204,6 +216,10 @@
                 "ServiceCacheMixin": 1,
                 "TransformsMixin": 1,
                 "ApplicationSerializer": 1,
+                "ServerError": 1,
+                "ClientError": 1,
+                "FetchError": 1,
+                "Utils": 1,
                 "RelatedProxyUtil": 1,
                 "TransformMap": 1,
                 "TransformDateAttribute": 1
@@ -214,7 +230,7 @@
             },
             "namespaces": {},
             "file": "addon/utils/transforms.js",
-            "line": 8
+            "line": 9
         },
         "adapters": {
             "name": "adapters",
@@ -365,18 +381,26 @@
             "submodules": {},
             "elements": {},
             "classes": {
+                "ServerError": 1,
+                "ClientError": 1,
+                "FetchError": 1,
+                "Utils": 1,
                 "RelatedProxyUtil": 1,
                 "TransformMap": 1,
                 "TransformDateAttribute": 1
             },
-            "fors": {},
+            "fors": {
+                "Resource": 1
+            },
             "is_submodule": 1,
             "namespaces": {},
             "module": "ember-jsonapi-resources",
             "namespace": "",
             "file": "addon/utils/transforms.js",
-            "line": 8,
-            "description": "Utility for creating promise proxy objects for related resources"
+            "line": 9,
+            "tag": "main",
+            "itemtype": "main",
+            "description": "Abstract class to transform mapped data structures"
         }
     },
     "classes": {
@@ -523,6 +547,120 @@
             "description": "Serializer/Deserializer for a JSON API resource object, used by adapter.\n\nWhen extending use a mixin or define transform methods to serialize and/or\ndeserializer attributes based on the name or the type of attribute.\n\nThe methods use a naming convention:\n\n  - '[de]serialize' + 'AttrName' or 'TypeName' + 'Attribute'\n  - E.g. use `serializeNameAttribute` and `deserializeNameAttribute` in\n    a generated serializer for use with `name: attr()`\n  - Or, redefine `serializeDateAttribute` and `deserializeDateAttribute`\n    to use your own data transformation with `attr('date')` the default,\n    Date type [de]serialize methods transfrom to/from ISO Format.\n  - Transform methods based on the name of the attribute will be called\n    instead of any transform methods based on the type of the attribute.",
             "static": 1
         },
+        "ServerError": {
+            "name": "ServerError",
+            "shortname": "ServerError",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "ember-jsonapi-resources",
+            "submodule": "utils",
+            "namespace": "",
+            "file": "addon/utils/errors.js",
+            "line": 6,
+            "is_constructor": 1,
+            "params": [
+                {
+                    "name": "message",
+                    "description": "",
+                    "type": "String"
+                },
+                {
+                    "name": "response",
+                    "description": "",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Error"
+            }
+        },
+        "ClientError": {
+            "name": "ClientError",
+            "shortname": "ClientError",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "ember-jsonapi-resources",
+            "submodule": "utils",
+            "namespace": "",
+            "file": "addon/utils/errors.js",
+            "line": 24,
+            "is_constructor": 1,
+            "params": [
+                {
+                    "name": "message",
+                    "description": "",
+                    "type": "String"
+                },
+                {
+                    "name": "response",
+                    "description": "",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Error"
+            }
+        },
+        "FetchError": {
+            "name": "FetchError",
+            "shortname": "FetchError",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "ember-jsonapi-resources",
+            "submodule": "utils",
+            "namespace": "",
+            "file": "addon/utils/errors.js",
+            "line": 42,
+            "is_constructor": 1,
+            "params": [
+                {
+                    "name": "message",
+                    "description": "",
+                    "type": "String"
+                },
+                {
+                    "name": "error",
+                    "description": "",
+                    "type": "Error"
+                },
+                {
+                    "name": "response",
+                    "description": "",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Error"
+            }
+        },
+        "Utils": {
+            "name": "Utils",
+            "shortname": "Utils",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "ember-jsonapi-resources",
+            "submodule": "utils",
+            "namespace": "",
+            "file": "addon/utils/is.js",
+            "line": 8,
+            "description": "Abstract class to transform mapped data structures",
+            "static": 1
+        },
         "RelatedProxyUtil": {
             "name": "RelatedProxyUtil",
             "shortname": "RelatedProxyUtil",
@@ -535,9 +673,10 @@
             "submodule": "utils",
             "namespace": "",
             "file": "addon/utils/related-proxy.js",
-            "line": 9,
+            "line": 10,
             "description": "Utility for creating promise proxy objects for related resources",
-            "static": 1
+            "static": 1,
+            "final": 1
         },
         "TransformMap": {
             "name": "TransformMap",
@@ -551,13 +690,9 @@
             "submodule": "utils",
             "namespace": "",
             "file": "addon/utils/transform-map.js",
-            "line": 8,
+            "line": 9,
             "description": "Abstract class to transform mapped data structures",
-            "is_constructor": 1,
-            "mainName": "TransformMap",
-            "tag": "main",
-            "itemtype": "main",
-            "_main": true
+            "is_constructor": 1
         },
         "TransformDateAttribute": {
             "name": "TransformDateAttribute",
@@ -571,7 +706,7 @@
             "submodule": "utils",
             "namespace": "",
             "file": "addon/utils/transforms.js",
-            "line": 8,
+            "line": 9,
             "is_constructor": 1
         }
     },
@@ -2461,10 +2596,11 @@
         },
         {
             "file": "addon/utils/attr.js",
-            "line": 9,
+            "line": 10,
             "description": "Utility helper to setup a computed property for a resource attribute, imported and\nexported with the resource submodule.\n\nAn `attr` of the resource is a computed property to the actual attribute in an\n`attributes` hash on the `resource` (model) instance. Using `attr()` supports\nany type, and an optional `type` (String) argument can be used to enforce\nsetting and getting with a specific type. `'string'`, `'number'`, `'boolean'`,\n`'date'`, `'object'`, and `'array'` are all valid types for attributes.\n\nUse `attr()`, with optional type argument, to compose your model attributes, e.g:\n\n```js\nimport Ember from 'ember';\nimport Resource from 'ember-jsonapi-resources/models/resource';\nimport { attr, hasOne, hasMany } from 'ember-jsonapi-resources/models/resource';\n\nexport default Resource.extend({\n  type: 'articles',\n  service: Ember.inject.service('articles'),\n\n  title: attr('string'),\n  published: attr('date'),\n  tags: attr('array'),\n  footnotes: attr('object'),\n  revisions: attr()\n  version: attr('number'),\n  \"is-approved\": attr('boolean')\n});\n```",
-            "itemtype": "main",
+            "itemtype": "method",
             "name": "attr",
+            "final": 1,
             "params": [
                 {
                     "name": "type",
@@ -2484,96 +2620,17 @@
                 "description": "computed property",
                 "type": "Object"
             },
-            "mainName": "attr",
-            "tag": "main",
-            "_main": true,
-            "class": "RelatedProxyUtil",
-            "module": "ember-jsonapi-resources",
-            "submodule": "utils"
-        },
-        {
-            "file": "addon/utils/errors.js",
-            "line": 6,
-            "is_constructor": 1,
-            "params": [
-                {
-                    "name": "message",
-                    "description": "",
-                    "type": "String"
-                },
-                {
-                    "name": "response",
-                    "description": "",
-                    "type": "Object"
-                }
-            ],
-            "return": {
-                "description": "",
-                "type": "Error"
-            },
-            "class": "RelatedProxyUtil",
-            "module": "ember-jsonapi-resources",
-            "submodule": "utils"
-        },
-        {
-            "file": "addon/utils/errors.js",
-            "line": 23,
-            "is_constructor": 1,
-            "params": [
-                {
-                    "name": "message",
-                    "description": "",
-                    "type": "String"
-                },
-                {
-                    "name": "response",
-                    "description": "",
-                    "type": "Object"
-                }
-            ],
-            "return": {
-                "description": "",
-                "type": "Error"
-            },
-            "class": "RelatedProxyUtil",
-            "module": "ember-jsonapi-resources",
-            "submodule": "utils"
-        },
-        {
-            "file": "addon/utils/errors.js",
-            "line": 40,
-            "is_constructor": 1,
-            "params": [
-                {
-                    "name": "message",
-                    "description": "",
-                    "type": "String"
-                },
-                {
-                    "name": "error",
-                    "description": "",
-                    "type": "Error"
-                },
-                {
-                    "name": "response",
-                    "description": "",
-                    "type": "Object"
-                }
-            ],
-            "return": {
-                "description": "",
-                "type": "Error"
-            },
-            "class": "RelatedProxyUtil",
+            "class": "Resource",
             "module": "ember-jsonapi-resources",
             "submodule": "utils"
         },
         {
             "file": "addon/utils/has-many.js",
-            "line": 11,
+            "line": 12,
             "description": "Helper to setup a has many relationship to another resource\n\n```js\nlet Author = Resource.extend({\n  type: 'authors',\n  name: attr(),\n  posts: hasMany('posts')\n});\n```\n\nOr, with an optional type to use instead of the resource's service\n\n```js\nlet Person = Resource.extend({\n  type: 'people',\n  name: attr()\n});\n\nlet Supervisor = Person.extend({\n  type: 'supervisors',\n  directReports: hasMany({ resource: 'employees', type: 'people' })\n});\n```",
-            "itemtype": "main",
+            "itemtype": "method",
             "name": "hasMany",
+            "final": 1,
             "params": [
                 {
                     "name": "relation",
@@ -2597,19 +2654,17 @@
                 "description": "computed property",
                 "type": "Object"
             },
-            "mainName": "hasMany",
-            "tag": "main",
-            "_main": true,
-            "class": "RelatedProxyUtil",
+            "class": "Resource",
             "module": "ember-jsonapi-resources",
             "submodule": "utils"
         },
         {
             "file": "addon/utils/has-one.js",
-            "line": 11,
+            "line": 12,
             "description": "Helper to setup a has one relationship to another resource\n\n```js\nlet Employee = Person.extend({\n  type: 'employees',\n  supervisor: hasOne('supervisor')\n});\n```\n\nOr, with an optional type to use instead of the resource's service\n\n```js\nlet Person = Resource.extend({\n  type: 'people',\n  name: attr()\n});\n\nlet Employee = Person.extend({\n  type: 'employees',\n  supervisor: hasOne({ resource: 'supervisor', type: 'people' })\n});\n```",
-            "itemtype": "main",
+            "itemtype": "method",
             "name": "hasOne",
+            "final": 1,
             "params": [
                 {
                     "name": "relation",
@@ -2633,16 +2688,13 @@
                 "description": "computed property",
                 "type": "Object"
             },
-            "mainName": "hasOne",
-            "tag": "main",
-            "_main": true,
-            "class": "RelatedProxyUtil",
+            "class": "Resource",
             "module": "ember-jsonapi-resources",
             "submodule": "utils"
         },
         {
             "file": "addon/utils/is.js",
-            "line": 8,
+            "line": 20,
             "itemtype": "method",
             "name": "isBlank",
             "params": [
@@ -2656,13 +2708,13 @@
                 "description": "",
                 "type": "Boolean"
             },
-            "class": "RelatedProxyUtil",
+            "class": "Utils",
             "module": "ember-jsonapi-resources",
             "submodule": "utils"
         },
         {
             "file": "addon/utils/is.js",
-            "line": 17,
+            "line": 29,
             "itemtype": "method",
             "name": "isDasherized",
             "params": [
@@ -2676,13 +2728,13 @@
                 "description": "",
                 "type": "Boolean"
             },
-            "class": "RelatedProxyUtil",
+            "class": "Utils",
             "module": "ember-jsonapi-resources",
             "submodule": "utils"
         },
         {
             "file": "addon/utils/is.js",
-            "line": 26,
+            "line": 38,
             "itemtype": "method",
             "name": "isType",
             "params": [
@@ -2701,13 +2753,13 @@
                 "description": "",
                 "type": "Boolean"
             },
-            "class": "RelatedProxyUtil",
+            "class": "Utils",
             "module": "ember-jsonapi-resources",
             "submodule": "utils"
         },
         {
             "file": "addon/utils/related-proxy.js",
-            "line": 17,
+            "line": 19,
             "description": "Checks for required `relationship` property",
             "itemtype": "method",
             "name": "init",
@@ -2717,7 +2769,7 @@
         },
         {
             "file": "addon/utils/related-proxy.js",
-            "line": 30,
+            "line": 32,
             "description": "The name of the relationship",
             "itemtype": "property",
             "name": "resource",
@@ -2729,7 +2781,7 @@
         },
         {
             "file": "addon/utils/related-proxy.js",
-            "line": 39,
+            "line": 41,
             "description": "The name of the type of resource",
             "itemtype": "property",
             "name": "type",
@@ -2741,7 +2793,7 @@
         },
         {
             "file": "addon/utils/related-proxy.js",
-            "line": 48,
+            "line": 50,
             "description": "Proxy for the requested relation, resolves w/ content from fulfilled promise",
             "itemtype": "method",
             "name": "createProxy",
@@ -2767,7 +2819,7 @@
         },
         {
             "file": "addon/utils/related-proxy.js",
-            "line": 73,
+            "line": 75,
             "itemtype": "method",
             "name": "proxySetup",
             "params": [
@@ -2797,7 +2849,7 @@
         },
         {
             "file": "addon/utils/related-proxy.js",
-            "line": 94,
+            "line": 96,
             "itemtype": "method",
             "name": "proxyResolution",
             "params": [
@@ -2817,7 +2869,7 @@
         },
         {
             "file": "addon/utils/related-proxy.js",
-            "line": 116,
+            "line": 118,
             "description": "Proxy url to fetch for the resource's relation",
             "itemtype": "method",
             "name": "proxyUrl",
@@ -2843,7 +2895,7 @@
         },
         {
             "file": "addon/utils/related-proxy.js",
-            "line": 133,
+            "line": 135,
             "description": "Lookup relation from service cache and pomisify result",
             "itemtype": "method",
             "name": "promiseFromCache",
@@ -2874,7 +2926,7 @@
         },
         {
             "file": "addon/utils/related-proxy.js",
-            "line": 160,
+            "line": 162,
             "description": "Lookup data in service cache",
             "itemtype": "method",
             "name": "serviceCacheLookup",
@@ -2900,7 +2952,7 @@
         },
         {
             "file": "addon/utils/related-proxy.js",
-            "line": 175,
+            "line": 177,
             "itemtype": "method",
             "name": "linksPath",
             "params": [
@@ -2965,7 +3017,7 @@
         },
         {
             "file": "addon/utils/transforms.js",
-            "line": 14,
+            "line": 15,
             "itemtype": "method",
             "name": "serialize",
             "params": [
@@ -2985,7 +3037,7 @@
         },
         {
             "file": "addon/utils/transforms.js",
-            "line": 30,
+            "line": 31,
             "itemtype": "method",
             "name": "deserialize",
             "params": [
@@ -3005,11 +3057,8 @@
         },
         {
             "file": "addon/utils/transforms.js",
-            "line": 46,
-            "mainName": "dateTransform",
-            "tag": "main",
-            "itemtype": "main",
-            "_main": true,
+            "line": 47,
+            "final": 1,
             "class": "TransformDateAttribute",
             "module": "ember-jsonapi-resources",
             "submodule": "utils"
@@ -3022,15 +3071,7 @@
         },
         {
             "message": "Missing item type",
-            "line": " addon/utils/errors.js:6"
-        },
-        {
-            "message": "Missing item type",
-            "line": " addon/utils/errors.js:23"
-        },
-        {
-            "message": "Missing item type",
-            "line": " addon/utils/errors.js:40"
+            "line": " addon/utils/transforms.js:47"
         }
     ]
 }

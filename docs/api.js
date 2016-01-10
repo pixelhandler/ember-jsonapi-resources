@@ -4,14 +4,18 @@ YUI.add("yuidoc-meta", function(Y) {
         "ApplicationAdapter",
         "ApplicationSerializer",
         "AuthorizationMixin",
+        "ClientError",
+        "FetchError",
         "FetchMixin",
         "RelatedProxyUtil",
         "Resource",
+        "ServerError",
         "ServiceCacheMixin",
         "StoreService",
         "TransformDateAttribute",
         "TransformMap",
-        "TransformsMixin"
+        "TransformsMixin",
+        "Utils"
     ],
     "modules": [
         "adapters",
@@ -78,7 +82,7 @@ YUI.add("yuidoc-meta", function(Y) {
         {
             "displayName": "utils",
             "name": "utils",
-            "description": "Utility for creating promise proxy objects for related resources"
+            "description": "Abstract class to transform mapped data structures"
         }
     ],
     "elements": []

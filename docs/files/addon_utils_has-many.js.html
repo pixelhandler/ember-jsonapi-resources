@@ -41,14 +41,18 @@
                                 <li><a href="../classes/ApplicationAdapter.html">ApplicationAdapter</a></li>
                                 <li><a href="../classes/ApplicationSerializer.html">ApplicationSerializer</a></li>
                                 <li><a href="../classes/AuthorizationMixin.html">AuthorizationMixin</a></li>
+                                <li><a href="../classes/ClientError.html">ClientError</a></li>
+                                <li><a href="../classes/FetchError.html">FetchError</a></li>
                                 <li><a href="../classes/FetchMixin.html">FetchMixin</a></li>
                                 <li><a href="../classes/RelatedProxyUtil.html">RelatedProxyUtil</a></li>
                                 <li><a href="../classes/Resource.html">Resource</a></li>
+                                <li><a href="../classes/ServerError.html">ServerError</a></li>
                                 <li><a href="../classes/ServiceCacheMixin.html">ServiceCacheMixin</a></li>
                                 <li><a href="../classes/StoreService.html">StoreService</a></li>
                                 <li><a href="../classes/TransformDateAttribute.html">TransformDateAttribute</a></li>
                                 <li><a href="../classes/TransformMap.html">TransformMap</a></li>
                                 <li><a href="../classes/TransformsMixin.html">TransformsMixin</a></li>
+                                <li><a href="../classes/Utils.html">Utils</a></li>
                             </ul>
                 
                 
@@ -104,6 +108,7 @@
 /**
   @module ember-jsonapi-resources
   @submodule utils
+  @main hasMany
 **/
 
 import Ember from &#x27;ember&#x27;;
@@ -137,11 +142,12 @@ import { isDasherized } from &#x27;ember-jsonapi-resources/utils/is&#x27;;
   &#x60;&#x60;&#x60;
 
   @method hasMany
+  @for Resource
+  @final
   @param {String|Object} relation the name of the relationship
   @param {String} relation.resource the name of the relationship
   @param {String} relation.type the name of the type or service to use
   @return {Object} computed property
-  @main hasMany
 */
 export default function hasMany(relation) {
   let type = relation;

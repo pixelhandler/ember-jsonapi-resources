@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>serializers - Ember JSON API Resources</title>
+    <title>Utils - Ember JSON API Resources</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -101,51 +101,272 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-<h1>serializers Module</h1>
-<div class="box clearfix meta">
+<h1>Utils Class</h1>
+<div class="box meta">
 
 
         <div class="foundat">
-            Defined in: <a href="../files/addon_serializers_application.js.html#l9"><code>addon&#x2F;serializers&#x2F;application.js:9</code></a>
+            Defined in: <a href="../files/addon_utils_is.js.html#l8"><code>addon&#x2F;utils&#x2F;is.js:8</code></a>
         </div>
+
+            Module: <a href="../modules/utils.html">utils</a><br>
+            Parent Module: <a href="../modules/ember-jsonapi-resources.html">ember-jsonapi-resources</a>
 
 </div>
 
 
 <div class="box intro">
-    <p>Serializer/Deserializer for a JSON API resource object, used by adapter.</p>
-<p>When extending use a mixin or define transform methods to serialize and/or
-deserializer attributes based on the name or the type of attribute.</p>
-<p>The methods use a naming convention:</p>
-<ul>
-<li>'[de]serialize' + 'AttrName' or 'TypeName' + 'Attribute'</li>
-<li>E.g. use <code>serializeNameAttribute</code> and <code>deserializeNameAttribute</code> in
-a generated serializer for use with <code>name: attr()</code></li>
-<li>Or, redefine <code>serializeDateAttribute</code> and <code>deserializeDateAttribute</code>
-to use your own data transformation with <code>attr('date')</code> the default,
-Date type [de]serialize methods transfrom to/from ISO Format.</li>
-<li>Transform methods based on the name of the attribute will be called
-instead of any transform methods based on the type of the attribute.</li>
-</ul>
+    <p>Abstract class to transform mapped data structures</p>
 
 </div>
 
 
-<div class="yui3-g">
-    <div class="yui3-u-1-2">
-            <p>This module provides the following classes:</p>
+<div id="classdocs" class="tabview">
+    <ul class="api-class-tabs">
+        <li class="api-class-tab index"><a href="#index">Index</a></li>
 
-            <ul class="module-classes">
-                <li class="module-class">
-                    <a href="../classes/ApplicationSerializer.html">
-                        ApplicationSerializer
-                    </a>
+            <li class="api-class-tab methods"><a href="#methods">Methods</a></li>
+    </ul>
+
+    <div>
+        <div id="index" class="api-class-tabpanel index">
+            <h2 class="off-left">Item Index</h2>
+
+                <div class="index-section methods">
+                    <h3>Methods</h3>
+
+                    <ul class="index-list methods">
+                            <li class="index-item method">
+                                <a href="#method_isBlank">isBlank</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_isDasherized">isDasherized</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_isType">isType</a>
+
+                            </li>
+                    </ul>
+                </div>
+
+
+
+        </div>
+
+            <div id="methods" class="api-class-tabpanel">
+                <h2 class="off-left">Methods</h2>
+
+<div id="method_isBlank" class="method item">
+    <h3 class="name"><code>isBlank</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>value</code>
                 </li>
-            </ul>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">Boolean</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/addon_utils_is.js.html#l20"><code>addon&#x2F;utils&#x2F;is.js:20</code></a>
+        </p>
+
+
+
     </div>
 
+    <div class="description">
+        
+    </div>
 
-    <div class="yui3-u-1-2">
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">value</code>
+                        <span class="type">String</span>
+
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Boolean</span>:
+            </div>
+        </div>
+
+
+</div>
+<div id="method_isDasherized" class="method item">
+    <h3 class="name"><code>isDasherized</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>name</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">Boolean</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/addon_utils_is.js.html#l29"><code>addon&#x2F;utils&#x2F;is.js:29</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">name</code>
+                        <span class="type">String</span>
+
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Boolean</span>:
+            </div>
+        </div>
+
+
+</div>
+<div id="method_isType" class="method item">
+    <h3 class="name"><code>isType</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>type</code>
+                </li>
+                <li class="arg">
+                        <code>value</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">Boolean</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/addon_utils_is.js.html#l38"><code>addon&#x2F;utils&#x2F;is.js:38</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">type</code>
+                        <span class="type">String</span>
+
+
+                    <div class="param-description">
+                        <ul>
+<li>e.g. string, date, error, boolean, etc.</li>
+</ul>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">value</code>
+                        <span class="type">Object</span>
+
+
+                    <div class="param-description">
+                        <ul>
+<li>object to test the type</li>
+</ul>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Boolean</span>:
+            </div>
+        </div>
+
+
+</div>
+            </div>
+
+
+
     </div>
 </div>
                     </div>
