@@ -2,6 +2,7 @@
 var inflector = require('inflection');
 var stringUtil = require('ember-cli-string-utils');
 var pathUtil = require('ember-cli-path-utils');
+var path = require('path');
 
 module.exports = {
   description: 'Generates an (ember-jsonapi-resource) initializer for a service using the JSON API 1.0 spec.',
