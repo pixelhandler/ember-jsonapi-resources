@@ -23,7 +23,11 @@ module.exports = {
           return path.join(options.podPath, moduleName);
         }
         var blueprintName = options.originBlueprintName.replace('jsonapi-', '');
-        return inflector.pluralize(blueprintName);
+        if (blueprintName.match(/dictionary/) !== null) {
+          return 'utils/dictionaries';
+        } else {
+          return inflector.pluralize(blueprintName);
+        }
       },
       __root__: function(options) {
         if (options.inRepoAddon) {
@@ -38,14 +42,16 @@ module.exports = {
     var addonName      = stringUtil.dasherize(addonRawName);
     var blueprintName  = options.originBlueprintName.replace('jsonapi-', '');
     var fileName       = stringUtil.dasherize(options.entity.name);
-    var pathName       = [addonName, inflector.pluralize(blueprintName), fileName].join('/');
+    var modulePath     = [addonName, inflector.pluralize(blueprintName), fileName].join('/');
 
     if (options.pod) {
-      pathName = [addonName, fileName, blueprintName].join('/');
+      modulePath = [addonName, fileName, blueprintName].join('/');
     }
-
+    if (blueprintName.match(/dictionary/) !== null) {
+      modulePath = [addonName, 'utils/dictionaries', fileName].join('/');
+    }
     return {
-      modulePath: pathName
+      modulePath: modulePath
     };
   }
 };
