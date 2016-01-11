@@ -24,10 +24,7 @@ headers; or by whatever means the developer chooses.
 
 ## Status
 
-This addon has a 1.0.0 BETA release, and is under active development.
-
-There may be bugs depending on your use of the addon. Please do file an issue
-if you run into a bug.
+This addon has a 1.0.0 release.
 
 
 ## Requirements
