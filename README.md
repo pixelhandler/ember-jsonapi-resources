@@ -4,11 +4,11 @@ An [Ember CLI] Addon… a lightweight solution for data persistence in an [Ember
 application following the [JSON API] 1.0 specification (your anti-bikeshedding
 weapon for API development).
 
-See [ember-jsonapi-resources.com](http://ember-jsonapi-resources.com)
+See [ember-jsonapi-resources.com]
 
 * [API Docs][generated docs]
-* [Example App](https://github.com/pixelhandler/jr-test)
-* [Wiki Guide](https://github.com/pixelhandler/ember-jsonapi-resources/wiki)
+* [Example App]
+* [Wiki Guide]
 
 [![Build Status](https://travis-ci.org/pixelhandler/ember-jsonapi-resources.svg?branch=master)](https://travis-ci.org/pixelhandler/ember-jsonapi-resources)
 [![Ember Observer Score](http://emberobserver.com/badges/ember-jsonapi-resources.svg)](http://emberobserver.com/addons/ember-jsonapi-resources)
@@ -29,7 +29,7 @@ Clone the repo, install the dependencies:
 
 To run the app in /tests/dummy use a proxy url for a live API
 
-* `ember server --proxy http://api.pixelhandler.com`
+* `ember server`, an http-proxy is setup to use (dev) localhost:3000 or (prod) api.pixelhandler.com
 * Visit <http://localhost:4200>.
 
 ### Running Tests
@@ -46,10 +46,7 @@ see source code for the unit tests: [tests/unit](tests/unit).
 
 * `ember build`
 
-For more information on using ember-cli, visit [http://www.ember-cli.com/]
-
-[http://www.ember-cli.com/]: http://www.ember-cli.com/
-
+For more information on using ember-cli, visit [http://www.ember-cli.com/][Ember CLI]
 
 ## Documentation
 
@@ -65,5 +62,11 @@ To generate docs for the gh-pages branch:
 
 * `yuidoc ./addon/* -c yuidoc.json`
 
+[Ember CLI]: http://www.ember-cli.com/
+[Ember.js]: http://emberjs.com
+[ember-jsonapi-resources.com]: http://ember-jsonapi-resources.com
+[Example App]: https://github.com/pixelhandler/jr-test
 [generated docs]: http://pixelhandler.github.io/ember-jsonapi-resources/docs
+[JSON API]: http://jsonapi.org
+[Wiki Guide]: https://github.com/pixelhandler/ember-jsonapi-resources/wiki
 [yuidoc]: https://github.com/yui/yuidoc
