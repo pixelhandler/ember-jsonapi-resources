@@ -8,7 +8,7 @@ var pathUtil = require('ember-cli-path-utils');
 var getDependencyDepth = require('ember-cli-get-dependency-depth');
 
 module.exports = {
-  description: 'Generates a model unit test.',
+  description: 'Generates a (ember-jsonapi-resource) model unit test.',
 
   locals: function(options) {
     var resource = options.entity.name || options.args[1];

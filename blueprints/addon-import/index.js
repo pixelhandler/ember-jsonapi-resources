@@ -14,7 +14,12 @@ module.exports = {
         if (options.pod && options.hasPathToken) {
           return blueprintName;
         }
-        var moduleName = options.dasherizedModuleName.replace('jsonapi-', '');
+        var moduleName;
+        if (blueprintName.match(/transform-mixin/) !== null) {
+          moduleName = options.dasherizedModuleName + '-transforms';
+        } else {
+          moduleName = options.dasherizedModuleName;
+        }
         return moduleName;
       },
       __path__: function(options) {
@@ -25,6 +30,8 @@ module.exports = {
         var blueprintName = options.originBlueprintName.replace('jsonapi-', '');
         if (blueprintName.match(/dictionary/) !== null) {
           return 'utils/dictionaries';
+        } else if (blueprintName.match(/transform-mixin/) !== null) {
+          return 'mixins';
         } else {
           return inflector.pluralize(blueprintName);
         }
@@ -49,6 +56,8 @@ module.exports = {
     }
     if (blueprintName.match(/dictionary/) !== null) {
       modulePath = [addonName, 'utils/dictionaries', fileName].join('/');
+    } else if (blueprintName.match(/transform-mixin/) !== null) {
+      modulePath = [addonName, 'mixins', fileName + '-transforms'].join('/');
     }
     return {
       modulePath: modulePath
