@@ -8,7 +8,7 @@ var SerializerBlueprint = require('../jsonapi-serializer');
 var getDependencyDepth = require('ember-cli-get-dependency-depth');
 
 module.exports = {
-  description: 'Ember JSON API Resources: generates a serializer unit test.',
+  description: 'Generates an (ember-jsonapi-resource) serializer unit test.',
 
   locals: function(options) {
     var resource = options.entity.name || options.args[1];
