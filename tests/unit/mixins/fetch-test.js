@@ -41,19 +41,20 @@ test('#useFetch default value is true', function(assert) {
 });
 
 test('#_ajax handles 5xx (Server Error)', function(assert) {
-  assert.expect(2);
+  assert.expect(3);
   const done = assert.async();
   this.server.respondWith('GET', '/posts', [500, {}, ""]);
   let promise = this.subject._ajax('/posts', { method: 'GET' }, false);
   assert.ok(typeof promise.then === 'function', 'returns a thenable');
   promise.catch(function(error) {
     assert.equal(error.name, 'ServerError', '5xx response throws a custom error');
+    assert.equal(error.code, 500, 'error code 500');
     done();
   });
 });
 
 test('#_ajax handles 4xx (Client Error)', function(assert) {
-  assert.expect(4);
+  assert.expect(5);
   const done = assert.async();
   this.server.respondWith('GET', '/posts/101', [
     404,
@@ -73,6 +74,7 @@ test('#_ajax handles 4xx (Client Error)', function(assert) {
     assert.ok(error.name, 'Client Error', '4xx response throws a custom error');
     assert.ok(Array.isArray(error.errors), '4xx error includes errors');
     assert.equal(error.errors[0].code, 404, '404 error code is in errors list');
+    assert.equal(error.code, 404, 'error code 404');
     done();
   });
 });
@@ -85,7 +87,7 @@ test('#_ajax handles 3xx error', function(assert) {
   assert.ok(typeof promise.then === 'function', 'returns a thenable');
   promise.catch(function(error) {
     assert.equal(error.name, 'FetchError', 'unknown error response throws a custom error');
-    assert.equal(error.error.code, 302, '302 error code');
+    assert.equal(error.code, 302, '302 error code');
     done();
   });
 });
