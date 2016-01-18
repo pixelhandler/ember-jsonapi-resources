@@ -70,8 +70,11 @@ export default Ember.Mixin.create({
     @param {Function} reject - Promise reject handler
   */
   fetchServerErrorHandler(response, reject) {
-    let msg = 'The Service responded with a '+ response.status +' error.';
-    reject(new ServerError(msg, response));
+    response.text().then(function(respText) {
+      let msg = parseFetchErrorMessage(response);
+      let json = parseFetchErrorText(respText, response);
+      reject(new ServerError(msg, json));
+    });
   },
 
   /**
@@ -82,14 +85,9 @@ export default Ember.Mixin.create({
     @param {Function} reject - Promise reject handler
   */
   fetchClientErrorHandler(response, reject) {
-    response.text().then(function(resp) {
-      let json, msg = 'The API responded with a '+ response.status +' error.';
-      try {
-        json = JSON.parse(resp);
-      } catch (e) {
-        Ember.Logger.error(e);
-        json = { "errors": [ { "status": response.status } ] };
-      }
+    response.text().then(function(respText) {
+      let msg = parseFetchErrorMessage(response);
+      let json = parseFetchErrorText(respText, response);
       reject(new ClientError(msg, json));
     });
   },
@@ -98,12 +96,22 @@ export default Ember.Mixin.create({
     Fetch generic error handler
 
     @method fetchErrorHandler
-    @param {Response} response - Fetch response
+    @param {Error|Response} error - Fetch error or response object
     @param {Function} reject - Promise reject handler
   */
   fetchErrorHandler(error, reject) {
-    let msg = (error && error.message) ? error.message : 'Unable to Fetch resource(s)';
-    reject(new FetchError(msg, error));
+    let msg = 'Unable to Fetch resource(s)';
+    if (error instanceof Error) {
+      msg = (error && error.message) ? error.message : msg;
+      reject(new FetchError(msg, error));
+    } else if (typeof error.text === 'function') {
+      error.text().then(function(respText) {
+        msg = parseFetchErrorMessage(error);
+        reject(new FetchError(msg, parseFetchErrorText(respText, error)));
+      });
+    } else {
+      reject(new FetchError(msg, error));
+    }
   },
 
   /**
@@ -219,7 +227,8 @@ export default Ember.Mixin.create({
   */
   ajaxServerErrorHandler(jqXHR, textStatus, errorThrown, reject) {
     let msg = 'The Service responded with ' + textStatus + ' ' + jqXHR.status;
-    reject(new ServerError(msg, jqXHR.responseJSON || jqXHR.responseText || errorThrown));
+    let json = parseXhrErrorResponse(jqXHR, errorThrown);
+    reject(new ServerError(msg, json));
   },
 
   /**
@@ -233,18 +242,7 @@ export default Ember.Mixin.create({
   */
   ajaxClientErrorHandler(jqXHR, textStatus, errorThrown, reject) {
     let msg = 'The API responded with a '+ jqXHR.status +' error.';
-    let json = jqXHR.responseJSON;
-    if (!json) {
-      json = {
-        "errors": [
-          {
-            "status": jqXHR.status,
-            "detail": jqXHR.responseText,
-            "message": errorThrown
-          }
-        ]
-      };
-    }
+    let json = parseXhrErrorResponse(jqXHR, errorThrown);
     reject(new ClientError(msg, json));
   },
 
@@ -259,12 +257,8 @@ export default Ember.Mixin.create({
   */
   ajaxErrorHandler(jqXHR, textStatus, errorThrown, reject) {
     let msg = (errorThrown) ? errorThrown : 'Unable to Fetch resource(s)';
-    reject(new FetchError(msg, {
-      code: jqXHR.status,
-      message: errorThrown,
-      'status': textStatus,
-      response: jqXHR.responseText
-    }));
+    let json = parseXhrErrorResponse(jqXHR, errorThrown);
+    reject(new FetchError(msg, json));
   },
 
   /**
@@ -326,3 +320,51 @@ export default Ember.Mixin.create({
   }
 
 });
+
+function parseFetchErrorMessage(response) {
+  return [
+    'The API responded with a ',
+    response.status,
+    (response.statusText) ? ' (' + response.statusText + ') ' : '',
+    ' error.'
+  ].join('');
+}
+
+function parseFetchErrorText(text, response) {
+  let json;
+  try {
+    json = JSON.parse(text);
+  } catch (err) {
+    Ember.Logger.warn(err);
+    json = {
+      "errors": [{
+        "status": response.status,
+        "detail": text
+      }]
+    };
+  }
+  json = json || {};
+  json.status = response.status;
+  return json;
+}
+
+function parseXhrErrorResponse(jqXHR, errorThrown) {
+  let json = jqXHR.responseJSON;
+  if (!json) {
+    try {
+      if (jqXHR.responseText) {
+        json = JSON.parse(jqXHR.responseText);
+      }
+    } catch(err) {
+      Ember.Logger.warn(err);
+    }
+  }
+  json = json || {};
+  json.status = jqXHR.status;
+  json.errors = json.errors || [{
+    status: jqXHR.status,
+    detail: jqXHR.responseText,
+    message: errorThrown
+  }];
+  return json;
+}

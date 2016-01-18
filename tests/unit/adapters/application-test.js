@@ -395,22 +395,28 @@ test('serializer#deserializeIncluded called after successful fetch', function(as
 
 
 test('#fetch handles 5xx (ServerError) response status', function(assert) {
-  assert.expect(2);
+  assert.expect(3);
   const done = assert.async();
   const adapter = this.subject({type: 'posts', url: '/posts'});
   sandbox.stub(window, 'fetch', function () {
-    return Ember.RSVP.Promise.resolve({ "status": 500 });
+    return Ember.RSVP.Promise.resolve({
+      "status": 500,
+      "text": function() {
+        return Ember.RSVP.Promise.resolve('');
+      }
+    });
   });
   let promise = adapter.fetch('/posts', { method: 'POST', body: 'json string here' });
   assert.ok(typeof promise.then === 'function', 'returns a thenable');
   promise.catch(function(error) {
     assert.equal(error.name, 'ServerError', '5xx response throws a custom error');
+    assert.equal(error.code, 500, 'error code 500');
     done();
   });
 });
 
 test('#fetch handles 4xx (Client Error) response status', function(assert) {
-  assert.expect(4);
+  assert.expect(5);
   const done = assert.async();
   const adapter = this.subject({type: 'posts', url: '/posts'});
   sandbox.stub(adapter, 'fetchUrl', function () {});
@@ -428,6 +434,7 @@ test('#fetch handles 4xx (Client Error) response status', function(assert) {
     assert.ok(error.name, 'Client Error', '4xx response throws a custom error');
     assert.ok(Array.isArray(error.errors), '4xx error includes errors');
     assert.equal(error.errors[0].status, 404, '404 error status is in errors list');
+    assert.equal(error.code, 404, 'error code 404');
     done();
   });
 });
