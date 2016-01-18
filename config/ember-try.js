@@ -32,21 +32,27 @@ module.exports = {
       }
     },
     {
-      name: 'ember-1.13.10',
+      name: 'ember-1.13.13',
       dependencies: {
-        'ember': '1.13.10'
+        'ember': '1.13.13'
       }
     },
     {
-      name: 'ember-2.0.2',
+      name: 'ember-2.0.3',
       dependencies: {
-        'ember': '2.0.2'
+        'ember': '2.0.3'
       }
     },
     {
-      name: 'ember-2.1.0',
+      name: 'ember-2.1.2',
       dependencies: {
-        'ember': '2.1.0'
+        'ember': '2.1.2'
+      }
+    },
+    {
+      name: 'ember-2.2.2',
+      dependencies: {
+        'ember': '2.2.2'
       }
     }
   ]
