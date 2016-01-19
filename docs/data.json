@@ -590,7 +590,7 @@
             "submodule": "utils",
             "namespace": "",
             "file": "addon/utils/errors.js",
-            "line": 24,
+            "line": 25,
             "is_constructor": 1,
             "params": [
                 {
@@ -621,7 +621,7 @@
             "submodule": "utils",
             "namespace": "",
             "file": "addon/utils/errors.js",
-            "line": 42,
+            "line": 44,
             "is_constructor": 1,
             "params": [
                 {
@@ -631,13 +631,8 @@
                 },
                 {
                     "name": "error",
-                    "description": "",
-                    "type": "Error"
-                },
-                {
-                    "name": "response",
-                    "description": "",
-                    "type": "Object"
+                    "description": "or response object",
+                    "type": "Error|Object"
                 }
             ],
             "return": {
@@ -1250,7 +1245,7 @@
         },
         {
             "file": "addon/mixins/fetch.js",
-            "line": 77,
+            "line": 80,
             "description": "Fetch client error handler ~ status >= 400",
             "itemtype": "method",
             "name": "fetchClientErrorHandler",
@@ -1272,15 +1267,15 @@
         },
         {
             "file": "addon/mixins/fetch.js",
-            "line": 97,
+            "line": 95,
             "description": "Fetch generic error handler",
             "itemtype": "method",
             "name": "fetchErrorHandler",
             "params": [
                 {
-                    "name": "response",
-                    "description": "- Fetch response",
-                    "type": "Response"
+                    "name": "error",
+                    "description": "- Fetch error or response object",
+                    "type": "Error|Response"
                 },
                 {
                     "name": "reject",
@@ -1294,7 +1289,7 @@
         },
         {
             "file": "addon/mixins/fetch.js",
-            "line": 109,
+            "line": 117,
             "description": "Fetch 204 No Content handler",
             "itemtype": "method",
             "name": "fetchNoContentHandler",
@@ -1316,7 +1311,7 @@
         },
         {
             "file": "addon/mixins/fetch.js",
-            "line": 122,
+            "line": 130,
             "description": "Fetch 20x Success handler",
             "itemtype": "method",
             "name": "fetchSuccessHandler",
@@ -1343,7 +1338,7 @@
         },
         {
             "file": "addon/mixins/fetch.js",
-            "line": 145,
+            "line": 153,
             "description": "Makes an XHR request via $.ajax",
             "access": "private",
             "tagname": "",
@@ -1379,7 +1374,7 @@
         },
         {
             "file": "addon/mixins/fetch.js",
-            "line": 166,
+            "line": 174,
             "itemtype": "method",
             "name": "ajaxFailHandler",
             "params": [
@@ -1399,7 +1394,7 @@
         },
         {
             "file": "addon/mixins/fetch.js",
-            "line": 189,
+            "line": 197,
             "itemtype": "method",
             "name": "ajaxDoneHandler",
             "params": [
@@ -1424,7 +1419,7 @@
         },
         {
             "file": "addon/mixins/fetch.js",
-            "line": 211,
+            "line": 219,
             "description": "Ajax server error handler ~ status >= 500",
             "itemtype": "method",
             "name": "ajaxServerErrorHandler",
@@ -1456,7 +1451,7 @@
         },
         {
             "file": "addon/mixins/fetch.js",
-            "line": 225,
+            "line": 234,
             "description": "Ajax client error handler ~ status >= 400",
             "itemtype": "method",
             "name": "ajaxClientErrorHandler",
@@ -1488,7 +1483,7 @@
         },
         {
             "file": "addon/mixins/fetch.js",
-            "line": 251,
+            "line": 249,
             "description": "Ajax Generic error handler",
             "itemtype": "method",
             "name": "ajaxErrorHandler",
@@ -1520,7 +1515,7 @@
         },
         {
             "file": "addon/mixins/fetch.js",
-            "line": 270,
+            "line": 264,
             "description": "Ajax 204 No Content handler",
             "itemtype": "method",
             "name": "ajaxNoContentHandler",
@@ -1552,7 +1547,7 @@
         },
         {
             "file": "addon/mixins/fetch.js",
-            "line": 283,
+            "line": 277,
             "description": "Ajax 20x Success handler",
             "itemtype": "method",
             "name": "ajaxSuccessHandler",
@@ -1589,7 +1584,7 @@
         },
         {
             "file": "addon/mixins/fetch.js",
-            "line": 307,
+            "line": 301,
             "access": "private",
             "tagname": "",
             "itemtype": "method",
