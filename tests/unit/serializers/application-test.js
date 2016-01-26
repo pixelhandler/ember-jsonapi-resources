@@ -1,5 +1,5 @@
 import { moduleFor, test } from 'ember-qunit';
-import { setup, teardown } from 'dummy/tests/helpers/resources';
+import { setup, teardown, mockServices } from 'dummy/tests/helpers/resources';
 
 import authorMock from 'fixtures/api/authors/1';
 import postMock from 'fixtures/api/posts/1';
@@ -53,6 +53,7 @@ test('#serializeResource with only attributes data', function(assert) {
 
 test('#serializeResource with attributes and relationship', function(assert) {
   const serializer = this.subject();
+  mockServices.call(this);
   let resource = this.container.lookup('model:post').create({
     attributes: postMock.data.attributes
   });

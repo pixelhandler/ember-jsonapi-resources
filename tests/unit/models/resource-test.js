@@ -2,11 +2,12 @@ import { moduleFor, test } from 'ember-qunit';
 import Ember from 'ember';
 import Resource from 'ember-jsonapi-resources/models/resource';
 import { attr } from 'ember-jsonapi-resources/models/resource';
-import { setup, teardown } from 'dummy/tests/helpers/resources';
+import { setup, teardown, mockServices } from 'dummy/tests/helpers/resources';
 
 moduleFor('model:resource', 'Unit | Model | resource', {
   beforeEach() {
     setup.call(this);
+    mockServices.call(this);
     let owner = this.container;
     this.sandbox = window.sinon.sandbox.create();
     this.registry.register('model:resource', Resource, { instantiate: false });
@@ -193,63 +194,72 @@ test('#removeRelationship', function(assert) {
   let post = this.container.lookup('model:post').create({
     id: '1', attributes: {title: 'Wyatt Earp', excerpt: 'Was a gambler.'},
     relationships: {
-      author: { data: { type: 'authors', id: '2' } },
-      comments: { data: [{ type: 'comments', id: '4' }] }
+      author: { data: { type: 'authors', id: '2' }, links: { related: ''} },
+      comments: { data: [{ type: 'comments', id: '4' }], links: { related: ''} }
     }
   });
   let author = this.container.lookup('model:author').create({
     id: '2', attributes: { name: 'Bill' },
     relationships: {
-      posts: { data: [{ type: 'posts', id: '1' }] }
+      posts: { data: [{ type: 'posts', id: '1' }], links: { related: ''} }
     }
   });
   let commenter = this.container.lookup('model:commenter').create({
     id: '3', attributes: { name: 'Virgil Erp' },
     relationships: {
-      comments: { data: [{ type: 'comments', id: '4' }] }
+      comments: { data: [{ type: 'comments', id: '4' }], links: { related: ''} }
     }
   });
   let comment = this.container.lookup('model:comment').create({
     id: '4', attributes: { body: 'Wyatt become a deputy too.' },
     relationships: {
-      commenter: { data: { type: 'commenter', id: '3' } },
-      post: { data: { type: 'posts', id: '1' } }
+      commenter: { data: { type: 'commenter', id: '3' }, links: { related: ''} },
+      post: { data: { type: 'posts', id: '1' }, links: { related: ''} }
     }
   });
 
-  let authorRelations = '{"posts":{"data":[{"type":"posts","id":"1"}],"links":{}}}';
+  let authorRelations = '{"posts":{"data":[{"type":"posts","id":"1"}],"links":{"related":""}}}';
   assert.equal(JSON.stringify(author.get('relationships')), authorRelations, 'author relations have a post');
 
-  let postRelations = '{"author":{"data":{"type":"authors","id":"2"},"links":{}},"comments":{"data":[{"type":"comments","id":"4"}],"links":{}}}';
+  let postRelations = '{"author":{"data":{"type":"authors","id":"2"},"links":{"related":""}},"comments":{"data":[{"type":"comments","id":"4"}],"links":{"related":""}}}';
   assert.equal(JSON.stringify(post.get('relationships')), postRelations, 'author relations have a post');
 
-  let commentRelations = '{"commenter":{"data":{"type":"commenter","id":"3"},"links":{}},"post":{"data":{"type":"posts","id":"1"},"links":{}}}';
+  let commentRelations = '{"commenter":{"data":{"type":"commenter","id":"3"},"links":{"related":""}},"post":{"data":{"type":"posts","id":"1"},"links":{"related":""}}}';
   assert.equal(JSON.stringify(comment.get('relationships')), commentRelations, 'comment relations have a commenter');
 
-  let commenterRelations = '{"comments":{"data":[{"type":"comments","id":"4"}],"links":{}}}';
+  let commenterRelations = '{"comments":{"data":[{"type":"comments","id":"4"}],"links":{"related":""}}}';
   assert.equal(JSON.stringify(commenter.get('relationships')), commenterRelations, 'commenter relations have a comment');
 
   post.removeRelationship('author', '2');
-  postRelations = '{"author":{"data":null,"links":{}},"comments":{"data":[{"type":"comments","id":"4"}],"links":{}}}';
-  assert.equal(JSON.stringify(post.get('relationships')), postRelations, 'removed author from post');
+  let postAuthorRelation = '{"data":null,"links":{"related":""}}';
+  assert.equal(JSON.stringify(post.get('relationships.author')), postAuthorRelation, 'removed author from post, author relation ok');
+  let postCommentsRelation = '{"data":[{"type":"comments","id":"4"}],"links":{"related":""}}';
+  assert.equal(JSON.stringify(post.get('relationships.comments')), postCommentsRelation, 'removed author from post, comments relation ok');
 
   post.removeRelationship('comments', '4');
-  postRelations = '{"author":{"data":null,"links":{}},"comments":{"data":[],"links":{}}}';
-  assert.equal(JSON.stringify(post.get('relationships')), postRelations, 'removed comment from post');
+  postAuthorRelation = '{"data":null,"links":{"related":""}}';
+  assert.equal(JSON.stringify(post.get('relationships.author')), postAuthorRelation, 'removed comment from post, author relation ok');
+  postCommentsRelation = '{"data":[],"links":{"related":""}}';
+  assert.equal(JSON.stringify(post.get('relationships.comments')), postCommentsRelation, 'removed comment from post, comments relation ok');
 
   author.removeRelationship('posts', '1');
-  authorRelations = '{"posts":{"data":[],"links":{}}}';
+  authorRelations = '{"posts":{"data":[],"links":{"related":""}}}';
   assert.equal(JSON.stringify(author.get('relationships')), authorRelations, 'removed a post from author');
 
   comment.removeRelationship('commenter', '3');
-  commentRelations = '{"commenter":{"data":null,"links":{}},"post":{"data":{"type":"posts","id":"1"},"links":{}}}';
-  assert.equal(JSON.stringify(comment.get('relationships')), commentRelations, 'removed a commenter from comment');
+  let commentCommenterRelations = '{"data":null,"links":{"related":""}}';
+  assert.equal(JSON.stringify(comment.get('relationships.commenter')), commentCommenterRelations, 'removed a commenter from comment, commenter relation ok');
+  let commentPostRelations = '{"data":{"type":"posts","id":"1"},"links":{"related":""}}';
+  assert.equal(JSON.stringify(comment.get('relationships.post')), commentPostRelations, 'removed a commenter from comment, post relation ok');
+
   comment.removeRelationship('post', '1');
-  commentRelations = '{"commenter":{"data":null,"links":{}},"post":{"data":null,"links":{}}}';
-  assert.equal(JSON.stringify(comment.get('relationships')), commentRelations, 'removed a post from comment');
+  commentCommenterRelations = '{"data":null,"links":{"related":""}}';
+  assert.equal(JSON.stringify(comment.get('relationships.commenter')), commentCommenterRelations, 'removed a post from comment, commenter relation ok');
+  commentPostRelations = '{"data":null,"links":{"related":""}}';
+  assert.equal(JSON.stringify(comment.get('relationships.post')), commentPostRelations, 'removed a post from comment, post relation ok');
 
   commenter.removeRelationship('comments', '4');
-  commenterRelations = '{"comments":{"data":[],"links":{}}}';
+  commenterRelations = '{"comments":{"data":[],"links":{"related":""}}}';
   assert.equal(JSON.stringify(commenter.get('relationships')), commenterRelations, 'removed a comment from commenter');
 });
 
@@ -273,8 +283,8 @@ test('#removeRelationships', function(assert) {
   let post = this.container.lookup('model:post').create({
     id: '1', attributes: {title: 'Wyatt Earp', excerpt: 'Was a gambler.'},
     relationships: {
-      author: { data: { type: 'authors', id: '2' } },
-      comments: { data: [{ type: 'comments', id: '4' }] }
+      author: { data: { type: 'authors', id: '2' }, links: { related: 'url-here'} },
+      comments: { data: [{ type: 'comments', id: '4' }], links: { related: 'url-here'} }
     }
   });
   post.removeRelationships('comments', ['4']);
@@ -290,8 +300,8 @@ test('#updateRelationship', function(assert) {
   let post = this.container.lookup('model:post').create({
     id: '1', attributes: {title: 'Wyatt Earp', excerpt: 'Was a gambler.'},
     relationships: {
-      author: { data: { type: 'authors', id: '2' } },
-      comments: { data: [{ type: 'comments', id: '4' }] }
+      author: { data: { type: 'authors', id: '2' }, links: { related: 'url-here'} },
+      comments: { data: [{ type: 'comments', id: '4' }], links: { related: 'url-here'} }
     },
     // mock service
     service: { patchRelationship: serviceOp }
@@ -330,13 +340,13 @@ test('#didResolveProxyRelation', function(assert) {
   let post = this.container.lookup('model:post').create({
     id: '1', attributes: {title: 'Wyatt Earp', excerpt: 'Was a gambler.'},
     relationships: {
-      author: { data: { type: 'authors', id: '2'} }
+      author: { data: { type: 'authors', id: '2'}, links: { related: 'url-here'} }
     }
   });
   let author = this.container.lookup('model:author').create({
     id: '2', attributes: { name: 'Bill' },
     relationships: {
-      posts: { data: [{ type: 'posts', id: '1' }] }
+      posts: { data: [{ type: 'posts', id: '1' }], links: { related: 'url-here'} }
     }
   });
 
@@ -361,11 +371,10 @@ test('#isNew resource uses relations without proxied content', function(assert) 
     // mock service
     service: { findRelated: serviceOp }
   });
-
   post.addRelationships('comments', ['4', '5']);
   let comments = post.get('comments');
   assert.equal(serviceOp.calledOnce, false, 'service#findRelated not called after adding to-many');
-  assert.equal(comments.length, 0, '0 comments');
+  assert.equal(comments.get('length'), 0, '0 comments');
   comments = post.get('relationships.comments.data');
   assert.equal(comments.length, 2, '2 items in comments data');
 
