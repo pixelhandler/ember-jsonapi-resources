@@ -56,16 +56,16 @@ const RelatedProxyUtil = Ember.Object.extend({
     @return {PromiseProxy|ObjectProxy|ArrayProxy} proxy instance, new resource uses mock relations
   */
   createProxy(resource, kind) {
-    let mockRelation, proxyFactory;
+    let proxyFactory, newContent;
     if (kind === 'hasMany') {
-      mockRelation = Ember.A([]);
       proxyFactory = Ember.ArrayProxy;
+      newContent = Ember.A([]);
     } else if (kind === 'hasOne') {
-      mockRelation = Ember.Object.create();
       proxyFactory = Ember.ObjectProxy;
+      newContent = Ember.Object.create();
     }
     if (resource.get('isNew')) {
-      return mockRelation;
+      return proxyFactory.create({ content: newContent });
     } else {
       let proxy = this.proxySetup(resource, kind, proxyFactory);
       return this.proxyResolution(resource, proxy);
@@ -124,8 +124,8 @@ const RelatedProxyUtil = Ember.Object.extend({
     @return {PromiseProxy} proxy
   */
   proxyUrl(resource, relation) {
-    const related = linksPath(relation);
-    const url = resource.get(related);
+    let related = linksPath(relation);
+    let url = resource.get(related);
     if (typeof url !== 'string') {
       throw new Error('RelatedProxyUtil#_proxyUrl expects `model.'+ related +'` property to exist.');
     }

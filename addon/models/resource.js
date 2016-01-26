@@ -10,7 +10,7 @@ import hasOne from 'ember-jsonapi-resources/utils/has-one';
 import hasMany from 'ember-jsonapi-resources/utils/has-many';
 import { isType } from 'ember-jsonapi-resources/utils/is';
 
-const { computed, Logger } = Ember;
+const { getOwner, computed, Logger } = Ember;
 
 /**
   A Resource class to create JSON API resource objects. This is abstract, first
@@ -197,27 +197,55 @@ const Resource = Ember.Object.extend({
   },
 
   /**
-    Adds related links object on the relationship hash
+    Adds related resource identifier object to the relationship data.
+
+    Also sets the `content` of the related (computed property's) proxy object.
+
+    - For has-many relations the related identifier object is added to
+      the resource linkage data array.
+    - For has-one relations the resource identifier object is assigned,
+      so the relation may be replaced.
+
+    See:
+    - http://jsonapi.org/format/#document-resource-object-linkage
+    - http://jsonapi.org/format/#document-resource-identifier-objects
 
     @method addRelationship
     @param {String} related - resource name
     @param {String} id
   */
   addRelationship(related, id) {
-    const key = ['relationships', related, 'data'].join('.');
+    let key = ['relationships', related, 'data'].join('.');
     let data = this.get(key);
-    const type = pluralize(related);
-    const linkage = { type: type, id: id };
+    let type = pluralize(related);
+    let identifier = { type: type, id: id };
+    let owner = (typeof getOwner === 'function') ? getOwner(this) : this.container;
+    let resource = owner.lookup(`service:${type}`).cacheLookup(id);
     if (Array.isArray(data)) {
-      data.push(linkage);
+      data.push(identifier);
+      if (resource) {
+        this.get(related).pushObject(resource);
+      }
     } else {
-      data = linkage;
+      data = identifier;
+      if (resource) {
+        this.set(`${related}.content`, resource);
+      }
     }
     return this.set(key, data);
   },
 
   /**
-    Remove related links object on the relationship hash to have `null` data
+    Removes resource identifier object of the relationship data. Also, sets the
+    `content` of the related (computed property's) proxy object to `null`.
+
+    - For has-one relations the (resource linkage) data is set to `null`.
+    - For has-many relations the resource identifier object is removed from
+      the resource Linkage `data` array.
+
+    See:
+    - http://jsonapi.org/format/#document-resource-object-linkage
+    - http://jsonapi.org/format/#document-resource-identifier-objects
 
     @method removeRelationship
     @param {String} related - resource name
@@ -232,8 +260,13 @@ const Resource = Ember.Object.extend({
           break;
         }
       }
+      let type = pluralize(related);
+      let owner = (typeof getOwner === 'function') ? getOwner(this) : this.container;
+      let resource = owner.lookup(`service:${type}`).cacheLookup(id);
+      this.get(related).removeObject(resource);
     } else if (typeof relation === 'object') {
       relation.data = null;
+      this.set(`${related}.content`, null);
     }
   },
 
@@ -414,7 +447,7 @@ Resource.reopenClass({
     if (!type) {
       Logger.warn(msg + '#create called, instead you should first use ' + msg + '.extend({type:"entity"})');
     } else {
-      let owner = (typeof Ember.getOwner === 'function') ? Ember.getOwner(instance) : instance.container;
+      let owner = (typeof getOwner === 'function') ? getOwner(instance) : instance.container;
       if (owner) {
         useComputedPropsMetaToSetupRelationships(owner, factory, instance);
       } else {

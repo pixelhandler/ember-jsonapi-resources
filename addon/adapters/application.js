@@ -7,6 +7,8 @@ import Ember from 'ember';
 import { pluralize } from 'ember-inflector';
 import FetchMixin from 'ember-jsonapi-resources/mixins/fetch';
 
+const { Evented, RSVP, getOwner } = Ember;
+
 /**
   Adapter for a JSON API endpoint, use as a service for your backend
 
@@ -15,7 +17,7 @@ import FetchMixin from 'ember-jsonapi-resources/mixins/fetch';
   @uses Ember.Evented
   @static
 */
-export default Ember.Object.extend(FetchMixin, Ember.Evented, {
+export default Ember.Object.extend(FetchMixin, Evented, {
 
   /**
     The name of the entity
@@ -115,7 +117,7 @@ export default Ember.Object.extend(FetchMixin, Ember.Evented, {
       type = resource.type;
     }
     // use resource's service if in container, otherwise use this service to fetch
-    let owner = (typeof Ember.getOwner === 'function') ? Ember.getOwner(this) : this.container;
+    let owner = (typeof getOwner === 'function') ? getOwner(this) : this.container;
     let service = owner.lookup('service:' + pluralize(type)) || this;
     url = this.fetchUrl(url);
     return service.fetch(url, { method: 'GET' });
@@ -153,12 +155,14 @@ export default Ember.Object.extend(FetchMixin, Ember.Evented, {
 
     @method updateResource
     @param {Resource} the resource instance to serialize the changed attributes
-    @return {Promise}
+    @return {Promise} resolves with PATCH response or `null` if nothing to update
   */
   updateResource(resource) {
     let url = resource.get('links.self') || this.get('url') + '/' + resource.get('id');
     const json = this.serializer.serializeChanged(resource);
-    if (!json) { return null; }
+    if (!json) {
+      return RSVP.Promise.resolve(null);
+    }
     return this.fetch(url, {
       method: 'PATCH',
       body: JSON.stringify(json),

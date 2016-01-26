@@ -47,7 +47,7 @@ export const Supervisor = Employee.extend({
 });
 
 export function setup() {
-  const opts = { instantiate: false, singleton: false };
+  let opts = { instantiate: false, singleton: false };
   setupOwner.call(this);
   this.registry.register('model:post', Post, opts);
   this.registry.register('model:author', Author, opts);
@@ -56,6 +56,17 @@ export function setup() {
   this.registry.register('model:person', Person, opts);
   this.registry.register('model:employee', Employee, opts);
   this.registry.register('model:supervisor', Supervisor, opts);
+}
+
+export function mockServices() {
+  let types = Ember.String.w('posts authors comments commenters people employees supervisors');
+  let mockService = Ember.Service.extend({
+    cacheLookup(/*id*/) { return undefined; },
+    findRelated() { return Ember.RSVP.resolve(null); }
+  });
+  for (let i = 0; i < types.length; i++) {
+    this.registry.register('service:' + types[i], mockService);
+  }
 }
 
 function setupOwner() {
