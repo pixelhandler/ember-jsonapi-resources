@@ -296,7 +296,9 @@ test('#removeRelationships', function(assert) {
 });
 
 test('#updateRelationship', function(assert) {
-  let serviceOp = this.sandbox.spy();
+  let serviceOp = this.sandbox.spy(function() {
+    return Ember.RSVP.Promise.resolve(null);
+  });
   let post = this.container.lookup('model:post').create({
     id: '1', attributes: {title: 'Wyatt Earp', excerpt: 'Was a gambler.'},
     relationships: {
