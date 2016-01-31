@@ -138,13 +138,33 @@ const Resource = Ember.Object.extend({
 
     This is not a replace operation, but rather support for editing as a set.
 
+    Calling `updateRelationship` will call the service to persist the changes,
+    via it's `patchRelationship` method. Since the default `catch` for this
+    method is to rollback the relations, an optional `callback` function can be
+    used to handle the error response.
+
     @method updateRelationship
     @param {String} relation
     @param {Array|String|null} ids
+    @param {Function} errorCallback `function (error) {}`
   */
-  updateRelationship(relation, ids) {
+  updateRelationship(relation, ids, errorCallback) {
+    let related = this.get(relation);
+    let rollback;
+    if (related.kind === 'hasOne') {
+      rollback = related.get('id');
+    } else if (related.kind === 'hasMany') {
+      rollback = related.mapBy('id');
+    }
     this._updateRelationshipsData(relation, ids);
-    return this.get('service').patchRelationship(this, relation);
+    return this.get('service').patchRelationship(this, relation).catch(function (error) {
+      this._updateRelationshipsData(relation, rollback);
+      if (typeof callback === 'function') {
+        errorCallback(error);
+      } else {
+        Ember.Logger.error(error);
+      }
+    }.bind(this));
   },
 
   /**
@@ -199,7 +219,7 @@ const Resource = Ember.Object.extend({
   /**
     Adds related resource identifier object to the relationship data.
 
-    Also sets the `content` of the related (computed property's) proxy object.
+    Also sets or adds to the `content` of the related proxy object.
 
     - For has-many relations the related identifier object is added to
       the resource linkage data array.
@@ -224,7 +244,10 @@ const Resource = Ember.Object.extend({
     if (Array.isArray(data)) {
       data.push(identifier);
       if (resource) {
-        this.get(related).pushObject(resource);
+        let resources = this.get(related);
+        if (!resources.contains(resource)) {
+          resources.pushObject(resource);
+        }
       }
     } else {
       data = identifier;
@@ -260,10 +283,11 @@ const Resource = Ember.Object.extend({
           break;
         }
       }
-      let type = pluralize(related);
-      let owner = (typeof getOwner === 'function') ? getOwner(this) : this.container;
-      let resource = owner.lookup(`service:${type}`).cacheLookup(id);
-      this.get(related).removeObject(resource);
+      let resources = this.get(related);
+      let idx = resources.mapBy('id').indexOf(id);
+      if (idx > -1) {
+        resources.removeAt(idx);
+      }
     } else if (typeof relation === 'object') {
       relation.data = null;
       this.set(`${related}.content`, null);
