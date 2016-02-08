@@ -2,8 +2,8 @@
 
 **Is this a replacement for Ember Data or an interface to it?**
 
-**Neither**. This is a completely separate solution. Ember Data needs *foreign keys* 
-and provides an abstraction for adaters and serializers. It's solution helps you work 
+**Neither**. This is a completely separate solution. Ember Data needs *foreign keys*
+and provides an abstraction for adapters and serializers. It's solution helps you work
 with various JSON document formats. Ember JSON API Resources needs *URLs* and fits
 a specific specification for an API server without the need for an abstraction.
 
@@ -36,6 +36,6 @@ for that entity and call that service's `find` method. The service is a combinat
 of an adapter, cache mixin, and associated serializer for the same entity. The service
 is an extension of that adapter with a mixin for the caching strategy for that entity.
 The default `service-cache` mixin provides a basic caching plan using a time value
-for exiration, which is a property of the resource (defaults to 7 minutes).
+for expiration, which is a property of the resource (defaults to 7 minutes).
 
 [JSON Patch]: http://jsonpatch.com/
