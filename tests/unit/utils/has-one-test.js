@@ -8,7 +8,7 @@ const mockService = function () {
   let sandbox = this.sandbox;
   return Ember.Service.extend({
     findRelated: sandbox.spy(function () { return Ember.RSVP.Promise.resolve(Ember.Object.create({id: 1})); }),
-    cacheLookup: sandbox.spy(function () { return Ember.A([]); })
+    cacheLookup: sandbox.spy(function () { return undefined; })
   });
 };
 let entities = ['post', 'author'];
@@ -36,23 +36,12 @@ test('hasOne() helper sets up a promise proxy to a related resource', function(a
     id: '1', attributes: { title: 'Wyatt Earp', excerpt: 'Was a gambler.'},
     relationships: {
       author: {
-        data: { type: 'authors', id: '2' },
+        data: { type: 'authors', id: '1' },
         links: {
           'self': 'http://api.pixelhandler.com/api/v1/posts/1/relationships/author',
           'related': 'http://api.pixelhandler.com/api/v1/posts/1/author'
         }
       },
-    }
-  });
-  this.container.lookup('model:author').create({
-    id: '2', attributes: { name: 'Bill' },
-    relationships: {
-      posts: {
-        links: {
-          "self": "http://api.pixelhandler.com/api/v1/authors/2/relationships/posts",
-          "related": "http://api.pixelhandler.com/api/v1/authors/2/posts"
-        }
-      }
     }
   });
   let promise = post.get('author');
