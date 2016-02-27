@@ -144,8 +144,9 @@ const RelatedProxyUtil = Ember.Object.extend({
   promiseFromCache(resource, relation, service) {
     let data = resource.get('relationships.' + relation + '.data');
     if (!data) { return; }
-    let content = Ember.A([]), found;
+    let content, found;
     if (Array.isArray(data)) {
+      content = Ember.A([]);
       for (let i = 0; i < data.length; i++) {
         found = this.serviceCacheLookup(service, data[i]);
         if (found) {
@@ -156,7 +157,7 @@ const RelatedProxyUtil = Ember.Object.extend({
     } else {
       content = this.serviceCacheLookup(service, data);
     }
-    return (content && content.length > 0) ? Ember.RSVP.Promise.resolve(content) : null;
+    return (content) ? Ember.RSVP.Promise.resolve(content) : null;
   },
 
   /**
