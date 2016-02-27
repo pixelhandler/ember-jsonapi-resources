@@ -163,16 +163,16 @@ const RelatedProxyUtil = Ember.Object.extend({
     @return {PromiseProxy|ObjectProxy|ArrayProxy} proxy instance, new resource uses mock relations
   */
   createProxy(resource, kind) {
-    let mockRelation, proxyFactory;
+    let proxyFactory, newContent;
     if (kind === &#x27;hasMany&#x27;) {
-      mockRelation = Ember.A([]);
       proxyFactory = Ember.ArrayProxy;
+      newContent = Ember.A([]);
     } else if (kind === &#x27;hasOne&#x27;) {
-      mockRelation = Ember.Object.create();
       proxyFactory = Ember.ObjectProxy;
+      newContent = Ember.Object.create();
     }
     if (resource.get(&#x27;isNew&#x27;)) {
-      return mockRelation;
+      return proxyFactory.create({ content: newContent });
     } else {
       let proxy = this.proxySetup(resource, kind, proxyFactory);
       return this.proxyResolution(resource, proxy);
@@ -231,8 +231,8 @@ const RelatedProxyUtil = Ember.Object.extend({
     @return {PromiseProxy} proxy
   */
   proxyUrl(resource, relation) {
-    const related = linksPath(relation);
-    const url = resource.get(related);
+    let related = linksPath(relation);
+    let url = resource.get(related);
     if (typeof url !== &#x27;string&#x27;) {
       throw new Error(&#x27;RelatedProxyUtil#_proxyUrl expects &#x60;model.&#x27;+ related +&#x27;&#x60; property to exist.&#x27;);
     }
@@ -251,8 +251,9 @@ const RelatedProxyUtil = Ember.Object.extend({
   promiseFromCache(resource, relation, service) {
     let data = resource.get(&#x27;relationships.&#x27; + relation + &#x27;.data&#x27;);
     if (!data) { return; }
-    let content = Ember.A([]), found;
+    let content, found;
     if (Array.isArray(data)) {
+      content = Ember.A([]);
       for (let i = 0; i &lt; data.length; i++) {
         found = this.serviceCacheLookup(service, data[i]);
         if (found) {
@@ -263,7 +264,7 @@ const RelatedProxyUtil = Ember.Object.extend({
     } else {
       content = this.serviceCacheLookup(service, data);
     }
-    return (content &amp;&amp; content.length &gt; 0) ? Ember.RSVP.Promise.resolve(content) : null;
+    return (content) ? Ember.RSVP.Promise.resolve(content) : null;
   },
 
   /**

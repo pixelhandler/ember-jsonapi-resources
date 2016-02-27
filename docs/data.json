@@ -245,7 +245,7 @@
             "module": "ember-jsonapi-resources",
             "namespace": "",
             "file": "addon/adapters/application.js",
-            "line": 10,
+            "line": 12,
             "description": "Adapter for a JSON API endpoint, use as a service for your backend"
         },
         "initializers": {
@@ -416,7 +416,7 @@
             "submodule": "adapters",
             "namespace": "",
             "file": "addon/adapters/application.js",
-            "line": 10,
+            "line": 12,
             "description": "Adapter for a JSON API endpoint, use as a service for your backend",
             "requires": [
                 "Ember.Inflector"
@@ -709,7 +709,7 @@
     "classitems": [
         {
             "file": "addon/adapters/application.js",
-            "line": 20,
+            "line": 22,
             "description": "The name of the entity",
             "itemtype": "property",
             "name": "type",
@@ -721,7 +721,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 29,
+            "line": 31,
             "description": "The url for the entity, e.g. /posts or /api/v1/posts",
             "itemtype": "property",
             "name": "url",
@@ -733,7 +733,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 38,
+            "line": 40,
             "description": "Find resource(s) using an id or a using a query `{id: '', query: {}}`",
             "itemtype": "method",
             "name": "find",
@@ -754,7 +754,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 59,
+            "line": 61,
             "description": "Find a resource by id, optionally pass a query object, e.g. w/ filter param(s)\n\nUses a url like: /photos/1",
             "itemtype": "method",
             "name": "findOne",
@@ -780,7 +780,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 75,
+            "line": 77,
             "description": "Find resources using an optional query object, e.g. w/ pagination params",
             "itemtype": "method",
             "name": "findQuery",
@@ -801,7 +801,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 89,
+            "line": 91,
             "description": "Find resources by relationship or use a specificed (optional) service to find relation\n\nA Url like: /photos/1/relationships/photographer is a required param\n\n```js\nservice.findRelated('photographer', '/api/v1/photos/1/relationships/photographer');\n```\n\nOr, with option to find releated resource using a different service\n\n```js\nservice.findRelated({resource: 'photographer', type: 'people'}, url);\n```",
             "itemtype": "method",
             "name": "findRelated",
@@ -839,7 +839,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 124,
+            "line": 126,
             "description": "Create a new resource, sends a POST request, updates resource instance\nwith persisted data, and updates cache with persisted resource",
             "itemtype": "method",
             "name": "createResource",
@@ -860,7 +860,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 151,
+            "line": 153,
             "description": "Patch an existing resource, sends a PATCH request.",
             "itemtype": "method",
             "name": "updateResource",
@@ -872,7 +872,7 @@
                 }
             ],
             "return": {
-                "description": "",
+                "description": "resolves with PATCH response or `null` if nothing to update",
                 "type": "Promise"
             },
             "class": "ApplicationAdapter",
@@ -881,7 +881,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 169,
+            "line": 173,
             "description": "Patch a relationship, either add or remove, sends a PATCH request\n\nAdds with payload: `{ \"data\": { \"type\": \"comments\", \"id\": \"12\" } }`\nRemoves with payload: `{ \"data\": null }` for to-one or `{ \"data\": [] }` for to-many",
             "itemtype": "method",
             "name": "patchRelationship",
@@ -907,7 +907,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 191,
+            "line": 195,
             "description": "Delete an existing resource, sends a DELETE request",
             "itemtype": "method",
             "name": "deleteResource",
@@ -928,7 +928,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 210,
+            "line": 214,
             "description": "Fetches data using Fetch API or XMLHttpRequest",
             "itemtype": "method",
             "name": "fetch",
@@ -954,7 +954,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 228,
+            "line": 232,
             "description": "Hook to customize the URL, e.g. if your API is behind a proxy and you need\nto swap a portion of the domain to make a request on the same domain.",
             "itemtype": "method",
             "name": "fetchUrl",
@@ -975,7 +975,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 240,
+            "line": 244,
             "description": "Adds params and headers or Fetch request.\n\n- The HTTP Header is set for Content-Type: application/vnd.api+json\n- Sets Authorization header if accessible in the `authorizationCredential` property",
             "itemtype": "method",
             "name": "fetchOptions",
@@ -996,7 +996,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 262,
+            "line": 266,
             "description": "Sets Authorization header if accessible in the `authorizationCredential` property",
             "itemtype": "method",
             "name": "fetchAuthorizationHeader",
@@ -1013,7 +1013,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 279,
+            "line": 283,
             "description": "Authentication credentials/token used with HTTP authentication\nThis property should be added by an Authorization Mixin",
             "itemtype": "property",
             "name": "authorizationCredential",
@@ -1024,7 +1024,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 288,
+            "line": 292,
             "description": "The name of the Authorization request-header field\nThis property should be added by an Authorization Mixin",
             "itemtype": "property",
             "name": "authorizationHeaderField",
@@ -1035,7 +1035,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 297,
+            "line": 301,
             "description": "Noop as a hook for defining how deserialized resource objects are cached,\ne.g. in memory",
             "itemtype": "method",
             "name": "cacheResource",
@@ -1052,7 +1052,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 306,
+            "line": 310,
             "description": "Noop as a hook for defining how to handle cache after updating a resource",
             "itemtype": "method",
             "name": "cacheUpdate",
@@ -1069,7 +1069,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 314,
+            "line": 318,
             "description": "Noop as a hook to remove a resource from cached data",
             "itemtype": "method",
             "name": "cacheRemove",
@@ -1918,7 +1918,7 @@
         {
             "file": "addon/models/resource.js",
             "line": 131,
-            "description": "Update a relation by adding or removing using a list, id, or null. When\nadding an id for a to-many relation send one or more ids, include the\nexisting ids as well. When removing from a to-many relation pass the ids\nthat should remain, missing ids will be removed, or remove all with an empty\narray. When operating on a to-one relation just use the id to change the\nrelation, or null to remove.\n\nThis is not a replace operation, but rather support for editing as a set.",
+            "description": "Update a relation by adding or removing using a list, id, or null. When\nadding an id for a to-many relation send one or more ids, include the\nexisting ids as well. When removing from a to-many relation pass the ids\nthat should remain, missing ids will be removed, or remove all with an empty\narray. When operating on a to-one relation just use the id to change the\nrelation, or null to remove.\n\nThis is not a replace operation, but rather support for editing as a set.\n\nCalling `updateRelationship` will call the service to persist the changes,\nvia it's `patchRelationship` method. Since the default `catch` for this\nmethod is to rollback the relations, an optional `callback` function can be\nused to handle the error response.",
             "itemtype": "method",
             "name": "updateRelationship",
             "params": [
@@ -1931,6 +1931,11 @@
                     "name": "ids",
                     "description": "",
                     "type": "Array|String|null"
+                },
+                {
+                    "name": "errorCallback",
+                    "description": "`function (error) {}`",
+                    "type": "Function"
                 }
             ],
             "class": "Resource",
@@ -1939,7 +1944,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 150,
+            "line": 170,
             "access": "private",
             "tagname": "",
             "itemtype": "method",
@@ -1962,7 +1967,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 177,
+            "line": 197,
             "itemtype": "method",
             "name": "addRelationships",
             "params": [
@@ -1983,7 +1988,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 188,
+            "line": 208,
             "itemtype": "method",
             "name": "removeRelationships",
             "params": [
@@ -2004,8 +2009,8 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 199,
-            "description": "Adds related links object on the relationship hash",
+            "line": 219,
+            "description": "Adds related resource identifier object to the relationship data.\n\nAlso sets or adds to the `content` of the related proxy object.\n\n- For has-many relations the related identifier object is added to\n  the resource linkage data array.\n- For has-one relations the resource identifier object is assigned,\n  so the relation may be replaced.\n\nSee:\n- http://jsonapi.org/format/#document-resource-object-linkage\n- http://jsonapi.org/format/#document-resource-identifier-objects",
             "itemtype": "method",
             "name": "addRelationship",
             "params": [
@@ -2026,8 +2031,8 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 219,
-            "description": "Remove related links object on the relationship hash to have `null` data",
+            "line": 261,
+            "description": "Removes resource identifier object of the relationship data. Also, sets the\n`content` of the related (computed property's) proxy object to `null`.\n\n- For has-one relations the (resource linkage) data is set to `null`.\n- For has-many relations the resource identifier object is removed from\n  the resource Linkage `data` array.\n\nSee:\n- http://jsonapi.org/format/#document-resource-object-linkage\n- http://jsonapi.org/format/#document-resource-identifier-objects",
             "itemtype": "method",
             "name": "removeRelationship",
             "params": [
@@ -2048,7 +2053,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 240,
+            "line": 297,
             "itemtype": "method",
             "name": "changedAttributes",
             "return": {
@@ -2061,7 +2066,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 258,
+            "line": 315,
             "itemtype": "method",
             "name": "previousAttributes",
             "return": {
@@ -2074,7 +2079,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 276,
+            "line": 333,
             "description": "Revert to previous attributes",
             "itemtype": "method",
             "name": "rollback",
@@ -2084,7 +2089,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 292,
+            "line": 349,
             "description": "Reset tracked changed/previous attrs",
             "access": "private",
             "tagname": "",
@@ -2096,7 +2101,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 306,
+            "line": 363,
             "description": "Sets all payload properties on the resource and resets private _attributes\nused for changed/previous tracking",
             "itemtype": "method",
             "name": "didUpdateResource",
@@ -2113,7 +2118,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 319,
+            "line": 376,
             "description": "Sets the relationships data, used after the promise proxy resolves by\nhasOne and hasMany helpers",
             "itemtype": "method",
             "name": "didResolveProxyRelation",
@@ -2140,7 +2145,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 349,
+            "line": 406,
             "description": "A local cache duration, to minimize duplicate fetch requests",
             "itemtype": "property",
             "name": "cacheDuration",
@@ -2151,7 +2156,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 357,
+            "line": 414,
             "itemtype": "property",
             "name": "isCacheExpired",
             "type": "Boolean",
@@ -2161,7 +2166,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 369,
+            "line": 426,
             "description": "To protect the JSON API Resource properties for attributes, links and\nrelationships these objects are setup during create(). This has to be\ndefined since the attr() helper needs to have new objects for each instance,\nto project from keeping a reference on the prototype.\n\nThe create method should only be called after looking up a factory from the\ncontainer, for example in a route's model hook:\n\n```\nmodel() {\n  let owner = (typeof Ember.getOwner === 'function') ? Ember.getOwner(this) : this.container;\n  return owner.lookup('model:post').create({\n    attributes: {\n      title: 'The JSON API 1.0 Spec Rocks!'\n    }\n  });\n}\n```\n\nThe create method uses the container to lookup the factory's prototype and\nfind the computed properties used for relations to setup the relationships\nfor the Resource instance you create. Calling Resource#create without using\nthe factory lookup will result in an instance without a reference to the\napplication's container and you will have to manually setup the relationships\nobject prior to adding a relationship.",
             "itemtype": "method",
             "name": "create",
@@ -2921,7 +2926,7 @@
         },
         {
             "file": "addon/utils/related-proxy.js",
-            "line": 162,
+            "line": 163,
             "description": "Lookup data in service cache",
             "itemtype": "method",
             "name": "serviceCacheLookup",
@@ -2947,7 +2952,7 @@
         },
         {
             "file": "addon/utils/related-proxy.js",
-            "line": 177,
+            "line": 178,
             "itemtype": "method",
             "name": "linksPath",
             "params": [

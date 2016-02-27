@@ -117,7 +117,7 @@ import hasOne from &#x27;ember-jsonapi-resources/utils/has-one&#x27;;
 import hasMany from &#x27;ember-jsonapi-resources/utils/has-many&#x27;;
 import { isType } from &#x27;ember-jsonapi-resources/utils/is&#x27;;
 
-const { computed, Logger } = Ember;
+const { getOwner, computed, Logger } = Ember;
 
 /**
   A Resource class to create JSON API resource objects. This is abstract, first
@@ -245,13 +245,33 @@ const Resource = Ember.Object.extend({
 
     This is not a replace operation, but rather support for editing as a set.
 
+    Calling &#x60;updateRelationship&#x60; will call the service to persist the changes,
+    via it&#x27;s &#x60;patchRelationship&#x60; method. Since the default &#x60;catch&#x60; for this
+    method is to rollback the relations, an optional &#x60;callback&#x60; function can be
+    used to handle the error response.
+
     @method updateRelationship
     @param {String} relation
     @param {Array|String|null} ids
+    @param {Function} errorCallback &#x60;function (error) {}&#x60;
   */
-  updateRelationship(relation, ids) {
+  updateRelationship(relation, ids, errorCallback) {
+    let related = this.get(relation);
+    let rollback;
+    if (related.kind === &#x27;hasOne&#x27;) {
+      rollback = related.get(&#x27;id&#x27;);
+    } else if (related.kind === &#x27;hasMany&#x27;) {
+      rollback = related.mapBy(&#x27;id&#x27;);
+    }
     this._updateRelationshipsData(relation, ids);
-    return this.get(&#x27;service&#x27;).patchRelationship(this, relation);
+    return this.get(&#x27;service&#x27;).patchRelationship(this, relation).catch(function (error) {
+      this._updateRelationshipsData(relation, rollback);
+      if (typeof callback === &#x27;function&#x27;) {
+        errorCallback(error);
+      } else {
+        Ember.Logger.error(error);
+      }
+    }.bind(this));
   },
 
   /**
@@ -304,27 +324,58 @@ const Resource = Ember.Object.extend({
   },
 
   /**
-    Adds related links object on the relationship hash
+    Adds related resource identifier object to the relationship data.
+
+    Also sets or adds to the &#x60;content&#x60; of the related proxy object.
+
+    - For has-many relations the related identifier object is added to
+      the resource linkage data array.
+    - For has-one relations the resource identifier object is assigned,
+      so the relation may be replaced.
+
+    See:
+    - http://jsonapi.org/format/#document-resource-object-linkage
+    - http://jsonapi.org/format/#document-resource-identifier-objects
 
     @method addRelationship
     @param {String} related - resource name
     @param {String} id
   */
   addRelationship(related, id) {
-    const key = [&#x27;relationships&#x27;, related, &#x27;data&#x27;].join(&#x27;.&#x27;);
+    let key = [&#x27;relationships&#x27;, related, &#x27;data&#x27;].join(&#x27;.&#x27;);
     let data = this.get(key);
-    const type = pluralize(related);
-    const linkage = { type: type, id: id };
+    let type = pluralize(related);
+    let identifier = { type: type, id: id };
+    let owner = (typeof getOwner === &#x27;function&#x27;) ? getOwner(this) : this.container;
+    let resource = owner.lookup(&#x60;service:${type}&#x60;).cacheLookup(id);
     if (Array.isArray(data)) {
-      data.push(linkage);
+      data.push(identifier);
+      if (resource) {
+        let resources = this.get(related);
+        if (!resources.contains(resource)) {
+          resources.pushObject(resource);
+        }
+      }
     } else {
-      data = linkage;
+      data = identifier;
+      if (resource) {
+        this.set(&#x60;${related}.content&#x60;, resource);
+      }
     }
     return this.set(key, data);
   },
 
   /**
-    Remove related links object on the relationship hash to have &#x60;null&#x60; data
+    Removes resource identifier object of the relationship data. Also, sets the
+    &#x60;content&#x60; of the related (computed property&#x27;s) proxy object to &#x60;null&#x60;.
+
+    - For has-one relations the (resource linkage) data is set to &#x60;null&#x60;.
+    - For has-many relations the resource identifier object is removed from
+      the resource Linkage &#x60;data&#x60; array.
+
+    See:
+    - http://jsonapi.org/format/#document-resource-object-linkage
+    - http://jsonapi.org/format/#document-resource-identifier-objects
 
     @method removeRelationship
     @param {String} related - resource name
@@ -339,8 +390,14 @@ const Resource = Ember.Object.extend({
           break;
         }
       }
+      let resources = this.get(related);
+      let idx = resources.mapBy(&#x27;id&#x27;).indexOf(id);
+      if (idx &gt; -1) {
+        resources.removeAt(idx);
+      }
     } else if (typeof relation === &#x27;object&#x27;) {
       relation.data = null;
+      this.set(&#x60;${related}.content&#x60;, null);
     }
   },
 
@@ -521,7 +578,7 @@ Resource.reopenClass({
     if (!type) {
       Logger.warn(msg + &#x27;#create called, instead you should first use &#x27; + msg + &#x27;.extend({type:&quot;entity&quot;})&#x27;);
     } else {
-      let owner = (typeof Ember.getOwner === &#x27;function&#x27;) ? Ember.getOwner(instance) : instance.container;
+      let owner = (typeof getOwner === &#x27;function&#x27;) ? getOwner(instance) : instance.container;
       if (owner) {
         useComputedPropsMetaToSetupRelationships(owner, factory, instance);
       } else {
