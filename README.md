@@ -1,14 +1,23 @@
 # Ember JSON API Resources
 
-An [Ember CLI] Addon… a lightweight solution for data persistence in an [Ember.js]
-application following the [JSON API] 1.0 specification (your anti-bikeshedding
-weapon for API development).
+A stand-alone data persistence solution as an addon for [Ember.js] applications
+built using [Ember CLI]. It follows the [JSON API] 1.0 specification (your
+anti-bikeshedding weapon for API development).
 
-See [ember-jsonapi-resources.com]
+A thin data layer, a 1:1 solution using the JSON API spec, which does not
+attempt to solve "all the things".
 
+By considering this equation **e = mc<sup>2</sup>**
+
+> “Errors = (More Code)<sup>2</sup>”
+
+…The "EJR" addon is a lightweight library that simply focuses on one solid
+specification, and follows common patterns for data persistance in Ember apps.
+
+* [ember-jsonapi-resources.com]
 * [API Docs][generated docs]
 * [Example App]
-* [Wiki Guide]
+* [Wiki | Guides | Cookbooks][Wiki Guide]
 
 [![Build Status](https://travis-ci.org/pixelhandler/ember-jsonapi-resources.svg?branch=master)](https://travis-ci.org/pixelhandler/ember-jsonapi-resources)
 [![Ember Observer Score](http://emberobserver.com/badges/ember-jsonapi-resources.svg)](http://emberobserver.com/addons/ember-jsonapi-resources)
