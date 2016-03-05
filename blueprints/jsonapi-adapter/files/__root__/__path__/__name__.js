@@ -1,5 +1,5 @@
 <%= importStatement %>
-import config from '<%= dasherizedPackageName %>/config/environment';
+import config from '../config/environment';
 
 export default <%= baseClass %>.extend({
   type: '<%= entity %>',

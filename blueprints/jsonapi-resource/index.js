@@ -31,6 +31,7 @@ module.exports = {
         return mainBlueprint[type](options);
       })
       .then(function() {
+        if (name === 'addon-import') { return; }
         var testBlueprint = mainBlueprint.lookupBlueprint(name + '-test', {
           ui: this.ui,
           analytics: this.analytics,
@@ -56,24 +57,20 @@ module.exports = {
     var modelOptions = merge({}, options, {
       entity: {
         name: entityName ? inflection.singularize(entityName) : ''
-      }
+      },
+      originBlueprintName: 'jsonapi-model'
     });
 
     var otherOptions = merge({}, options);
 
-    var self = this;
-    return this._processBlueprint(type, 'jsonapi-model', modelOptions)
-    .then(function() {
-      return self._processBlueprint(type, 'jsonapi-adapter', otherOptions)
-      .then(function() {
-        return self._processBlueprint(type, 'jsonapi-serializer', otherOptions)
-        .then(function() {
-          return self._processBlueprint(type, 'jsonapi-service', otherOptions)
-          .then(function() {
-            return self._processBlueprint(type, 'jsonapi-initializer', otherOptions);
-          });
-        });
-      });
-    });
+    return Promise.all([
+      this._processBlueprint(type, 'jsonapi-model', modelOptions),
+      this._processBlueprint(type, 'addon-import', modelOptions),
+      this._processBlueprint(type, 'jsonapi-adapter', otherOptions),
+      this._processBlueprint(type, 'jsonapi-serializer', otherOptions),
+      this._processBlueprint(type, 'jsonapi-service', otherOptions),
+      this._processBlueprint(type, 'jsonapi-adapter', otherOptions),
+      this._processBlueprint(type, 'jsonapi-initializer', otherOptions)
+    ]);
   }
 };

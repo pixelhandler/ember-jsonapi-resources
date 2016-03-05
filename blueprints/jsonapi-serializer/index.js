@@ -41,6 +41,14 @@ module.exports = {
           blueprintName = 'serializer';
         }
         return inflector.pluralize(blueprintName);
+      },
+      __root__: function(options) {
+        if (options.inRepoAddon) {
+          return path.join('lib', options.inRepoAddon, 'app');
+        } else if (options.inAddon) {
+          return 'app';
+        }
+        return 'app';
       }
     };
   }
