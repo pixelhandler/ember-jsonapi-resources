@@ -56,18 +56,15 @@ module.exports = {
     needs = '  needs: [' + needsDeduplicated.join(', ') + '],';
 
     var relativePath = pathUtil.getRelativePath(resource);
-    var baseResourcePath = relativePath + 'resource';
     if (options.pod) {
       relativePath = pathUtil.getRelativeParentPath(resource);
-      baseResourcePath = relativePath + ['models', 'resource'].join('/');
     }
 
     return {
       attrs: attrs,
       needs: needs,
       entity: stringUtils.dasherize(inflection.singularize(resource)),
-      resource: stringUtils.dasherize(inflection.pluralize(resource)),
-      resourcePath: baseResourcePath
+      resource: stringUtils.dasherize(inflection.pluralize(resource))
     };
   },
 
