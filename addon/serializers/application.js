@@ -110,9 +110,9 @@ export default Ember.Object.extend({
   */
   deserialize(json) {
     if (Array.isArray(json.data)) {
-      return this.deserializeResources(Ember.A(json.data));
+      return (json.data.length > 0) ? this.deserializeResources(Ember.A(json.data)) : null;
     } else if (typeof json.data === 'object') {
-      return this.deserializeResource(json.data);
+      return (json.data !== null) ? this.deserializeResource(json.data) : null;
     } else {
       return null;
     }

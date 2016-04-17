@@ -1,9 +1,11 @@
+/* globals process */
 /**
   @module ember-jsonapi-resources
   @submodule fetch
 **/
 import Ember from 'ember';
 import { ServerError, ClientError, FetchError } from 'ember-jsonapi-resources/utils/errors';
+import networkFetch from 'ember-network/fetch';
 
 /**
   Fetch/Ajax methods for use with an Adapter calls `cacheUpdate`, `cacheResource`
@@ -20,6 +22,7 @@ export default Ember.Mixin.create({
     @type Boolean
   */
   useFetch: Ember.computed('useAjax', function () {
+    if (this._isFastBoot()) { return true; }
     let notFirefox = window.navigator.userAgent.indexOf("Firefox") === -1;
     return !this.get('useAjax') && window.fetch && notFirefox;
   }),
@@ -31,6 +34,15 @@ export default Ember.Mixin.create({
     @type Boolean
   */
   useAjax: false,
+
+  /**
+    @private
+    @method _isFastBoot
+  */
+  _isFastBoot() {
+    let onServer = typeof process !== 'undefined';
+    return onServer && process.env.EMBER_CLI_FASTBOOT === 'true';
+  },
 
   /**
     Makes a fetch request via Fetch API (may use polyfill)
@@ -46,7 +58,7 @@ export default Ember.Mixin.create({
   */
   _fetch(url, options, isUpdate) {
     return new Ember.RSVP.Promise(function(resolve, reject) {
-      window.fetch(url, options).then(function(response) {
+      networkFetch(url, options).then(function(response) {
         if (response.status >= 500) {
           this.fetchServerErrorHandler(response, reject);
         } else if (response.status >= 400) {

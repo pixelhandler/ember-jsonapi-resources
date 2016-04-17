@@ -65,6 +65,7 @@ export default Ember.Mixin.create({
   */
   cacheData(resp) {
     const ids = this.cache.data.mapBy('id');
+    if (!ids) { return; }
     if (Array.isArray(resp.data)) {
       if (ids.length === 0) {
         for (let i = 0; i < resp.data.length; i++) {
@@ -126,6 +127,7 @@ export default Ember.Mixin.create({
     @param {Object} headers
   */
   cacheControl(resource, headers) {
+    if (!resource) { return; }
     resource.set('meta.timeStamps', { local: Date.now() });
     if (headers && typeof headers.get === 'function') {
       let date = headers.get('date');
