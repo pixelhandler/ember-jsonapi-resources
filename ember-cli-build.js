@@ -6,9 +6,7 @@ var compileES6 = require('broccoli-es6-concatenator');
 var jsonToModule = require('./lib/json-to-module');
 
 module.exports = function(defaults) {
-  var app = new EmberAddon(defaults, {
-    // Add options here
-  });
+  var app = new EmberAddon(defaults);
 
   /*
     This build file specifies the options for the dummy test app of this
