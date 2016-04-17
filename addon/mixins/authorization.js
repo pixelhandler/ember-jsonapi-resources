@@ -59,7 +59,7 @@ export default Ember.Mixin.create({
     @method ajaxPrefilter
   */
   ajaxPrefilter: Ember.on('init', function () {
-    if (!this.get('useAjax') || this.get('useFetch')) { return; }
+    if (this.get('useFetch')) { return; }
     Ember.$.ajaxPrefilter(function(options) {
       let key = this.get('authorizationHeaderStorageKey');
       let field = this.get('authorizationHeaderField');
