@@ -7,7 +7,7 @@ module.exports = {
       }
     },
     {
-      name: 'ember-1-13',
+      name: 'ember-1.13',
       bower: {
         dependencies: {
           'ember': '~1.13.0'
@@ -86,6 +86,17 @@ module.exports = {
         },
         resolutions: {
           'ember': '2.3.1'
+        }
+      }
+    },
+    {
+      name: 'ember-2.4.5-LTS',
+      bower: {
+        dependencies: {
+          'ember': '2.4.5'
+        },
+        resolutions: {
+          'ember': '2.4.5'
         }
       }
     }
