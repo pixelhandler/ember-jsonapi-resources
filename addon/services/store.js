@@ -24,7 +24,7 @@ export default Ember.Service.extend({
     @return {Promise}
   */
   find(type, options) {
-    const service = this._service(type, options);
+    let service = this._service(type, options);
     return service.find(options);
   },
 
@@ -36,7 +36,7 @@ export default Ember.Service.extend({
     @return {Ember.Array}
   */
   all(type) {
-    const service = this._service(type);
+    let service = this._service(type);
     return (service.cache && service.cache.data) ? service.cache.data : Ember.A([]);
   },
 
@@ -48,7 +48,7 @@ export default Ember.Service.extend({
     @return {Promise}
   */
   createResource(type, resource) {
-    const service = this._service(type);
+    let service = this._service(type);
     return service.createResource(resource);
   },
 
@@ -61,25 +61,8 @@ export default Ember.Service.extend({
     @return {Promise}
   */
   updateResource(type, resource) {
-    const service = this._service(type);
+    let service = this._service(type);
     return service.updateResource(resource);
-  },
-
-  /**
-    Patch a relationship, either add or remove, sends a PATCH request
-
-    Adds with payload: `{ "data": { "type": "comments", "id": "12" } }`
-    Removes with payload: `{ "data": null }`
-
-    @method patchRelationship
-    @param {String} type - the entity or resource name will be pluralized
-    @param {Resource} resource - model instance, has URLs via it's relationships property
-    @param {String} relationship - resource name (plural) to find the url from the resource instance
-    @return {Promise}
-  */
-  patchRelationship(type, resource, relationship) {
-    const service = this._service(type);
-    return service.patchRelationship(resource, relationship);
   },
 
   /**
@@ -91,8 +74,65 @@ export default Ember.Service.extend({
     @return {Promise}
   */
   deleteResource(type, resource) {
-    const service = this._service(type);
+    let service = this._service(type);
     return service.deleteResource(resource);
+  },
+
+  /**
+    Creates a relationship, sends a POST request
+
+    Adds using a payload with the resource object:
+
+    - to-one: `{ "data": { "type": "authors", "id": "1" } }`
+    - to-many: `{ "data": [{ "type": "comments", "id": "12" }] }`
+
+    @method createRelationship
+    @param {String} type the entity or resource name will be pluralized
+    @param {Resource} resource instance, has URLs via it's relationships property
+    @param {String} relationship name (plural) to find the url from the resource instance
+    @param {String} id of the related resource
+    @return {Promise}
+  */
+  createRelationship(type, resource, relationship, id) {
+    let service = this._service(type);
+    return service.createRelationship(resource, relationship, id);
+  },
+
+  /**
+    Patch a relationship, either adds or removes everyting, sends a PATCH request
+
+    Adds with payload: `{ "data": { "type": "comments", "id": "12" } }`
+    Removes with payload: `{ "data": null }` for to-one or `{ "data": [] }` for to-many
+
+    @method patchRelationship
+    @param {String} type the entity or resource name will be pluralized
+    @param {Resource} resource instance, has URLs via it's relationships property
+    @param {String} relationship name (plural) to find the url from the resource instance
+    @return {Promise}
+  */
+  patchRelationship(type, resource, relationship) {
+    let service = this._service(type);
+    return service.patchRelationship(resource, relationship);
+  },
+
+  /**
+    Deletes a relationship, sends a DELETE request
+
+    Removes using a payload with the resource object:
+
+    - to-one: `{ "data": { "type": "authors", "id": "1" } }`
+    - to-many: `{ "data": [{ "type": "comments", "id": "12" }] }`
+
+    @method deleteRelationship
+    @param {String} type the entity or resource name will be pluralized
+    @param {Resource} resource instance, has URLs via it's relationships property
+    @param {String} relationship name (plural) to find the url from the resource instance
+    @param {String} id of the related resource
+    @return {Promise}
+  */
+  deleteRelationship(type, resource, relationship, id) {
+    let service = this._service(type);
+    return service.deleteRelationship(resource, relationship, id);
   },
 
   /**

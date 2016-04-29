@@ -211,6 +211,66 @@ test('when serializer returns null (nothing changed) #updateResource return prom
   });
 });
 
+test('#createRelationship (to-many)', function(assert) {
+  const done = assert.async();
+  mockServices.call(this);
+  let adapter = this.subject({type: 'posts', url: '/posts'});
+  sandbox.stub(adapter, 'fetch', function () { return Ember.RSVP.Promise.resolve(null); });
+  let resource = this.container.lookup('model:post').create(postMock.data);
+  let promise = adapter.createRelationship(resource, 'comments', '1');
+  assert.ok(typeof promise.then === 'function', 'returns a thenable');
+  promise.then(function() {
+    let relationURL = 'http://api.pixelhandler.com/api/v1/posts/1/relationships/comments';
+    let jsonBody = '{"data":[{"type":"comments","id":"1"}]}';
+    let msg = '#fetch called with url and options with data';
+    assert.ok(adapter.fetch.calledWith(relationURL, { method: 'POST', body: jsonBody }), msg);
+    done();
+  });
+});
+
+test('#createRelationship (to-one)', function(assert) {
+  const adapter = this.subject({type: 'posts', url: '/posts'});
+  mockServices.call(this);
+  sandbox.stub(adapter, 'fetch', function () { return Ember.RSVP.Promise.resolve(null); });
+  let resource = this.container.lookup('model:post').create(postMock.data);
+  let promise = adapter.createRelationship(resource, 'author', '1');
+  assert.ok(typeof promise.then === 'function', 'returns a thenable');
+  let relationURL = 'http://api.pixelhandler.com/api/v1/posts/1/relationships/author';
+  let jsonBody = '{"data":{"type":"authors","id":"1"}}';
+  let msg = '#fetch called with url and options with data';
+  assert.ok(adapter.fetch.calledWith(relationURL, { method: 'POST', body: jsonBody }), msg);
+});
+
+test('#deleteRelationship (to-many)', function(assert) {
+  const done = assert.async();
+  mockServices.call(this);
+  let adapter = this.subject({type: 'posts', url: '/posts'});
+  sandbox.stub(adapter, 'fetch', function () { return Ember.RSVP.Promise.resolve(null); });
+  let resource = this.container.lookup('model:post').create(postMock.data);
+  let promise = adapter.deleteRelationship(resource, 'comments', '1');
+  assert.ok(typeof promise.then === 'function', 'returns a thenable');
+  promise.then(function() {
+    let relationURL = 'http://api.pixelhandler.com/api/v1/posts/1/relationships/comments';
+    let jsonBody = '{"data":[{"type":"comments","id":"1"}]}';
+    let msg = '#fetch called with url and options with data';
+    assert.ok(adapter.fetch.calledWith(relationURL, { method: 'DELETE', body: jsonBody }), msg);
+    done();
+  });
+});
+
+test('#deleteRelationship (to-one)', function(assert) {
+  const adapter = this.subject({type: 'posts', url: '/posts'});
+  mockServices.call(this);
+  sandbox.stub(adapter, 'fetch', function () { return Ember.RSVP.Promise.resolve(null); });
+  let resource = this.container.lookup('model:post').create(postMock.data);
+  let promise = adapter.deleteRelationship(resource, 'author', '1');
+  assert.ok(typeof promise.then === 'function', 'returns a thenable');
+  let relationURL = 'http://api.pixelhandler.com/api/v1/posts/1/relationships/author';
+  let jsonBody = '{"data":{"type":"authors","id":"1"}}';
+  let msg = '#fetch called with url and options with data';
+  assert.ok(adapter.fetch.calledWith(relationURL, { method: 'DELETE', body: jsonBody }), msg);
+});
+
 test('#patchRelationship (to-many)', function(assert) {
   const done = assert.async();
   mockServices.call(this);

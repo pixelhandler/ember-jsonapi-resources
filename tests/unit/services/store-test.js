@@ -2,7 +2,9 @@ import { moduleFor, test } from 'ember-qunit';
 import Ember from 'ember';
 import { pluralize } from 'ember-inflector';
 
-let methods = Ember.String.w('find createResource updateResource patchRelationship deleteResource');
+let methods = 'find createResource updateResource deleteResource';
+methods += ' createRelationship patchRelationship deleteRelationship';
+methods = Ember.String.w(methods);
 
 let mockServices, entities = ['post', 'author', 'comment'];
 

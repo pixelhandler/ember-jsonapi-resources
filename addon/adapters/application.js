@@ -171,28 +171,6 @@ export default Ember.Object.extend(FetchMixin, Evented, {
   },
 
   /**
-    Patch a relationship, either add or remove, sends a PATCH request
-
-    Adds with payload: `{ "data": { "type": "comments", "id": "12" } }`
-    Removes with payload: `{ "data": null }` for to-one or `{ "data": [] }` for to-many
-
-    @method patchRelationship
-    @param {Resource} the resource instance, has URLs via it's relationships property
-    @param {String} resource name (plural) to find the url from the resource instance
-    @return {Promise}
-  */
-  patchRelationship(resource, relationship) {
-    let url = resource.get(['relationships', relationship, 'links', 'self'].join('.'));
-    url = url || [this.get('url'), resource.get('id'), 'relationships', relationship].join('/');
-    let data = resource.get(['relationships', relationship, 'data'].join('.'));
-    data = { data: data };
-    return this.fetch(url, {
-      method: 'PATCH',
-      body: JSON.stringify(data)
-    });
-  },
-
-  /**
     Delete an existing resource, sends a DELETE request
 
     @method deleteResource
@@ -209,6 +187,94 @@ export default Ember.Object.extend(FetchMixin, Evented, {
       resource.destroy();
     }
     return this.fetch(url, { method: 'DELETE' });
+  },
+
+  /**
+    Creates a relationship, sends a POST request
+
+    Adds using a payload with the resource object:
+
+    - to-one: `{ "data": { "type": "authors", "id": "1" } }`
+    - to-many: `{ "data": [{ "type": "comments", "id": "12" }] }`
+
+    @method createRelationship
+    @param {Resource} resource instance, has URLs via it's relationships property
+    @param {String} relationship name (plural) to find the url from the resource instance
+    @param {String} id of the related resource
+    @return {Promise}
+  */
+  createRelationship(resource, relationship, id) {
+    return this.fetch(this._urlForRelationship(resource, relationship), {
+      method: 'POST',
+      body: JSON.stringify(this._payloadForRelationship(resource, relationship, id))
+    });
+  },
+
+  /**
+    Patch a relationship, either adds or removes everyting, sends a PATCH request
+
+    Adds with payload: `{ "data": { "type": "comments", "id": "12" } }`
+    Removes with payload: `{ "data": null }` for to-one or `{ "data": [] }` for to-many
+
+    @method patchRelationship
+    @param {Resource} resource instance, has URLs via it's relationships property
+    @param {String} relationship name (plural) to find the url from the resource instance
+    @return {Promise}
+  */
+  patchRelationship(resource, relationship) {
+    return this.fetch(this._urlForRelationship(resource, relationship), {
+      method: 'PATCH',
+      body: JSON.stringify({
+        data: resource.get(['relationships', relationship, 'data'].join('.'))
+      })
+    });
+  },
+
+  /**
+    Deletes a relationship, sends a DELETE request
+
+    Removes using a payload with the resource object:
+
+    - to-one: `{ "data": { "type": "authors", "id": "1" } }`
+    - to-many: `{ "data": [{ "type": "comments", "id": "12" }] }`
+
+    @method deleteRelationship
+    @param {Resource} resource instance, has URLs via it's relationships property
+    @param {String} relationship name (plural) to find the url from the resource instance
+    @param {String} id of the related resource
+    @return {Promise}
+  */
+  deleteRelationship(resource, relationship, id) {
+    return this.fetch(this._urlForRelationship(resource, relationship), {
+      method: 'DELETE',
+      body: JSON.stringify(this._payloadForRelationship(resource, relationship, id))
+    });
+  },
+
+  /**
+    @method _urlForRelationship
+    @private
+    @param {Resource} [resource] instance, has URLs via it's relationships property
+    @param {String} [relationship] name (plural) to find the url from the resource instance
+    @return {String} url
+  */
+  _urlForRelationship(resource, relationship) {
+    let url = resource.get(['relationships', relationship, 'links', 'self'].join('.'));
+    return url || [this.get('url'), resource.get('id'), 'relationships', relationship].join('/');
+  },
+
+  /**
+    @method _payloadForRelationship
+    @private
+    @param {Resource} [resource] instance, has URLs via it's relationships property
+    @param {String} [relationship] name (plural) to find the url from the resource instance
+    @param {String} [id] the id for the related resource
+    @return {Object} payload
+  */
+  _payloadForRelationship(resource, relationship, id) {
+    let data = resource.get(['relationships', relationship, 'data'].join('.'));
+    let resourceObject = { type: pluralize(relationship), id: id };
+    return { data: (Array.isArray(data)) ? [resourceObject] : resourceObject };
   },
 
   /**
