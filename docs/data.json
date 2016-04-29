@@ -882,32 +882,6 @@
         {
             "file": "addon/adapters/application.js",
             "line": 173,
-            "description": "Patch a relationship, either add or remove, sends a PATCH request\n\nAdds with payload: `{ \"data\": { \"type\": \"comments\", \"id\": \"12\" } }`\nRemoves with payload: `{ \"data\": null }` for to-one or `{ \"data\": [] }` for to-many",
-            "itemtype": "method",
-            "name": "patchRelationship",
-            "params": [
-                {
-                    "name": "the",
-                    "description": "resource instance, has URLs via it's relationships property",
-                    "type": "Resource"
-                },
-                {
-                    "name": "resource",
-                    "description": "name (plural) to find the url from the resource instance",
-                    "type": "String"
-                }
-            ],
-            "return": {
-                "description": "",
-                "type": "Promise"
-            },
-            "class": "ApplicationAdapter",
-            "module": "ember-jsonapi-resources",
-            "submodule": "adapters"
-        },
-        {
-            "file": "addon/adapters/application.js",
-            "line": 195,
             "description": "Delete an existing resource, sends a DELETE request",
             "itemtype": "method",
             "name": "deleteResource",
@@ -928,7 +902,159 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 214,
+            "line": 192,
+            "description": "Creates a relationship, sends a POST request\n\nAdds using a payload with the resource object:\n\n- to-one: `{ \"data\": { \"type\": \"authors\", \"id\": \"1\" } }`\n- to-many: `{ \"data\": [{ \"type\": \"comments\", \"id\": \"12\" }] }`",
+            "itemtype": "method",
+            "name": "createRelationship",
+            "params": [
+                {
+                    "name": "resource",
+                    "description": "instance, has URLs via it's relationships property",
+                    "type": "Resource"
+                },
+                {
+                    "name": "relationship",
+                    "description": "name (plural) to find the url from the resource instance",
+                    "type": "String"
+                },
+                {
+                    "name": "id",
+                    "description": "of the related resource",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Promise"
+            },
+            "class": "ApplicationAdapter",
+            "module": "ember-jsonapi-resources",
+            "submodule": "adapters"
+        },
+        {
+            "file": "addon/adapters/application.js",
+            "line": 213,
+            "description": "Patch a relationship, either adds or removes everyting, sends a PATCH request\n\nAdds with payload: `{ \"data\": { \"type\": \"comments\", \"id\": \"12\" } }`\nRemoves with payload: `{ \"data\": null }` for to-one or `{ \"data\": [] }` for to-many",
+            "itemtype": "method",
+            "name": "patchRelationship",
+            "params": [
+                {
+                    "name": "resource",
+                    "description": "instance, has URLs via it's relationships property",
+                    "type": "Resource"
+                },
+                {
+                    "name": "relationship",
+                    "description": "name (plural) to find the url from the resource instance",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Promise"
+            },
+            "class": "ApplicationAdapter",
+            "module": "ember-jsonapi-resources",
+            "submodule": "adapters"
+        },
+        {
+            "file": "addon/adapters/application.js",
+            "line": 233,
+            "description": "Deletes a relationship, sends a DELETE request\n\nRemoves using a payload with the resource object:\n\n- to-one: `{ \"data\": { \"type\": \"authors\", \"id\": \"1\" } }`\n- to-many: `{ \"data\": [{ \"type\": \"comments\", \"id\": \"12\" }] }`",
+            "itemtype": "method",
+            "name": "deleteRelationship",
+            "params": [
+                {
+                    "name": "resource",
+                    "description": "instance, has URLs via it's relationships property",
+                    "type": "Resource"
+                },
+                {
+                    "name": "relationship",
+                    "description": "name (plural) to find the url from the resource instance",
+                    "type": "String"
+                },
+                {
+                    "name": "id",
+                    "description": "of the related resource",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Promise"
+            },
+            "class": "ApplicationAdapter",
+            "module": "ember-jsonapi-resources",
+            "submodule": "adapters"
+        },
+        {
+            "file": "addon/adapters/application.js",
+            "line": 254,
+            "itemtype": "method",
+            "name": "_urlForRelationship",
+            "access": "private",
+            "tagname": "",
+            "params": [
+                {
+                    "name": "resource",
+                    "description": "instance, has URLs via it's relationships property",
+                    "type": "Resource",
+                    "optional": true
+                },
+                {
+                    "name": "relationship",
+                    "description": "name (plural) to find the url from the resource instance",
+                    "type": "String",
+                    "optional": true
+                }
+            ],
+            "return": {
+                "description": "url",
+                "type": "String"
+            },
+            "class": "ApplicationAdapter",
+            "module": "ember-jsonapi-resources",
+            "submodule": "adapters"
+        },
+        {
+            "file": "addon/adapters/application.js",
+            "line": 266,
+            "itemtype": "method",
+            "name": "_payloadForRelationship",
+            "access": "private",
+            "tagname": "",
+            "params": [
+                {
+                    "name": "resource",
+                    "description": "instance, has URLs via it's relationships property",
+                    "type": "Resource",
+                    "optional": true
+                },
+                {
+                    "name": "relationship",
+                    "description": "name (plural) to find the url from the resource instance",
+                    "type": "String",
+                    "optional": true
+                },
+                {
+                    "name": "id",
+                    "description": "the id for the related resource",
+                    "type": "String",
+                    "optional": true
+                }
+            ],
+            "return": {
+                "description": "payload",
+                "type": "Object"
+            },
+            "class": "ApplicationAdapter",
+            "module": "ember-jsonapi-resources",
+            "submodule": "adapters"
+        },
+        {
+            "file": "addon/adapters/application.js",
+            "line": 280,
             "description": "Fetches data using Fetch API or XMLHttpRequest",
             "itemtype": "method",
             "name": "fetch",
@@ -954,7 +1080,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 232,
+            "line": 298,
             "description": "Hook to customize the URL, e.g. if your API is behind a proxy and you need\nto swap a portion of the domain to make a request on the same domain.",
             "itemtype": "method",
             "name": "fetchUrl",
@@ -975,7 +1101,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 244,
+            "line": 310,
             "description": "Adds params and headers or Fetch request.\n\n- The HTTP Header is set for Content-Type: application/vnd.api+json\n- Sets Authorization header if accessible in the `authorizationCredential` property",
             "itemtype": "method",
             "name": "fetchOptions",
@@ -996,7 +1122,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 266,
+            "line": 332,
             "description": "Sets Authorization header if accessible in the `authorizationCredential` property",
             "itemtype": "method",
             "name": "fetchAuthorizationHeader",
@@ -1013,7 +1139,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 283,
+            "line": 349,
             "description": "Authentication credentials/token used with HTTP authentication\nThis property should be added by an Authorization Mixin",
             "itemtype": "property",
             "name": "authorizationCredential",
@@ -1024,7 +1150,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 292,
+            "line": 358,
             "description": "The name of the Authorization request-header field\nThis property should be added by an Authorization Mixin",
             "itemtype": "property",
             "name": "authorizationHeaderField",
@@ -1035,7 +1161,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 301,
+            "line": 367,
             "description": "Noop as a hook for defining how deserialized resource objects are cached,\ne.g. in memory",
             "itemtype": "method",
             "name": "cacheResource",
@@ -1052,7 +1178,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 310,
+            "line": 376,
             "description": "Noop as a hook for defining how to handle cache after updating a resource",
             "itemtype": "method",
             "name": "cacheUpdate",
@@ -1069,7 +1195,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 318,
+            "line": 384,
             "description": "Noop as a hook to remove a resource from cached data",
             "itemtype": "method",
             "name": "cacheRemove",
@@ -2516,37 +2642,6 @@
         {
             "file": "addon/services/store.js",
             "line": 68,
-            "description": "Patch a relationship, either add or remove, sends a PATCH request\n\nAdds with payload: `{ \"data\": { \"type\": \"comments\", \"id\": \"12\" } }`\nRemoves with payload: `{ \"data\": null }`",
-            "itemtype": "method",
-            "name": "patchRelationship",
-            "params": [
-                {
-                    "name": "type",
-                    "description": "- the entity or resource name will be pluralized",
-                    "type": "String"
-                },
-                {
-                    "name": "resource",
-                    "description": "- model instance, has URLs via it's relationships property",
-                    "type": "Resource"
-                },
-                {
-                    "name": "relationship",
-                    "description": "- resource name (plural) to find the url from the resource instance",
-                    "type": "String"
-                }
-            ],
-            "return": {
-                "description": "",
-                "type": "Promise"
-            },
-            "class": "StoreService",
-            "module": "ember-jsonapi-resources",
-            "submodule": "store"
-        },
-        {
-            "file": "addon/services/store.js",
-            "line": 85,
             "description": "Delete an existing resource, sends a DELETE request",
             "itemtype": "method",
             "name": "deleteResource",
@@ -2572,7 +2667,110 @@
         },
         {
             "file": "addon/services/store.js",
-            "line": 98,
+            "line": 81,
+            "description": "Creates a relationship, sends a POST request\n\nAdds using a payload with the resource object:\n\n- to-one: `{ \"data\": { \"type\": \"authors\", \"id\": \"1\" } }`\n- to-many: `{ \"data\": [{ \"type\": \"comments\", \"id\": \"12\" }] }`",
+            "itemtype": "method",
+            "name": "createRelationship",
+            "params": [
+                {
+                    "name": "type",
+                    "description": "the entity or resource name will be pluralized",
+                    "type": "String"
+                },
+                {
+                    "name": "resource",
+                    "description": "instance, has URLs via it's relationships property",
+                    "type": "Resource"
+                },
+                {
+                    "name": "relationship",
+                    "description": "name (plural) to find the url from the resource instance",
+                    "type": "String"
+                },
+                {
+                    "name": "id",
+                    "description": "of the related resource",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Promise"
+            },
+            "class": "StoreService",
+            "module": "ember-jsonapi-resources",
+            "submodule": "store"
+        },
+        {
+            "file": "addon/services/store.js",
+            "line": 101,
+            "description": "Patch a relationship, either adds or removes everyting, sends a PATCH request\n\nAdds with payload: `{ \"data\": { \"type\": \"comments\", \"id\": \"12\" } }`\nRemoves with payload: `{ \"data\": null }` for to-one or `{ \"data\": [] }` for to-many",
+            "itemtype": "method",
+            "name": "patchRelationship",
+            "params": [
+                {
+                    "name": "type",
+                    "description": "the entity or resource name will be pluralized",
+                    "type": "String"
+                },
+                {
+                    "name": "resource",
+                    "description": "instance, has URLs via it's relationships property",
+                    "type": "Resource"
+                },
+                {
+                    "name": "relationship",
+                    "description": "name (plural) to find the url from the resource instance",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Promise"
+            },
+            "class": "StoreService",
+            "module": "ember-jsonapi-resources",
+            "submodule": "store"
+        },
+        {
+            "file": "addon/services/store.js",
+            "line": 118,
+            "description": "Deletes a relationship, sends a DELETE request\n\nRemoves using a payload with the resource object:\n\n- to-one: `{ \"data\": { \"type\": \"authors\", \"id\": \"1\" } }`\n- to-many: `{ \"data\": [{ \"type\": \"comments\", \"id\": \"12\" }] }`",
+            "itemtype": "method",
+            "name": "deleteRelationship",
+            "params": [
+                {
+                    "name": "type",
+                    "description": "the entity or resource name will be pluralized",
+                    "type": "String"
+                },
+                {
+                    "name": "resource",
+                    "description": "instance, has URLs via it's relationships property",
+                    "type": "Resource"
+                },
+                {
+                    "name": "relationship",
+                    "description": "name (plural) to find the url from the resource instance",
+                    "type": "String"
+                },
+                {
+                    "name": "id",
+                    "description": "of the related resource",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Promise"
+            },
+            "class": "StoreService",
+            "module": "ember-jsonapi-resources",
+            "submodule": "store"
+        },
+        {
+            "file": "addon/services/store.js",
+            "line": 138,
             "description": "Lookup the injected service for a resource, pluralize type arg.",
             "access": "private",
             "tagname": "",
