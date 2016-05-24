@@ -126,8 +126,8 @@ export default Ember.Service.extend({
     Find resource(s) using an id or a using a query &#x60;{id: &#x27;&#x27;, query: {}}&#x60;
 
     @method find
-    @param {String} type - the entity or resource name will be pluralized unless a &#x60;{singleton: true}&#x60; option is passed
-    @param {Object|String} options (object) or id (string)
+    @param {String} type the entity or resource name will be pluralized unless a &#x60;{singleton: true}&#x60; option is passed
+    @param {Object|String} options object or (string) id
     @return {Promise}
   */
   find(type, options) {
@@ -139,7 +139,7 @@ export default Ember.Service.extend({
     Access to the cached object
 
     @method all
-    @param {String} type - the entity or resource name will be pluralized
+    @param {String} type the entity or resource name will be pluralized
     @return {Ember.Array}
   */
   all(type) {
@@ -151,7 +151,8 @@ export default Ember.Service.extend({
     Create a new resource, sends a POST request
 
     @method createResource
-    @param {Resource} the resource instance to serialize
+    @param {String} type the entity or resource name will be pluralized
+    @param {Resource} resource instance to serialize
     @return {Promise}
   */
   createResource(type, resource) {
@@ -160,11 +161,11 @@ export default Ember.Service.extend({
   },
 
   /**
-    Patch an existing resource
+    Patch an existing resource, sends a PATCH request.
 
     @method updateResource
-    @param {String} type - the entity or resource name will be pluralized
-    @param {Resource} the resource instance to serialize the changed attributes
+    @param {String} type the entity or resource name will be pluralized
+    @param {Resource} resource instance to serialize the changed attributes
     @return {Promise}
   */
   updateResource(type, resource) {
@@ -176,8 +177,8 @@ export default Ember.Service.extend({
     Delete an existing resource, sends a DELETE request
 
     @method deleteResource
-    @param {String} type - the entity or resource name will be pluralized
-    @param {String|Resource} the name (plural) or resource instance w/ self link
+    @param {String} type the entity or resource name will be pluralized
+    @param {String|Resource} resource name (plural) or instance with self link
     @return {Promise}
   */
   deleteResource(type, resource) {
@@ -186,12 +187,19 @@ export default Ember.Service.extend({
   },
 
   /**
-    Creates a relationship, sends a POST request
+    Create (add) a relationship for &#x60;to-many&#x60; relation, sends a POST request.
 
-    Adds using a payload with the resource object:
+    See: &lt;http://jsonapi.org/format/#crud-updating-to-many-relationships&gt;
 
-    - to-one: &#x60;{ &quot;data&quot;: { &quot;type&quot;: &quot;authors&quot;, &quot;id&quot;: &quot;1&quot; } }&#x60;
-    - to-many: &#x60;{ &quot;data&quot;: [{ &quot;type&quot;: &quot;comments&quot;, &quot;id&quot;: &quot;12&quot; }] }&#x60;
+    Adds a relation using a payload with a resource identifier object:
+
+    &#x60;&#x60;&#x60;
+    {
+      &quot;data&quot;: [
+        { &quot;type&quot;: &quot;comments&quot;, &quot;id&quot;: &quot;12&quot; }
+      ]
+    }
+    &#x60;&#x60;&#x60;
 
     @method createRelationship
     @param {String} type the entity or resource name will be pluralized
@@ -206,10 +214,32 @@ export default Ember.Service.extend({
   },
 
   /**
-    Patch a relationship, either adds or removes everyting, sends a PATCH request
+    Patch a relationship, either adds or removes everyting, sends a PATCH request.
 
-    Adds with payload: &#x60;{ &quot;data&quot;: { &quot;type&quot;: &quot;comments&quot;, &quot;id&quot;: &quot;12&quot; } }&#x60;
-    Removes with payload: &#x60;{ &quot;data&quot;: null }&#x60; for to-one or &#x60;{ &quot;data&quot;: [] }&#x60; for to-many
+    See: &lt;http://jsonapi.org/format/#crud-updating-to-one-relationships&gt;
+
+    For &#x60;to-one&#x60; relation:
+
+    - Remove (delete) with payload: &#x60;{ &quot;data&quot;: null }&#x60;
+    - Create/Update with payload:
+      &#x60;&#x60;&#x60;
+      {
+        &quot;data&quot;: { &quot;type&quot;: &quot;comments&quot;, &quot;id&quot;: &quot;1&quot; }
+      }
+      &#x60;&#x60;&#x60;
+
+    For &#x60;to-many&#x60; relation:
+
+    - Remove (delete) all with payload: &#x60;{ &quot;data&quot;: [] }&#x60;
+    - Replace all with payload:
+      &#x60;&#x60;&#x60;
+      {
+        &quot;data&quot;: [
+          { &quot;type&quot;: &quot;comments&quot;, &quot;id&quot;: &quot;1&quot; },
+          { &quot;type&quot;: &quot;comments&quot;, &quot;id&quot;: &quot;2&quot; }
+        ]
+      }
+      &#x60;&#x60;&#x60;
 
     @method patchRelationship
     @param {String} type the entity or resource name will be pluralized
@@ -223,12 +253,21 @@ export default Ember.Service.extend({
   },
 
   /**
-    Deletes a relationship, sends a DELETE request
+    Deletes a relationship for &#x60;to-many&#x60; relation, sends a DELETE request.
 
-    Removes using a payload with the resource object:
+    See: &lt;http://jsonapi.org/format/#crud-updating-to-many-relationships&gt;
 
-    - to-one: &#x60;{ &quot;data&quot;: { &quot;type&quot;: &quot;authors&quot;, &quot;id&quot;: &quot;1&quot; } }&#x60;
-    - to-many: &#x60;{ &quot;data&quot;: [{ &quot;type&quot;: &quot;comments&quot;, &quot;id&quot;: &quot;12&quot; }] }&#x60;
+    Remove using a payload with the resource identifier object:
+
+    For &#x60;to-many&#x60;:
+
+    &#x60;&#x60;&#x60;
+    {
+      &quot;data&quot;: [
+        { &quot;type&quot;: &quot;comments&quot;, &quot;id&quot;: &quot;1&quot; }
+      ]
+    }
+    &#x60;&#x60;&#x60;
 
     @method deleteRelationship
     @param {String} type the entity or resource name will be pluralized

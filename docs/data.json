@@ -845,8 +845,8 @@
             "name": "createResource",
             "params": [
                 {
-                    "name": "the",
-                    "description": "resource instance to serialize",
+                    "name": "resource",
+                    "description": "the instance to serialize",
                     "type": "Resource"
                 }
             ],
@@ -866,8 +866,8 @@
             "name": "updateResource",
             "params": [
                 {
-                    "name": "the",
-                    "description": "resource instance to serialize the changed attributes",
+                    "name": "resource",
+                    "description": "instance to serialize the changed attributes",
                     "type": "Resource"
                 }
             ],
@@ -887,8 +887,8 @@
             "name": "deleteResource",
             "params": [
                 {
-                    "name": "the",
-                    "description": "name (plural) or resource instance w/ self link",
+                    "name": "resource",
+                    "description": "name (plural) or instance w/ self link",
                     "type": "String|Resource"
                 }
             ],
@@ -903,7 +903,7 @@
         {
             "file": "addon/adapters/application.js",
             "line": 192,
-            "description": "Creates a relationship, sends a POST request\n\nAdds using a payload with the resource object:\n\n- to-one: `{ \"data\": { \"type\": \"authors\", \"id\": \"1\" } }`\n- to-many: `{ \"data\": [{ \"type\": \"comments\", \"id\": \"12\" }] }`",
+            "description": "Create (add) a relationship for `to-many` relation, sends a POST request.\n\nSee: <http://jsonapi.org/format/#crud-updating-to-many-relationships>\n\nAdds a relation using a payload with a resource identifier object:\n\n```\n{\n  \"data\": [\n    { \"type\": \"comments\", \"id\": \"12\" }\n  ]\n}\n```",
             "itemtype": "method",
             "name": "createRelationship",
             "params": [
@@ -933,8 +933,8 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 213,
-            "description": "Patch a relationship, either adds or removes everyting, sends a PATCH request\n\nAdds with payload: `{ \"data\": { \"type\": \"comments\", \"id\": \"12\" } }`\nRemoves with payload: `{ \"data\": null }` for to-one or `{ \"data\": [] }` for to-many",
+            "line": 220,
+            "description": "Patch a relationship, either adds or removes everyting, sends a PATCH request.\n\nSee: <http://jsonapi.org/format/#crud-updating-to-one-relationships>\n\nFor `to-one` relation:\n\n- Remove (delete) with payload: `{ \"data\": null }`\n- Create/Update with payload:\n  ```\n  {\n    \"data\": { \"type\": \"comments\", \"id\": \"1\" }\n  }\n  ```\n\nFor `to-many` relation:\n\n- Remove (delete) all with payload: `{ \"data\": [] }`\n- Replace all with payload:\n  ```\n  {\n    \"data\": [\n      { \"type\": \"comments\", \"id\": \"1\" },\n      { \"type\": \"comments\", \"id\": \"2\" }\n    ]\n  }\n  ```",
             "itemtype": "method",
             "name": "patchRelationship",
             "params": [
@@ -959,8 +959,8 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 233,
-            "description": "Deletes a relationship, sends a DELETE request\n\nRemoves using a payload with the resource object:\n\n- to-one: `{ \"data\": { \"type\": \"authors\", \"id\": \"1\" } }`\n- to-many: `{ \"data\": [{ \"type\": \"comments\", \"id\": \"12\" }] }`",
+            "line": 262,
+            "description": "Deletes a relationship for `to-many` relation, sends a DELETE request.\n\nSee: <http://jsonapi.org/format/#crud-updating-to-many-relationships>\n\nRemove using a payload with the resource identifier object:\n\nFor `to-many`:\n\n```\n{\n  \"data\": [\n    { \"type\": \"comments\", \"id\": \"1\" }\n  ]\n}\n```",
             "itemtype": "method",
             "name": "deleteRelationship",
             "params": [
@@ -990,7 +990,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 254,
+            "line": 292,
             "itemtype": "method",
             "name": "_urlForRelationship",
             "access": "private",
@@ -999,14 +999,12 @@
                 {
                     "name": "resource",
                     "description": "instance, has URLs via it's relationships property",
-                    "type": "Resource",
-                    "optional": true
+                    "type": "Resource"
                 },
                 {
                     "name": "relationship",
                     "description": "name (plural) to find the url from the resource instance",
-                    "type": "String",
-                    "optional": true
+                    "type": "String"
                 }
             ],
             "return": {
@@ -1019,7 +1017,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 266,
+            "line": 304,
             "itemtype": "method",
             "name": "_payloadForRelationship",
             "access": "private",
@@ -1028,20 +1026,17 @@
                 {
                     "name": "resource",
                     "description": "instance, has URLs via it's relationships property",
-                    "type": "Resource",
-                    "optional": true
+                    "type": "Resource"
                 },
                 {
                     "name": "relationship",
                     "description": "name (plural) to find the url from the resource instance",
-                    "type": "String",
-                    "optional": true
+                    "type": "String"
                 },
                 {
                     "name": "id",
                     "description": "the id for the related resource",
-                    "type": "String",
-                    "optional": true
+                    "type": "String"
                 }
             ],
             "return": {
@@ -1054,7 +1049,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 280,
+            "line": 318,
             "description": "Fetches data using Fetch API or XMLHttpRequest",
             "itemtype": "method",
             "name": "fetch",
@@ -1066,7 +1061,7 @@
                 },
                 {
                     "name": "options",
-                    "description": "- may include a query object or an update flag",
+                    "description": "may include a query object or an update flag",
                     "type": "Object"
                 }
             ],
@@ -1080,7 +1075,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 298,
+            "line": 336,
             "description": "Hook to customize the URL, e.g. if your API is behind a proxy and you need\nto swap a portion of the domain to make a request on the same domain.",
             "itemtype": "method",
             "name": "fetchUrl",
@@ -1101,7 +1096,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 310,
+            "line": 348,
             "description": "Adds params and headers or Fetch request.\n\n- The HTTP Header is set for Content-Type: application/vnd.api+json\n- Sets Authorization header if accessible in the `authorizationCredential` property",
             "itemtype": "method",
             "name": "fetchOptions",
@@ -1122,7 +1117,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 332,
+            "line": 370,
             "description": "Sets Authorization header if accessible in the `authorizationCredential` property",
             "itemtype": "method",
             "name": "fetchAuthorizationHeader",
@@ -1139,7 +1134,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 349,
+            "line": 387,
             "description": "Authentication credentials/token used with HTTP authentication\nThis property should be added by an Authorization Mixin",
             "itemtype": "property",
             "name": "authorizationCredential",
@@ -1150,7 +1145,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 358,
+            "line": 396,
             "description": "The name of the Authorization request-header field\nThis property should be added by an Authorization Mixin",
             "itemtype": "property",
             "name": "authorizationHeaderField",
@@ -1161,7 +1156,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 367,
+            "line": 405,
             "description": "Noop as a hook for defining how deserialized resource objects are cached,\ne.g. in memory",
             "itemtype": "method",
             "name": "cacheResource",
@@ -1178,7 +1173,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 376,
+            "line": 414,
             "description": "Noop as a hook for defining how to handle cache after updating a resource",
             "itemtype": "method",
             "name": "cacheUpdate",
@@ -1195,7 +1190,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 384,
+            "line": 422,
             "description": "Noop as a hook to remove a resource from cached data",
             "itemtype": "method",
             "name": "cacheRemove",
@@ -2554,12 +2549,12 @@
             "params": [
                 {
                     "name": "type",
-                    "description": "- the entity or resource name will be pluralized unless a `{singleton: true}` option is passed",
+                    "description": "the entity or resource name will be pluralized unless a `{singleton: true}` option is passed",
                     "type": "String"
                 },
                 {
                     "name": "options",
-                    "description": "(object) or id (string)",
+                    "description": "object or (string) id",
                     "type": "Object|String"
                 }
             ],
@@ -2580,7 +2575,7 @@
             "params": [
                 {
                     "name": "type",
-                    "description": "- the entity or resource name will be pluralized",
+                    "description": "the entity or resource name will be pluralized",
                     "type": "String"
                 }
             ],
@@ -2600,8 +2595,13 @@
             "name": "createResource",
             "params": [
                 {
-                    "name": "the",
-                    "description": "resource instance to serialize",
+                    "name": "type",
+                    "description": "the entity or resource name will be pluralized",
+                    "type": "String"
+                },
+                {
+                    "name": "resource",
+                    "description": "instance to serialize",
                     "type": "Resource"
                 }
             ],
@@ -2615,19 +2615,19 @@
         },
         {
             "file": "addon/services/store.js",
-            "line": 55,
-            "description": "Patch an existing resource",
+            "line": 56,
+            "description": "Patch an existing resource, sends a PATCH request.",
             "itemtype": "method",
             "name": "updateResource",
             "params": [
                 {
                     "name": "type",
-                    "description": "- the entity or resource name will be pluralized",
+                    "description": "the entity or resource name will be pluralized",
                     "type": "String"
                 },
                 {
-                    "name": "the",
-                    "description": "resource instance to serialize the changed attributes",
+                    "name": "resource",
+                    "description": "instance to serialize the changed attributes",
                     "type": "Resource"
                 }
             ],
@@ -2641,19 +2641,19 @@
         },
         {
             "file": "addon/services/store.js",
-            "line": 68,
+            "line": 69,
             "description": "Delete an existing resource, sends a DELETE request",
             "itemtype": "method",
             "name": "deleteResource",
             "params": [
                 {
                     "name": "type",
-                    "description": "- the entity or resource name will be pluralized",
+                    "description": "the entity or resource name will be pluralized",
                     "type": "String"
                 },
                 {
-                    "name": "the",
-                    "description": "name (plural) or resource instance w/ self link",
+                    "name": "resource",
+                    "description": "name (plural) or instance with self link",
                     "type": "String|Resource"
                 }
             ],
@@ -2667,8 +2667,8 @@
         },
         {
             "file": "addon/services/store.js",
-            "line": 81,
-            "description": "Creates a relationship, sends a POST request\n\nAdds using a payload with the resource object:\n\n- to-one: `{ \"data\": { \"type\": \"authors\", \"id\": \"1\" } }`\n- to-many: `{ \"data\": [{ \"type\": \"comments\", \"id\": \"12\" }] }`",
+            "line": 82,
+            "description": "Create (add) a relationship for `to-many` relation, sends a POST request.\n\nSee: <http://jsonapi.org/format/#crud-updating-to-many-relationships>\n\nAdds a relation using a payload with a resource identifier object:\n\n```\n{\n  \"data\": [\n    { \"type\": \"comments\", \"id\": \"12\" }\n  ]\n}\n```",
             "itemtype": "method",
             "name": "createRelationship",
             "params": [
@@ -2703,8 +2703,8 @@
         },
         {
             "file": "addon/services/store.js",
-            "line": 101,
-            "description": "Patch a relationship, either adds or removes everyting, sends a PATCH request\n\nAdds with payload: `{ \"data\": { \"type\": \"comments\", \"id\": \"12\" } }`\nRemoves with payload: `{ \"data\": null }` for to-one or `{ \"data\": [] }` for to-many",
+            "line": 109,
+            "description": "Patch a relationship, either adds or removes everyting, sends a PATCH request.\n\nSee: <http://jsonapi.org/format/#crud-updating-to-one-relationships>\n\nFor `to-one` relation:\n\n- Remove (delete) with payload: `{ \"data\": null }`\n- Create/Update with payload:\n  ```\n  {\n    \"data\": { \"type\": \"comments\", \"id\": \"1\" }\n  }\n  ```\n\nFor `to-many` relation:\n\n- Remove (delete) all with payload: `{ \"data\": [] }`\n- Replace all with payload:\n  ```\n  {\n    \"data\": [\n      { \"type\": \"comments\", \"id\": \"1\" },\n      { \"type\": \"comments\", \"id\": \"2\" }\n    ]\n  }\n  ```",
             "itemtype": "method",
             "name": "patchRelationship",
             "params": [
@@ -2734,8 +2734,8 @@
         },
         {
             "file": "addon/services/store.js",
-            "line": 118,
-            "description": "Deletes a relationship, sends a DELETE request\n\nRemoves using a payload with the resource object:\n\n- to-one: `{ \"data\": { \"type\": \"authors\", \"id\": \"1\" } }`\n- to-many: `{ \"data\": [{ \"type\": \"comments\", \"id\": \"12\" }] }`",
+            "line": 148,
+            "description": "Deletes a relationship for `to-many` relation, sends a DELETE request.\n\nSee: <http://jsonapi.org/format/#crud-updating-to-many-relationships>\n\nRemove using a payload with the resource identifier object:\n\nFor `to-many`:\n\n```\n{\n  \"data\": [\n    { \"type\": \"comments\", \"id\": \"1\" }\n  ]\n}\n```",
             "itemtype": "method",
             "name": "deleteRelationship",
             "params": [
@@ -2770,7 +2770,7 @@
         },
         {
             "file": "addon/services/store.js",
-            "line": 138,
+            "line": 177,
             "description": "Lookup the injected service for a resource, pluralize type arg.",
             "access": "private",
             "tagname": "",

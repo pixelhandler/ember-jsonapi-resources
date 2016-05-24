@@ -211,7 +211,7 @@
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_services_store.js.html#l138"><code>addon&#x2F;services&#x2F;store.js:138</code></a>
+        <a href="../files/addon_services_store.js.html#l177"><code>addon&#x2F;services&#x2F;store.js:177</code></a>
         </p>
 
 
@@ -303,9 +303,7 @@
 
 
                     <div class="param-description">
-                        <ul>
-<li>the entity or resource name will be pluralized</li>
-</ul>
+                        <p>the entity or resource name will be pluralized</p>
 
                     </div>
 
@@ -356,7 +354,7 @@
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_services_store.js.html#l81"><code>addon&#x2F;services&#x2F;store.js:81</code></a>
+        <a href="../files/addon_services_store.js.html#l82"><code>addon&#x2F;services&#x2F;store.js:82</code></a>
         </p>
 
 
@@ -364,12 +362,15 @@
     </div>
 
     <div class="description">
-        <p>Creates a relationship, sends a POST request</p>
-<p>Adds using a payload with the resource object:</p>
-<ul>
-<li>to-one: <code>{ &quot;data&quot;: { &quot;type&quot;: &quot;authors&quot;, &quot;id&quot;: &quot;1&quot; } }</code></li>
-<li>to-many: <code>{ &quot;data&quot;: [{ &quot;type&quot;: &quot;comments&quot;, &quot;id&quot;: &quot;12&quot; }] }</code></li>
-</ul>
+        <p>Create (add) a relationship for <code>to-many</code> relation, sends a POST request.</p>
+<p>See: <a href="http://jsonapi.org/format/#crud-updating-to-many-relationships">http://jsonapi.org/format/#crud-updating-to-many-relationships</a></p>
+<p>Adds a relation using a payload with a resource identifier object:</p>
+<pre class="code prettyprint"><code>{
+  &quot;data&quot;: [
+    { &quot;type&quot;: &quot;comments&quot;, &quot;id&quot;: &quot;12&quot; }
+  ]
+}
+</code></pre>
 
     </div>
 
@@ -440,7 +441,10 @@
         <div class="args">
             <span class="paren">(</span><ul class="args-list inline commas">
                 <li class="arg">
-                        <code>the</code>
+                        <code>type</code>
+                </li>
+                <li class="arg">
+                        <code>resource</code>
                 </li>
             </ul><span class="paren">)</span>
         </div>
@@ -475,12 +479,23 @@
 
             <ul class="params-list">
                 <li class="param">
-                        <code class="param-name">the</code>
+                        <code class="param-name">type</code>
+                        <span class="type">String</span>
+
+
+                    <div class="param-description">
+                        <p>the entity or resource name will be pluralized</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">resource</code>
                         <span class="type"><a href="../classes/Resource.html" class="crosslink">Resource</a></span>
 
 
                     <div class="param-description">
-                        <p>resource instance to serialize</p>
+                        <p>instance to serialize</p>
 
                     </div>
 
@@ -531,7 +546,7 @@
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_services_store.js.html#l118"><code>addon&#x2F;services&#x2F;store.js:118</code></a>
+        <a href="../files/addon_services_store.js.html#l148"><code>addon&#x2F;services&#x2F;store.js:148</code></a>
         </p>
 
 
@@ -539,12 +554,16 @@
     </div>
 
     <div class="description">
-        <p>Deletes a relationship, sends a DELETE request</p>
-<p>Removes using a payload with the resource object:</p>
-<ul>
-<li>to-one: <code>{ &quot;data&quot;: { &quot;type&quot;: &quot;authors&quot;, &quot;id&quot;: &quot;1&quot; } }</code></li>
-<li>to-many: <code>{ &quot;data&quot;: [{ &quot;type&quot;: &quot;comments&quot;, &quot;id&quot;: &quot;12&quot; }] }</code></li>
-</ul>
+        <p>Deletes a relationship for <code>to-many</code> relation, sends a DELETE request.</p>
+<p>See: <a href="http://jsonapi.org/format/#crud-updating-to-many-relationships">http://jsonapi.org/format/#crud-updating-to-many-relationships</a></p>
+<p>Remove using a payload with the resource identifier object:</p>
+<p>For <code>to-many</code>:</p>
+<pre class="code prettyprint"><code>{
+  &quot;data&quot;: [
+    { &quot;type&quot;: &quot;comments&quot;, &quot;id&quot;: &quot;1&quot; }
+  ]
+}
+</code></pre>
 
     </div>
 
@@ -618,7 +637,7 @@
                         <code>type</code>
                 </li>
                 <li class="arg">
-                        <code>the</code>
+                        <code>resource</code>
                 </li>
             </ul><span class="paren">)</span>
         </div>
@@ -636,7 +655,7 @@
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_services_store.js.html#l68"><code>addon&#x2F;services&#x2F;store.js:68</code></a>
+        <a href="../files/addon_services_store.js.html#l69"><code>addon&#x2F;services&#x2F;store.js:69</code></a>
         </p>
 
 
@@ -658,20 +677,18 @@
 
 
                     <div class="param-description">
-                        <ul>
-<li>the entity or resource name will be pluralized</li>
-</ul>
+                        <p>the entity or resource name will be pluralized</p>
 
                     </div>
 
                 </li>
                 <li class="param">
-                        <code class="param-name">the</code>
+                        <code class="param-name">resource</code>
                         <span class="type">String | <a href="../classes/Resource.html" class="crosslink">Resource</a></span>
 
 
                     <div class="param-description">
-                        <p>name (plural) or resource instance w/ self link</p>
+                        <p>name (plural) or instance with self link</p>
 
                     </div>
 
@@ -738,9 +755,7 @@
 
 
                     <div class="param-description">
-                        <ul>
-<li>the entity or resource name will be pluralized unless a <code>{singleton: true}</code> option is passed</li>
-</ul>
+                        <p>the entity or resource name will be pluralized unless a <code>{singleton: true}</code> option is passed</p>
 
                     </div>
 
@@ -751,7 +766,7 @@
 
 
                     <div class="param-description">
-                        <p>(object) or id (string)</p>
+                        <p>object or (string) id</p>
 
                     </div>
 
@@ -831,7 +846,7 @@
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_services_store.js.html#l101"><code>addon&#x2F;services&#x2F;store.js:101</code></a>
+        <a href="../files/addon_services_store.js.html#l109"><code>addon&#x2F;services&#x2F;store.js:109</code></a>
         </p>
 
 
@@ -839,9 +854,29 @@
     </div>
 
     <div class="description">
-        <p>Patch a relationship, either adds or removes everyting, sends a PATCH request</p>
-<p>Adds with payload: <code>{ &quot;data&quot;: { &quot;type&quot;: &quot;comments&quot;, &quot;id&quot;: &quot;12&quot; } }</code>
-Removes with payload: <code>{ &quot;data&quot;: null }</code> for to-one or <code>{ &quot;data&quot;: [] }</code> for to-many</p>
+        <p>Patch a relationship, either adds or removes everyting, sends a PATCH request.</p>
+<p>See: <a href="http://jsonapi.org/format/#crud-updating-to-one-relationships">http://jsonapi.org/format/#crud-updating-to-one-relationships</a></p>
+<p>For <code>to-one</code> relation:</p>
+<ul>
+<li>Remove (delete) with payload: <code>{ &quot;data&quot;: null }</code></li>
+<li>Create/Update with payload:<pre class="code prettyprint"><code>{
+  &quot;data&quot;: { &quot;type&quot;: &quot;comments&quot;, &quot;id&quot;: &quot;1&quot; }
+}
+</code></pre>
+</li>
+</ul>
+<p>For <code>to-many</code> relation:</p>
+<ul>
+<li>Remove (delete) all with payload: <code>{ &quot;data&quot;: [] }</code></li>
+<li>Replace all with payload:<pre class="code prettyprint"><code>{
+  &quot;data&quot;: [
+    { &quot;type&quot;: &quot;comments&quot;, &quot;id&quot;: &quot;1&quot; },
+    { &quot;type&quot;: &quot;comments&quot;, &quot;id&quot;: &quot;2&quot; }
+  ]
+}
+</code></pre>
+</li>
+</ul>
 
     </div>
 
@@ -904,7 +939,7 @@ Removes with payload: <code>{ &quot;data&quot;: null }</code> for to-one or <cod
                         <code>type</code>
                 </li>
                 <li class="arg">
-                        <code>the</code>
+                        <code>resource</code>
                 </li>
             </ul><span class="paren">)</span>
         </div>
@@ -922,7 +957,7 @@ Removes with payload: <code>{ &quot;data&quot;: null }</code> for to-one or <cod
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_services_store.js.html#l55"><code>addon&#x2F;services&#x2F;store.js:55</code></a>
+        <a href="../files/addon_services_store.js.html#l56"><code>addon&#x2F;services&#x2F;store.js:56</code></a>
         </p>
 
 
@@ -930,7 +965,7 @@ Removes with payload: <code>{ &quot;data&quot;: null }</code> for to-one or <cod
     </div>
 
     <div class="description">
-        <p>Patch an existing resource</p>
+        <p>Patch an existing resource, sends a PATCH request.</p>
 
     </div>
 
@@ -944,20 +979,18 @@ Removes with payload: <code>{ &quot;data&quot;: null }</code> for to-one or <cod
 
 
                     <div class="param-description">
-                        <ul>
-<li>the entity or resource name will be pluralized</li>
-</ul>
+                        <p>the entity or resource name will be pluralized</p>
 
                     </div>
 
                 </li>
                 <li class="param">
-                        <code class="param-name">the</code>
+                        <code class="param-name">resource</code>
                         <span class="type"><a href="../classes/Resource.html" class="crosslink">Resource</a></span>
 
 
                     <div class="param-description">
-                        <p>resource instance to serialize the changed attributes</p>
+                        <p>instance to serialize the changed attributes</p>
 
                     </div>
 
