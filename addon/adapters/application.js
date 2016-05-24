@@ -128,7 +128,7 @@ export default Ember.Object.extend(FetchMixin, Evented, {
     with persisted data, and updates cache with persisted resource
 
     @method createResource
-    @param {Resource} the resource instance to serialize
+    @param {Resource} resource the instance to serialize
     @return {Promise}
   */
   createResource(resource) {
@@ -154,7 +154,7 @@ export default Ember.Object.extend(FetchMixin, Evented, {
     Patch an existing resource, sends a PATCH request.
 
     @method updateResource
-    @param {Resource} the resource instance to serialize the changed attributes
+    @param {Resource} resource instance to serialize the changed attributes
     @return {Promise} resolves with PATCH response or `null` if nothing to update
   */
   updateResource(resource) {
@@ -174,7 +174,7 @@ export default Ember.Object.extend(FetchMixin, Evented, {
     Delete an existing resource, sends a DELETE request
 
     @method deleteResource
-    @param {String|Resource} the name (plural) or resource instance w/ self link
+    @param {String|Resource} resource name (plural) or instance w/ self link
     @return {Promise}
   */
   deleteResource(resource) {
@@ -190,12 +190,19 @@ export default Ember.Object.extend(FetchMixin, Evented, {
   },
 
   /**
-    Creates a relationship, sends a POST request
+    Create (add) a relationship for `to-many` relation, sends a POST request.
 
-    Adds using a payload with the resource object:
+    See: <http://jsonapi.org/format/#crud-updating-to-many-relationships>
 
-    - to-one: `{ "data": { "type": "authors", "id": "1" } }`
-    - to-many: `{ "data": [{ "type": "comments", "id": "12" }] }`
+    Adds a relation using a payload with a resource identifier object:
+
+    ```
+    {
+      "data": [
+        { "type": "comments", "id": "12" }
+      ]
+    }
+    ```
 
     @method createRelationship
     @param {Resource} resource instance, has URLs via it's relationships property
@@ -211,10 +218,32 @@ export default Ember.Object.extend(FetchMixin, Evented, {
   },
 
   /**
-    Patch a relationship, either adds or removes everyting, sends a PATCH request
+    Patch a relationship, either adds or removes everyting, sends a PATCH request.
 
-    Adds with payload: `{ "data": { "type": "comments", "id": "12" } }`
-    Removes with payload: `{ "data": null }` for to-one or `{ "data": [] }` for to-many
+    See: <http://jsonapi.org/format/#crud-updating-to-one-relationships>
+
+    For `to-one` relation:
+
+    - Remove (delete) with payload: `{ "data": null }`
+    - Create/Update with payload:
+      ```
+      {
+        "data": { "type": "comments", "id": "1" }
+      }
+      ```
+
+    For `to-many` relation:
+
+    - Remove (delete) all with payload: `{ "data": [] }`
+    - Replace all with payload:
+      ```
+      {
+        "data": [
+          { "type": "comments", "id": "1" },
+          { "type": "comments", "id": "2" }
+        ]
+      }
+      ```
 
     @method patchRelationship
     @param {Resource} resource instance, has URLs via it's relationships property
@@ -231,12 +260,21 @@ export default Ember.Object.extend(FetchMixin, Evented, {
   },
 
   /**
-    Deletes a relationship, sends a DELETE request
+    Deletes a relationship for `to-many` relation, sends a DELETE request.
 
-    Removes using a payload with the resource object:
+    See: <http://jsonapi.org/format/#crud-updating-to-many-relationships>
 
-    - to-one: `{ "data": { "type": "authors", "id": "1" } }`
-    - to-many: `{ "data": [{ "type": "comments", "id": "12" }] }`
+    Remove using a payload with the resource identifier object:
+
+    For `to-many`:
+
+    ```
+    {
+      "data": [
+        { "type": "comments", "id": "1" }
+      ]
+    }
+    ```
 
     @method deleteRelationship
     @param {Resource} resource instance, has URLs via it's relationships property
@@ -254,8 +292,8 @@ export default Ember.Object.extend(FetchMixin, Evented, {
   /**
     @method _urlForRelationship
     @private
-    @param {Resource} [resource] instance, has URLs via it's relationships property
-    @param {String} [relationship] name (plural) to find the url from the resource instance
+    @param {Resource} resource instance, has URLs via it's relationships property
+    @param {String} relationship name (plural) to find the url from the resource instance
     @return {String} url
   */
   _urlForRelationship(resource, relationship) {
@@ -266,9 +304,9 @@ export default Ember.Object.extend(FetchMixin, Evented, {
   /**
     @method _payloadForRelationship
     @private
-    @param {Resource} [resource] instance, has URLs via it's relationships property
-    @param {String} [relationship] name (plural) to find the url from the resource instance
-    @param {String} [id] the id for the related resource
+    @param {Resource} resource instance, has URLs via it's relationships property
+    @param {String} relationship name (plural) to find the url from the resource instance
+    @param {String} id the id for the related resource
     @return {Object} payload
   */
   _payloadForRelationship(resource, relationship, id) {
@@ -282,7 +320,7 @@ export default Ember.Object.extend(FetchMixin, Evented, {
 
     @method fetch
     @param {String} url
-    @param {Object} options - may include a query object or an update flag
+    @param {Object} options may include a query object or an update flag
     @return {Ember.RSVP.Promise}
   */
   fetch(url, options = {}) {

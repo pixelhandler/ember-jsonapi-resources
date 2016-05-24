@@ -12,7 +12,7 @@ By considering this equation **e = mc<sup>2</sup>**
 > “Errors = (More Code)<sup>2</sup>”
 
 …The "EJR" addon is a lightweight library that simply focuses on one solid
-specification, and follows common patterns for data persistance in Ember apps.
+specification, and follows common patterns for data persistence in Ember apps.
 
 * [ember-jsonapi-resources.com]
 * [API Docs][generated docs]
