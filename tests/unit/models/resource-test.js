@@ -295,7 +295,7 @@ test('#removeRelationships', function(assert) {
   assert.equal(author, null, 'removed author');
 });
 
-test('#updateRelationship', function(assert) {
+test('#updateRelationship, from resource-operations mixin', function(assert) {
   let serviceOp = this.sandbox.spy(function() {
     return Ember.RSVP.Promise.resolve(null);
   });

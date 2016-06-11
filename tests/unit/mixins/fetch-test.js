@@ -36,7 +36,6 @@ test('#useAjax default value is false', function(assert) {
 });
 
 test('#useFetch default value is true', function(assert) {
-  sandbox.stub(window, 'navigator', { userAgent: 'browser User Agent String' });
   assert.equal(this.subject.get('useFetch'), true, 'useFetch flag is true');
 });
 

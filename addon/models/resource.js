@@ -9,6 +9,7 @@ import attr from 'ember-jsonapi-resources/utils/attr';
 import hasOne from 'ember-jsonapi-resources/utils/has-one';
 import hasMany from 'ember-jsonapi-resources/utils/has-many';
 import { isType } from 'ember-jsonapi-resources/utils/is';
+import ResourceOperationsMixin from '../mixins/resource-operations';
 
 const { getOwner, computed, Logger } = Ember;
 
@@ -30,15 +31,7 @@ const { getOwner, computed, Logger } = Ember;
   @requires Ember.Inflector
   @static
 */
-const Resource = Ember.Object.extend({
-
-  /**
-    The service object for the entity (adapter with cache and serializer)
-
-    @property service
-    @type Object
-    @required
-  */
+const Resource = Ember.Object.extend(ResourceOperationsMixin, {
   service: null,
 
   /**
@@ -126,45 +119,6 @@ const Resource = Ember.Object.extend({
     let type = this.get('type') || 'null';
     let id = this.get('id') || 'null';
     return `[JSONAPIResource|${type}:${id}]`;
-  },
-
-  /**
-    Update a relation by adding or removing using a list, id, or null. When
-    adding an id for a to-many relation send one or more ids, include the
-    existing ids as well. When removing from a to-many relation pass the ids
-    that should remain, missing ids will be removed, or remove all with an empty
-    array. When operating on a to-one relation just use the id to change the
-    relation, or null to remove.
-
-    This is not a replace operation, but rather support for editing as a set.
-
-    Calling `updateRelationship` will call the service to persist the changes,
-    via it's `patchRelationship` method. Since the default `catch` for this
-    method is to rollback the relations, an optional `callback` function can be
-    used to handle the error response.
-
-    @method updateRelationship
-    @param {String} relation
-    @param {Array|String|null} ids
-    @param {Function} errorCallback `function (error) {}`
-  */
-  updateRelationship(relation, ids, errorCallback) {
-    let related = this.get(relation);
-    let rollback;
-    if (related.kind === 'hasOne') {
-      rollback = related.get('id');
-    } else if (related.kind === 'hasMany') {
-      rollback = related.mapBy('id');
-    }
-    this._updateRelationshipsData(relation, ids);
-    return this.get('service').patchRelationship(this, relation).catch(function (error) {
-      this._updateRelationshipsData(relation, rollback);
-      if (typeof callback === 'function') {
-        errorCallback(error);
-      } else {
-        Ember.Logger.error(error);
-      }
-    }.bind(this));
   },
 
   /**
