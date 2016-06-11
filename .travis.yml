@@ -1,7 +1,7 @@
 ---
 language: node_js
 node_js:
-  - "0.12"
+  - "4"
 
 sudo: false
 
@@ -19,7 +19,8 @@ env:
   - EMBER_TRY_SCENARIO=ember-2.1.2
   - EMBER_TRY_SCENARIO=ember-2.2.2
   - EMBER_TRY_SCENARIO=ember-2.3.1
-  - EMBER_TRY_SCENARIO=ember-2.4.5-LTS
+  - EMBER_TRY_SCENARIO=ember-2.4.6-LTS
+  - EMBER_TRY_SCENARIO=ember-2.5.1
 
 matrix:
   fast_finish: true
@@ -28,17 +29,18 @@ matrix:
     - env: EMBER_TRY_SCENARIO=ember-canary
 
 before_install:
-  - export PATH=/usr/local/phantomjs-2.0.0/bin:$PATH
-  - "npm config set spin false"
-  - "npm install -g npm@^2"
+  - npm config set spin false
+  - npm install -g bower
+  - npm install phantomjs-prebuilt
 
 install:
-  - npm install -g bower
   - npm install
   - bower install
 
 script:
-  - ember try $EMBER_TRY_SCENARIO test
+  # Usually, it's ok to finish the test scenario without reverting
+  #  to the addon's original dependency state, skipping "cleanup".
+  - ember try $EMBER_TRY_SCENARIO test --skip-cleanup
 
 addons:
   code_climate:
