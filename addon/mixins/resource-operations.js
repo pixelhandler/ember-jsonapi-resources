@@ -21,6 +21,51 @@ export default Ember.Mixin.create({
   service: Ember.required,
 
   /**
+    Create a new resource, calls service to persist new model
+
+    - See: <http://jsonapi.org/format/#crud-creating>
+
+    Calling `this.createResource` will call the service to persist the new model,
+    via it's `createResource` method.
+
+    @method createResource
+    @return {Promise}
+  */
+  createResource() {
+    return this.get('service').createResource(this);
+  },
+
+  /**
+    Update a persistend resource, calls service to persist changes
+
+    - See: <http://jsonapi.org/format/#crud-updating>
+
+    Calling `this.updateResource` will call the service to persist the changes,
+    via it's `updateResource` method.
+
+    @method updateResource
+    @return {Promise}
+  */
+  updateResource() {
+    return this.get('service').updateResource(this);
+  },
+
+  /**
+    Delete a persistend resource, calls service to DELETE via API request
+
+    - See: <http://jsonapi.org/format/#crud-deleting>
+
+    Calling `this.deleteResource` will call the service to remove the destroy,
+    via it's `deleteResource` method.
+
+    @method deleteResource
+    @return {Promise}
+  */
+  deleteResource() {
+    return this.get('service').deleteResource(this);
+  },
+
+  /**
     Create a relationship for a `to-many` relation, calls service to persist.
 
     See: <http://jsonapi.org/format/#crud-updating-to-many-relationships>

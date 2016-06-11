@@ -6,6 +6,8 @@ import { attr/*, hasOne, hasMany*/ } from 'ember-jsonapi-resources/models/resour
 
 const { RSVP } = Ember;
 
+let promiseResolved = function() { return RSVP.Promise.resolve(); };
+
 // ResourceOperationsMixin is mixed into Resource so will use Resource for test subject.
 module('Unit | Mixin | resource-operations', {
   beforeEach() {
@@ -13,9 +15,12 @@ module('Unit | Mixin | resource-operations', {
     let Cowboy = Resource.extend({
       type: 'cowboy',
       service: {
-        createRelationship: this.sandbox.spy(function () { return RSVP.Promise.resolve(); }),
-        patchRelationship: this.sandbox.spy(function () { return RSVP.Promise.resolve(); }),
-        deleteRelationship: this.sandbox.spy(function () { return RSVP.Promise.resolve(); }),
+        createResource: this.sandbox.spy(promiseResolved),
+        updateResource: this.sandbox.spy(promiseResolved),
+        deleteResource: this.sandbox.spy(promiseResolved),
+        createRelationship: this.sandbox.spy(promiseResolved),
+        patchRelationship: this.sandbox.spy(promiseResolved),
+        deleteRelationship: this.sandbox.spy(promiseResolved),
         trigger: Ember.K
       },
       name: attr('string'),
@@ -27,7 +32,7 @@ module('Unit | Mixin | resource-operations', {
     // mock payload setup
     this.subject.set('relationships', {
       guns: { links: { related: 'url' } },
-      horse: { links: { related: 'url' } } 
+      horse: { links: { related: 'url' } }
     });
   },
   afterEach() {
@@ -35,6 +40,36 @@ module('Unit | Mixin | resource-operations', {
     delete this.subject;
     delete this.sandbox;
   }
+});
+
+test('createResource via service/adapter', function(assert) {
+  let promise = this.subject.createResource();
+  assert.ok(typeof promise.then === 'function', 'returns a thenable');
+
+  let args = this.subject.get('service').createResource.firstCall.args;
+  assert.equal( args[0], this.subject,
+    'called service.createResource with the resource instance'
+  );
+});
+
+test('updateResource via service/adapter', function(assert) {
+  let promise = this.subject.updateResource();
+  assert.ok(typeof promise.then === 'function', 'returns a thenable');
+
+  let args = this.subject.get('service').updateResource.firstCall.args;
+  assert.equal( args[0], this.subject,
+    'called service.updateResource with the resource instance'
+  );
+});
+
+test('deleteResource via service/adapter', function(assert) {
+  let promise = this.subject.deleteResource();
+  assert.ok(typeof promise.then === 'function', 'returns a thenable');
+
+  let args = this.subject.get('service').deleteResource.firstCall.args;
+  assert.equal( args[0], this.subject,
+    'called service.deleteResource with the resource instance'
+  );
 });
 
 test('createRelationship for to-many relation', function(assert) {
