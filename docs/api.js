@@ -9,6 +9,7 @@ YUI.add("yuidoc-meta", function(Y) {
         "FetchMixin",
         "RelatedProxyUtil",
         "Resource",
+        "ResourceOperationsMixin",
         "ServerError",
         "ServiceCacheMixin",
         "StoreService",
@@ -25,6 +26,7 @@ YUI.add("yuidoc-meta", function(Y) {
         "fetch",
         "initializers",
         "resource",
+        "resource-operations",
         "serializers",
         "store",
         "transforms",
@@ -63,6 +65,11 @@ YUI.add("yuidoc-meta", function(Y) {
             "displayName": "resource",
             "name": "resource",
             "description": "A Resource class to create JSON API resource objects. This is abstract, first\ndefine a prototype using `Resource.extend({ type: entity })`. Model prototypes\nare registered in the container as factories, they use the options:\n`{ instantiate: false, singleton: false }`. So, to create a model instance\nuse the owner API or the container to `lookup` the factory, for example:\n\n```js\nlet owner = (typeof Ember.getOwner === 'function') ? Ember.getOwner(this) : this.container;\nlet model = owner.lookup('model:entity').create({ attributes: { key: value } });\n```\n\nSee <http://jsonapi.org/format/#document-resource-objects>"
+        },
+        {
+            "displayName": "resource-operations",
+            "name": "resource-operations",
+            "description": "Mixin to provide interations between a Resource instance and service/adapter."
         },
         {
             "displayName": "serializers",

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>addon/utils/related-proxy.js - Ember JSON API Resources</title>
+    <title>addon/mixins/resource-operations.js - Ember JSON API Resources</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -103,195 +103,187 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-<h1 class="file-heading">File: addon/utils/related-proxy.js</h1>
+<h1 class="file-heading">File: addon/mixins/resource-operations.js</h1>
 
 <div class="file">
     <pre class="code prettyprint linenums">
 /**
   @module ember-jsonapi-resources
-  @submodule utils
-  @main RelatedProxyUtil
+  @submodule resource-operations
 **/
-
 import Ember from &#x27;ember&#x27;;
-import { pluralize } from &#x27;ember-inflector&#x27;;
 
 /**
-  Utility for creating promise proxy objects for related resources
+  Mixin to provide interations between a Resource instance and service/adapter.
 
-  @class RelatedProxyUtil
+  @class ResourceOperationsMixin
   @static
-  @final
 */
-const RelatedProxyUtil = Ember.Object.extend({
-
+export default Ember.Mixin.create({
   /**
-    Checks for required &#x60;relationship&#x60; property
+    The service object for the entity (adapter with cache and serializer)
 
-    @method init
-  */
-  init: function () {
-    this._super();
-    if (typeof this.get(&#x27;relationship&#x27;) !== &#x27;string&#x27;) {
-      throw new Error(&#x27;RelatedProxyUtil#init expects &#x60;relationship&#x60; property to exist.&#x27;);
-    }
-    return this;
-  },
-
-  /**
-    The name of the relationship
-
-    @property resource
-    @type String
+    @property service
+    @type Object
     @required
   */
-  relationship: null,
+  service: Ember.required,
 
   /**
-    The name of the type of resource
+    Create a new resource, calls service to persist new model
 
-    @property type
-    @type String
-    @required
+    - See: &lt;http://jsonapi.org/format/#crud-creating&gt;
+
+    Calling &#x60;this.createResource&#x60; will call the service to persist the new model,
+    via it&#x27;s &#x60;createResource&#x60; method.
+
+    @method createResource
+    @return {Promise}
   */
-  type: null,
-
-  /**
-    Proxy for the requested relation, resolves w/ content from fulfilled promise
-
-    @method createProxy
-    @param {Resource} resource
-    @param {String} kind &#x27;hasMany&#x27; or &#x27;hasOne&#x27;
-    @return {PromiseProxy|ObjectProxy|ArrayProxy} proxy instance, new resource uses mock relations
-  */
-  createProxy(resource, kind) {
-    let proxyFactory, newContent;
-    if (kind === &#x27;hasMany&#x27;) {
-      proxyFactory = Ember.ArrayProxy;
-      newContent = Ember.A([]);
-    } else if (kind === &#x27;hasOne&#x27;) {
-      proxyFactory = Ember.ObjectProxy;
-      newContent = Ember.Object.create();
-    }
-    if (resource.get(&#x27;isNew&#x27;)) {
-      return proxyFactory.create({ content: newContent });
-    } else {
-      let proxy = this.proxySetup(resource, kind, proxyFactory);
-      return this.proxyResolution(resource, proxy);
-    }
+  createResource() {
+    return this.get(&#x27;service&#x27;).createResource(this);
   },
 
   /**
-    @method proxySetup
-    @param {Resource} resource
-    @param {String} kind &#x27;hasMany&#x27; or &#x27;hasOne&#x27;
-    @param {Ember.ObjectProxy|Ember.ArrayProxy} proxyFactory
-    @return {PromiseProxy} proxy
+    Update a persistend resource, calls service to persist changes
+
+    - See: &lt;http://jsonapi.org/format/#crud-updating&gt;
+
+    Calling &#x60;this.updateResource&#x60; will call the service to persist the changes,
+    via it&#x27;s &#x60;updateResource&#x60; method.
+
+    @method updateResource
+    @return {Promise}
   */
-  proxySetup(resource, kind, proxyFactory) {
-    let relation = this.get(&#x27;relationship&#x27;);
-    let type = this.get(&#x27;type&#x27;);
-    let url = this.proxyUrl(resource, relation);
-    let owner = (typeof Ember.getOwner === &#x27;function&#x27;) ? Ember.getOwner(resource) : resource.container;
-    let service = owner.lookup(&#x27;service:&#x27; + pluralize(type));
-    let promise = this.promiseFromCache(resource, relation, service);
-    promise = promise || service.findRelated({&#x27;resource&#x27;: relation, &#x27;type&#x27;: type}, url);
-    let proxyProto = proxyFactory.extend(Ember.PromiseProxyMixin, {
-      &#x27;promise&#x27;: promise, &#x27;type&#x27;: relation, &#x27;kind&#x27;: kind
-    });
-    return proxyProto.create();
+  updateResource() {
+    return this.get(&#x27;service&#x27;).updateResource(this);
   },
 
   /**
-    @method proxyResolution
-    @param {proxy} resource
-    @return {PromiseProxy} proxy
+    Delete a persistend resource, calls service to DELETE via API request
+
+    - See: &lt;http://jsonapi.org/format/#crud-deleting&gt;
+
+    Calling &#x60;this.deleteResource&#x60; will call the service to remove the destroy,
+    via it&#x27;s &#x60;deleteResource&#x60; method.
+
+    @method deleteResource
+    @return {Promise}
   */
-  proxyResolution(resource, proxy) {
-    proxy.then(
-      function (resources) {
-        proxy.set(&#x27;content&#x27;, resources);
-        let relation = proxy.get(&#x27;type&#x27;);
-        let kind = proxy.get(&#x27;kind&#x27;);
-        resource.didResolveProxyRelation(relation, kind, resources);
-        return resources;
-      },
-      function (error) {
+  deleteResource() {
+    return this.get(&#x27;service&#x27;).deleteResource(this);
+  },
+
+  /**
+    Create a relationship for a &#x60;to-many&#x60; relation, calls service to persist.
+
+    See: &lt;http://jsonapi.org/format/#crud-updating-to-many-relationships&gt;
+
+    Calling &#x60;this.createRelationship&#x60; will call the service to persist the changes,
+    via it&#x27;s &#x60;createRelationship&#x60; method. Since the default &#x60;catch&#x60; for this
+    method is to rollback the relationships, an optional &#x60;errorCallback&#x60; function
+    can be used to handle the error response.
+
+    @method createRelationship
+    @param {String} relationship name (plural) to find the url
+    @param {String} id of the related resource
+    @param {Function} errorCallback &#x60;function (error) {}&#x60;
+    @return {Promise}
+  */
+  createRelationship(relationship, id, errorCallback) {
+    this.addRelationship(relationship, id);
+    return this.get(&#x27;service&#x27;).createRelationship(this, relationship, id)
+    .catch(function (error) {
+      this.removeRelationship(relationship, id);
+      if (typeof errorCallback === &#x27;function&#x27;) {
+        errorCallback(error);
+      } else {
         Ember.Logger.error(error);
-        throw error;
       }
-    );
-    return proxy;
+    }.bind(this));
   },
 
   /**
-    Proxy url to fetch for the resource&#x27;s relation
+    Update a relationship, works with both &#x60;to-many&#x60; and &#x60;to-one&#x60;. Primarily use
+    with &#x60;to-one&#x60; as &#x60;to-many&#x60; is for a full replacement only.
 
-    @method proxyUrl
-    @param {Resource} resource
-    @param {String} relation
-    @return {PromiseProxy} proxy
+    For a &#x60;to-one&#x60; relationship, add, replace or remove, and persist the change
+    using the service. With an id the relation will be added or changed, with
+    &#x60;null&#x60; a relationship will be removed.
+
+    See: &lt;http://jsonapi.org/format/#crud-updating-resource-relationships&gt;
+
+    For &#x60;to-many&#x60; relationships the backend will need to support editing as a set,
+    full replacement (most often that may be disabled).
+
+    Update a relationship by adding or removing using a list, id, or null. When
+    adding an id for a to-many relationship send one or more ids, include the
+    existing ids as well. When removing from a to-many relationship pass the ids
+    that should remain, missing ids will be removed, or remove all with an empty
+    array.
+
+    Calling &#x60;this.updateRelationship&#x60; will call the service to persist the changes,
+    via it&#x27;s &#x60;patchRelationship&#x60; method. Since the default &#x60;catch&#x60; for this
+    method is to rollback the relationships, an optional &#x60;errorCallback&#x60; function
+    can be used to handle the error response.
+
+    @method updateRelationship
+    @param {String} relationship name
+    @param {Array|String|null} ids can be only one id or null to remove
+    @param {Function} errorCallback &#x60;function (error) {}&#x60;
+    @return {Promise}
   */
-  proxyUrl(resource, relation) {
-    let related = linksPath(relation);
-    let url = resource.get(related);
-    if (typeof url !== &#x27;string&#x27;) {
-      throw new Error(&#x27;RelatedProxyUtil#_proxyUrl expects &#x60;model.&#x27;+ related +&#x27;&#x60; property to exist.&#x27;);
+  updateRelationship(relationship, ids, errorCallback) {
+    let related = this.get(relationship);
+    let rollback;
+    if (related.kind === &#x27;hasOne&#x27;) {
+      rollback = related.get(&#x27;id&#x27;);
+    } else if (related.kind === &#x27;hasMany&#x27;) {
+      rollback = related.mapBy(&#x27;id&#x27;);
     }
-    return url;
-  },
-
-  /**
-    Lookup relation from service cache and pomisify result
-
-    @method promiseFromCache
-    @param {Resource} resource
-    @param {String} relation
-    @param {Object} service
-    @return {Promise|null}
-  */
-  promiseFromCache(resource, relation, service) {
-    let data = resource.get(&#x27;relationships.&#x27; + relation + &#x27;.data&#x27;);
-    if (!data) { return; }
-    let content, found;
-    if (Array.isArray(data)) {
-      content = Ember.A([]);
-      for (let i = 0; i &lt; data.length; i++) {
-        found = this.serviceCacheLookup(service, data[i]);
-        if (found) {
-          content.push(found);
-        }
+    this._updateRelationshipsData(relationship, ids);
+    return this.get(&#x27;service&#x27;).patchRelationship(this, relationship)
+    .catch(function (error) {
+      this._updateRelationshipsData(relationship, rollback);
+      if (typeof errorCallback === &#x27;function&#x27;) {
+        errorCallback(error);
+      } else {
+        Ember.Logger.error(error);
       }
-      content = (data.length &amp;&amp; data.length === content.length) ? content : null;
-    } else {
-      content = this.serviceCacheLookup(service, data);
-    }
-    return (content) ? Ember.RSVP.Promise.resolve(content) : null;
+    }.bind(this));
   },
 
   /**
-    Lookup data in service cache
+    Deletes a relationship for &#x60;to-many&#x60; relation, calls service to persist.
 
-    @method serviceCacheLookup
-    @param {Object} service
-    @param {Object} data
-    @return {Resource|undefined}
+    See: &lt;http://jsonapi.org/format/#crud-updating-to-many-relationships&gt;
+
+    Calling &#x60;this.deleteRelationship&#x60; will call the service to persist the changes,
+    via it&#x27;s &#x60;deleteRelationship&#x60; method. Since the default &#x60;catch&#x60; for this
+    method is to rollback the relationships, an optional &#x60;errorCallback&#x60; function
+    can be used to handle the error response.
+
+    @method deleteRelationship
+    @param {String} relationship name (plural) to find the url
+    @param {String} id of the related resource
+    @param {Function} errorCallback &#x60;function (error) {}&#x60;
+    @return {Promise}
   */
-  serviceCacheLookup(service, data) {
-    return (typeof data === &#x27;object&#x27; &amp;&amp; data.id) ? service.cacheLookup(data.id) : undefined;
-  }
+  deleteRelationship(relationship, id, errorCallback) {
+    this.removeRelationship(relationship, id);
+    return this.get(&#x27;service&#x27;).deleteRelationship(this, relationship, id)
+    .catch(function (error) {
+      this.addRelationship(relationship, id);
+      if (typeof errorCallback === &#x27;function&#x27;) {
+        errorCallback(error);
+      } else {
+        Ember.Logger.error(error);
+      }
+    }.bind(this));
+  },
+
+  _updateRelationshipsData: Ember.required
 });
-
-export default RelatedProxyUtil;
-
-/**
-  @method linksPath
-  @param {String} relation
-  @return {String} path to the related link
-*/
-export function linksPath(relation) {
-  return [&#x27;relationships&#x27;, relation, &#x27;links&#x27;, &#x27;related&#x27;].join(&#x27;.&#x27;);
-}
 
     </pre>
 </div>

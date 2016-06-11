@@ -46,6 +46,7 @@
                                 <li><a href="../classes/FetchMixin.html">FetchMixin</a></li>
                                 <li><a href="../classes/RelatedProxyUtil.html">RelatedProxyUtil</a></li>
                                 <li><a href="../classes/Resource.html">Resource</a></li>
+                                <li><a href="../classes/ResourceOperationsMixin.html">ResourceOperationsMixin</a></li>
                                 <li><a href="../classes/ServerError.html">ServerError</a></li>
                                 <li><a href="../classes/ServiceCacheMixin.html">ServiceCacheMixin</a></li>
                                 <li><a href="../classes/StoreService.html">StoreService</a></li>
@@ -64,6 +65,7 @@
                                 <li><a href="../modules/fetch.html">fetch</a></li>
                                 <li><a href="../modules/initializers.html">initializers</a></li>
                                 <li><a href="../modules/resource.html">resource</a></li>
+                                <li><a href="../modules/resource-operations.html">resource-operations</a></li>
                                 <li><a href="../modules/serializers.html">serializers</a></li>
                                 <li><a href="../modules/store.html">store</a></li>
                                 <li><a href="../modules/transforms.html">transforms</a></li>
@@ -116,6 +118,7 @@ import attr from &#x27;ember-jsonapi-resources/utils/attr&#x27;;
 import hasOne from &#x27;ember-jsonapi-resources/utils/has-one&#x27;;
 import hasMany from &#x27;ember-jsonapi-resources/utils/has-many&#x27;;
 import { isType } from &#x27;ember-jsonapi-resources/utils/is&#x27;;
+import ResourceOperationsMixin from &#x27;../mixins/resource-operations&#x27;;
 
 const { getOwner, computed, Logger } = Ember;
 
@@ -137,15 +140,7 @@ const { getOwner, computed, Logger } = Ember;
   @requires Ember.Inflector
   @static
 */
-const Resource = Ember.Object.extend({
-
-  /**
-    The service object for the entity (adapter with cache and serializer)
-
-    @property service
-    @type Object
-    @required
-  */
+const Resource = Ember.Object.extend(ResourceOperationsMixin, {
   service: null,
 
   /**
@@ -233,45 +228,6 @@ const Resource = Ember.Object.extend({
     let type = this.get(&#x27;type&#x27;) || &#x27;null&#x27;;
     let id = this.get(&#x27;id&#x27;) || &#x27;null&#x27;;
     return &#x60;[JSONAPIResource|${type}:${id}]&#x60;;
-  },
-
-  /**
-    Update a relation by adding or removing using a list, id, or null. When
-    adding an id for a to-many relation send one or more ids, include the
-    existing ids as well. When removing from a to-many relation pass the ids
-    that should remain, missing ids will be removed, or remove all with an empty
-    array. When operating on a to-one relation just use the id to change the
-    relation, or null to remove.
-
-    This is not a replace operation, but rather support for editing as a set.
-
-    Calling &#x60;updateRelationship&#x60; will call the service to persist the changes,
-    via it&#x27;s &#x60;patchRelationship&#x60; method. Since the default &#x60;catch&#x60; for this
-    method is to rollback the relations, an optional &#x60;callback&#x60; function can be
-    used to handle the error response.
-
-    @method updateRelationship
-    @param {String} relation
-    @param {Array|String|null} ids
-    @param {Function} errorCallback &#x60;function (error) {}&#x60;
-  */
-  updateRelationship(relation, ids, errorCallback) {
-    let related = this.get(relation);
-    let rollback;
-    if (related.kind === &#x27;hasOne&#x27;) {
-      rollback = related.get(&#x27;id&#x27;);
-    } else if (related.kind === &#x27;hasMany&#x27;) {
-      rollback = related.mapBy(&#x27;id&#x27;);
-    }
-    this._updateRelationshipsData(relation, ids);
-    return this.get(&#x27;service&#x27;).patchRelationship(this, relation).catch(function (error) {
-      this._updateRelationshipsData(relation, rollback);
-      if (typeof callback === &#x27;function&#x27;) {
-        errorCallback(error);
-      } else {
-        Ember.Logger.error(error);
-      }
-    }.bind(this));
   },
 
   /**

@@ -59,6 +59,17 @@
             "fors": {},
             "namespaces": {}
         },
+        "addon/mixins/resource-operations.js": {
+            "name": "addon/mixins/resource-operations.js",
+            "modules": {
+                "resource-operations": 1
+            },
+            "classes": {
+                "ResourceOperationsMixin": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
         "addon/mixins/service-cache.js": {
             "name": "addon/mixins/service-cache.js",
             "modules": {
@@ -199,6 +210,7 @@
                 "initializers": 1,
                 "authorization": 1,
                 "fetch": 1,
+                "resource-operations": 1,
                 "cache": 1,
                 "transforms": 1,
                 "resource": 1,
@@ -213,6 +225,7 @@
                 "StoreService": 1,
                 "AuthorizationMixin": 1,
                 "FetchMixin": 1,
+                "ResourceOperationsMixin": 1,
                 "ServiceCacheMixin": 1,
                 "TransformsMixin": 1,
                 "ApplicationSerializer": 1,
@@ -296,6 +309,22 @@
             "line": 8,
             "description": "Fetch/Ajax methods for use with an Adapter calls `cacheUpdate`, `cacheResource`\nmethods and a `serializer` injection."
         },
+        "resource-operations": {
+            "name": "resource-operations",
+            "submodules": {},
+            "elements": {},
+            "classes": {
+                "ResourceOperationsMixin": 1
+            },
+            "fors": {},
+            "is_submodule": 1,
+            "namespaces": {},
+            "module": "ember-jsonapi-resources",
+            "namespace": "",
+            "file": "addon/mixins/resource-operations.js",
+            "line": 7,
+            "description": "Mixin to provide interations between a Resource instance and service/adapter."
+        },
         "cache": {
             "name": "cache",
             "submodules": {},
@@ -341,7 +370,7 @@
             "module": "ember-jsonapi-resources",
             "namespace": "",
             "file": "addon/models/resource.js",
-            "line": 15,
+            "line": 16,
             "description": "A Resource class to create JSON API resource objects. This is abstract, first\ndefine a prototype using `Resource.extend({ type: entity })`. Model prototypes\nare registered in the container as factories, they use the options:\n`{ instantiate: false, singleton: false }`. So, to create a model instance\nuse the owner API or the container to `lookup` the factory, for example:\n\n```js\nlet owner = (typeof Ember.getOwner === 'function') ? Ember.getOwner(this) : this.container;\nlet model = owner.lookup('model:entity').create({ attributes: { key: value } });\n```\n\nSee <http://jsonapi.org/format/#document-resource-objects>"
         },
         "serializers": {
@@ -438,7 +467,7 @@
             "submodule": "resource",
             "namespace": "",
             "file": "addon/models/resource.js",
-            "line": 15,
+            "line": 16,
             "description": "A Resource class to create JSON API resource objects. This is abstract, first\ndefine a prototype using `Resource.extend({ type: entity })`. Model prototypes\nare registered in the container as factories, they use the options:\n`{ instantiate: false, singleton: false }`. So, to create a model instance\nuse the owner API or the container to `lookup` the factory, for example:\n\n```js\nlet owner = (typeof Ember.getOwner === 'function') ? Ember.getOwner(this) : this.container;\nlet model = owner.lookup('model:entity').create({ attributes: { key: value } });\n```\n\nSee <http://jsonapi.org/format/#document-resource-objects>",
             "requires": [
                 "Ember.Inflector"
@@ -494,6 +523,22 @@
             "file": "addon/mixins/fetch.js",
             "line": 8,
             "description": "Fetch/Ajax methods for use with an Adapter calls `cacheUpdate`, `cacheResource`\nmethods and a `serializer` injection.",
+            "static": 1
+        },
+        "ResourceOperationsMixin": {
+            "name": "ResourceOperationsMixin",
+            "shortname": "ResourceOperationsMixin",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "ember-jsonapi-resources",
+            "submodule": "resource-operations",
+            "namespace": "",
+            "file": "addon/mixins/resource-operations.js",
+            "line": 7,
+            "description": "Mixin to provide interations between a Resource instance and service/adapter.",
             "static": 1
         },
         "ServiceCacheMixin": {
@@ -1726,6 +1771,153 @@
             "submodule": "fetch"
         },
         {
+            "file": "addon/mixins/resource-operations.js",
+            "line": 14,
+            "description": "The service object for the entity (adapter with cache and serializer)",
+            "itemtype": "property",
+            "name": "service",
+            "type": "Object",
+            "required": 1,
+            "class": "ResourceOperationsMixin",
+            "module": "ember-jsonapi-resources",
+            "submodule": "resource-operations"
+        },
+        {
+            "file": "addon/mixins/resource-operations.js",
+            "line": 23,
+            "description": "Create a new resource, calls service to persist new model\n\n- See: <http://jsonapi.org/format/#crud-creating>\n\nCalling `this.createResource` will call the service to persist the new model,\nvia it's `createResource` method.",
+            "itemtype": "method",
+            "name": "createResource",
+            "return": {
+                "description": "",
+                "type": "Promise"
+            },
+            "class": "ResourceOperationsMixin",
+            "module": "ember-jsonapi-resources",
+            "submodule": "resource-operations"
+        },
+        {
+            "file": "addon/mixins/resource-operations.js",
+            "line": 38,
+            "description": "Update a persistend resource, calls service to persist changes\n\n- See: <http://jsonapi.org/format/#crud-updating>\n\nCalling `this.updateResource` will call the service to persist the changes,\nvia it's `updateResource` method.",
+            "itemtype": "method",
+            "name": "updateResource",
+            "return": {
+                "description": "",
+                "type": "Promise"
+            },
+            "class": "ResourceOperationsMixin",
+            "module": "ember-jsonapi-resources",
+            "submodule": "resource-operations"
+        },
+        {
+            "file": "addon/mixins/resource-operations.js",
+            "line": 53,
+            "description": "Delete a persistend resource, calls service to DELETE via API request\n\n- See: <http://jsonapi.org/format/#crud-deleting>\n\nCalling `this.deleteResource` will call the service to remove the destroy,\nvia it's `deleteResource` method.",
+            "itemtype": "method",
+            "name": "deleteResource",
+            "return": {
+                "description": "",
+                "type": "Promise"
+            },
+            "class": "ResourceOperationsMixin",
+            "module": "ember-jsonapi-resources",
+            "submodule": "resource-operations"
+        },
+        {
+            "file": "addon/mixins/resource-operations.js",
+            "line": 68,
+            "description": "Create a relationship for a `to-many` relation, calls service to persist.\n\nSee: <http://jsonapi.org/format/#crud-updating-to-many-relationships>\n\nCalling `this.createRelationship` will call the service to persist the changes,\nvia it's `createRelationship` method. Since the default `catch` for this\nmethod is to rollback the relationships, an optional `errorCallback` function\ncan be used to handle the error response.",
+            "itemtype": "method",
+            "name": "createRelationship",
+            "params": [
+                {
+                    "name": "relationship",
+                    "description": "name (plural) to find the url",
+                    "type": "String"
+                },
+                {
+                    "name": "id",
+                    "description": "of the related resource",
+                    "type": "String"
+                },
+                {
+                    "name": "errorCallback",
+                    "description": "`function (error) {}`",
+                    "type": "Function"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Promise"
+            },
+            "class": "ResourceOperationsMixin",
+            "module": "ember-jsonapi-resources",
+            "submodule": "resource-operations"
+        },
+        {
+            "file": "addon/mixins/resource-operations.js",
+            "line": 97,
+            "description": "Update a relationship, works with both `to-many` and `to-one`. Primarily use\nwith `to-one` as `to-many` is for a full replacement only.\n\nFor a `to-one` relationship, add, replace or remove, and persist the change\nusing the service. With an id the relation will be added or changed, with\n`null` a relationship will be removed.\n\nSee: <http://jsonapi.org/format/#crud-updating-resource-relationships>\n\nFor `to-many` relationships the backend will need to support editing as a set,\nfull replacement (most often that may be disabled).\n\nUpdate a relationship by adding or removing using a list, id, or null. When\nadding an id for a to-many relationship send one or more ids, include the\nexisting ids as well. When removing from a to-many relationship pass the ids\nthat should remain, missing ids will be removed, or remove all with an empty\narray.\n\nCalling `this.updateRelationship` will call the service to persist the changes,\nvia it's `patchRelationship` method. Since the default `catch` for this\nmethod is to rollback the relationships, an optional `errorCallback` function\ncan be used to handle the error response.",
+            "itemtype": "method",
+            "name": "updateRelationship",
+            "params": [
+                {
+                    "name": "relationship",
+                    "description": "name",
+                    "type": "String"
+                },
+                {
+                    "name": "ids",
+                    "description": "can be only one id or null to remove",
+                    "type": "Array|String|null"
+                },
+                {
+                    "name": "errorCallback",
+                    "description": "`function (error) {}`",
+                    "type": "Function"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Promise"
+            },
+            "class": "ResourceOperationsMixin",
+            "module": "ember-jsonapi-resources",
+            "submodule": "resource-operations"
+        },
+        {
+            "file": "addon/mixins/resource-operations.js",
+            "line": 147,
+            "description": "Deletes a relationship for `to-many` relation, calls service to persist.\n\nSee: <http://jsonapi.org/format/#crud-updating-to-many-relationships>\n\nCalling `this.deleteRelationship` will call the service to persist the changes,\nvia it's `deleteRelationship` method. Since the default `catch` for this\nmethod is to rollback the relationships, an optional `errorCallback` function\ncan be used to handle the error response.",
+            "itemtype": "method",
+            "name": "deleteRelationship",
+            "params": [
+                {
+                    "name": "relationship",
+                    "description": "name (plural) to find the url",
+                    "type": "String"
+                },
+                {
+                    "name": "id",
+                    "description": "of the related resource",
+                    "type": "String"
+                },
+                {
+                    "name": "errorCallback",
+                    "description": "`function (error) {}`",
+                    "type": "Function"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Promise"
+            },
+            "class": "ResourceOperationsMixin",
+            "module": "ember-jsonapi-resources",
+            "submodule": "resource-operations"
+        },
+        {
             "file": "addon/mixins/service-cache.js",
             "line": 17,
             "description": "Cache object",
@@ -1916,19 +2108,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 35,
-            "description": "The service object for the entity (adapter with cache and serializer)",
-            "itemtype": "property",
-            "name": "service",
-            "type": "Object",
-            "required": 1,
-            "class": "Resource",
-            "module": "ember-jsonapi-resources",
-            "submodule": "resource"
-        },
-        {
-            "file": "addon/models/resource.js",
-            "line": 44,
+            "line": 37,
             "description": "Extending Prototypes Must define a `type` value for the entity, e.g. `posts`",
             "itemtype": "property",
             "name": "type",
@@ -1940,7 +2120,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 53,
+            "line": 46,
             "description": "Persisted resource ID value",
             "itemtype": "property",
             "name": "id",
@@ -1952,7 +2132,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 62,
+            "line": 55,
             "description": "An optional `attributes` property of for a JSON API Resource object, setup in create()\n\nThis object will keep the values from the response object and may be mutable\nUse this as a refence for creating computed properties\n\nFor example the `attr()` helper sets up a properties based on this content",
             "access": "protected",
             "tagname": "",
@@ -1965,7 +2145,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 76,
+            "line": 69,
             "description": "An optional `relationships` property of for a JSON API Resource object, setup in create()",
             "access": "protected",
             "tagname": "",
@@ -1978,7 +2158,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 85,
+            "line": 78,
             "description": "An optional `links` property of for a JSON API Resource object, setup in create()",
             "access": "protected",
             "tagname": "",
@@ -1991,7 +2171,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 94,
+            "line": 87,
             "description": "An optional property of for a JSON API Resource object, setup in create()",
             "access": "protected",
             "tagname": "",
@@ -2004,7 +2184,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 103,
+            "line": 96,
             "description": "Hash of attributes for changed/previous values",
             "access": "private",
             "tagname": "",
@@ -2017,7 +2197,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 112,
+            "line": 105,
             "description": "Flag for new instance, e.g. not peristed",
             "itemtype": "property",
             "name": "isNew",
@@ -2028,7 +2208,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 120,
+            "line": 113,
             "description": "Custom `toString` method used for clarity that the instance is a JSON API Resource kind of object",
             "itemtype": "method",
             "name": "toString",
@@ -2038,34 +2218,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 131,
-            "description": "Update a relation by adding or removing using a list, id, or null. When\nadding an id for a to-many relation send one or more ids, include the\nexisting ids as well. When removing from a to-many relation pass the ids\nthat should remain, missing ids will be removed, or remove all with an empty\narray. When operating on a to-one relation just use the id to change the\nrelation, or null to remove.\n\nThis is not a replace operation, but rather support for editing as a set.\n\nCalling `updateRelationship` will call the service to persist the changes,\nvia it's `patchRelationship` method. Since the default `catch` for this\nmethod is to rollback the relations, an optional `callback` function can be\nused to handle the error response.",
-            "itemtype": "method",
-            "name": "updateRelationship",
-            "params": [
-                {
-                    "name": "relation",
-                    "description": "",
-                    "type": "String"
-                },
-                {
-                    "name": "ids",
-                    "description": "",
-                    "type": "Array|String|null"
-                },
-                {
-                    "name": "errorCallback",
-                    "description": "`function (error) {}`",
-                    "type": "Function"
-                }
-            ],
-            "class": "Resource",
-            "module": "ember-jsonapi-resources",
-            "submodule": "resource"
-        },
-        {
-            "file": "addon/models/resource.js",
-            "line": 170,
+            "line": 124,
             "access": "private",
             "tagname": "",
             "itemtype": "method",
@@ -2088,7 +2241,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 197,
+            "line": 151,
             "itemtype": "method",
             "name": "addRelationships",
             "params": [
@@ -2109,7 +2262,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 208,
+            "line": 162,
             "itemtype": "method",
             "name": "removeRelationships",
             "params": [
@@ -2130,7 +2283,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 219,
+            "line": 173,
             "description": "Adds related resource identifier object to the relationship data.\n\nAlso sets or adds to the `content` of the related proxy object.\n\n- For has-many relations the related identifier object is added to\n  the resource linkage data array.\n- For has-one relations the resource identifier object is assigned,\n  so the relation may be replaced.\n\nSee:\n- http://jsonapi.org/format/#document-resource-object-linkage\n- http://jsonapi.org/format/#document-resource-identifier-objects",
             "itemtype": "method",
             "name": "addRelationship",
@@ -2152,7 +2305,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 261,
+            "line": 215,
             "description": "Removes resource identifier object of the relationship data. Also, sets the\n`content` of the related (computed property's) proxy object to `null`.\n\n- For has-one relations the (resource linkage) data is set to `null`.\n- For has-many relations the resource identifier object is removed from\n  the resource Linkage `data` array.\n\nSee:\n- http://jsonapi.org/format/#document-resource-object-linkage\n- http://jsonapi.org/format/#document-resource-identifier-objects",
             "itemtype": "method",
             "name": "removeRelationship",
@@ -2174,7 +2327,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 297,
+            "line": 251,
             "itemtype": "method",
             "name": "changedAttributes",
             "return": {
@@ -2187,7 +2340,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 315,
+            "line": 269,
             "itemtype": "method",
             "name": "previousAttributes",
             "return": {
@@ -2200,7 +2353,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 333,
+            "line": 287,
             "description": "Revert to previous attributes",
             "itemtype": "method",
             "name": "rollback",
@@ -2210,7 +2363,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 349,
+            "line": 303,
             "description": "Reset tracked changed/previous attrs",
             "access": "private",
             "tagname": "",
@@ -2222,7 +2375,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 363,
+            "line": 317,
             "description": "Sets all payload properties on the resource and resets private _attributes\nused for changed/previous tracking",
             "itemtype": "method",
             "name": "didUpdateResource",
@@ -2239,7 +2392,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 376,
+            "line": 330,
             "description": "Sets the relationships data, used after the promise proxy resolves by\nhasOne and hasMany helpers",
             "itemtype": "method",
             "name": "didResolveProxyRelation",
@@ -2266,7 +2419,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 406,
+            "line": 360,
             "description": "A local cache duration, to minimize duplicate fetch requests",
             "itemtype": "property",
             "name": "cacheDuration",
@@ -2277,7 +2430,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 414,
+            "line": 368,
             "itemtype": "property",
             "name": "isCacheExpired",
             "type": "Boolean",
@@ -2287,7 +2440,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 426,
+            "line": 380,
             "description": "To protect the JSON API Resource properties for attributes, links and\nrelationships these objects are setup during create(). This has to be\ndefined since the attr() helper needs to have new objects for each instance,\nto project from keeping a reference on the prototype.\n\nThe create method should only be called after looking up a factory from the\ncontainer, for example in a route's model hook:\n\n```\nmodel() {\n  let owner = (typeof Ember.getOwner === 'function') ? Ember.getOwner(this) : this.container;\n  return owner.lookup('model:post').create({\n    attributes: {\n      title: 'The JSON API 1.0 Spec Rocks!'\n    }\n  });\n}\n```\n\nThe create method uses the container to lookup the factory's prototype and\nfind the computed properties used for relations to setup the relationships\nfor the Resource instance you create. Calling Resource#create without using\nthe factory lookup will result in an instance without a reference to the\napplication's container and you will have to manually setup the relationships\nobject prior to adding a relationship.",
             "itemtype": "method",
             "name": "create",
