@@ -137,7 +137,9 @@ export default Ember.Mixin.create({
   */
   fetchSuccessHandler(response, resolve, isUpdate) {
     return response.json().then(function(json) {
-      if (isUpdate) {
+      if (json.data === null) {
+        resolve(null);
+      } else if (isUpdate) {
         json.data = this.serializer.transformAttributes(json.data);
         this.cacheUpdate({ meta: json.meta, data: json.data, headers: response.headers });
         resolve(json.data);
@@ -285,6 +287,10 @@ export default Ember.Mixin.create({
     @param {Boolean} isUpdate - Used with patch to update a resource
   */
   ajaxSuccessHandler(json, textStatus, jqXHR, resolve, isUpdate) {
+    if (json.data === null) {
+      resolve(null);
+      return;
+    }
     let headers = this._getAjaxHeaders(jqXHR);
     if (isUpdate) {
       json.data = this.serializer.transformAttributes(json.data);

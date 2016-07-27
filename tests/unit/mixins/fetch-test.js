@@ -134,3 +134,31 @@ test('#_getAjaxHeaders', function(assert) {
   assert.equal(headers['Content-Type'], 'application/vnd.api+json', 'JSAON API header ok');
   assert.equal(headers['Cache-Control'], 'max-age=0, private, must-revalidate', 'Catch control header ok');
 });
+
+test('#ajaxSuccessHandler handles response for empty has-one relationship', function(assert) {
+  assert.expect(1);
+  let result = void 0;
+  let resolve = function(resp) { result = resp; };
+  let jqXHR = {
+    responseText: '{"data":null}'
+  };
+  let json = JSON.parse(jqXHR.responseText);
+  this.subject.ajaxSuccessHandler(json, 'success', jqXHR, resolve, false);
+  assert.ok(result === null, 'resolved with `null`');
+});
+
+test('#fetchSuccessHandler handles response for empty has-one relationship', function(assert) {
+  assert.expect(1);
+  let done = assert.async();
+  let response = {
+    "status": 200,
+    "json": function() { return Ember.RSVP.Promise.resolve({ data: null }); }
+  };
+  let result = void 0;
+  let resolve = function(resp) { result = resp; };
+  let promise = this.subject.fetchSuccessHandler(response, resolve, false);
+  promise.then(function() {
+    assert.ok(result === null, 'resolved with `null`');
+    done();
+  });
+});

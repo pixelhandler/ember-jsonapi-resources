@@ -78,7 +78,7 @@ export default Ember.Object.extend(FetchMixin, Evented, {
     Find resources using an optional query object, e.g. w/ pagination params
 
     @method findQuery
-    @param {Object} query
+    @param {Object} options
     @return {Promise}
   */
   findQuery(options = {}) {
