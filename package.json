@@ -26,7 +26,6 @@
     "ember-buffered-proxy": "^0.5.1",
     "ember-cli": "2.7.0",
     "ember-cli-app-version": "^1.0.0",
-    "ember-cli-blanket": "^0.9.2",
     "ember-cli-content-security-policy": "0.4.0",
     "ember-cli-dependency-checker": "^1.2.0",
     "ember-cli-get-dependency-depth": "^1.0.0",
