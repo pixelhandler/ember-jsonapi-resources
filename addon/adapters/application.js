@@ -4,10 +4,11 @@
 **/
 
 import Ember from 'ember';
+import RSVP from 'rsvp';
 import { pluralize } from 'ember-inflector';
 import FetchMixin from 'ember-jsonapi-resources/mixins/fetch';
 
-const { Evented, RSVP, getOwner } = Ember;
+const { Evented, getOwner } = Ember;
 
 /**
   Adapter for a JSON API endpoint, use as a service for your backend
@@ -321,7 +322,7 @@ export default Ember.Object.extend(FetchMixin, Evented, {
     @method fetch
     @param {String} url
     @param {Object} options may include a query object or an update flag
-    @return {Ember.RSVP.Promise}
+    @return {Promise}
   */
   fetch(url, options = {}) {
     url = this.fetchUrl(url);

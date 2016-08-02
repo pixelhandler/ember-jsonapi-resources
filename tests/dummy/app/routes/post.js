@@ -1,8 +1,9 @@
 import Ember from 'ember';
+import RSVP from 'rsvp';
 
 export default Ember.Route.extend({
   model(params) {
-    return new Ember.RSVP.Promise(function (resolve, reject) {
+    return new RSVP.Promise(function (resolve, reject) {
       const found = this.store.all('posts').filter(function (post) {
         return post.get('id') === params.post_id;
       });

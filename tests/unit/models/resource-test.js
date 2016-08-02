@@ -1,5 +1,6 @@
 import { moduleFor, test } from 'ember-qunit';
 import Ember from 'ember';
+import RSVP from 'rsvp';
 import Resource from 'ember-jsonapi-resources/models/resource';
 import { attr } from 'ember-jsonapi-resources/models/resource';
 import { setup, teardown, mockServices } from 'dummy/tests/helpers/resources';
@@ -297,7 +298,7 @@ test('#removeRelationships', function(assert) {
 
 test('#updateRelationship, from resource-operations mixin', function(assert) {
   let serviceOp = this.sandbox.spy(function() {
-    return Ember.RSVP.Promise.resolve(null);
+    return RSVP.Promise.resolve(null);
   });
   let post = this.container.lookup('model:post').create({
     id: '1', attributes: {title: 'Wyatt Earp', excerpt: 'Was a gambler.'},

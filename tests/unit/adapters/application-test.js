@@ -1,6 +1,7 @@
 import { moduleFor, test } from 'ember-qunit';
 import Adapter from 'ember-jsonapi-resources/adapters/application';
 import Ember from 'ember';
+import RSVP from 'rsvp';
 import { setup, teardown, mockServices } from 'dummy/tests/helpers/resources';
 
 import postMock from 'fixtures/api/posts/1';
@@ -17,7 +18,7 @@ moduleFor('adapter:application', 'Unit | Adapter | application', {
   beforeEach() {
     setup.call(this);
     sandbox = window.sinon.sandbox.create();
-    Ember.RSVP.configure('onerror', RSVPonerror);
+    RSVP.configure('onerror', RSVPonerror);
     window.localStorage.removeItem('AuthorizationHeader');
   },
   afterEach() {
@@ -29,7 +30,7 @@ moduleFor('adapter:application', 'Unit | Adapter | application', {
 
 test('#find calls #findOne when options arg is a string', function(assert) {
   const adapter = this.subject();
-  sandbox.stub(adapter, 'findOne', function () { return Ember.RSVP.Promise.resolve(null); });
+  sandbox.stub(adapter, 'findOne', function () { return RSVP.Promise.resolve(null); });
   let promise = adapter.find('1');
   assert.ok(typeof promise.then === 'function', 'returns a thenable');
   assert.ok(adapter.findOne.calledOnce, 'findOne called');
@@ -38,7 +39,7 @@ test('#find calls #findOne when options arg is a string', function(assert) {
 
 test('#find calls #findOne when options arg is an object having an id property', function(assert) {
   const adapter = this.subject();
-  sandbox.stub(adapter, 'findOne', function () { return Ember.RSVP.Promise.resolve(null); });
+  sandbox.stub(adapter, 'findOne', function () { return RSVP.Promise.resolve(null); });
   let options = { id: '1', query: {sort: '-date'} };
   let promise = adapter.find(options);
   assert.ok(typeof promise.then === 'function', 'returns a thenable');
@@ -48,7 +49,7 @@ test('#find calls #findOne when options arg is an object having an id property',
 
 test('#find calls #findQuery when options arg is undefined', function(assert) {
   const adapter = this.subject();
-  sandbox.stub(adapter, 'findQuery', function () { return Ember.RSVP.Promise.resolve(null); });
+  sandbox.stub(adapter, 'findQuery', function () { return RSVP.Promise.resolve(null); });
   let promise = adapter.find(undefined);
   assert.ok(typeof promise.then === 'function', 'returns a thenable');
   assert.ok(adapter.findQuery.calledOnce, 'findQuery called');
@@ -56,7 +57,7 @@ test('#find calls #findQuery when options arg is undefined', function(assert) {
 
 test('#find calls #findQuery with options object (that has no id property)', function(assert) {
   const adapter = this.subject();
-  sandbox.stub(adapter, 'findQuery', function () { return Ember.RSVP.Promise.resolve(null); });
+  sandbox.stub(adapter, 'findQuery', function () { return RSVP.Promise.resolve(null); });
   let options = { query: {sort: '-date'} };
   let promise = adapter.find(options);
   assert.ok(typeof promise.then === 'function', 'returns a thenable');
@@ -66,7 +67,7 @@ test('#find calls #findQuery with options object (that has no id property)', fun
 
 test('#findOne calls #fetch with url and options object with method:GET', function(assert) {
   const adapter = this.subject({type: 'posts', url: '/posts'});
-  sandbox.stub(adapter, 'fetch', function () { return Ember.RSVP.Promise.resolve(null); });
+  sandbox.stub(adapter, 'fetch', function () { return RSVP.Promise.resolve(null); });
   let promise = adapter.findOne('1');
   assert.ok(typeof promise.then === 'function', 'returns a thenable');
   assert.ok(adapter.fetch.calledOnce, 'fetch called');
@@ -75,7 +76,7 @@ test('#findOne calls #fetch with url and options object with method:GET', functi
 
 test('#findQuery calls #fetch url and options object with method:GET', function(assert) {
   const adapter = this.subject({type: 'posts', url: '/posts'});
-  sandbox.stub(adapter, 'fetch', function () { return Ember.RSVP.Promise.resolve(null); });
+  sandbox.stub(adapter, 'fetch', function () { return RSVP.Promise.resolve(null); });
   let promise = adapter.findQuery();
   assert.ok(typeof promise.then === 'function', 'returns a thenable');
   assert.ok(adapter.fetch.calledOnce, 'fetch called');
@@ -84,7 +85,7 @@ test('#findQuery calls #fetch url and options object with method:GET', function(
 
 test('#findQuery calls #fetch url including a query', function(assert) {
   const adapter = this.subject({type: 'posts', url: '/posts'});
-  sandbox.stub(adapter, 'fetch', function () { return Ember.RSVP.Promise.resolve(null); });
+  sandbox.stub(adapter, 'fetch', function () { return RSVP.Promise.resolve(null); });
   let promise = adapter.findQuery({ query: { sort:'-desc' } });
   assert.ok(typeof promise.then === 'function', 'returns a thenable');
   assert.ok(adapter.fetch.calledOnce, 'fetch called');
@@ -98,7 +99,7 @@ test('#findRelated', function(assert) {
   const adapter = this.subject({type: 'posts', url: '/posts'});
   let service = this.container.lookup('service:authors');
   let related = this.container.lookup('model:author').create(authorMock.data);
-  sandbox.stub(service, 'fetch', function () { return Ember.RSVP.Promise.resolve(related); });
+  sandbox.stub(service, 'fetch', function () { return RSVP.Promise.resolve(related); });
   let promise = adapter.findRelated('author', url);
   assert.ok(typeof promise.then === 'function', 'returns a thenable');
   assert.ok(service.fetch.calledOnce, 'authors service#fetch method called');
@@ -126,7 +127,7 @@ test('#findRelated can be called with optional type for the resource', function 
     }
   });
   let stub = sandbox.stub(service, 'findRelated', function () {
-    return Ember.RSVP.Promise.resolve(supervisor);
+    return RSVP.Promise.resolve(supervisor);
   });
   let resource = this.container.lookup('model:employee').create({
     type: 'employees',
@@ -161,7 +162,7 @@ test('#createResource', function(assert) {
   assert.equal(newResource.get('id'), null, 'new resource does not have an id');
   adapter.serializer = { serialize: function () { return data; } };
   let persistedResource = postFactory.create(postMock.data);
-  sandbox.stub(adapter, 'fetch', function () { return Ember.RSVP.Promise.resolve(persistedResource); });
+  sandbox.stub(adapter, 'fetch', function () { return RSVP.Promise.resolve(persistedResource); });
   let promise = adapter.createResource(newResource);
   assert.ok(typeof promise.then === 'function', 'returns a thenable');
   assert.ok(adapter.fetch.calledOnce, '#fetch method called');
@@ -186,7 +187,7 @@ test('#updateResource', function(assert) {
     }
   };
   adapter.serializer = { serializeChanged: function () { return payload; } };
-  sandbox.stub(adapter, 'fetch', function () { return Ember.RSVP.Promise.resolve(null); });
+  sandbox.stub(adapter, 'fetch', function () { return RSVP.Promise.resolve(null); });
   let resource = this.container.lookup('model:post').create(postMock.data);
   let promise = adapter.updateResource(resource);
   assert.ok(typeof promise.then === 'function', 'returns a thenable');
@@ -200,7 +201,7 @@ test('when serializer returns null (nothing changed) #updateResource return prom
   const done = assert.async();
   let adapter = this.subject({type: 'posts', url: '/posts'});
   adapter.serializer = { serializeChanged: function () { return null; } };
-  sandbox.stub(adapter, 'fetch', function () { return Ember.RSVP.Promise.resolve(null); });
+  sandbox.stub(adapter, 'fetch', function () { return RSVP.Promise.resolve(null); });
   let resource = this.container.lookup('model:post').create(postMock.data);
   let promise = adapter.updateResource(resource);
   assert.ok(typeof promise.then === 'function', 'returns a thenable');
@@ -215,7 +216,7 @@ test('#createRelationship (to-many)', function(assert) {
   const done = assert.async();
   mockServices.call(this);
   let adapter = this.subject({type: 'posts', url: '/posts'});
-  sandbox.stub(adapter, 'fetch', function () { return Ember.RSVP.Promise.resolve(null); });
+  sandbox.stub(adapter, 'fetch', function () { return RSVP.Promise.resolve(null); });
   let resource = this.container.lookup('model:post').create(postMock.data);
   let promise = adapter.createRelationship(resource, 'comments', '1');
   assert.ok(typeof promise.then === 'function', 'returns a thenable');
@@ -231,7 +232,7 @@ test('#createRelationship (to-many)', function(assert) {
 test('#createRelationship (to-one)', function(assert) {
   const adapter = this.subject({type: 'posts', url: '/posts'});
   mockServices.call(this);
-  sandbox.stub(adapter, 'fetch', function () { return Ember.RSVP.Promise.resolve(null); });
+  sandbox.stub(adapter, 'fetch', function () { return RSVP.Promise.resolve(null); });
   let resource = this.container.lookup('model:post').create(postMock.data);
   let promise = adapter.createRelationship(resource, 'author', '1');
   assert.ok(typeof promise.then === 'function', 'returns a thenable');
@@ -245,7 +246,7 @@ test('#deleteRelationship (to-many)', function(assert) {
   const done = assert.async();
   mockServices.call(this);
   let adapter = this.subject({type: 'posts', url: '/posts'});
-  sandbox.stub(adapter, 'fetch', function () { return Ember.RSVP.Promise.resolve(null); });
+  sandbox.stub(adapter, 'fetch', function () { return RSVP.Promise.resolve(null); });
   let resource = this.container.lookup('model:post').create(postMock.data);
   let promise = adapter.deleteRelationship(resource, 'comments', '1');
   assert.ok(typeof promise.then === 'function', 'returns a thenable');
@@ -261,7 +262,7 @@ test('#deleteRelationship (to-many)', function(assert) {
 test('#deleteRelationship (to-one)', function(assert) {
   const adapter = this.subject({type: 'posts', url: '/posts'});
   mockServices.call(this);
-  sandbox.stub(adapter, 'fetch', function () { return Ember.RSVP.Promise.resolve(null); });
+  sandbox.stub(adapter, 'fetch', function () { return RSVP.Promise.resolve(null); });
   let resource = this.container.lookup('model:post').create(postMock.data);
   let promise = adapter.deleteRelationship(resource, 'author', '1');
   assert.ok(typeof promise.then === 'function', 'returns a thenable');
@@ -275,7 +276,7 @@ test('#patchRelationship (to-many)', function(assert) {
   const done = assert.async();
   mockServices.call(this);
   let adapter = this.subject({type: 'posts', url: '/posts'});
-  sandbox.stub(adapter, 'fetch', function () { return Ember.RSVP.Promise.resolve(null); });
+  sandbox.stub(adapter, 'fetch', function () { return RSVP.Promise.resolve(null); });
   let resource = this.container.lookup('model:post').create(postMock.data);
   resource.addRelationship('comments', '1');
   let promise = adapter.patchRelationship(resource, 'comments');
@@ -292,7 +293,7 @@ test('#patchRelationship (to-many)', function(assert) {
 test('#patchRelationship (to-one)', function(assert) {
   const adapter = this.subject({type: 'posts', url: '/posts'});
   mockServices.call(this);
-  sandbox.stub(adapter, 'fetch', function () { return Ember.RSVP.Promise.resolve(null); });
+  sandbox.stub(adapter, 'fetch', function () { return RSVP.Promise.resolve(null); });
   let resource = this.container.lookup('model:post').create(postMock.data);
   resource.addRelationship('author', '1');
   let promise = adapter.patchRelationship(resource, 'author');
@@ -305,7 +306,7 @@ test('#patchRelationship (to-one)', function(assert) {
 
 test('#deleteResource can be called with a string as the id for the resource', function(assert) {
   const adapter = this.subject({type: 'posts', url: '/posts'});
-  sandbox.stub(adapter, 'fetch', function () { return Ember.RSVP.Promise.resolve(null); });
+  sandbox.stub(adapter, 'fetch', function () { return RSVP.Promise.resolve(null); });
   let promise = adapter.deleteResource('1');
   assert.ok(typeof promise.then === 'function', 'returns a thenable');
   let msg = '#fetch called with url';
@@ -314,7 +315,7 @@ test('#deleteResource can be called with a string as the id for the resource', f
 
 test('#deleteResource can be called with a resource having a self link, and calls resource#destroy', function(assert) {
   const adapter = this.subject({type: 'posts', url: '/posts'});
-  sandbox.stub(adapter, 'fetch', function () { return Ember.RSVP.Promise.resolve(null); });
+  sandbox.stub(adapter, 'fetch', function () { return RSVP.Promise.resolve(null); });
   let resource = this.container.lookup('model:post').create(postMock.data);
   sandbox.stub(resource, 'destroy', function () {});
   let promise = adapter.deleteResource(resource);
@@ -327,7 +328,7 @@ test('#deleteResource can be called with a resource having a self link, and call
 
 test('when called with resource argument, #deleteResource calls #cacheRemove', function(assert) {
   const adapter = this.subject({type: 'posts', url: '/posts'});
-  sandbox.stub(adapter, 'fetch', function () { return Ember.RSVP.Promise.resolve(null); });
+  sandbox.stub(adapter, 'fetch', function () { return RSVP.Promise.resolve(null); });
   let resource = this.container.lookup('model:post').create(postMock.data);
   sandbox.stub(adapter, 'cacheRemove', function () {});
   Ember.run(function() {
@@ -340,9 +341,9 @@ test('#fetch calls #fetchURL to customize if needed', function(assert) {
   const adapter = this.subject({type: 'posts', url: '/posts'});
   sandbox.stub(adapter, 'fetchUrl', function () {});
   sandbox.stub(window, 'fetch', function () {
-    return Ember.RSVP.Promise.resolve({
+    return RSVP.Promise.resolve({
       "status": 204,
-      "text": function() { return Ember.RSVP.Promise.resolve(''); }
+      "text": function() { return RSVP.Promise.resolve(''); }
     });
   });
   let promise = adapter.fetch('/posts', { method: 'PATCH', body: 'json string here' });
@@ -356,10 +357,10 @@ test('#fetch calls #fetchOptions checking if the request is an update, if true s
   const adapter = this.subject({type: 'posts', url: '/posts'});
   sandbox.stub(adapter, 'fetchUrl', function () {});
   sandbox.stub(window, 'fetch', function () {
-    return Ember.RSVP.Promise.resolve({
+    return RSVP.Promise.resolve({
       "status": 202,
       "json": function() {
-        return Ember.RSVP.Promise.resolve({data: {}, meta: {}});
+        return RSVP.Promise.resolve({data: {}, meta: {}});
       }
     });
   });
@@ -390,10 +391,10 @@ test('#cacheResource called after successful fetch', function(assert) {
     deserializeIncluded: function () { return; }
   };
   sandbox.stub(window, 'fetch', function () {
-    return Ember.RSVP.Promise.resolve({
+    return RSVP.Promise.resolve({
       "status": 200,
       "json": function() {
-        return Ember.RSVP.Promise.resolve(postsMock);
+        return RSVP.Promise.resolve(postsMock);
       }
     });
   });
@@ -411,10 +412,10 @@ test('#cacheUpdate called after #updateResource success', function(assert) {
   const adapter = this.subject();
   sandbox.stub(adapter, 'cacheUpdate', function () {});
   sandbox.stub(window, 'fetch', function () {
-    return Ember.RSVP.Promise.resolve({
+    return RSVP.Promise.resolve({
       "status": 200,
       "json": function() {
-        return Ember.RSVP.Promise.resolve(postsMock);
+        return RSVP.Promise.resolve(postsMock);
       }
     });
   });
@@ -449,10 +450,10 @@ test('serializer#deserializeIncluded called after successful fetch', function(as
     deserializeIncluded: sandbox.spy()
   };
   sandbox.stub(window, 'fetch', function () {
-    return Ember.RSVP.Promise.resolve({
+    return RSVP.Promise.resolve({
       "status": 200,
       "json": function() {
-        return Ember.RSVP.Promise.resolve(postMock);
+        return RSVP.Promise.resolve(postMock);
       }
     });
   });
@@ -470,10 +471,10 @@ test('#fetch handles 5xx (ServerError) response status', function(assert) {
   const done = assert.async();
   const adapter = this.subject({type: 'posts', url: '/posts'});
   sandbox.stub(window, 'fetch', function () {
-    return Ember.RSVP.Promise.resolve({
+    return RSVP.Promise.resolve({
       "status": 500,
       "text": function() {
-        return Ember.RSVP.Promise.resolve('');
+        return RSVP.Promise.resolve('');
       }
     });
   });
@@ -492,10 +493,10 @@ test('#fetch handles 4xx (Client Error) response status', function(assert) {
   const adapter = this.subject({type: 'posts', url: '/posts'});
   sandbox.stub(adapter, 'fetchUrl', function () {});
   sandbox.stub(window, 'fetch', function () {
-    return Ember.RSVP.Promise.resolve({
+    return RSVP.Promise.resolve({
       "status": 404,
       "text": function() {
-        return Ember.RSVP.Promise.resolve('{ "errors": [ { "status": 404 } ] }');
+        return RSVP.Promise.resolve('{ "errors": [ { "status": 404 } ] }');
       }
     });
   });
@@ -514,9 +515,9 @@ test('#fetch handles 204 (Success, no content) response status w/o calling deser
   const adapter = this.subject({type: 'posts', url: '/posts'});
   sandbox.stub(adapter, 'fetchUrl', function () {});
   sandbox.stub(window, 'fetch', function () {
-    return Ember.RSVP.Promise.resolve({
+    return RSVP.Promise.resolve({
       "status": 204,
-      "text": function() { return Ember.RSVP.Promise.resolve(''); }
+      "text": function() { return RSVP.Promise.resolve(''); }
     });
   });
   sandbox.stub(adapter, 'cacheResource', function () {});
@@ -532,9 +533,9 @@ test('#fetch handles 200 (Success) response status', function(assert) {
   const done = assert.async();
   const adapter = this.subject({type: 'posts', url: '/posts'});
   sandbox.stub(window, 'fetch', function () {
-    return Ember.RSVP.Promise.resolve({
+    return RSVP.Promise.resolve({
       "status": 200,
-      "json": function() { return Ember.RSVP.Promise.resolve(postMock); }
+      "json": function() { return RSVP.Promise.resolve(postMock); }
     });
   });
   sandbox.stub(adapter, 'cacheResource', function () {});

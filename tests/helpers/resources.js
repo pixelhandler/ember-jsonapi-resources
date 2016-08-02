@@ -1,6 +1,7 @@
 import Resource from 'ember-jsonapi-resources/models/resource';
 import { attr, hasOne, hasMany } from 'ember-jsonapi-resources/models/resource';
 import Ember from 'ember';
+import RSVP from 'rsvp';
 
 export const Post = Resource.extend({
   type: 'posts',
@@ -62,7 +63,7 @@ export function mockServices() {
   let types = Ember.String.w('posts authors comments commenters people employees supervisors');
   let mockService = Ember.Service.extend({
     cacheLookup(/*id*/) { return undefined; },
-    findRelated() { return Ember.RSVP.resolve(null); }
+    findRelated() { return RSVP.resolve(null); }
   });
   for (let i = 0; i < types.length; i++) {
     this.registry.register('service:' + types[i], mockService);

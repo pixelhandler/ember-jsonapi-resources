@@ -5,6 +5,7 @@
 **/
 
 import Ember from 'ember';
+import RSVP from 'rsvp';
 import { pluralize } from 'ember-inflector';
 
 /**
@@ -157,7 +158,7 @@ const RelatedProxyUtil = Ember.Object.extend({
     } else {
       content = this.serviceCacheLookup(service, data);
     }
-    return (content) ? Ember.RSVP.Promise.resolve(content) : null;
+    return (content) ? RSVP.Promise.resolve(content) : null;
   },
 
   /**

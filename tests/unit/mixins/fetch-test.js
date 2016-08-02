@@ -1,4 +1,5 @@
 import Ember from 'ember';
+import RSVP from 'rsvp';
 import FetchMixin from '../../../mixins/fetch';
 import { module, test } from 'qunit';
 
@@ -18,7 +19,7 @@ module('Unit | Mixin | fetch', {
       return url.match(/\/write-blanket-coverage/);
     });
     this.server.autoRespond = true;
-    Ember.RSVP.configure('onerror', RSVPonerror);
+    RSVP.configure('onerror', RSVPonerror);
     window.localStorage.removeItem('AuthorizationHeader');
     let FetchObject = Ember.Object.extend(FetchMixin);
     this.subject = FetchObject.create();
@@ -152,7 +153,7 @@ test('#fetchSuccessHandler handles response for empty has-one relationship', fun
   let done = assert.async();
   let response = {
     "status": 200,
-    "json": function() { return Ember.RSVP.Promise.resolve({ data: null }); }
+    "json": function() { return RSVP.Promise.resolve({ data: null }); }
   };
   let result = void 0;
   let resolve = function(resp) { result = resp; };

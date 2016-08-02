@@ -1,5 +1,6 @@
 import { moduleFor, test } from 'ember-qunit';
 import Ember from 'ember';
+import RSVP from 'rsvp';
 import { pluralize } from 'ember-inflector';
 import { setup, teardown } from 'dummy/tests/helpers/resources';
 
@@ -7,7 +8,7 @@ let mockServices;
 const mockService = function () {
   let sandbox = this.sandbox;
   return Ember.Service.extend({
-    findRelated: sandbox.spy(function () { return Ember.RSVP.Promise.resolve(Ember.Object.create({id: 1})); }),
+    findRelated: sandbox.spy(function () { return RSVP.Promise.resolve(Ember.Object.create({id: 1})); }),
     cacheLookup: sandbox.spy(function () { return undefined; })
   });
 };

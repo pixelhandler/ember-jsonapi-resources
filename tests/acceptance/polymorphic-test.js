@@ -1,4 +1,5 @@
 import Ember from 'ember';
+import RSVP from 'rsvp';
 import { module, test } from 'qunit';
 import startApp from '../../tests/helpers/start-app';
 
@@ -94,46 +95,46 @@ function setupFetchResonses(sandbox) {
 }
 
 function picturesMockResponse() {
-  return Ember.RSVP.Promise.resolve({
+  return RSVP.Promise.resolve({
     "status": 200,
     "json": function() {
-      return Ember.RSVP.Promise.resolve(picturesMock);
+      return RSVP.Promise.resolve(picturesMock);
     }
   });
 }
 
 function pictures1MockResponse() {
-  return Ember.RSVP.Promise.resolve({
+  return RSVP.Promise.resolve({
     "status": 200,
     "json": function() {
-      return Ember.RSVP.Promise.resolve(pictures1Mock);
+      return RSVP.Promise.resolve(pictures1Mock);
     }
   });
 }
 
 function pictures1ImageableMockResponse() {
-  return Ember.RSVP.Promise.resolve({
+  return RSVP.Promise.resolve({
     "status": 200,
     "json": function() {
-      return Ember.RSVP.Promise.resolve(pictures1ImageableMock);
+      return RSVP.Promise.resolve(pictures1ImageableMock);
     }
   });
 }
 
 function pictures5MockResponse() {
-  return Ember.RSVP.Promise.resolve({
+  return RSVP.Promise.resolve({
     "status": 200,
     "json": function() {
-      return Ember.RSVP.Promise.resolve(pictures5Mock);
+      return RSVP.Promise.resolve(pictures5Mock);
     }
   });
 }
 
 function pictures5ImageableMockResponse() {
-  return Ember.RSVP.Promise.resolve({
+  return RSVP.Promise.resolve({
     "status": 200,
     "json": function() {
-      return Ember.RSVP.Promise.resolve(pictures5ImageableMock);
+      return RSVP.Promise.resolve(pictures5ImageableMock);
     }
   });
 }

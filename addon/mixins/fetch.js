@@ -3,6 +3,7 @@
   @submodule fetch
 **/
 import Ember from 'ember';
+import RSVP from 'rsvp';
 import { ServerError, ClientError, FetchError } from 'ember-jsonapi-resources/utils/errors';
 
 /**
@@ -42,10 +43,10 @@ export default Ember.Mixin.create({
     @param {String} url
     @param {Object} options - May include a query object or an update flag
     @param {Boolean} isUpdate
-    @return {Ember.RSVP.Promise}
+    @return {Promise}
   */
   _fetch(url, options, isUpdate) {
-    return new Ember.RSVP.Promise(function(resolve, reject) {
+    return new RSVP.Promise(function(resolve, reject) {
       window.fetch(url, options).then(function(response) {
         if (response.status >= 500) {
           this.fetchServerErrorHandler(response, reject);
@@ -160,13 +161,13 @@ export default Ember.Mixin.create({
     @param {String} url
     @param {Object} options - may include a query object or an update flag
     @param {Boolean} isUpdate
-    @return {Ember.RSVP.Promise}
+    @return {Promise}
     @requires jQuery
   */
   _ajax(url, options, isUpdate) {
     options.data = options.body;
     delete options.body;
-    return new Ember.RSVP.Promise(function(resolve, reject) {
+    return new RSVP.Promise(function(resolve, reject) {
       Ember.$.ajax(url, options)
         .done(this.ajaxDoneHandler(resolve, isUpdate))
         .fail(this.ajaxFailHandler(reject));

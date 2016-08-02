@@ -1,10 +1,9 @@
 import Ember from 'ember';
+import RSVP from 'rsvp';
 // import ResourceOperationsMixin from 'ember-jsonapi-resources/mixins/resource-operations';
 import { module, test } from 'qunit';
 import Resource from 'ember-jsonapi-resources/models/resource';
 import { attr/*, hasOne, hasMany*/ } from 'ember-jsonapi-resources/models/resource';
-
-const { RSVP } = Ember;
 
 let promiseResolved = function() { return RSVP.Promise.resolve(); };
 
