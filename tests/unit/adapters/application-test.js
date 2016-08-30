@@ -110,29 +110,41 @@ test('#findRelated', function(assert) {
 test('#findRelated can be called with optional type for the resource', function (assert) {
   assert.expect(4);
   const done = assert.async();
-  let PersonAdapter = Adapter.extend({type: 'people', url: '/people'});
-  PersonAdapter.reopenClass({ isServiceFactory: true });
-  this.registry.register('service:people', PersonAdapter.extend());
-  let service = this.container.lookup('service:people');
-  let supervisor = this.container.lookup('model:employee').create({
+
+  let supervisor = this.container.lookup('model:supervisor').create({
     type: 'supervisors',
-    id: 1000000,
-    name: 'The Boss',
+    id: '1000000',
+    attributes: {
+      name: 'The Boss',
+    },
     relationships: {
       employees: {
         links: {
-          related: 'http://locahost:3000/api/v1/supervisor/1000000/employees'
+          related: 'http://locahost:3000/api/v1/supervisors/1000000/employees'
         }
       }
     }
   });
+
+  let PersonAdapter = Adapter.extend({type: 'people', url: '/people'});
+  this.registry.register('service:supervisors', PersonAdapter.extend({
+    cacheLookup: function() {
+      return supervisor;
+    }
+  }));
+  PersonAdapter.reopenClass({ isServiceFactory: true });
+  this.registry.register('service:people', PersonAdapter.extend());
+  let service = this.container.lookup('service:people');
   let stub = sandbox.stub(service, 'findRelated', function () {
     return RSVP.Promise.resolve(supervisor);
   });
+
   let resource = this.container.lookup('model:employee').create({
     type: 'employees',
-    id: 1000001,
-    name: 'The Special',
+    id: '1000001',
+    attributes: {
+      name: 'The Special',
+    },
     relationships: {
       supervisor: {
         links: {
