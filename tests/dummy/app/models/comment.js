@@ -3,7 +3,7 @@ import Resource from './resource';
 import { attr, hasOne } from 'ember-jsonapi-resources/models/resource';
 
 export default Resource.extend({
-  type: 'comment',
+  type: 'comments',
   service: Ember.inject.service('comments'),
 
   body: attr('string'),

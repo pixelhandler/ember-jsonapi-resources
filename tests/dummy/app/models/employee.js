@@ -1,12 +1,8 @@
-import Ember from 'ember';
-import Resource from './resource';
-import { attr, hasMany } from 'ember-jsonapi-resources/models/resource';
+import PersonResource from './person';
+import { hasOne, hasMany } from 'ember-jsonapi-resources/models/resource';
 
-export default Resource.extend({
+export default PersonResource.extend({
   type: 'employees',
-  service: Ember.inject.service('employees'),
-
-  name: attr('string'),
-
-  pictures: hasMany('pictures')
+  pictures: hasMany('pictures'),
+  supervisor: hasOne({resource: 'supervisor', type: 'employees'})
 });

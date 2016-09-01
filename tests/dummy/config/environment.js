@@ -22,6 +22,7 @@ module.exports = function(environment) {
       API_PATH: 'api/v1',
     },
     contentSecurityPolicy: {
+      'script-src': "'self' 'unsafe-inline' 'unsafe-eval' localhost:49152",
       'connect-src': "'self' api.pixelhandler.com localhost:3000 0.0.0.0:3000",
       'img-src': "'self' www.gravatar.com"
     }

@@ -3,7 +3,7 @@ import Resource from './resource';
 import { attr, hasOne, hasMany } from 'ember-jsonapi-resources/models/resource';
 
 export default Resource.extend({
-  type: 'post',
+  type: 'posts',
   service: Ember.inject.service('posts'),
 
   title: attr('string'),

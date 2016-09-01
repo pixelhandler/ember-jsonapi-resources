@@ -132,7 +132,7 @@ test('#deserializeResource', function(assert) {
   assert.equal(resource.get('type'), postMock.data.type, 'type present in resource');
   assert.equal(resource.get('title'), postMock.data.attributes.title, 'title present in resource');
   assert.equal(resource.get('excerpt'), postMock.data.attributes.excerpt, 'excerpt present in resource');
-  assert.equal(resource.toString(), '[JSONAPIResource|posts:1]');
+  assert.equal(resource.toString(), '[JSONAPIResource|post:1]');
 });
 
 test('#deserializeIncluded', function(assert) {

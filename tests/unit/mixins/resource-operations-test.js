@@ -113,6 +113,7 @@ test('deleteRelationship for to-many relation', function(assert) {
   );
 });
 
+
 test('updateRelationship for to-one relation', function(assert) {
   this.sandbox.stub(this.subject, '_updateRelationshipsData');
 

@@ -42,21 +42,30 @@ export default Ember.Object.extend(FetchMixin, Evented, {
     Find resource(s) using an id or a using a query `{id: '', query: {}}`
 
     @method find
-    @param {Object|String} options use a string for a single id or an object
+    @param {Object|String|Number} options use a string for a single id or an object.
     @return {Promise}
   */
   find(options) {
-    if (typeof options === 'string') {
-      return this.findOne(options);
-    } else if (typeof options === 'object') {
-      if (options.id) {
-        return this.findOne(options.id, options.query);
+    // Collect id and query from options (if given).
+    // Ensure id is String conform JSONAPI specs.
+    // findOne when id is given, otherwise findQuery.
+    let id, query;
+
+    if (options !== undefined) {
+      if (typeof options === 'object') {
+        query = options; // default
+
+        if (options.hasOwnProperty('id')) {
+          id    = options.id.toString();
+          query = options.query;
+        }
       } else {
-        return this.findQuery(options);
+        id = options.toString();
       }
-    } else {
-      return this.findQuery();
     }
+
+    // this works even for id 0 since it is cast to string.
+    return id ? this.findOne(id, query) : this.findQuery(query);
   },
 
   /**
@@ -312,7 +321,7 @@ export default Ember.Object.extend(FetchMixin, Evented, {
   */
   _payloadForRelationship(resource, relationship, id) {
     let data = resource.get(['relationships', relationship, 'data'].join('.'));
-    let resourceObject = { type: pluralize(relationship), id: id };
+    let resourceObject = { type: pluralize(relationship), id: id.toString() };
     return { data: (Array.isArray(data)) ? [resourceObject] : resourceObject };
   },
 

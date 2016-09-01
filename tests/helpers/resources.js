@@ -1,51 +1,24 @@
-import Resource from 'ember-jsonapi-resources/models/resource';
-import { attr, hasOne, hasMany } from 'ember-jsonapi-resources/models/resource';
 import Ember from 'ember';
 import RSVP from 'rsvp';
 
-export const Post = Resource.extend({
-  type: 'posts',
-  title: attr('string'),
-  excerpt: attr('string'),
-  "updated-at": attr('date'),
-  "created-at": attr('date'),
-  author: hasOne('author'),
-  comments: hasMany('comments')
-});
+import PostResource       from 'dummy/models/post';
+import AuthorResource     from 'dummy/models/author';
+import CommentResource    from 'dummy/models/comment';
+import CommenterResource  from 'dummy/models/commenter';
+import PersonResource     from 'dummy/models/person';
+import EmployeeResource   from 'dummy/models/employee';
+import SupervisorResource from 'dummy/models/supervisor';
+// Even though unused, keep PictureResource here for clarity. (shut up jshint!)
+import PictureResource    from 'dummy/models/picture'; // jshint ignore:line
 
-export const Author = Resource.extend({
-  type: 'authors',
-  name: attr('string'),
-  posts: hasMany('posts')
-});
-
-export const Comment = Resource.extend({
-  type: 'comments',
-  body: attr('string'),
-  commenter: hasOne('commenter'),
-  post: hasOne('post')
-});
-
-export const Commenter = Resource.extend({
-  type: 'commenters',
-  name: attr('string'),
-  comments: hasMany('comments')
-});
-
-export const Person = Resource.extend({
-  type: 'people',
-  name: attr() // can use any value type for an attribute
-});
-
-export const Employee = Person.extend({
-  type: 'employees',
-  supervisor: hasOne({ resource: 'supervisor', type: 'people' })
-});
-
-export const Supervisor = Employee.extend({
-  type: 'supervisors',
-  directReports: hasMany({ resource: 'employees', type: 'people' })
-});
+// Remove the service from resources. We're using mock services.
+export const Post       = PostResource.extend({service: null});
+export const Author     = AuthorResource.extend({service: null});
+export const Comment    = CommentResource.extend({service: null});
+export const Commenter  = CommenterResource.extend({service: null});
+export const Person     = PersonResource.extend({service: null});
+export const Employee   = EmployeeResource.extend({service: null});
+export const Supervisor = SupervisorResource.extend({service: null});
 
 export function setup() {
   let opts = { instantiate: false, singleton: false };
