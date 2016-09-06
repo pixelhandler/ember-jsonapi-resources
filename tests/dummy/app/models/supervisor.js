@@ -3,5 +3,5 @@ import { hasMany } from 'ember-jsonapi-resources/models/resource';
 
 export default EmployeeResource.extend({
   type: 'supervisors',
-  directReports: hasMany('employees')
+  directReports: hasMany({resource: 'direct-reports', type: 'employees'})
 });

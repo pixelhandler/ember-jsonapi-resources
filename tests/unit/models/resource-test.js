@@ -54,6 +54,17 @@ test('in creating instances, ids are cast to string', function (assert) {
   assert.strictEqual(post.get('id'), id.toString(), 'new instance id cast to string');
 });
 
+test('in creating instances, optional resource is used to set up relationships', function (assert) {
+  assert.expect(2);
+
+  let supervisor = this.container.lookup('model:supervisor').create();
+  let meta       = supervisor.constructor.metaForProperty('directReports');
+  let relationships = supervisor.get('relationships');
+
+  assert.ok(!relationships.hasOwnProperty('directReports'), 'camelCased relation directReports does not exist');
+  assert.ok(relationships.hasOwnProperty(meta.relation), 'relation "direct-reports" exists as defined as optional resource');
+});
+
 test('#toString method', function(assert) {
   let resource = this.subject();
   let stringified = resource.toString();

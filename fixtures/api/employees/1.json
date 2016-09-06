@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "employees",
+    "id": "1",
+    "links": {
+      "self": "http://api.pixelhandler.com/api/v1/employees/1"
+    },
+    "attributes": {
+      "name": "The Special"
+    },
+    "relationships": {
+      "supervisor": {
+        "links": {
+          "related": "http://api.pixelhandler.com/api/v1/employees/1/supervisor"
+        }
+      }
+    }
+  }
+}

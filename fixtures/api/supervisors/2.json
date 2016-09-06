@@ -1,0 +1,20 @@
+{
+  "data": {
+    "type": "supervisors",
+    "id": "2",
+    "links": {
+      "self": "http://api.pixelhandler.com/api/v1/supervisors/2"
+    },
+    "attributes": {
+      "name": "The Boss"
+    },
+    "relationships": {
+      "direct-reports": {
+        "links": {
+          "self": "http://api.pixelhandler.com/api/v1/supervisors/2/relationships/direct-reports",
+          "related": "http://api.pixelhandler.com/api/v1/supervisors/2/direct-reports"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "data": [
+    {
+      "type": "employees",
+      "id": "1",
+      "links": {
+        "self": "http://api.pixelhandler.com/api/v1/employees/1"
+      },
+      "attributes": {
+        "name": "The Special"
+      },
+      "relationships": {
+        "supervisor": {
+          "links": {
+            "self": "http://api.pixelhandler.com/api/v1/employees/1/relationships/supervisor",
+            "related": "http://api.pixelhandler.com/api/v1/employees/1/supervisor"
+          }
+        }
+      }
+    },
+    {
+      "type": "supervisors",
+      "id": "2",
+      "links": {
+        "self": "http://api.pixelhandler.com/api/v1/supervisors/2"
+      },
+      "attributes": {
+        "name": "The Boss"
+      },
+      "relationships": {
+        "direct-reports": {
+          "links": {
+            "self": "http://api.pixelhandler.com/api/v1/supervisors/2/relationships/direct-reports",
+            "related": "http://api.pixelhandler.com/api/v1/supervisors/2/direct-reports"
+          }
+        }
+      }
+    }
+  ],
+  "meta": {
+    "page": {
+      "sort": "-date",
+      "total": 2,
+      "limit": "5",
+      "offset": "0"
+    }
+  }
+}

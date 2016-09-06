@@ -190,9 +190,12 @@ const Resource = Ember.Object.extend(ResourceOperationsMixin, {
   */
   addRelationship(related, id) {
     if (id !== undefined) { id = id.toString(); } // ensure String id.
-    let key = ['relationships', related, 'data'].join('.');
+
+    // actual resource type of this relationship is found in related-proxy's meta.
+    let meta = this.constructor.metaForProperty(related);
+    let key = ['relationships', meta.relation, 'data'].join('.');
     let data = this.get(key);
-    let type = pluralize(related);
+    let type = pluralize(meta.type);
     let identifier = { type: type, id: id };
     let owner = (typeof getOwner === 'function') ? getOwner(this) : this.container;
     let resource = owner.lookup(`service:${type}`).cacheLookup(id);
@@ -207,7 +210,7 @@ const Resource = Ember.Object.extend(ResourceOperationsMixin, {
     } else {
       data = identifier;
       if (resource) {
-        this.set(`${related}.content`, resource);
+        this.set(`${meta.relation}.content`, resource);
       }
     }
     return this.set(key, data);
@@ -466,9 +469,9 @@ function useComputedPropsMetaToSetupRelationships(owner, factory, instance) {
       let meta = factory.metaForProperty(prop);
       if (meta && meta.kind) {
         if (meta.kind === 'hasOne') {
-          setupRelationship.call(instance, prop);
+          setupRelationship.call(instance, meta.relation);
         } else if (meta.kind === 'hasMany') {
-          setupRelationship.call(instance, prop, Ember.A([]));
+          setupRelationship.call(instance, meta.relation, Ember.A([]));
         }
       }
     } catch (e) {

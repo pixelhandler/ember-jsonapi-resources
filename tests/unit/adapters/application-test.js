@@ -7,6 +7,8 @@ import { setup, teardown, mockServices } from 'dummy/tests/helpers/resources';
 import postMock from 'fixtures/api/posts/1';
 import postsMock from 'fixtures/api/posts';
 import authorMock from 'fixtures/api/authors/1';
+import employeeMock from 'fixtures/api/employees/1';
+import supervisorMock from 'fixtures/api/supervisors/2';
 
 let sandbox;
 
@@ -224,51 +226,27 @@ test('#findRelated', function(assert) {
 test('#findRelated is called with optional type for the resource', function (assert) {
   assert.expect(4);
   const done = assert.async();
-  let supervisor = this.container.lookup('model:supervisor').create({
-    type: 'supervisors',
-    id: '1000000',
-    attributes: {
-      name: 'The Boss',
-    },
-    relationships: {
-      employees: {
-        links: {
-          related: 'http://api.pixelhandler.com/api/v1/supervisors/1000000/employees'
-        }
-      }
-    }
+
+  let supervisor = this.container.lookup('model:supervisor').create(supervisorMock.data);
+  let employee = this.container.lookup('model:employee').create(employeeMock.data);
+
+  let SupervisorAdapter = Adapter.extend({type: 'supervisors', url: '/supervisors'});
+  SupervisorAdapter.reopenClass({isServiceFactory: true});
+  let EmployeeAdapter   = Adapter.extend({type: 'employees', url: '/employees'});
+  EmployeeAdapter.reopenClass({isServiceFactory: true});
+
+  this.registry.register('service:employees', EmployeeAdapter.extend({
+    cacheLookup: function () { return employee; }
+  }));
+  let employeeService = this.container.lookup('service:employees');
+  let stub = sandbox.stub(employeeService, 'findRelated', function () {
+    return RSVP.Promise.resolve(null);
   });
 
-  let EmployeeAdapter = Adapter.extend({type: 'employees', url: '/employees'});
-  this.registry.register('service:supervisors', EmployeeAdapter.extend({
-    cacheLookup: function() {
-      return supervisor;
-    }
-  }));
-  EmployeeAdapter.reopenClass({ isServiceFactory: true });
-  this.registry.register('service:employees', EmployeeAdapter.extend());
-  let service = this.container.lookup('service:employees');
-  let stub = sandbox.stub(service, 'findRelated', function () {
-    return RSVP.Promise.resolve(supervisor);
-  });
-  let employee = this.container.lookup('model:employee').create({
-    type: 'employees',
-    id: '1000001',
-    attributes: {
-      name: 'The Special',
-    },
-    relationships: {
-      supervisor: {
-        links: {
-          related: 'http://api.pixelhandler.com/api/v1/employees/1000001/supervisor'
-        }
-      }
-    }
-  });
-  let url = employee.get('relationships.supervisor.links.related');
-  employee.get('supervisor').then(() => {
+  let url = supervisor.get('relationships.direct-reports.links.related');
+  supervisor.get('directReports').then(() => {
     assert.ok(stub.calledOnce, 'employees service findRelated method called once');
-    assert.equal(stub.firstCall.args[0].resource, 'supervisor', 'findRelated called with supervisor resource');
+    assert.equal(stub.firstCall.args[0].resource, 'direct-reports', 'findRelated called with "direct-reports" resource');
     assert.equal(stub.firstCall.args[0].type, 'employees', 'findRelated called with employees type');
     assert.equal(stub.firstCall.args[1], url, 'findRelated called with url, ' + url);
     done();
@@ -406,6 +384,30 @@ test('#createRelationship (to-one)', function(assert) {
   });
 });
 
+test('#createRelationship uses optional resource type', function (assert) {
+  assert.expect(2);
+  const done = assert.async();
+
+  mockServices.call(this);
+  let adapter = this.subject({type: 'supervisors', url: '/supervisors'});
+  sandbox.stub(adapter, 'fetch', function () { return RSVP.Promise.resolve(null); });
+  let resource = this.container.lookup('model:supervisor').create(supervisorMock.data);
+  let promise = adapter.createRelationship(resource, 'directReports', '1');
+
+  assert.ok(typeof promise.then === 'function', 'returns a thenable');
+  promise.then(() => {
+    let jsonBody = JSON.stringify({data: [{type: 'employees', id: '1'}]});
+    assert.ok(
+      adapter.fetch.calledWith(
+        supervisorMock.data.relationships['direct-reports'].links.self,
+        {method: 'POST', body: jsonBody}
+      ),
+      '#fetch called with url and options with data'
+    );
+    done();
+  });
+});
+
 test('#deleteRelationship (to-many)', function(assert) {
   assert.expect(2);
   const done = assert.async();
@@ -446,6 +448,30 @@ test('#deleteRelationship (to-one)', function(assert) {
     assert.ok(
       adapter.fetch.calledWith(
         postMock.data.relationships.author.links.self,
+        {method: 'DELETE', body: jsonBody}
+      ),
+      '#fetch called with url and options with data'
+    );
+    done();
+  });
+});
+
+test('#deleteRelationship uses optional resource type', function (assert) {
+  assert.expect(2);
+  const done = assert.async();
+
+  mockServices.call(this);
+  let adapter = this.subject({type: 'supervisors', url: '/supervisors'});
+  sandbox.stub(adapter, 'fetch', function () { return RSVP.Promise.resolve(null); });
+  let resource = this.container.lookup('model:supervisor').create(supervisorMock.data);
+  let promise = adapter.deleteRelationship(resource, 'directReports', '1');
+
+  assert.ok(typeof promise.then === 'function', 'returns a thenable');
+  promise.then(() => {
+    let jsonBody = JSON.stringify({data: [{type: 'employees', id: '1'}]});
+    assert.ok(
+      adapter.fetch.calledWith(
+        supervisorMock.data.relationships['direct-reports'].links.self,
         {method: 'DELETE', body: jsonBody}
       ),
       '#fetch called with url and options with data'
@@ -503,6 +529,32 @@ test('#patchRelationship (to-one)', function(assert) {
     done();
   });
 });
+
+test('#patchRelationship uses optional resource type', function (assert) {
+  assert.expect(2);
+  const done = assert.async();
+
+  mockServices.call(this);
+  let adapter = this.subject({type: 'supervisors', url: '/supervisors'});
+  sandbox.stub(adapter, 'fetch', function () { return RSVP.Promise.resolve(null); });
+  let resource = this.container.lookup('model:supervisor').create(supervisorMock.data);
+  resource.addRelationship('directReports', '1');
+  let promise = adapter.patchRelationship(resource, 'directReports');
+
+  assert.ok(typeof promise.then === 'function', 'returns a thenable');
+  promise.then(() => {
+    let jsonBody = JSON.stringify({data: [{type: 'employees', id: '1'}]});
+    assert.ok(
+      adapter.fetch.calledWith(
+        supervisorMock.data.relationships['direct-reports'].links.self,
+        {method: 'PATCH', body: jsonBody}
+      ),
+      '#fetch called with url and options with data'
+    );
+    done();
+  });
+});
+
 
 // Even though create- and deleteRelationship both use _payloadForRelationship,
 // which does the casting of id to String, we test them seperately to ensure this

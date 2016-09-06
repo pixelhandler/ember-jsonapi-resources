@@ -123,7 +123,6 @@ export default Ember.Object.extend(FetchMixin, Evented, {
   findRelated(resource, url) {
     let type = resource;
     if (typeof type === 'object') {
-      resource = resource.resource;
       type = resource.type;
     }
     // use resource's service if in container, otherwise use this service to fetch
@@ -142,18 +141,25 @@ export default Ember.Object.extend(FetchMixin, Evented, {
     @return {Promise}
   */
   createResource(resource) {
-    let url = this.get('url');
-    const json = this.serializer.serialize(resource);
-    return this.fetch(url, {
+    return this.fetch(this.get('url'), {
       method: 'POST',
-      body: JSON.stringify(json)
+      body: JSON.stringify(this.serializer.serialize(resource))
     }).then(function(resp) {
       if (resource.toString().match('JSONAPIResource') === null) {
         return resp;
       } else {
-        resource.set('id', resp.get('id') );
-        let json = resp.getProperties('attributes', 'relationships', 'links', 'meta', 'type', 'isNew', 'id');
-        resource.didUpdateResource(json);
+        resource.set('id', resp.get('id'));
+        resource.didUpdateResource(
+          resp.getProperties(
+            'attributes',
+            'relationships',
+            'links',
+            'meta',
+            'type',
+            'isNew',
+            'id'
+          )
+        );
         this.cacheUpdate({ data: resource });
         return resource;
       }
@@ -263,9 +269,7 @@ export default Ember.Object.extend(FetchMixin, Evented, {
   patchRelationship(resource, relationship) {
     return this.fetch(this._urlForRelationship(resource, relationship), {
       method: 'PATCH',
-      body: JSON.stringify({
-        data: resource.get(['relationships', relationship, 'data'].join('.'))
-      })
+      body: JSON.stringify(this._payloadForRelationship(resource, relationship))
     });
   },
 
@@ -307,7 +311,8 @@ export default Ember.Object.extend(FetchMixin, Evented, {
     @return {String} url
   */
   _urlForRelationship(resource, relationship) {
-    let url = resource.get(['relationships', relationship, 'links', 'self'].join('.'));
+    let meta = resource.constructor.metaForProperty(relationship);
+    let url  = resource.get(['relationships', meta.relation, 'links', 'self'].join('.'));
     return url || [this.get('url'), resource.get('id'), 'relationships', relationship].join('/');
   },
 
@@ -316,12 +321,15 @@ export default Ember.Object.extend(FetchMixin, Evented, {
     @private
     @param {Resource} resource instance, has URLs via it's relationships property
     @param {String} relationship name (plural) to find the url from the resource instance
-    @param {String} id the id for the related resource
+    @param {String} id the id for the related resource or undefined current relationship data
     @return {Object} payload
   */
   _payloadForRelationship(resource, relationship, id) {
-    let data = resource.get(['relationships', relationship, 'data'].join('.'));
-    let resourceObject = { type: pluralize(relationship), id: id.toString() };
+    // actual resource type of this relationship is found in related-proxy's meta.
+    let meta  = resource.constructor.metaForProperty(relationship);
+    let data  = resource.get(['relationships', meta.relation, 'data'].join('.'));
+    if (id === undefined) { return {data: data}; }
+    let resourceObject = { type: pluralize(meta.type), id: id.toString() };
     return { data: (Array.isArray(data)) ? [resourceObject] : resourceObject };
   },
 
