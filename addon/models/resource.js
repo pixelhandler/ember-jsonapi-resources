@@ -103,7 +103,7 @@ const Resource = Ember.Object.extend(ResourceOperationsMixin, {
   _attributes: null,
 
   /**
-    Flag for new instance, e.g. not peristed
+    Flag for new instance, e.g. not persisted
 
     @property isNew
     @type Boolean
@@ -413,21 +413,24 @@ Resource.reopenClass({
       `attributes`, `links` and `relationships`
   */
   create(properties) {
+    properties = properties || {};
     const prototype = {};
     const attrs = Ember.String.w('_attributes attributes links meta relationships');
     for (let i = 0; i < attrs.length; i++) {
       prototype[attrs[i]] = {};
     }
 
-    const instance = this._super(prototype);
-    if (properties) {
-      if (properties.hasOwnProperty('id')) {
-        // JSONAPI ids MUST be strings.
-        properties.id = properties.id.toString();
-      }
-
-      instance.setProperties(properties);
+    // JSONAPI ids MUST be strings.
+    // Without an id we default isNew to true (unless otherwise specified)
+    if (properties.hasOwnProperty('id')) {
+      properties.id = properties.id.toString();
+    } else if (typeof properties.isNew === 'undefined') {
+      properties.isNew = true;
     }
+
+    const instance = this._super(prototype);
+    instance.setProperties(properties);
+
     let type = singularize(instance.get('type'));
     let msg = (type) ? Ember.String.capitalize(type) : 'Resource';
     let factory = 'model:' + type;

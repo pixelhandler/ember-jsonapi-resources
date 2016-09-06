@@ -27,12 +27,25 @@ moduleFor('model:resource', 'Unit | Model | resource', {
   }
 });
 
-test('it creates an instance, default flag for isNew is false', function(assert) {
+test('it creates an instance', function (assert) {
   let resource = this.subject();
   assert.ok(!!resource);
-  assert.equal(resource.get('isNew'), false, 'default value for isNew flag set to `false`');
 });
+test('creating an instance WITHOUT id has flag for isNew set to true', function(assert) {
+  let resource = this.subject();
+  assert.equal(resource.get('isNew'), true, 'without id, default value for isNew flag set to `true`');
+});
+test('creating an instance WITH id has flag for isNew set to false', function(assert) {
+  let resource = this.subject({id: 1});
+  assert.equal(resource.get('isNew'), false, 'without id, default value for isNew flag set to `false`');
+});
+test('creating an instance allows isNew regardless of id/defaults', function (assert) {
+  let notIsNewResource = this.subject({isNew: false});
+  let yesIsNewResource = this.subject({id: 1, isNew: true});
 
+  assert.equal(notIsNewResource.get('isNew'), false, 'without id, isNew property is honored');
+  assert.equal(yesIsNewResource.get('isNew'), true, 'with id, isNew property is honored');
+});
 test('in creating instances, ids are cast to string', function (assert) {
   let id = 1;
   let post = this.container.lookup('model:post').create({
@@ -118,7 +131,8 @@ test('attr() helper creates a computed property using a unique (protected) attri
 
 test('#changedAttributes', function(assert) {
   let post = this.container.lookup('model:post').create({
-    attributes: {id: '1', title: 'Wyatt Earp', excerpt: 'Was a gambler.'}
+    id: 1,
+    attributes: {title: 'Wyatt Earp', excerpt: 'Was a gambler.'}
   });
   assert.equal(post.get('excerpt'), 'Was a gambler.', 'excerpt is set "Was a gambler."');
   post.set('excerpt', 'Became a deputy.');
@@ -131,7 +145,8 @@ test('#changedAttributes', function(assert) {
 
 test('#previousAttributes', function(assert) {
   let post = this.container.lookup('model:post').create({
-    id: '1', attributes: {title: 'Wyatt Earp', excerpt: 'Was a gambler.'}
+    id: '1',
+    attributes: {title: 'Wyatt Earp', excerpt: 'Was a gambler.'}
   });
   assert.equal(post.get('excerpt'), 'Was a gambler.', 'excerpt is set to "Was a gambler."');
   post.set('excerpt', 'Became a deputy.');
@@ -144,7 +159,8 @@ test('#previousAttributes', function(assert) {
 
 test('#rollback resets attributes based on #previousAttributes', function(assert) {
   let post = this.container.lookup('model:post').create({
-    id: '1', attributes: {title: 'Wyatt Earp', excerpt: 'Was a gambler.'}
+    id: '1',
+    attributes: {title: 'Wyatt Earp', excerpt: 'Was a gambler.'}
   });
   assert.equal(post.get('excerpt'), 'Was a gambler.', 'excerpt is set to "Was a gambler."');
   post.set('excerpt', 'Became a deputy.');

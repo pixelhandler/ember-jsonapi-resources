@@ -13,7 +13,6 @@ let <%= classifiedModuleName %> = Resource.extend({
 
   getDefaults() {
     return {
-      isNew: true,
       attributes: {}
     };
   }

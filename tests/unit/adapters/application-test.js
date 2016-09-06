@@ -276,7 +276,7 @@ test('#findRelated is called with optional type for the resource', function (ass
 });
 
 test('#createResource', function(assert) {
-  assert.expect(6);
+  assert.expect(8);
   let done = assert.async();
 
   const adapter = this.subject({type: 'posts', url: '/posts'});
@@ -287,6 +287,7 @@ test('#createResource', function(assert) {
   let newResource = postFactory.create(data);
 
   assert.equal(newResource.get('id'), null, 'new resource does not have an id');
+  assert.equal(newResource.get('isNew'), true, 'new resource isNew');
 
   adapter.serializer = { serialize: function () { return data; } };
   let persistedResource = postFactory.create(postMock.data);
@@ -301,6 +302,7 @@ test('#createResource', function(assert) {
       '#fetch called with url and options with data'
     );
     assert.equal(newResource.get('id'), postMock.data.id, 'new resource now has an id');
+    assert.equal(newResource.get('isNew'), false, 'new resource no longer isNew');
     assert.deepEqual(resp, newResource, 'response is the same resource instance sent as arg');
     done();
   });
