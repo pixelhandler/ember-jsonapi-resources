@@ -32,11 +32,22 @@ export default Ember.Object.extend(FetchMixin, Evented, {
   /**
     The url for the entity, e.g. /posts or /api/v1/posts
 
+    defaults to config.APP.API_HOST/config.APP.API_PATH/pluralize(type) if
+    not set explicitly.
+
     @property url
     @type String
     @required
   */
-  url: null,
+  url: Ember.computed('type', {
+    get() {
+      const config = this.container.lookupFactory('config:environment');
+      const enclosingSlashes = /^\/|\/$/g;
+      const host = config.APP.API_HOST.replace(enclosingSlashes, '');
+      const path = config.APP.API_PATH.replace(enclosingSlashes, '');
+      return [host, path, pluralize(this.get('type'))].join('/');
+    }
+  }),
 
   /**
     Find resource(s) using an id or a using a query `{id: '', query: {}}`

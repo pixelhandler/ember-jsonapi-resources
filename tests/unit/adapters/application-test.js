@@ -1,5 +1,6 @@
 import { moduleFor, test } from 'ember-qunit';
 import Adapter from 'ember-jsonapi-resources/adapters/application';
+import AdapterApiHostProxyMixin from 'ember-jsonapi-resources/mixins/adapter-api-host-proxy';
 import Ember from 'ember';
 import RSVP from 'rsvp';
 import { setup, teardown, mockServices } from 'dummy/tests/helpers/resources';
@@ -28,6 +29,54 @@ moduleFor('adapter:application', 'Unit | Adapter | application', {
     sandbox.restore();
     window.localStorage.removeItem('AuthorizationHeader');
   }
+});
+
+test('adapter has sane default url', function (assert) {
+  assert.expect(1);
+  this.registry.register('config:environment', {
+    APP: {
+      API_HOST: 'http://api.pixelhandler.com',
+      API_PATH: 'api/v1'
+    }
+  });
+  const adapter = this.subject({type: 'posts'});
+  assert.equal(adapter.get('url'), 'http://api.pixelhandler.com/api/v1/posts');
+});
+
+test('adapter default url handles enclosing slashes in config', function (assert) {
+  assert.expect(1);
+  this.registry.register('config:environment', {
+    APP: {
+      API_HOST: 'http://api.pixelhandler.com/',
+      API_PATH: '/api/v1/'
+    }
+  });
+  const adapter = this.subject({type: 'posts'});
+  assert.equal(adapter.get('url'), 'http://api.pixelhandler.com/api/v1/posts');
+});
+
+test('adapter allows custom url', function (assert) {
+  assert.expect(1);
+  const adapter = this.subject({type: 'posts', url: 'http://example.com/posts'});
+  assert.equal(adapter.get('url'), 'http://example.com/posts');
+});
+
+test('adapter with ApiHostProxyMixin rewrites API_HOST to API_HOST_PROXY', function (assert) {
+  assert.expect(2);
+  const host  = 'http://api.pixelhandler.com';
+  const proxy = 'http://localhost:3000';
+  this.registry.register('config:environment', {
+    APP: {
+      API_HOST: host,
+      API_HOST_PROXY: proxy,
+      API_PATH: 'api/v1/',
+    }
+  });
+  this.registry.register('service:posts', Adapter.extend(AdapterApiHostProxyMixin, {type: 'posts'}));
+  const service = this.container.lookup('service:posts');
+  const url     = service.get('url');
+  assert.equal(url, 'http://api.pixelhandler.com/api/v1/posts', 'non-proxied-url ok');
+  assert.equal(service.fetchUrl(url), url.replace(host, proxy), 'API_HOST_PROXY replaced API_HOST through in fetchUrl');
 });
 
 test('#find calls #findOne when options arg is a string', function(assert) {

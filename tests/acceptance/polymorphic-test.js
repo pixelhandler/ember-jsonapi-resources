@@ -9,6 +9,8 @@ import pictures1ImageableMock from 'fixtures/api/pictures/1/imageable';
 import pictures5Mock from 'fixtures/api/pictures/5';
 import pictures5ImageableMock from 'fixtures/api/pictures/5/imageable';
 
+import config from '../../config/environment';
+
 module('Acceptance | polymorphic', {
   beforeEach: function() {
     this.sandbox = window.sinon.sandbox.create();
@@ -23,7 +25,7 @@ module('Acceptance | polymorphic', {
 
 test('visiting /pictures list', function(assert) {
   assert.expect(6);
-  setupFetchResonses(this.sandbox);
+  setupFetchResponses(this.sandbox);
 
   visit('/pictures');
   andThen(function() {
@@ -39,7 +41,7 @@ test('visiting /pictures list', function(assert) {
 
 test('visiting /pictures/1, picture with an (imageable) product relation', function(assert) {
   assert.expect(3);
-  setupFetchResonses(this.sandbox);
+  setupFetchResponses(this.sandbox);
 
   visit('/pictures/1');
   andThen(function() {
@@ -54,7 +56,7 @@ test('visiting /pictures/1, picture with an (imageable) product relation', funct
 
 test('visiting /pictures/5, picture with an (imageable) employee relation', function(assert) {
   assert.expect(3);
-  setupFetchResonses(this.sandbox);
+  setupFetchResponses(this.sandbox);
 
   visit('/pictures/5');
   andThen(function() {
@@ -68,27 +70,28 @@ test('visiting /pictures/5, picture with an (imageable) employee relation', func
 });
 
 
-function setupFetchResonses(sandbox) {
+function setupFetchResponses(sandbox) {
+  const apiUrl = [config.APP.API_HOST, config.APP.API_PATH].join('/');
   sandbox.stub(window, 'fetch', function (url) {
     let resp;
     switch(url) {
-      case 'api/v1/pictures?sort=id&include=imageable':
+      case [apiUrl, 'pictures?sort=id&include=imageable'].join('/'):
         resp = picturesMockResponse();
         break;
-      case 'api/v1/pictures/1':
+      case [apiUrl, 'pictures/1'].join('/'):
         resp = pictures1MockResponse();
         break;
-      case '/api/v1/pictures/1/imageable':
+      case [apiUrl, 'pictures/1/imageable'].join('/'):
         resp = pictures1ImageableMockResponse();
         break;
-      case 'api/v1/pictures/5':
+      case [apiUrl, 'pictures/5'].join('/'):
         resp = pictures5MockResponse();
         break;
-      case '/api/v1/pictures/5/imageable':
+      case [apiUrl, 'pictures/5/imageable'].join('/'):
         resp = pictures5ImageableMockResponse();
         break;
       default:
-        throw('no mocked fetch reponse for request');
+        throw('no mocked fetch reponse for request: ' + url);
     }
     return resp;
   });
