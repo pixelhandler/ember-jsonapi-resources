@@ -121,6 +121,17 @@ module.exports = {
           'ember': '2.6.2'
         }
       }
+    },
+    {
+      name: 'ember-2.7.3',
+      bower: {
+        dependencies: {
+          'ember': '2.7.3'
+        },
+        resolutions: {
+          'ember': '2.7.3'
+        }
+      }
     }
   ]
 };

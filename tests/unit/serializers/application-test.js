@@ -12,7 +12,7 @@ moduleFor('serializer:application', 'Unit | Serializer | application', {
     sandbox = window.sinon.sandbox.create();
   },
   afterEach() {
-    teardown();
+    teardown.call(this);
     sandbox.restore();
   }
 });

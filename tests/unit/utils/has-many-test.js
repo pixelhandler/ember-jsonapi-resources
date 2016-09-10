@@ -26,7 +26,7 @@ moduleFor('model:resource', 'Unit | Utility | hasMany', {
   },
   afterEach() {
     mockServices = null;
-    teardown();
+    teardown.call(this);
     this.sandbox.restore();
   }
 });

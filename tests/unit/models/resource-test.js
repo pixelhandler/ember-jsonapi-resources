@@ -20,7 +20,7 @@ moduleFor('model:resource', 'Unit | Model | resource', {
     };
   },
   afterEach() {
-    teardown();
+    teardown.call(this);
     this.sandbox.restore();
     this.registry.unregister('model:resource');
     this.subject = this._ogSubject;

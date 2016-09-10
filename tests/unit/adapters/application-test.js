@@ -25,7 +25,7 @@ moduleFor('adapter:application', 'Unit | Adapter | application', {
     window.localStorage.removeItem('AuthorizationHeader');
   },
   afterEach() {
-    teardown();
+    teardown.call(this);
     sandbox.restore();
     window.localStorage.removeItem('AuthorizationHeader');
   }
