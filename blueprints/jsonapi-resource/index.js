@@ -57,19 +57,16 @@ module.exports = {
     var modelOptions = merge({}, options, {
       entity: {
         name: entityName ? inflection.singularize(entityName) : ''
-      },
-      originBlueprintName: 'jsonapi-model'
+      }
     });
 
     var otherOptions = merge({}, options);
 
     return Promise.all([
       this._processBlueprint(type, 'jsonapi-model', modelOptions),
-      this._processBlueprint(type, 'addon-import', modelOptions),
       this._processBlueprint(type, 'jsonapi-adapter', otherOptions),
       this._processBlueprint(type, 'jsonapi-serializer', otherOptions),
       this._processBlueprint(type, 'jsonapi-service', otherOptions),
-      this._processBlueprint(type, 'jsonapi-adapter', otherOptions),
       this._processBlueprint(type, 'jsonapi-initializer', otherOptions)
     ]);
   }
