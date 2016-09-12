@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>resource - Ember JSON API Resources</title>
+    <title>AdapterApiHostProxyMixin - Ember JSON API Resources</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -105,46 +105,44 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-<h1>resource Module</h1>
-<div class="box clearfix meta">
+<h1>AdapterApiHostProxyMixin Class</h1>
+<div class="box meta">
 
 
         <div class="foundat">
-            Defined in: <a href="../files/addon_models_resource.js.html#l16"><code>addon&#x2F;models&#x2F;resource.js:16</code></a>
+            Defined in: <a href="../files/addon_mixins_adapter-api-host-proxy.js.html#l7"><code>addon&#x2F;mixins&#x2F;adapter-api-host-proxy.js:7</code></a>
         </div>
+
+            Module: <a href="../modules/adapter-api-host-proxy-mixin.html">adapter-api-host-proxy-mixin</a><br>
+            Parent Module: <a href="../modules/ember-jsonapi-resources.html">ember-jsonapi-resources</a>
 
 </div>
 
 
 <div class="box intro">
-    <p>A Resource class to create JSON API resource objects. This is abstract, first
-define a prototype using <code>Resource.extend({ type: entity })</code>. Model prototypes
-are registered in the container as factories, they use the options:
-<code>{ instantiate: false, singleton: false }</code>. So, to create a model instance
-use the owner API or the container to <code>lookup</code> the factory, for example:</p>
-<pre class="code prettyprint"><code class="language-js">let owner = (typeof Ember.getOwner === 'function') ? Ember.getOwner(this) : this.container;
-let model = owner.lookup('model:entity').create({ attributes: { key: value } });
-</code></pre>
-<p>See <a href="http://jsonapi.org/format/#document-resource-objects">http://jsonapi.org/format/#document-resource-objects</a></p>
+    <p>Mixin to provide url rewrite for proxied api. Mostly used as example.</p>
 
 </div>
 
 
-<div class="yui3-g">
-    <div class="yui3-u-1-2">
-            <p>This module provides the following classes:</p>
+<div id="classdocs" class="tabview">
+    <ul class="api-class-tabs">
+        <li class="api-class-tab index"><a href="#index">Index</a></li>
 
-            <ul class="module-classes">
-                <li class="module-class">
-                    <a href="../classes/Resource.html">
-                        Resource
-                    </a>
-                </li>
-            </ul>
-    </div>
+    </ul>
+
+    <div>
+        <div id="index" class="api-class-tabpanel index">
+            <h2 class="off-left">Item Index</h2>
 
 
-    <div class="yui3-u-1-2">
+
+
+        </div>
+
+
+
+
     </div>
 </div>
                     </div>

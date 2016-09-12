@@ -1,6 +1,7 @@
 YUI.add("yuidoc-meta", function(Y) {
    Y.YUIDoc = { meta: {
     "classes": [
+        "AdapterApiHostProxyMixin",
         "ApplicationAdapter",
         "ApplicationSerializer",
         "AuthorizationMixin",
@@ -19,6 +20,7 @@ YUI.add("yuidoc-meta", function(Y) {
         "Utils"
     ],
     "modules": [
+        "adapter-api-host-proxy-mixin",
         "adapters",
         "authorization",
         "cache",
@@ -33,6 +35,11 @@ YUI.add("yuidoc-meta", function(Y) {
         "utils"
     ],
     "allModules": [
+        {
+            "displayName": "adapter-api-host-proxy-mixin",
+            "name": "adapter-api-host-proxy-mixin",
+            "description": "Mixin to provide url rewrite for proxied api. Mostly used as example."
+        },
         {
             "displayName": "adapters",
             "name": "adapters",

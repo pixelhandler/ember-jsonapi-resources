@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>resource - Ember JSON API Resources</title>
+    <title>addon/mixins/adapter-api-host-proxy.js - Ember JSON API Resources</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -105,47 +105,35 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-<h1>resource Module</h1>
-<div class="box clearfix meta">
+<h1 class="file-heading">File: addon/mixins/adapter-api-host-proxy.js</h1>
 
+<div class="file">
+    <pre class="code prettyprint linenums">
+/**
+  @module ember-jsonapi-resources
+  @submodule adapter-api-host-proxy-mixin
+**/
+import Ember from &#x27;ember&#x27;;
 
-        <div class="foundat">
-            Defined in: <a href="../files/addon_models_resource.js.html#l16"><code>addon&#x2F;models&#x2F;resource.js:16</code></a>
-        </div>
+/**
+  Mixin to provide url rewrite for proxied api. Mostly used as example.
 
-</div>
+  @class AdapterApiHostProxyMixin
+  @static
+*/
+export default Ember.Mixin.create({
+	fetchUrl: function(url) {
+    const config = this.container.lookupFactory(&#x27;config:environment&#x27;);
+    const proxy  = config.APP.API_HOST_PROXY;
+    const host   = config.APP.API_HOST;
+    if (proxy &amp;&amp; host) {
+      url = url.replace(host, proxy);
+    }
+    return url;
+  }
+});
 
-
-<div class="box intro">
-    <p>A Resource class to create JSON API resource objects. This is abstract, first
-define a prototype using <code>Resource.extend({ type: entity })</code>. Model prototypes
-are registered in the container as factories, they use the options:
-<code>{ instantiate: false, singleton: false }</code>. So, to create a model instance
-use the owner API or the container to <code>lookup</code> the factory, for example:</p>
-<pre class="code prettyprint"><code class="language-js">let owner = (typeof Ember.getOwner === 'function') ? Ember.getOwner(this) : this.container;
-let model = owner.lookup('model:entity').create({ attributes: { key: value } });
-</code></pre>
-<p>See <a href="http://jsonapi.org/format/#document-resource-objects">http://jsonapi.org/format/#document-resource-objects</a></p>
-
-</div>
-
-
-<div class="yui3-g">
-    <div class="yui3-u-1-2">
-            <p>This module provides the following classes:</p>
-
-            <ul class="module-classes">
-                <li class="module-class">
-                    <a href="../classes/Resource.html">
-                        Resource
-                    </a>
-                </li>
-            </ul>
-    </div>
-
-
-    <div class="yui3-u-1-2">
-    </div>
+    </pre>
 </div>
                     </div>
                 </div>

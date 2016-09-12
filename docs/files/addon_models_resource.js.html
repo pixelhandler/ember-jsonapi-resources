@@ -38,6 +38,7 @@
                 
                         <div id="api-tabview-panel">
                             <ul id="api-classes" class="apis classes">
+                                <li><a href="../classes/AdapterApiHostProxyMixin.html">AdapterApiHostProxyMixin</a></li>
                                 <li><a href="../classes/ApplicationAdapter.html">ApplicationAdapter</a></li>
                                 <li><a href="../classes/ApplicationSerializer.html">ApplicationSerializer</a></li>
                                 <li><a href="../classes/AuthorizationMixin.html">AuthorizationMixin</a></li>
@@ -58,6 +59,7 @@
                 
                 
                             <ul id="api-modules" class="apis modules">
+                                <li><a href="../modules/adapter-api-host-proxy-mixin.html">adapter-api-host-proxy-mixin</a></li>
                                 <li><a href="../modules/adapters.html">adapters</a></li>
                                 <li><a href="../modules/authorization.html">authorization</a></li>
                                 <li><a href="../modules/cache.html">cache</a></li>
@@ -212,7 +214,7 @@ const Resource = Ember.Object.extend(ResourceOperationsMixin, {
   _attributes: null,
 
   /**
-    Flag for new instance, e.g. not peristed
+    Flag for new instance, e.g. not persisted
 
     @property isNew
     @type Boolean
@@ -225,7 +227,7 @@ const Resource = Ember.Object.extend(ResourceOperationsMixin, {
     @method toString
   */
   toString() {
-    let type = this.get(&#x27;type&#x27;) || &#x27;null&#x27;;
+    let type = singularize(this.get(&#x27;type&#x27;)) || &#x27;null&#x27;;
     let id = this.get(&#x27;id&#x27;) || &#x27;null&#x27;;
     return &#x60;[JSONAPIResource|${type}:${id}]&#x60;;
   },
@@ -298,9 +300,13 @@ const Resource = Ember.Object.extend(ResourceOperationsMixin, {
     @param {String} id
   */
   addRelationship(related, id) {
-    let key = [&#x27;relationships&#x27;, related, &#x27;data&#x27;].join(&#x27;.&#x27;);
+    if (id !== undefined) { id = id.toString(); } // ensure String id.
+
+    // actual resource type of this relationship is found in related-proxy&#x27;s meta.
+    let meta = this.constructor.metaForProperty(related);
+    let key = [&#x27;relationships&#x27;, meta.relation, &#x27;data&#x27;].join(&#x27;.&#x27;);
     let data = this.get(key);
-    let type = pluralize(related);
+    let type = pluralize(meta.type);
     let identifier = { type: type, id: id };
     let owner = (typeof getOwner === &#x27;function&#x27;) ? getOwner(this) : this.container;
     let resource = owner.lookup(&#x60;service:${type}&#x60;).cacheLookup(id);
@@ -315,7 +321,7 @@ const Resource = Ember.Object.extend(ResourceOperationsMixin, {
     } else {
       data = identifier;
       if (resource) {
-        this.set(&#x60;${related}.content&#x60;, resource);
+        this.set(&#x60;${meta.relation}.content&#x60;, resource);
       }
     }
     return this.set(key, data);
@@ -338,6 +344,8 @@ const Resource = Ember.Object.extend(ResourceOperationsMixin, {
     @param {String} id
   */
   removeRelationship(related, id) {
+    if (id !== undefined) { id = id.toString(); } // ensure String ids.
+
     let relation = this.get(&#x27;relationships.&#x27; + related);
     if (Array.isArray(relation.data)) {
       for (let i = 0; i &lt; relation.data.length; i++) {
@@ -519,15 +527,24 @@ Resource.reopenClass({
       &#x60;attributes&#x60;, &#x60;links&#x60; and &#x60;relationships&#x60;
   */
   create(properties) {
+    properties = properties || {};
     const prototype = {};
     const attrs = Ember.String.w(&#x27;_attributes attributes links meta relationships&#x27;);
     for (let i = 0; i &lt; attrs.length; i++) {
       prototype[attrs[i]] = {};
     }
-    const instance = this._super(prototype);
-    if (properties) {
-      instance.setProperties(properties);
+
+    // JSONAPI ids MUST be strings.
+    // Without an id we default isNew to true (unless otherwise specified)
+    if (properties.hasOwnProperty(&#x27;id&#x27;)) {
+      properties.id = properties.id.toString();
+    } else if (typeof properties.isNew === &#x27;undefined&#x27;) {
+      properties.isNew = true;
     }
+
+    const instance = this._super(prototype);
+    instance.setProperties(properties);
+
     let type = singularize(instance.get(&#x27;type&#x27;));
     let msg = (type) ? Ember.String.capitalize(type) : &#x27;Resource&#x27;;
     let factory = &#x27;model:&#x27; + type;
@@ -563,9 +580,9 @@ function useComputedPropsMetaToSetupRelationships(owner, factory, instance) {
       let meta = factory.metaForProperty(prop);
       if (meta &amp;&amp; meta.kind) {
         if (meta.kind === &#x27;hasOne&#x27;) {
-          setupRelationship.call(instance, prop);
+          setupRelationship.call(instance, meta.relation);
         } else if (meta.kind === &#x27;hasMany&#x27;) {
-          setupRelationship.call(instance, prop, Ember.A([]));
+          setupRelationship.call(instance, meta.relation, Ember.A([]));
         }
       }
     } catch (e) {

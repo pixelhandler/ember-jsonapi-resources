@@ -38,6 +38,7 @@
                 
                         <div id="api-tabview-panel">
                             <ul id="api-classes" class="apis classes">
+                                <li><a href="../classes/AdapterApiHostProxyMixin.html">AdapterApiHostProxyMixin</a></li>
                                 <li><a href="../classes/ApplicationAdapter.html">ApplicationAdapter</a></li>
                                 <li><a href="../classes/ApplicationSerializer.html">ApplicationSerializer</a></li>
                                 <li><a href="../classes/AuthorizationMixin.html">AuthorizationMixin</a></li>
@@ -58,6 +59,7 @@
                 
                 
                             <ul id="api-modules" class="apis modules">
+                                <li><a href="../modules/adapter-api-host-proxy-mixin.html">adapter-api-host-proxy-mixin</a></li>
                                 <li><a href="../modules/adapters.html">adapters</a></li>
                                 <li><a href="../modules/authorization.html">authorization</a></li>
                                 <li><a href="../modules/cache.html">cache</a></li>
@@ -113,10 +115,11 @@
 **/
 
 import Ember from &#x27;ember&#x27;;
+import RSVP from &#x27;rsvp&#x27;;
 import { pluralize } from &#x27;ember-inflector&#x27;;
 import FetchMixin from &#x27;ember-jsonapi-resources/mixins/fetch&#x27;;
 
-const { Evented, RSVP, getOwner } = Ember;
+const { Evented, getOwner } = Ember;
 
 /**
   Adapter for a JSON API endpoint, use as a service for your backend
@@ -140,31 +143,51 @@ export default Ember.Object.extend(FetchMixin, Evented, {
   /**
     The url for the entity, e.g. /posts or /api/v1/posts
 
+    defaults to config.APP.API_HOST/config.APP.API_PATH/pluralize(type) if
+    not set explicitly.
+
     @property url
     @type String
     @required
   */
-  url: null,
+  url: Ember.computed(&#x27;type&#x27;, {
+    get() {
+      const config = this.container.lookupFactory(&#x27;config:environment&#x27;);
+      const enclosingSlashes = /^\/|\/$/g;
+      const host = config.APP.API_HOST.replace(enclosingSlashes, &#x27;&#x27;);
+      const path = config.APP.API_PATH.replace(enclosingSlashes, &#x27;&#x27;);
+      return [host, path, pluralize(this.get(&#x27;type&#x27;))].join(&#x27;/&#x27;);
+    }
+  }),
 
   /**
     Find resource(s) using an id or a using a query &#x60;{id: &#x27;&#x27;, query: {}}&#x60;
 
     @method find
-    @param {Object|String} options use a string for a single id or an object
+    @param {Object|String|Number} options use a string for a single id or an object.
     @return {Promise}
   */
   find(options) {
-    if (typeof options === &#x27;string&#x27;) {
-      return this.findOne(options);
-    } else if (typeof options === &#x27;object&#x27;) {
-      if (options.id) {
-        return this.findOne(options.id, options.query);
+    // Collect id and query from options (if given).
+    // Ensure id is String conform JSONAPI specs.
+    // findOne when id is given, otherwise findQuery.
+    let id, query;
+
+    if (options !== undefined) {
+      if (typeof options === &#x27;object&#x27;) {
+        query = options; // default
+
+        if (options.hasOwnProperty(&#x27;id&#x27;)) {
+          id    = options.id.toString();
+          query = options.query;
+        }
       } else {
-        return this.findQuery(options);
+        id = options.toString();
       }
-    } else {
-      return this.findQuery();
     }
+
+    // this works even for id 0 since it is cast to string.
+    return id ? this.findOne(id, query) : this.findQuery(query);
   },
 
   /**
@@ -187,7 +210,7 @@ export default Ember.Object.extend(FetchMixin, Evented, {
     Find resources using an optional query object, e.g. w/ pagination params
 
     @method findQuery
-    @param {Object} query
+    @param {Object} options
     @return {Promise}
   */
   findQuery(options = {}) {
@@ -222,7 +245,6 @@ export default Ember.Object.extend(FetchMixin, Evented, {
   findRelated(resource, url) {
     let type = resource;
     if (typeof type === &#x27;object&#x27;) {
-      resource = resource.resource;
       type = resource.type;
     }
     // use resource&#x27;s service if in container, otherwise use this service to fetch
@@ -241,18 +263,25 @@ export default Ember.Object.extend(FetchMixin, Evented, {
     @return {Promise}
   */
   createResource(resource) {
-    let url = this.get(&#x27;url&#x27;);
-    const json = this.serializer.serialize(resource);
-    return this.fetch(url, {
+    return this.fetch(this.get(&#x27;url&#x27;), {
       method: &#x27;POST&#x27;,
-      body: JSON.stringify(json)
+      body: JSON.stringify(this.serializer.serialize(resource))
     }).then(function(resp) {
       if (resource.toString().match(&#x27;JSONAPIResource&#x27;) === null) {
         return resp;
       } else {
-        resource.set(&#x27;id&#x27;, resp.get(&#x27;id&#x27;) );
-        let json = resp.getProperties(&#x27;attributes&#x27;, &#x27;relationships&#x27;, &#x27;links&#x27;, &#x27;meta&#x27;, &#x27;type&#x27;, &#x27;isNew&#x27;, &#x27;id&#x27;);
-        resource.didUpdateResource(json);
+        resource.set(&#x27;id&#x27;, resp.get(&#x27;id&#x27;));
+        resource.didUpdateResource(
+          resp.getProperties(
+            &#x27;attributes&#x27;,
+            &#x27;relationships&#x27;,
+            &#x27;links&#x27;,
+            &#x27;meta&#x27;,
+            &#x27;type&#x27;,
+            &#x27;isNew&#x27;,
+            &#x27;id&#x27;
+          )
+        );
         this.cacheUpdate({ data: resource });
         return resource;
       }
@@ -362,9 +391,7 @@ export default Ember.Object.extend(FetchMixin, Evented, {
   patchRelationship(resource, relationship) {
     return this.fetch(this._urlForRelationship(resource, relationship), {
       method: &#x27;PATCH&#x27;,
-      body: JSON.stringify({
-        data: resource.get([&#x27;relationships&#x27;, relationship, &#x27;data&#x27;].join(&#x27;.&#x27;))
-      })
+      body: JSON.stringify(this._payloadForRelationship(resource, relationship))
     });
   },
 
@@ -406,7 +433,8 @@ export default Ember.Object.extend(FetchMixin, Evented, {
     @return {String} url
   */
   _urlForRelationship(resource, relationship) {
-    let url = resource.get([&#x27;relationships&#x27;, relationship, &#x27;links&#x27;, &#x27;self&#x27;].join(&#x27;.&#x27;));
+    let meta = resource.constructor.metaForProperty(relationship);
+    let url  = resource.get([&#x27;relationships&#x27;, meta.relation, &#x27;links&#x27;, &#x27;self&#x27;].join(&#x27;.&#x27;));
     return url || [this.get(&#x27;url&#x27;), resource.get(&#x27;id&#x27;), &#x27;relationships&#x27;, relationship].join(&#x27;/&#x27;);
   },
 
@@ -415,12 +443,15 @@ export default Ember.Object.extend(FetchMixin, Evented, {
     @private
     @param {Resource} resource instance, has URLs via it&#x27;s relationships property
     @param {String} relationship name (plural) to find the url from the resource instance
-    @param {String} id the id for the related resource
+    @param {String} id the id for the related resource or undefined current relationship data
     @return {Object} payload
   */
   _payloadForRelationship(resource, relationship, id) {
-    let data = resource.get([&#x27;relationships&#x27;, relationship, &#x27;data&#x27;].join(&#x27;.&#x27;));
-    let resourceObject = { type: pluralize(relationship), id: id };
+    // actual resource type of this relationship is found in related-proxy&#x27;s meta.
+    let meta  = resource.constructor.metaForProperty(relationship);
+    let data  = resource.get([&#x27;relationships&#x27;, meta.relation, &#x27;data&#x27;].join(&#x27;.&#x27;));
+    if (id === undefined) { return {data: data}; }
+    let resourceObject = { type: pluralize(meta.type), id: id.toString() };
     return { data: (Array.isArray(data)) ? [resourceObject] : resourceObject };
   },
 
@@ -430,7 +461,7 @@ export default Ember.Object.extend(FetchMixin, Evented, {
     @method fetch
     @param {String} url
     @param {Object} options may include a query object or an update flag
-    @return {Ember.RSVP.Promise}
+    @return {Promise}
   */
   fetch(url, options = {}) {
     url = this.fetchUrl(url);

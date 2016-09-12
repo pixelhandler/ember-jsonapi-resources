@@ -37,6 +37,17 @@
             },
             "namespaces": {}
         },
+        "addon/mixins/adapter-api-host-proxy.js": {
+            "name": "addon/mixins/adapter-api-host-proxy.js",
+            "modules": {
+                "adapter-api-host-proxy-mixin": 1
+            },
+            "classes": {
+                "AdapterApiHostProxyMixin": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
         "addon/mixins/authorization.js": {
             "name": "addon/mixins/authorization.js",
             "modules": {
@@ -208,6 +219,7 @@
             "submodules": {
                 "adapters": 1,
                 "initializers": 1,
+                "adapter-api-host-proxy-mixin": 1,
                 "authorization": 1,
                 "fetch": 1,
                 "resource-operations": 1,
@@ -223,6 +235,7 @@
                 "ApplicationAdapter": 1,
                 "Resource": 1,
                 "StoreService": 1,
+                "AdapterApiHostProxyMixin": 1,
                 "AuthorizationMixin": 1,
                 "FetchMixin": 1,
                 "ResourceOperationsMixin": 1,
@@ -258,7 +271,7 @@
             "module": "ember-jsonapi-resources",
             "namespace": "",
             "file": "addon/adapters/application.js",
-            "line": 12,
+            "line": 13,
             "description": "Adapter for a JSON API endpoint, use as a service for your backend"
         },
         "initializers": {
@@ -276,6 +289,22 @@
             "namespace": "",
             "file": "addon/initializers/model-setup.js",
             "line": 1
+        },
+        "adapter-api-host-proxy-mixin": {
+            "name": "adapter-api-host-proxy-mixin",
+            "submodules": {},
+            "elements": {},
+            "classes": {
+                "AdapterApiHostProxyMixin": 1
+            },
+            "fors": {},
+            "is_submodule": 1,
+            "namespaces": {},
+            "module": "ember-jsonapi-resources",
+            "namespace": "",
+            "file": "addon/mixins/adapter-api-host-proxy.js",
+            "line": 7,
+            "description": "Mixin to provide url rewrite for proxied api. Mostly used as example."
         },
         "authorization": {
             "name": "authorization",
@@ -306,7 +335,7 @@
             "module": "ember-jsonapi-resources",
             "namespace": "",
             "file": "addon/mixins/fetch.js",
-            "line": 8,
+            "line": 9,
             "description": "Fetch/Ajax methods for use with an Adapter calls `cacheUpdate`, `cacheResource`\nmethods and a `serializer` injection."
         },
         "resource-operations": {
@@ -445,7 +474,7 @@
             "submodule": "adapters",
             "namespace": "",
             "file": "addon/adapters/application.js",
-            "line": 12,
+            "line": 13,
             "description": "Adapter for a JSON API endpoint, use as a service for your backend",
             "requires": [
                 "Ember.Inflector"
@@ -493,6 +522,22 @@
             ],
             "static": 1
         },
+        "AdapterApiHostProxyMixin": {
+            "name": "AdapterApiHostProxyMixin",
+            "shortname": "AdapterApiHostProxyMixin",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "ember-jsonapi-resources",
+            "submodule": "adapter-api-host-proxy-mixin",
+            "namespace": "",
+            "file": "addon/mixins/adapter-api-host-proxy.js",
+            "line": 7,
+            "description": "Mixin to provide url rewrite for proxied api. Mostly used as example.",
+            "static": 1
+        },
         "AuthorizationMixin": {
             "name": "AuthorizationMixin",
             "shortname": "AuthorizationMixin",
@@ -521,7 +566,7 @@
             "submodule": "fetch",
             "namespace": "",
             "file": "addon/mixins/fetch.js",
-            "line": 8,
+            "line": 9,
             "description": "Fetch/Ajax methods for use with an Adapter calls `cacheUpdate`, `cacheResource`\nmethods and a `serializer` injection.",
             "static": 1
         },
@@ -713,7 +758,7 @@
             "submodule": "utils",
             "namespace": "",
             "file": "addon/utils/related-proxy.js",
-            "line": 10,
+            "line": 11,
             "description": "Utility for creating promise proxy objects for related resources",
             "static": 1,
             "final": 1
@@ -754,7 +799,7 @@
     "classitems": [
         {
             "file": "addon/adapters/application.js",
-            "line": 22,
+            "line": 23,
             "description": "The name of the entity",
             "itemtype": "property",
             "name": "type",
@@ -766,8 +811,8 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 31,
-            "description": "The url for the entity, e.g. /posts or /api/v1/posts",
+            "line": 32,
+            "description": "The url for the entity, e.g. /posts or /api/v1/posts\n\ndefaults to config.APP.API_HOST/config.APP.API_PATH/pluralize(type) if\nnot set explicitly.",
             "itemtype": "property",
             "name": "url",
             "type": "String",
@@ -778,15 +823,15 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 40,
+            "line": 52,
             "description": "Find resource(s) using an id or a using a query `{id: '', query: {}}`",
             "itemtype": "method",
             "name": "find",
             "params": [
                 {
                     "name": "options",
-                    "description": "use a string for a single id or an object",
-                    "type": "Object|String"
+                    "description": "use a string for a single id or an object.",
+                    "type": "Object|String|Number"
                 }
             ],
             "return": {
@@ -799,7 +844,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 61,
+            "line": 82,
             "description": "Find a resource by id, optionally pass a query object, e.g. w/ filter param(s)\n\nUses a url like: /photos/1",
             "itemtype": "method",
             "name": "findOne",
@@ -825,13 +870,13 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 77,
+            "line": 98,
             "description": "Find resources using an optional query object, e.g. w/ pagination params",
             "itemtype": "method",
             "name": "findQuery",
             "params": [
                 {
-                    "name": "query",
+                    "name": "options",
                     "description": "",
                     "type": "Object"
                 }
@@ -846,7 +891,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 91,
+            "line": 112,
             "description": "Find resources by relationship or use a specificed (optional) service to find relation\n\nA Url like: /photos/1/relationships/photographer is a required param\n\n```js\nservice.findRelated('photographer', '/api/v1/photos/1/relationships/photographer');\n```\n\nOr, with option to find releated resource using a different service\n\n```js\nservice.findRelated({resource: 'photographer', type: 'people'}, url);\n```",
             "itemtype": "method",
             "name": "findRelated",
@@ -884,7 +929,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 126,
+            "line": 146,
             "description": "Create a new resource, sends a POST request, updates resource instance\nwith persisted data, and updates cache with persisted resource",
             "itemtype": "method",
             "name": "createResource",
@@ -905,7 +950,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 153,
+            "line": 180,
             "description": "Patch an existing resource, sends a PATCH request.",
             "itemtype": "method",
             "name": "updateResource",
@@ -926,7 +971,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 173,
+            "line": 200,
             "description": "Delete an existing resource, sends a DELETE request",
             "itemtype": "method",
             "name": "deleteResource",
@@ -947,7 +992,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 192,
+            "line": 219,
             "description": "Create (add) a relationship for `to-many` relation, sends a POST request.\n\nSee: <http://jsonapi.org/format/#crud-updating-to-many-relationships>\n\nAdds a relation using a payload with a resource identifier object:\n\n```\n{\n  \"data\": [\n    { \"type\": \"comments\", \"id\": \"12\" }\n  ]\n}\n```",
             "itemtype": "method",
             "name": "createRelationship",
@@ -978,7 +1023,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 220,
+            "line": 247,
             "description": "Patch a relationship, either adds or removes everyting, sends a PATCH request.\n\nSee: <http://jsonapi.org/format/#crud-updating-to-one-relationships>\n\nFor `to-one` relation:\n\n- Remove (delete) with payload: `{ \"data\": null }`\n- Create/Update with payload:\n  ```\n  {\n    \"data\": { \"type\": \"comments\", \"id\": \"1\" }\n  }\n  ```\n\nFor `to-many` relation:\n\n- Remove (delete) all with payload: `{ \"data\": [] }`\n- Replace all with payload:\n  ```\n  {\n    \"data\": [\n      { \"type\": \"comments\", \"id\": \"1\" },\n      { \"type\": \"comments\", \"id\": \"2\" }\n    ]\n  }\n  ```",
             "itemtype": "method",
             "name": "patchRelationship",
@@ -1004,7 +1049,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 262,
+            "line": 287,
             "description": "Deletes a relationship for `to-many` relation, sends a DELETE request.\n\nSee: <http://jsonapi.org/format/#crud-updating-to-many-relationships>\n\nRemove using a payload with the resource identifier object:\n\nFor `to-many`:\n\n```\n{\n  \"data\": [\n    { \"type\": \"comments\", \"id\": \"1\" }\n  ]\n}\n```",
             "itemtype": "method",
             "name": "deleteRelationship",
@@ -1035,7 +1080,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 292,
+            "line": 317,
             "itemtype": "method",
             "name": "_urlForRelationship",
             "access": "private",
@@ -1062,7 +1107,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 304,
+            "line": 330,
             "itemtype": "method",
             "name": "_payloadForRelationship",
             "access": "private",
@@ -1080,7 +1125,7 @@
                 },
                 {
                     "name": "id",
-                    "description": "the id for the related resource",
+                    "description": "the id for the related resource or undefined current relationship data",
                     "type": "String"
                 }
             ],
@@ -1094,7 +1139,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 318,
+            "line": 347,
             "description": "Fetches data using Fetch API or XMLHttpRequest",
             "itemtype": "method",
             "name": "fetch",
@@ -1112,7 +1157,7 @@
             ],
             "return": {
                 "description": "",
-                "type": "Ember.RSVP.Promise"
+                "type": "Promise"
             },
             "class": "ApplicationAdapter",
             "module": "ember-jsonapi-resources",
@@ -1120,7 +1165,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 336,
+            "line": 365,
             "description": "Hook to customize the URL, e.g. if your API is behind a proxy and you need\nto swap a portion of the domain to make a request on the same domain.",
             "itemtype": "method",
             "name": "fetchUrl",
@@ -1141,7 +1186,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 348,
+            "line": 377,
             "description": "Adds params and headers or Fetch request.\n\n- The HTTP Header is set for Content-Type: application/vnd.api+json\n- Sets Authorization header if accessible in the `authorizationCredential` property",
             "itemtype": "method",
             "name": "fetchOptions",
@@ -1162,7 +1207,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 370,
+            "line": 399,
             "description": "Sets Authorization header if accessible in the `authorizationCredential` property",
             "itemtype": "method",
             "name": "fetchAuthorizationHeader",
@@ -1179,7 +1224,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 387,
+            "line": 416,
             "description": "Authentication credentials/token used with HTTP authentication\nThis property should be added by an Authorization Mixin",
             "itemtype": "property",
             "name": "authorizationCredential",
@@ -1190,7 +1235,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 396,
+            "line": 425,
             "description": "The name of the Authorization request-header field\nThis property should be added by an Authorization Mixin",
             "itemtype": "property",
             "name": "authorizationHeaderField",
@@ -1201,7 +1246,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 405,
+            "line": 434,
             "description": "Noop as a hook for defining how deserialized resource objects are cached,\ne.g. in memory",
             "itemtype": "method",
             "name": "cacheResource",
@@ -1218,7 +1263,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 414,
+            "line": 443,
             "description": "Noop as a hook for defining how to handle cache after updating a resource",
             "itemtype": "method",
             "name": "cacheUpdate",
@@ -1235,7 +1280,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 422,
+            "line": 451,
             "description": "Noop as a hook to remove a resource from cached data",
             "itemtype": "method",
             "name": "cacheRemove",
@@ -1334,7 +1379,7 @@
         },
         {
             "file": "addon/mixins/fetch.js",
-            "line": 16,
+            "line": 17,
             "description": "Flag indicates whether to use window.fetch or not, computed from `useAjax`",
             "itemtype": "property",
             "name": "useFetch",
@@ -1345,7 +1390,7 @@
         },
         {
             "file": "addon/mixins/fetch.js",
-            "line": 27,
+            "line": 28,
             "description": "Flag to use $.ajax instead of window.fetch",
             "itemtype": "property",
             "name": "useAjax",
@@ -1356,7 +1401,7 @@
         },
         {
             "file": "addon/mixins/fetch.js",
-            "line": 35,
+            "line": 36,
             "description": "Makes a fetch request via Fetch API (may use polyfill)\n\nSee http://updates.html5rocks.com/2015/03/introduction-to-fetch",
             "access": "private",
             "tagname": "",
@@ -1381,7 +1426,7 @@
             ],
             "return": {
                 "description": "",
-                "type": "Ember.RSVP.Promise"
+                "type": "Promise"
             },
             "class": "FetchMixin",
             "module": "ember-jsonapi-resources",
@@ -1389,7 +1434,7 @@
         },
         {
             "file": "addon/mixins/fetch.js",
-            "line": 65,
+            "line": 66,
             "description": "Fetch server error handler ~ status >= 500",
             "itemtype": "method",
             "name": "fetchServerErrorHandler",
@@ -1411,7 +1456,7 @@
         },
         {
             "file": "addon/mixins/fetch.js",
-            "line": 80,
+            "line": 81,
             "description": "Fetch client error handler ~ status >= 400",
             "itemtype": "method",
             "name": "fetchClientErrorHandler",
@@ -1433,7 +1478,7 @@
         },
         {
             "file": "addon/mixins/fetch.js",
-            "line": 95,
+            "line": 96,
             "description": "Fetch generic error handler",
             "itemtype": "method",
             "name": "fetchErrorHandler",
@@ -1455,7 +1500,7 @@
         },
         {
             "file": "addon/mixins/fetch.js",
-            "line": 117,
+            "line": 118,
             "description": "Fetch 204 No Content handler",
             "itemtype": "method",
             "name": "fetchNoContentHandler",
@@ -1477,7 +1522,7 @@
         },
         {
             "file": "addon/mixins/fetch.js",
-            "line": 130,
+            "line": 131,
             "description": "Fetch 20x Success handler",
             "itemtype": "method",
             "name": "fetchSuccessHandler",
@@ -1504,7 +1549,7 @@
         },
         {
             "file": "addon/mixins/fetch.js",
-            "line": 153,
+            "line": 156,
             "description": "Makes an XHR request via $.ajax",
             "access": "private",
             "tagname": "",
@@ -1529,7 +1574,7 @@
             ],
             "return": {
                 "description": "",
-                "type": "Ember.RSVP.Promise"
+                "type": "Promise"
             },
             "requires": [
                 "jQuery"
@@ -1540,7 +1585,7 @@
         },
         {
             "file": "addon/mixins/fetch.js",
-            "line": 174,
+            "line": 177,
             "itemtype": "method",
             "name": "ajaxFailHandler",
             "params": [
@@ -1560,7 +1605,7 @@
         },
         {
             "file": "addon/mixins/fetch.js",
-            "line": 197,
+            "line": 200,
             "itemtype": "method",
             "name": "ajaxDoneHandler",
             "params": [
@@ -1585,7 +1630,7 @@
         },
         {
             "file": "addon/mixins/fetch.js",
-            "line": 219,
+            "line": 222,
             "description": "Ajax server error handler ~ status >= 500",
             "itemtype": "method",
             "name": "ajaxServerErrorHandler",
@@ -1617,7 +1662,7 @@
         },
         {
             "file": "addon/mixins/fetch.js",
-            "line": 234,
+            "line": 237,
             "description": "Ajax client error handler ~ status >= 400",
             "itemtype": "method",
             "name": "ajaxClientErrorHandler",
@@ -1649,7 +1694,7 @@
         },
         {
             "file": "addon/mixins/fetch.js",
-            "line": 249,
+            "line": 252,
             "description": "Ajax Generic error handler",
             "itemtype": "method",
             "name": "ajaxErrorHandler",
@@ -1681,7 +1726,7 @@
         },
         {
             "file": "addon/mixins/fetch.js",
-            "line": 264,
+            "line": 267,
             "description": "Ajax 204 No Content handler",
             "itemtype": "method",
             "name": "ajaxNoContentHandler",
@@ -1713,7 +1758,7 @@
         },
         {
             "file": "addon/mixins/fetch.js",
-            "line": 277,
+            "line": 280,
             "description": "Ajax 20x Success handler",
             "itemtype": "method",
             "name": "ajaxSuccessHandler",
@@ -1750,7 +1795,7 @@
         },
         {
             "file": "addon/mixins/fetch.js",
-            "line": 301,
+            "line": 308,
             "access": "private",
             "tagname": "",
             "itemtype": "method",
@@ -2198,7 +2243,7 @@
         {
             "file": "addon/models/resource.js",
             "line": 105,
-            "description": "Flag for new instance, e.g. not peristed",
+            "description": "Flag for new instance, e.g. not persisted",
             "itemtype": "property",
             "name": "isNew",
             "type": "Boolean",
@@ -2305,7 +2350,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 215,
+            "line": 219,
             "description": "Removes resource identifier object of the relationship data. Also, sets the\n`content` of the related (computed property's) proxy object to `null`.\n\n- For has-one relations the (resource linkage) data is set to `null`.\n- For has-many relations the resource identifier object is removed from\n  the resource Linkage `data` array.\n\nSee:\n- http://jsonapi.org/format/#document-resource-object-linkage\n- http://jsonapi.org/format/#document-resource-identifier-objects",
             "itemtype": "method",
             "name": "removeRelationship",
@@ -2327,7 +2372,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 251,
+            "line": 257,
             "itemtype": "method",
             "name": "changedAttributes",
             "return": {
@@ -2340,7 +2385,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 269,
+            "line": 275,
             "itemtype": "method",
             "name": "previousAttributes",
             "return": {
@@ -2353,7 +2398,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 287,
+            "line": 293,
             "description": "Revert to previous attributes",
             "itemtype": "method",
             "name": "rollback",
@@ -2363,7 +2408,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 303,
+            "line": 309,
             "description": "Reset tracked changed/previous attrs",
             "access": "private",
             "tagname": "",
@@ -2375,7 +2420,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 317,
+            "line": 323,
             "description": "Sets all payload properties on the resource and resets private _attributes\nused for changed/previous tracking",
             "itemtype": "method",
             "name": "didUpdateResource",
@@ -2392,7 +2437,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 330,
+            "line": 336,
             "description": "Sets the relationships data, used after the promise proxy resolves by\nhasOne and hasMany helpers",
             "itemtype": "method",
             "name": "didResolveProxyRelation",
@@ -2419,7 +2464,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 360,
+            "line": 366,
             "description": "A local cache duration, to minimize duplicate fetch requests",
             "itemtype": "property",
             "name": "cacheDuration",
@@ -2430,7 +2475,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 368,
+            "line": 374,
             "itemtype": "property",
             "name": "isCacheExpired",
             "type": "Boolean",
@@ -2440,7 +2485,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 380,
+            "line": 386,
             "description": "To protect the JSON API Resource properties for attributes, links and\nrelationships these objects are setup during create(). This has to be\ndefined since the attr() helper needs to have new objects for each instance,\nto project from keeping a reference on the prototype.\n\nThe create method should only be called after looking up a factory from the\ncontainer, for example in a route's model hook:\n\n```\nmodel() {\n  let owner = (typeof Ember.getOwner === 'function') ? Ember.getOwner(this) : this.container;\n  return owner.lookup('model:post').create({\n    attributes: {\n      title: 'The JSON API 1.0 Spec Rocks!'\n    }\n  });\n}\n```\n\nThe create method uses the container to lookup the factory's prototype and\nfind the computed properties used for relations to setup the relationships\nfor the Resource instance you create. Calling Resource#create without using\nthe factory lookup will result in an instance without a reference to the\napplication's container and you will have to manually setup the relationships\nobject prior to adding a relationship.",
             "itemtype": "method",
             "name": "create",
@@ -3110,7 +3155,7 @@
         },
         {
             "file": "addon/utils/related-proxy.js",
-            "line": 19,
+            "line": 20,
             "description": "Checks for required `relationship` property",
             "itemtype": "method",
             "name": "init",
@@ -3120,7 +3165,7 @@
         },
         {
             "file": "addon/utils/related-proxy.js",
-            "line": 32,
+            "line": 33,
             "description": "The name of the relationship",
             "itemtype": "property",
             "name": "resource",
@@ -3132,7 +3177,7 @@
         },
         {
             "file": "addon/utils/related-proxy.js",
-            "line": 41,
+            "line": 42,
             "description": "The name of the type of resource",
             "itemtype": "property",
             "name": "type",
@@ -3144,7 +3189,7 @@
         },
         {
             "file": "addon/utils/related-proxy.js",
-            "line": 50,
+            "line": 51,
             "description": "Proxy for the requested relation, resolves w/ content from fulfilled promise",
             "itemtype": "method",
             "name": "createProxy",
@@ -3170,7 +3215,7 @@
         },
         {
             "file": "addon/utils/related-proxy.js",
-            "line": 75,
+            "line": 76,
             "itemtype": "method",
             "name": "proxySetup",
             "params": [
@@ -3200,7 +3245,7 @@
         },
         {
             "file": "addon/utils/related-proxy.js",
-            "line": 96,
+            "line": 97,
             "itemtype": "method",
             "name": "proxyResolution",
             "params": [
@@ -3220,7 +3265,7 @@
         },
         {
             "file": "addon/utils/related-proxy.js",
-            "line": 118,
+            "line": 119,
             "description": "Proxy url to fetch for the resource's relation",
             "itemtype": "method",
             "name": "proxyUrl",
@@ -3246,7 +3291,7 @@
         },
         {
             "file": "addon/utils/related-proxy.js",
-            "line": 135,
+            "line": 136,
             "description": "Lookup relation from service cache and pomisify result",
             "itemtype": "method",
             "name": "promiseFromCache",
@@ -3277,7 +3322,7 @@
         },
         {
             "file": "addon/utils/related-proxy.js",
-            "line": 163,
+            "line": 164,
             "description": "Lookup data in service cache",
             "itemtype": "method",
             "name": "serviceCacheLookup",
@@ -3303,7 +3348,7 @@
         },
         {
             "file": "addon/utils/related-proxy.js",
-            "line": 178,
+            "line": 179,
             "itemtype": "method",
             "name": "linksPath",
             "params": [

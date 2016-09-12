@@ -38,6 +38,7 @@
                 
                         <div id="api-tabview-panel">
                             <ul id="api-classes" class="apis classes">
+                                <li><a href="../classes/AdapterApiHostProxyMixin.html">AdapterApiHostProxyMixin</a></li>
                                 <li><a href="../classes/ApplicationAdapter.html">ApplicationAdapter</a></li>
                                 <li><a href="../classes/ApplicationSerializer.html">ApplicationSerializer</a></li>
                                 <li><a href="../classes/AuthorizationMixin.html">AuthorizationMixin</a></li>
@@ -58,6 +59,7 @@
                 
                 
                             <ul id="api-modules" class="apis modules">
+                                <li><a href="../modules/adapter-api-host-proxy-mixin.html">adapter-api-host-proxy-mixin</a></li>
                                 <li><a href="../modules/adapters.html">adapters</a></li>
                                 <li><a href="../modules/authorization.html">authorization</a></li>
                                 <li><a href="../modules/cache.html">cache</a></li>
@@ -112,6 +114,7 @@
   @submodule fetch
 **/
 import Ember from &#x27;ember&#x27;;
+import RSVP from &#x27;rsvp&#x27;;
 import { ServerError, ClientError, FetchError } from &#x27;ember-jsonapi-resources/utils/errors&#x27;;
 
 /**
@@ -151,10 +154,10 @@ export default Ember.Mixin.create({
     @param {String} url
     @param {Object} options - May include a query object or an update flag
     @param {Boolean} isUpdate
-    @return {Ember.RSVP.Promise}
+    @return {Promise}
   */
   _fetch(url, options, isUpdate) {
-    return new Ember.RSVP.Promise(function(resolve, reject) {
+    return new RSVP.Promise(function(resolve, reject) {
       window.fetch(url, options).then(function(response) {
         if (response.status &gt;= 500) {
           this.fetchServerErrorHandler(response, reject);
@@ -246,7 +249,9 @@ export default Ember.Mixin.create({
   */
   fetchSuccessHandler(response, resolve, isUpdate) {
     return response.json().then(function(json) {
-      if (isUpdate) {
+      if (json.data === null) {
+        resolve(null);
+      } else if (isUpdate) {
         json.data = this.serializer.transformAttributes(json.data);
         this.cacheUpdate({ meta: json.meta, data: json.data, headers: response.headers });
         resolve(json.data);
@@ -267,13 +272,13 @@ export default Ember.Mixin.create({
     @param {String} url
     @param {Object} options - may include a query object or an update flag
     @param {Boolean} isUpdate
-    @return {Ember.RSVP.Promise}
+    @return {Promise}
     @requires jQuery
   */
   _ajax(url, options, isUpdate) {
     options.data = options.body;
     delete options.body;
-    return new Ember.RSVP.Promise(function(resolve, reject) {
+    return new RSVP.Promise(function(resolve, reject) {
       Ember.$.ajax(url, options)
         .done(this.ajaxDoneHandler(resolve, isUpdate))
         .fail(this.ajaxFailHandler(reject));
@@ -394,6 +399,10 @@ export default Ember.Mixin.create({
     @param {Boolean} isUpdate - Used with patch to update a resource
   */
   ajaxSuccessHandler(json, textStatus, jqXHR, resolve, isUpdate) {
+    if (json.data === null) {
+      resolve(null);
+      return;
+    }
     let headers = this._getAjaxHeaders(jqXHR);
     if (isUpdate) {
       json.data = this.serializer.transformAttributes(json.data);
