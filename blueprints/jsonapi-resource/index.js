@@ -57,17 +57,21 @@ module.exports = {
     var modelOptions = merge({}, options, {
       entity: {
         name: entityName ? inflection.singularize(entityName) : ''
-      }
+      },
+      originBlueprintName: 'jsonapi-model'
     });
 
     var otherOptions = merge({}, options);
-
-    return Promise.all([
+    var promises = [
       this._processBlueprint(type, 'jsonapi-model', modelOptions),
       this._processBlueprint(type, 'jsonapi-adapter', otherOptions),
       this._processBlueprint(type, 'jsonapi-serializer', otherOptions),
       this._processBlueprint(type, 'jsonapi-service', otherOptions),
       this._processBlueprint(type, 'jsonapi-initializer', otherOptions)
-    ]);
+    ];
+    if (!!options.project.pkg['ember-addon']) {
+      promies.push( this._processBlueprint(type, 'addon-import', modelOptions) );
+    }
+    return Promise.all(promises);
   }
 };

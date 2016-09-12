@@ -47,6 +47,7 @@ To run the app in /tests/dummy use a proxy url for a live API
 * `ember test --server`
 * `ember test --server -m 'Unit | Mixin | service cache'`
 * `ember test --server --filter 'cacheUpdate'`
+* `npm run nodetest` tests for blueprint, e.g. `jsonapi-resource`
 
 A good way to get to know more about how this addon works is to review the tests,
 see source code for the unit tests: [tests/unit](tests/unit).

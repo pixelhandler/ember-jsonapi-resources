@@ -2,14 +2,14 @@ import Ember from 'ember';
 import Resource from 'ember-jsonapi-resources/models/resource';
 import { attr, hasOne, hasMany } from 'ember-jsonapi-resources/models/resource';
 
-let <%= classifiedModuleName %> = Resource.extend({
+let <%= classifiedModuleName %>Model = Resource.extend({
   type: '<%= resource %>',
   service: Ember.inject.service('<%= resource %>'),
 
   <%= attrs %>
 });
 
-<%= classifiedModuleName %>.reopenClass({
+<%= classifiedModuleName %>Model.reopenClass({
 
   getDefaults() {
     return {
@@ -18,4 +18,4 @@ let <%= classifiedModuleName %> = Resource.extend({
   }
 });
 
-export default <%= classifiedModuleName %>;
+export default <%= classifiedModuleName %>Model;
