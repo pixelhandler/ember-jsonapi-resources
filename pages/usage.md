@@ -13,7 +13,6 @@ To consume this addon in an Ember CLI application:
 Remove dependency for Ember Data in your ember-cli app:
 
     npm rm ember-data --save-dev
-    bower uninstall ember-data --save
 
 Remove ember-data from both bower.json and package.json then:
 

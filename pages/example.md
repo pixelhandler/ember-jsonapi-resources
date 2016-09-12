@@ -14,7 +14,9 @@ ember-jsonapi-resources.
 - [post detail template](https://github.com/pixelhandler/ember-jsonapi-resources/tree/master/tests/dummy/app/templates/post/detail.hbs)
 - [post comments template](https://github.com/pixelhandler/ember-jsonapi-resources/tree/master/tests/dummy/app/templates/post/comments.hbs)
 
-See the commit history on this repo, [jr-test], a manual test of using this library
-in a new Ember CLI app generated with `ember new jr-test`
+See the commit history on this repo, [blog-admin], a manual test of using this library
+in a new Ember CLI app generated with `ember new blog-admin`
 
-[jr-test]: https://github.com/pixelhandler/jr-test
+The [blog-admin] app is used as a manual test for the ember-jsonapi-resources addon.
+
+[blog-admin]: https://github.com/pixelhandler/blog-admin

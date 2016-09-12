@@ -24,7 +24,8 @@ headers; or by whatever means the developer chooses.
 
 ## Status
 
-This addon has a 1.0.0 release.
+This addon's current release is 1.4.x. The Travis build suports Ember
+versions from 1.13.x though the current release, 2.8.x
 
 
 ## Requirements
