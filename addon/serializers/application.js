@@ -102,6 +102,65 @@ export default Ember.Object.extend({
   },
 
   /**
+    @method serializeRelationships
+    @param {Resource} resource with relationships to serialize
+    @param {Array} relationships list of {String} relationship properties
+    @return {Object} the serialized `relationship` node for the JSON payload
+  */
+  serializeRelationships(resource, relationships) {
+    if (!relationships || relationships.length === 0) {
+      return null;
+    }
+    let relations = Object.keys(resource.get('relationships'));
+    relations = this._intersection(relations, relationships);
+    relationships = {};
+    relations.forEach((relationship) => {
+      relationships[relationship] = this.serializeRelationship(resource, relationship);
+    });
+    return relationships;
+  },
+
+  /**
+    @method serializeRelationship
+    @param {Resource} resource instance, has URLs via it's relationships property
+    @param {String} relationship name (plural) to find the url from the resource instance
+    @param {String|undefined} id (optional) of the related resource
+    @return {Object} payload
+  */
+  serializeRelationship(resource, relationship, id) {
+    resource = resource.get('content') || resource;
+    // The actual resource type of this relationship is found in related-proxy's meta.
+    let meta = resource.relationMetadata(relationship);
+    let data = resource.get(['relationships', meta.relation, 'data'].join('.'));
+    if (id === undefined) {
+      return { data: data };
+    }
+    let resourceObject = { type: pluralize(meta.type), id: id.toString() };
+    return { data: (Array.isArray(data)) ? [resourceObject] : resourceObject };
+  },
+
+  /**
+    @private
+    @method _intersection
+    @param {Array} first
+    @param {Array} second
+    @return {Array}
+  */
+  _intersection(first, second) {
+    if (!Array.isArray(first) || !Array.isArray(second)) {
+      return [];
+    }
+    if (second.length > first.length) {
+      let tmp = second;
+      second = first;
+      first = tmp;
+    }
+    return first.filter( (item) => {
+      return (second.indexOf(item) !== -1);
+    });
+  },
+
+  /**
     Deserialize response objects from the request payload
 
     @method deserialize

@@ -182,14 +182,21 @@ export default Ember.Object.extend(FetchMixin, Evented, {
 
     @method updateResource
     @param {Resource} resource instance to serialize the changed attributes
+    @param {Array} includeRelationships (optional) list of {String} relationships
+      to opt-into an update
     @return {Promise} resolves with PATCH response or `null` if nothing to update
   */
-  updateResource(resource) {
+  updateResource(resource, includeRelationships = false) {
     let url = resource.get('links.self') || this.get('url') + '/' + resource.get('id');
-    const json = this.serializer.serializeChanged(resource);
-    if (!json) {
+    let json = this.serializer.serializeChanged(resource);
+    let relationships = this.serializer.serializeRelationships(resource, includeRelationships);
+    if ((includeRelationships &&
+          ((!json && !relationships) || (!json && relationships.length === 0))) ||
+        (!includeRelationships && !json)) {
       return RSVP.Promise.resolve(null);
     }
+    json = json || { data: { id: resource.get('id'), type: resource.get('type') } };
+    json.data.relationships = relationships;
     return this.fetch(url, {
       method: 'PATCH',
       body: JSON.stringify(json),
@@ -240,7 +247,7 @@ export default Ember.Object.extend(FetchMixin, Evented, {
   createRelationship(resource, relationship, id) {
     return this.fetch(this._urlForRelationship(resource, relationship), {
       method: 'POST',
-      body: JSON.stringify(this._payloadForRelationship(resource, relationship, id))
+      body: JSON.stringify(this.serializer.serializeRelationship(resource, relationship, id))
     });
   },
 
@@ -280,7 +287,7 @@ export default Ember.Object.extend(FetchMixin, Evented, {
   patchRelationship(resource, relationship) {
     return this.fetch(this._urlForRelationship(resource, relationship), {
       method: 'PATCH',
-      body: JSON.stringify(this._payloadForRelationship(resource, relationship))
+      body: JSON.stringify(this.serializer.serializeRelationship(resource, relationship))
     });
   },
 
@@ -310,7 +317,7 @@ export default Ember.Object.extend(FetchMixin, Evented, {
   deleteRelationship(resource, relationship, id) {
     return this.fetch(this._urlForRelationship(resource, relationship), {
       method: 'DELETE',
-      body: JSON.stringify(this._payloadForRelationship(resource, relationship, id))
+      body: JSON.stringify(this.serializer.serializeRelationship(resource, relationship, id))
     });
   },
 
@@ -322,26 +329,9 @@ export default Ember.Object.extend(FetchMixin, Evented, {
     @return {String} url
   */
   _urlForRelationship(resource, relationship) {
-    let meta = resource.constructor.metaForProperty(relationship);
+    let meta = resource.relationMetadata(relationship);
     let url  = resource.get(['relationships', meta.relation, 'links', 'self'].join('.'));
     return url || [this.get('url'), resource.get('id'), 'relationships', relationship].join('/');
-  },
-
-  /**
-    @method _payloadForRelationship
-    @private
-    @param {Resource} resource instance, has URLs via it's relationships property
-    @param {String} relationship name (plural) to find the url from the resource instance
-    @param {String} id the id for the related resource or undefined current relationship data
-    @return {Object} payload
-  */
-  _payloadForRelationship(resource, relationship, id) {
-    // actual resource type of this relationship is found in related-proxy's meta.
-    let meta  = resource.constructor.metaForProperty(relationship);
-    let data  = resource.get(['relationships', meta.relation, 'data'].join('.'));
-    if (id === undefined) { return {data: data}; }
-    let resourceObject = { type: pluralize(meta.type), id: id.toString() };
-    return { data: (Array.isArray(data)) ? [resourceObject] : resourceObject };
   },
 
   /**

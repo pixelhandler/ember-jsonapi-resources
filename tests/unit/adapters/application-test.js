@@ -349,7 +349,7 @@ test('#updateResource', function(assert) {
       }
     }
   };
-  adapter.serializer = { serializeChanged: function () { return payload; } };
+  adapter.serializer = mockSerializer({ changed: payload });
   sandbox.stub(adapter, 'fetch', function () { return RSVP.Promise.resolve(null); });
   let resource = this.container.lookup('model:post').create(postMock.data);
   let promise = adapter.updateResource(resource);
@@ -372,7 +372,7 @@ test('when serializer returns null (nothing changed) #updateResource return prom
   const done = assert.async();
 
   let adapter = this.subject({type: 'posts', url: '/posts'});
-  adapter.serializer = { serializeChanged: function () { return null; } };
+  adapter.serializer = mockSerializer();
   sandbox.stub(adapter, 'fetch', function () { return RSVP.Promise.resolve(null); });
   let resource = this.container.lookup('model:post').create(postMock.data);
   let promise = adapter.updateResource(resource);
@@ -388,16 +388,17 @@ test('when serializer returns null (nothing changed) #updateResource return prom
 test('#createRelationship (to-many)', function(assert) {
   assert.expect(2);
   const done = assert.async();
-
   mockServices.call(this);
   let adapter = this.subject({type: 'posts', url: '/posts'});
+  let payload = {data: [{type: 'comments', id: '1'}]};
+  adapter.serializer = mockSerializer({ relationship: payload });
   sandbox.stub(adapter, 'fetch', function () { return RSVP.Promise.resolve(null); });
   let resource = this.container.lookup('model:post').create(postMock.data);
   let promise = adapter.createRelationship(resource, 'comments', '1');
 
   assert.ok(typeof promise.then === 'function', 'returns a thenable');
   promise.then(() => {
-    let jsonBody = JSON.stringify({data: [{type: 'comments', id: '1'}]});
+    let jsonBody = JSON.stringify(payload);
     assert.ok(
       adapter.fetch.calledWith(
         postMock.data.relationships.comments.links.self,
@@ -413,11 +414,13 @@ test('#createRelationship (to-one)', function(assert) {
   assert.expect(2);
   const done = assert.async();
 
-  const adapter = this.subject({type: 'posts', url: '/posts'});
+  let adapter = this.subject({type: 'posts', url: '/posts'});
+  adapter.serializer = mockSerializer();
   mockServices.call(this);
   sandbox.stub(adapter, 'fetch', function () { return RSVP.Promise.resolve(null); });
   let resource = this.container.lookup('model:post').create(postMock.data);
   let promise = adapter.createRelationship(resource, 'author', '1');
+  debugger;
 
   assert.ok(typeof promise.then === 'function', 'returns a thenable');
   promise.then(() => {
@@ -801,10 +804,7 @@ test('#cacheUpdate called after #updateResource success', function(assert) {
       }
     }
   };
-  adapter.serializer = {
-    serializeChanged: function () { return payload; },
-    transformAttributes: function(json) { return json; }
-  };
+  adapter.serializer = mockSerializer({ changed: payload });
   let resource = this.container.lookup('model:post').create(postMock.data);
   let promise = adapter.updateResource(resource);
 
@@ -1006,3 +1006,15 @@ test('re-opening AuthorizationMixin can customize the settings for Authorization
   });
   assert.equal(adapter.get('authorizationCredential'), 'Bearer SecretToken');
 });
+
+function mockSerializer(mock = {}) {
+  mock.changed = mock.changed || null;
+  mock.relationships = mock.relationships || {};
+  mock.relationship = mock.relationship || null;
+  return {
+    serializeChanged: function () { return mock.changed; },
+    serializeRelationships: function () { return mock.relationships; },
+    serializeRelationship: function () { return mock.relationship; },
+    transformAttributes: function(json) { return json; }
+  };
+}
