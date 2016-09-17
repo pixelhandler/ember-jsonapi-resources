@@ -249,8 +249,8 @@ const Resource = Ember.Object.extend(ResourceOperationsMixin, {
       ref.changed = identity;
       ref.previous = ref.previous || last;
     } else if (meta && meta.kind === 'hasMany') {
-      ref.added = ref.added || [];
-      ref.removals = ref.removals || [];
+      ref.added = ref.added || Ember.A([]);
+      ref.removals = ref.removals || Ember.A([]);
       let id = identity.id;
       if (ref.removals.findBy('id', id)) {
         ref.removals = ref.removals.rejectBy('id', id);
@@ -318,13 +318,13 @@ const Resource = Ember.Object.extend(ResourceOperationsMixin, {
       // TODO can previous be falsy, ok to be null but not undefined ?
       ref.previous = ref.previous || this.get('relationships.' + relation);
     } else if (meta.kind === 'hasMany') {
-      ref.added = ref.added || [];
-      ref.removals = ref.removals || [];
+      ref.added = ref.added || Ember.A([]);
+      ref.removals = ref.removals || Ember.A([]);
       if (ref.added.findBy('id', id)) {
-        ref.added = ref.added.rejectBy('id', id);
+        ref.added = Ember.A(ref.added.rejectBy('id', id));
       }
       if (!ref.removals.findBy('id', id)) {
-        ref.removals.push({type: pluralize(relation), id: id});
+        ref.removals.push({ type: pluralize(relation), id: id });
       }
     }
   },
@@ -436,9 +436,9 @@ const Resource = Ember.Object.extend(ResourceOperationsMixin, {
             this.addRelationship(relation, ref.previous.id);
           }
         } else if (meta && meta.kind === 'hasMany') {
-          ref.added = ref.added || [];
+          ref.added = ref.added || Ember.A([]);
           let added = ref.added.mapBy('id');
-          ref.removals = ref.removals || [];
+          ref.removals = ref.removals || Ember.A([]);
           let removed = ref.removals.mapBy('id');
           added.forEach( (id) => {
             this.removeRelationship(relation, id);

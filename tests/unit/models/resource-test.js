@@ -495,7 +495,7 @@ test('#updateRelationship, from resource-operations mixin', function(assert) {
     return RSVP.Promise.resolve(null);
   });
   let post = this.container.lookup('model:post').create({
-    id: '1', attributes: {title: 'Wyatt Earp', excerpt: 'Was a gambler.'},
+    id: '1', attributes: { title: 'Wyatt Earp', excerpt: 'Was a gambler.' },
     relationships: {
       author: { data: { type: 'authors', id: '2' }, links: { related: 'url-here'} },
       comments: { data: [{ type: 'comments', id: '4' }], links: { related: 'url-here'} }
