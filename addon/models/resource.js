@@ -209,8 +209,7 @@ const Resource = Ember.Object.extend(ResourceOperationsMixin, {
     let owner = (typeof getOwner === 'function') ? getOwner(this) : this.container;
     let resource = owner.lookup(`service:${type}`).cacheLookup(id);
     if (Array.isArray(data)) {
-      let last = data.map(function (ref) { return ref; });
-      this._relationAdded(related, identifier, last);
+      this._relationAdded(related, identifier);
       data.push(identifier);
       if (resource) {
         let resources = this.get(related);
@@ -219,8 +218,8 @@ const Resource = Ember.Object.extend(ResourceOperationsMixin, {
         }
       }
     } else {
-      let last = (data && data.id) ? { type: type, id: data.id } : null;
-      this._relationAdded(related, identifier, last);
+      let previous = (data && data.id) ? { type: type, id: data.id } : null;
+      this._relationAdded(related, identifier, previous);
       data = identifier;
       if (resource) {
         this.set(`${meta.relation}.content`, resource);
@@ -239,22 +238,19 @@ const Resource = Ember.Object.extend(ResourceOperationsMixin, {
     @private
     @method _relationAdded
     @param {String} relation name of a related resource
-    @param {Object} identity a resource identifier object
-    @param {Object|Array} last resource identifier object or array of identifiers
+    @param {Object} identifier, a resource identifier object `{type: String, id: String}`
+    @param {Object|Array} previous, resource identifier object or array of identifiers
   */
-  _relationAdded(relation, identity, last) {
-    let ref = this._relationships[relation] = this._relationships[relation] || {};
+  _relationAdded(relation, identifier, previous) {
     let meta = this.relationMetadata(relation);
+    setupRelationshipTracking.call(this, relation, meta.kind);
+    let ref = this._relationships[relation];
     if (meta && meta.kind === 'hasOne') {
-      ref.changed = identity;
-      ref.previous = ref.previous || last;
+      ref.changed = identifier;
+      ref.previous = ref.previous || previous;
     } else if (meta && meta.kind === 'hasMany') {
-      ref.added = ref.added || Ember.A([]);
-      ref.removals = ref.removals || Ember.A([]);
-      let id = identity.id;
-      if (ref.removals.findBy('id', id)) {
-        ref.removals = ref.removals.rejectBy('id', id);
-      }
+      let id = identifier.id;
+      ref.removals = Ember.A(ref.removals.rejectBy('id', id));
       if (!ref.added.findBy('id', id)) {
         ref.added.push({type: pluralize(relation), id: id});
       }
@@ -313,16 +309,12 @@ const Resource = Ember.Object.extend(ResourceOperationsMixin, {
   _relationRemoved(relation, id) {
     let ref = this._relationships[relation] = this._relationships[relation] || {};
     let meta = this.relationMetadata(relation);
+    setupRelationshipTracking.call(this, relation, meta.kind);
     if (meta.kind === 'hasOne') {
       ref.changed = null;
-      // TODO can previous be falsy, ok to be null but not undefined ?
       ref.previous = ref.previous || this.get('relationships.' + relation);
     } else if (meta.kind === 'hasMany') {
-      ref.added = ref.added || Ember.A([]);
-      ref.removals = ref.removals || Ember.A([]);
-      if (ref.added.findBy('id', id)) {
-        ref.added = Ember.A(ref.added.rejectBy('id', id));
-      }
+      ref.added = Ember.A(ref.added.rejectBy('id', id));
       if (!ref.removals.findBy('id', id)) {
         ref.removals.push({ type: pluralize(relation), id: id });
       }
@@ -436,9 +428,7 @@ const Resource = Ember.Object.extend(ResourceOperationsMixin, {
             this.addRelationship(relation, ref.previous.id);
           }
         } else if (meta && meta.kind === 'hasMany') {
-          ref.added = ref.added || Ember.A([]);
           let added = ref.added.mapBy('id');
-          ref.removals = ref.removals || Ember.A([]);
           let removed = ref.removals.mapBy('id');
           added.forEach( (id) => {
             this.removeRelationship(relation, id);
@@ -629,11 +619,8 @@ function useComputedPropsMetaToSetupRelationships(owner, factory, instance) {
     try {
       let meta = factory.metaForProperty(prop);
       if (meta && meta.kind) {
-        if (meta.kind === 'hasOne') {
-          setupRelationship.call(instance, meta.relation);
-        } else if (meta.kind === 'hasMany') {
-          setupRelationship.call(instance, meta.relation, Ember.A([]));
-        }
+        setupRelationship.call(instance, meta.relation, meta.kind);
+        setupRelationshipTracking.call(instance, meta.relation, meta.kind);
       }
     } catch (e) {
       return; // metaForProperty has an assertion that may throw
@@ -641,15 +628,32 @@ function useComputedPropsMetaToSetupRelationships(owner, factory, instance) {
   });
 }
 
-function setupRelationship(relation, data = null) {
-  if (!this.relationships[relation]) {
-    this.relationships[relation] = { links: {}, data: data };
+function setupRelationship(relation, kind) {
+  let ref = this.relationships[relation];
+  if (!ref) {
+    ref = this.relationships[relation] = { links: {}, data: null };
   }
-  if (!this.relationships[relation].links) {
-    this.relationships[relation].links = {};
+  if (!ref.links) {
+    ref.links = {};
   }
-  if (!this.relationships[relation].data) {
-    this.relationships[relation].data = data;
+  if (!ref.data) {
+    if (kind === 'hasOne') {
+      ref.data = null;
+    } else if (kind === 'hasMany') {
+      ref.data = Ember.A([]);
+    }
+  }
+}
+
+function setupRelationshipTracking(relation, kind) {
+  this._relationships[relation] = this._relationships[relation] || {};
+  let ref = this._relationships[relation];
+  if (kind === 'hasOne') {
+    ref.changed = ref.changed || null;
+    ref.previous = ref.previous || null;
+  } else if (kind === 'hasMany') {
+    ref.added = ref.added || Ember.A([]);
+    ref.removals = ref.removals || Ember.A([]);
   }
 }
 
