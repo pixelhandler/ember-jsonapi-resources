@@ -290,7 +290,7 @@ const Resource = Ember.Object.extend(ResourceOperationsMixin, {
         resources.removeAt(idx);
       }
     } else if (typeof relation === 'object') {
-      if (relation.data[related]) {
+      if (relation.data.type === pluralize(related) && relation.data.id === id) {
         this._relationRemoved(related, id);
       }
       relation.data = null;
@@ -312,11 +312,11 @@ const Resource = Ember.Object.extend(ResourceOperationsMixin, {
     setupRelationshipTracking.call(this, relation, meta.kind);
     if (meta.kind === 'hasOne') {
       ref.changed = null;
-      ref.previous = ref.previous || this.get('relationships.' + relation);
+      ref.previous = ref.previous || this.get('relationships.' + relation).data;
     } else if (meta.kind === 'hasMany') {
       ref.added = Ember.A(ref.added.rejectBy('id', id));
       if (!ref.removals.findBy('id', id)) {
-        ref.removals.push({ type: pluralize(relation), id: id });
+        ref.removals.pushObject({ type: pluralize(relation), id: id });
       }
     }
   },
@@ -368,7 +368,7 @@ const Resource = Ember.Object.extend(ResourceOperationsMixin, {
         return !!ref.previous || (ref.removals && ref.removals.length) ||
           (ref.added && ref.added.length);
       });
-      return relationships;
+      return Ember.A(relationships);
     }
   }).volatile(),
 
