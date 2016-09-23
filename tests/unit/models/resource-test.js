@@ -491,8 +491,8 @@ test('#changedRelationships', function(assert) {
   post.removeRelationships('comments', ['3']);
   let changes = post.get('changedRelationships');
   assert.equal(changes.length, 2, 'two relationships were changed');
-  assert.ok(changes.includes('author'), 'author relationship was changed');
-  assert.ok(changes.includes('comments'), 'comments relationship was changed');
+  assert.ok(changes.indexOf('author') > -1, 'author relationship was changed');
+  assert.ok(changes.indexOf('comments') > -1, 'comments relationship was changed');
 });
 
 test('#didResolveProxyRelation', function(assert) {
