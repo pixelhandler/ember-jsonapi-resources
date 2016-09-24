@@ -31,14 +31,17 @@ test('it creates an instance', function (assert) {
   let resource = this.subject();
   assert.ok(!!resource);
 });
+
 test('creating an instance WITHOUT id has flag for isNew set to true', function(assert) {
   let resource = this.subject();
   assert.equal(resource.get('isNew'), true, 'without id, default value for isNew flag set to `true`');
 });
+
 test('creating an instance WITH id has flag for isNew set to false', function(assert) {
   let resource = this.subject({id: 1});
   assert.equal(resource.get('isNew'), false, 'without id, default value for isNew flag set to `false`');
 });
+
 test('creating an instance allows isNew regardless of id/defaults', function (assert) {
   let notIsNewResource = this.subject({isNew: false});
   let yesIsNewResource = this.subject({id: 1, isNew: true});
@@ -46,11 +49,10 @@ test('creating an instance allows isNew regardless of id/defaults', function (as
   assert.equal(notIsNewResource.get('isNew'), false, 'without id, isNew property is honored');
   assert.equal(yesIsNewResource.get('isNew'), true, 'with id, isNew property is honored');
 });
+
 test('in creating instances, ids are cast to string', function (assert) {
   let id = 1;
-  let post = this.container.lookup('model:post').create({
-    id: id, attributes: {title: 'Wyatt Earp', excerpt: 'Was a gambler.'}
-  });
+  let post = createPost.call(this);
   assert.strictEqual(post.get('id'), id.toString(), 'new instance id cast to string');
 });
 
@@ -106,9 +108,7 @@ test('it needs a reference to an injected service object', function(assert) {
 });
 
 test('attr() uses the attributes hash for computed model attributes', function(assert) {
-  let post = this.container.lookup('model:post').create({
-    id: '1', attributes: {title: 'Wyatt Earp', excerpt: 'Was a gambler.'}
-  });
+  let post = createPost.call(this);
   assert.equal(post.get('title'), 'Wyatt Earp', 'name is set to "Wyatt Earp"');
   assert.equal(post.get('excerpt'), 'Was a gambler.', 'excerpt is set to "Was a gambler."');
 
@@ -141,10 +141,7 @@ test('attr() helper creates a computed property using a unique (protected) attri
 });
 
 test('#changedAttributes', function(assert) {
-  let post = this.container.lookup('model:post').create({
-    id: 1,
-    attributes: {title: 'Wyatt Earp', excerpt: 'Was a gambler.'}
-  });
+  let post = createPost.call(this);
   assert.equal(post.get('excerpt'), 'Was a gambler.', 'excerpt is set "Was a gambler."');
   post.set('excerpt', 'Became a deputy.');
   assert.equal(post.get('excerpt'), 'Became a deputy.', 'excerpt is set to "Became a deputy."');
@@ -155,10 +152,7 @@ test('#changedAttributes', function(assert) {
 });
 
 test('#previousAttributes', function(assert) {
-  let post = this.container.lookup('model:post').create({
-    id: '1',
-    attributes: {title: 'Wyatt Earp', excerpt: 'Was a gambler.'}
-  });
+  let post = createPost.call(this);
   assert.equal(post.get('excerpt'), 'Was a gambler.', 'excerpt is set to "Was a gambler."');
   post.set('excerpt', 'Became a deputy.');
   assert.equal(post.get('excerpt'), 'Became a deputy.', 'excerpt is set to "Became a deputy."');
@@ -168,11 +162,8 @@ test('#previousAttributes', function(assert) {
   assert.equal(previous.excerpt, 'Was a gambler.', 'previous excerpt value is "Was a gambler."');
 });
 
-test('#rollback resets attributes based on #previousAttributes', function(assert) {
-  let post = this.container.lookup('model:post').create({
-    id: '1',
-    attributes: {title: 'Wyatt Earp', excerpt: 'Was a gambler.'}
-  });
+test('#rollbackAttributes resets attributes based on #previousAttributes', function(assert) {
+  let post = createPost.call(this);
   assert.equal(post.get('excerpt'), 'Was a gambler.', 'excerpt is set to "Was a gambler."');
   post.set('excerpt', 'Became a deputy.');
   assert.equal(post.get('excerpt'), 'Became a deputy.', 'excerpt is set to "Became a deputy."');
@@ -180,11 +171,55 @@ test('#rollback resets attributes based on #previousAttributes', function(assert
   assert.equal(previous.excerpt, 'Was a gambler.', 'previous excerpt value is "Was a gambler."');
   assert.equal(Object.keys(previous).length, 1, 'previous attribues have one change tracked');
 
-  post.rollback();
+  post.rollbackAttributes();
 
   previous = post.get('previousAttributes');
   assert.equal(post.get('excerpt'), 'Was a gambler.', 'excerpt is set to "Was a gambler."');
   assert.equal(Object.keys(previous).length, 0, 'previous attribues are empty');
+});
+
+test('#rollbackRelationships resets relationships', function(assert) {
+  let post = createPostWithRelationships.call(this);
+  let ogAuthorId = post.get('relationships.author.data.id');
+  let relationships = post.get('relationships');
+
+  post.addRelationship('author', '5');
+  assert.notEqual(relationships.author.id, ogAuthorId, 'author changed');
+
+  assert.equal(relationships.comments.data.length, 1, 'one comment');
+  post.removeRelationships('comments', ['3']);
+  assert.equal(relationships.comments.data.length, 0, 'no comments');
+
+  let changes = post.get('changedRelationships');
+  assert.equal(changes.length, 2, 'two relationships were changed');
+
+  post.rollbackRelationships();
+
+  changes = post.get('changedRelationships');
+  assert.equal(changes.length, 0, 'zero relationships were changed');
+  relationships = post.get('relationships');
+  assert.equal(relationships.author.data.id, ogAuthorId, 'author rolled back');
+  assert.equal(relationships.comments.data.length, 1, 'one comment');
+  assert.equal(relationships.comments.data[0].id, '3', 'comment rolled back');
+});
+
+test('#rollback resets attributes and relationships', function(assert){
+  let post = createPostWithRelationships.call(this);
+  post.set('excerpt', 'Became a deputy.');
+  let previous = post.get('previousAttributes');
+  assert.equal(Object.keys(previous).length, 1, 'previous attribues have one change tracked');
+
+  post.addRelationship('author', '5');
+  post.removeRelationships('comments', ['3']);
+  let changes = post.get('changedRelationships');
+  assert.equal(changes.length, 2, 'two relationships were changed');
+
+  post.rollback();
+  previous = post.get('previousAttributes');
+  changes = post.get('changedRelationships');
+
+  assert.equal(Object.keys(previous).length, 0, 'attribues rolled back');
+  assert.equal(changes.length, 0, 'relationships rolled back');
 });
 
 test('#didUpdateResource empties the resource _attributes hash when resource id matches json arg id value', function(assert) {
@@ -441,22 +476,6 @@ test('#removeRelationship casts id to string', function (assert) {
                    'comment relationship removed using number as id');
 });
 
-function createPostWithRelationships() {
-  return this.container.lookup('model:post').create({
-    id: '1', attributes: {
-      title: 'Wyatt Earp', excerpt: 'Was a gambler.'
-    },
-    relationships: {
-      author: {
-        data: { type: 'authors', id: '2' }, links: { related: 'url' }
-      },
-      comments: {
-        data: [{ type: 'comments', id: '3' }], links: { related: 'url' }
-      }
-    }
-  });
-}
-
 test('#removeRelationship tracks relationships changes', function(assert) {
   let post = createPostWithRelationships.call(this);
   post.removeRelationship('author', '2');
@@ -611,3 +630,27 @@ test('#updateRelationship, from resource-operations mixin', function(assert) {
   author = post.get('relationships.author.data');
   assert.equal(author, null, 'author removed');
 });
+
+function createPost() {
+  return this.container.lookup('model:post').create({
+    id: '1',
+    attributes: { title: 'Wyatt Earp', excerpt: 'Was a gambler.' }
+  });
+}
+
+function createPostWithRelationships() {
+  return this.container.lookup('model:post').create({
+    id: '1', attributes: {
+      title: 'Wyatt Earp', excerpt: 'Was a gambler.'
+    },
+    relationships: {
+      author: {
+        data: { type: 'authors', id: '2' }, links: { related: 'url' }
+      },
+      comments: {
+        data: [{ type: 'comments', id: '3' }], links: { related: 'url' }
+      }
+    }
+  });
+}
+
