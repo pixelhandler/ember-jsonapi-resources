@@ -94,6 +94,43 @@ test('when #serializedChanged has nothing to return', function(assert) {
   assert.equal(serialized, null, 'null is returned when there are no changed attributes');
 });
 
+test('#serializeRelationship', function(assert) {
+  const serializer = this.subject();
+  mockServices.call(this);
+  let post = createPost.call(this);
+  let json = serializer.serializeRelationship(post, 'author');
+  assert.deepEqual(json, { data: { type: 'authors', id: '2' } }, 'author serialized');
+  json = serializer.serializeRelationship(post, 'comments');
+  assert.deepEqual(json, { data: [{ type: 'comments', id: '3' }] }, 'comments serialized');
+});
+
+test('#serializeRelationships', function(assert) {
+  const serializer = this.subject();
+  mockServices.call(this);
+  let post = createPost.call(this);
+  let json = serializer.serializeRelationships(post, ['author', 'comments']);
+  assert.deepEqual(json, {
+    author: { data: { type: 'authors', id: '2' } },
+    comments: { data: [{ type: 'comments', id: '3' }] }
+  }, 'author and comments relationships serialized');
+});
+
+function createPost() {
+  return this.container.lookup('model:post').create({
+    id: '1', attributes: {
+      title: 'Wyatt Earp', excerpt: 'Was a gambler.'
+    },
+    relationships: {
+      author: {
+        data: { type: 'authors', id: '2' }, links: { related: 'url' }
+      },
+      comments: {
+        data: [{ type: 'comments', id: '3' }], links: { related: 'url' }
+      }
+    }
+  });
+}
+
 test('With data as an object #deserialize calls #deserializeResource', function(assert) {
   const serializer = this.subject();
   sandbox.stub(serializer, 'deserializeResource', function () {});

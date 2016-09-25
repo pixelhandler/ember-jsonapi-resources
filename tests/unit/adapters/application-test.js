@@ -279,9 +279,9 @@ test('#findRelated is called with optional type for the resource', function (ass
   let supervisor = this.container.lookup('model:supervisor').create(supervisorMock.data);
   let employee = this.container.lookup('model:employee').create(employeeMock.data);
 
-  let SupervisorAdapter = Adapter.extend({type: 'supervisors', url: '/supervisors'});
+  let SupervisorAdapter = Adapter.extend({ type: 'supervisors', url: '/supervisors' });
   SupervisorAdapter.reopenClass({isServiceFactory: true});
-  let EmployeeAdapter   = Adapter.extend({type: 'employees', url: '/employees'});
+  let EmployeeAdapter = Adapter.extend({ type: 'employees', url: '/employees' });
   EmployeeAdapter.reopenClass({isServiceFactory: true});
 
   this.registry.register('service:employees', EmployeeAdapter.extend({
@@ -335,11 +335,11 @@ test('#createResource', function(assert) {
   });
 });
 
-test('#updateResource', function(assert) {
+test('#updateResource updates changed attributes', function(assert) {
   assert.expect(3);
   const done = assert.async();
 
-  const adapter = this.subject({type: 'posts', url: '/posts'});
+  const adapter = this.subject({ type: 'posts', url: '/posts' });
   let payload = {
     data: {
       type: postMock.data.type,
@@ -349,7 +349,7 @@ test('#updateResource', function(assert) {
       }
     }
   };
-  adapter.serializer = { serializeChanged: function () { return payload; } };
+  adapter.serializer = mockSerializer({ changed: payload });
   sandbox.stub(adapter, 'fetch', function () { return RSVP.Promise.resolve(null); });
   let resource = this.container.lookup('model:post').create(postMock.data);
   let promise = adapter.updateResource(resource);
@@ -359,9 +359,56 @@ test('#updateResource', function(assert) {
     assert.ok(
       adapter.fetch.calledWith(
         postMock.data.links.self,
-        {method: 'PATCH', body: JSON.stringify(payload), update: true}
+        { method: 'PATCH', body: JSON.stringify(payload), update: true }
       ),
       '#fetch called with url and options with data'
+    );
+    done();
+  });
+});
+
+test('#updateResource updates (optional) relationships', function(assert) {
+  assert.expect(3);
+  const done = assert.async();
+  let adapter = this.subject({ type: 'posts', url: '/posts' });
+  sandbox.stub(adapter, 'fetch', function () { return RSVP.Promise.resolve(null); });
+
+  let author = this.container.lookup('model:comment').create(postMock.included[0]);
+  author.set('id', '2');
+  this.registry.register('service:authors', adapter.constructor.extend({
+    cacheLookup: function () { return author; }
+  }));
+  let comment = this.container.lookup('model:comment').create(postMock.included[1]);
+  comment.set('id', '3');
+  this.registry.register('service:comments', adapter.constructor.extend({
+    cacheLookup: function () { return comment; }
+  }));
+  let payload = {
+    data: {
+      id: '1',
+      type: 'posts',
+      relationships: {
+        author: { data: { type: 'authors', id: '2' } },
+        comments: { data: [{ type: 'comments', id: '3' }] }
+      }
+    }
+  };
+  adapter.serializer = mockSerializer({ relationships: payload.data.relationships });
+
+  let resource = this.container.lookup('model:post').create(postMock.data);
+  resource.addRelationship('author', '2');
+  resource.addRelationship('comments', '3');
+
+  let promise = adapter.updateResource(resource, ['author', 'comments']);
+  assert.ok(typeof promise.then === 'function', 'returns a thenable');
+  promise.then(() => {
+    assert.ok(adapter.fetch.calledOnce, '#fetch method called');
+    assert.ok(
+      adapter.fetch.calledWith(
+        postMock.data.links.self,
+        { method: 'PATCH', body: JSON.stringify(payload), update: true }
+      ),
+      '#fetch called with url and options with relationships data'
     );
     done();
   });
@@ -372,7 +419,7 @@ test('when serializer returns null (nothing changed) #updateResource return prom
   const done = assert.async();
 
   let adapter = this.subject({type: 'posts', url: '/posts'});
-  adapter.serializer = { serializeChanged: function () { return null; } };
+  adapter.serializer = mockSerializer();
   sandbox.stub(adapter, 'fetch', function () { return RSVP.Promise.resolve(null); });
   let resource = this.container.lookup('model:post').create(postMock.data);
   let promise = adapter.updateResource(resource);
@@ -388,16 +435,17 @@ test('when serializer returns null (nothing changed) #updateResource return prom
 test('#createRelationship (to-many)', function(assert) {
   assert.expect(2);
   const done = assert.async();
-
   mockServices.call(this);
   let adapter = this.subject({type: 'posts', url: '/posts'});
+  let payload = {data: [{type: 'comments', id: '1'}]};
+  adapter.serializer = mockSerializer({ relationship: payload });
   sandbox.stub(adapter, 'fetch', function () { return RSVP.Promise.resolve(null); });
   let resource = this.container.lookup('model:post').create(postMock.data);
   let promise = adapter.createRelationship(resource, 'comments', '1');
 
   assert.ok(typeof promise.then === 'function', 'returns a thenable');
   promise.then(() => {
-    let jsonBody = JSON.stringify({data: [{type: 'comments', id: '1'}]});
+    let jsonBody = JSON.stringify(payload);
     assert.ok(
       adapter.fetch.calledWith(
         postMock.data.relationships.comments.links.self,
@@ -413,7 +461,9 @@ test('#createRelationship (to-one)', function(assert) {
   assert.expect(2);
   const done = assert.async();
 
-  const adapter = this.subject({type: 'posts', url: '/posts'});
+  let adapter = this.subject({type: 'posts', url: '/posts'});
+  let mockRelationSerialized = { data: { type: 'authors', id: '1'} };
+  adapter.serializer = mockSerializer({ relationship: mockRelationSerialized });
   mockServices.call(this);
   sandbox.stub(adapter, 'fetch', function () { return RSVP.Promise.resolve(null); });
   let resource = this.container.lookup('model:post').create(postMock.data);
@@ -421,11 +471,10 @@ test('#createRelationship (to-one)', function(assert) {
 
   assert.ok(typeof promise.then === 'function', 'returns a thenable');
   promise.then(() => {
-    let jsonBody = JSON.stringify({data: {type: 'authors', id: '1'}});
     assert.ok(
       adapter.fetch.calledWith(
         postMock.data.relationships.author.links.self,
-        {method: 'POST', body: jsonBody}
+        {method: 'POST', body: JSON.stringify(mockRelationSerialized)}
       ),
       '#fetch called with url and options with data'
     );
@@ -439,17 +488,18 @@ test('#createRelationship uses optional resource type', function (assert) {
 
   mockServices.call(this);
   let adapter = this.subject({type: 'supervisors', url: '/supervisors'});
+  let mockRelationSerialized = { data: [{ type: 'employees', id: '1' }] };
+  adapter.serializer = mockSerializer({ relationship: mockRelationSerialized });
   sandbox.stub(adapter, 'fetch', function () { return RSVP.Promise.resolve(null); });
   let resource = this.container.lookup('model:supervisor').create(supervisorMock.data);
   let promise = adapter.createRelationship(resource, 'directReports', '1');
 
   assert.ok(typeof promise.then === 'function', 'returns a thenable');
   promise.then(() => {
-    let jsonBody = JSON.stringify({data: [{type: 'employees', id: '1'}]});
     assert.ok(
       adapter.fetch.calledWith(
         supervisorMock.data.relationships['direct-reports'].links.self,
-        {method: 'POST', body: jsonBody}
+        { method: 'POST', body: JSON.stringify(mockRelationSerialized) }
       ),
       '#fetch called with url and options with data'
     );
@@ -462,18 +512,19 @@ test('#deleteRelationship (to-many)', function(assert) {
   const done = assert.async();
 
   mockServices.call(this);
-  let adapter = this.subject({type: 'posts', url: '/posts'});
+  let adapter = this.subject({ type: 'posts', url: '/posts' });
+  let mockRelationSerialized = { data: [{ type: 'comments', id: '1' }] };
+  adapter.serializer = mockSerializer({ relationship: mockRelationSerialized });
   sandbox.stub(adapter, 'fetch', function () { return RSVP.Promise.resolve(null); });
   let resource = this.container.lookup('model:post').create(postMock.data);
   let promise = adapter.deleteRelationship(resource, 'comments', '1');
 
   assert.ok(typeof promise.then === 'function', 'returns a thenable');
   promise.then(() => {
-    let jsonBody = JSON.stringify({data: [{type: 'comments', id: '1'}]});
     assert.ok(
       adapter.fetch.calledWith(
         postMock.data.relationships.comments.links.self,
-        {method: 'DELETE', body: jsonBody}
+        { method: 'DELETE', body: JSON.stringify(mockRelationSerialized) }
       ),
       '#fetch called with url and options with data'
     );
@@ -487,17 +538,18 @@ test('#deleteRelationship (to-one)', function(assert) {
 
   mockServices.call(this);
   const adapter = this.subject({type: 'posts', url: '/posts'});
+  let mockRelationSerialized = { data: { type: 'authors', id: '1' } };
+  adapter.serializer = mockSerializer({ relationship: mockRelationSerialized });
   sandbox.stub(adapter, 'fetch', function () { return RSVP.Promise.resolve(null); });
   let resource = this.container.lookup('model:post').create(postMock.data);
   let promise = adapter.deleteRelationship(resource, 'author', '1');
 
   assert.ok(typeof promise.then === 'function', 'returns a thenable');
   promise.then(() => {
-    let jsonBody = JSON.stringify({data: {type: 'authors', id: '1'}});
     assert.ok(
       adapter.fetch.calledWith(
         postMock.data.relationships.author.links.self,
-        {method: 'DELETE', body: jsonBody}
+        { method: 'DELETE', body: JSON.stringify(mockRelationSerialized) }
       ),
       '#fetch called with url and options with data'
     );
@@ -511,17 +563,18 @@ test('#deleteRelationship uses optional resource type', function (assert) {
 
   mockServices.call(this);
   let adapter = this.subject({type: 'supervisors', url: '/supervisors'});
+  let mockRelationSerialized = { data: [{ type: 'employees', id: '1' }] };
+  adapter.serializer = mockSerializer({ relationship: mockRelationSerialized });
   sandbox.stub(adapter, 'fetch', function () { return RSVP.Promise.resolve(null); });
   let resource = this.container.lookup('model:supervisor').create(supervisorMock.data);
   let promise = adapter.deleteRelationship(resource, 'directReports', '1');
 
   assert.ok(typeof promise.then === 'function', 'returns a thenable');
   promise.then(() => {
-    let jsonBody = JSON.stringify({data: [{type: 'employees', id: '1'}]});
     assert.ok(
       adapter.fetch.calledWith(
         supervisorMock.data.relationships['direct-reports'].links.self,
-        {method: 'DELETE', body: jsonBody}
+        { method: 'DELETE', body: JSON.stringify(mockRelationSerialized) }
       ),
       '#fetch called with url and options with data'
     );
@@ -535,6 +588,8 @@ test('#patchRelationship (to-many)', function(assert) {
 
   mockServices.call(this);
   let adapter = this.subject({type: 'posts', url: '/posts'});
+  let mockRelationSerialized = { data: [{ type: 'comments', id: '1' }] };
+  adapter.serializer = mockSerializer({ relationship: mockRelationSerialized });
   sandbox.stub(adapter, 'fetch', function () { return RSVP.Promise.resolve(null); });
   let resource = this.container.lookup('model:post').create(postMock.data);
   resource.addRelationship('comments', '1');
@@ -542,11 +597,10 @@ test('#patchRelationship (to-many)', function(assert) {
 
   assert.ok(typeof promise.then === 'function', 'returns a thenable');
   promise.then(() => {
-    let jsonBody = JSON.stringify({data: [{type: 'comments', id: '1'}]});
     assert.ok(
       adapter.fetch.calledWith(
         postMock.data.relationships.comments.links.self,
-        {method: 'PATCH', body: jsonBody}
+        { method: 'PATCH', body: JSON.stringify(mockRelationSerialized) }
       ),
       '#fetch called with url and options with data'
     );
@@ -560,6 +614,8 @@ test('#patchRelationship (to-one)', function(assert) {
 
   mockServices.call(this);
   const adapter = this.subject({type: 'posts', url: '/posts'});
+  let mockRelationSerialized = { data: { type: 'authors', id: '1' } };
+  adapter.serializer = mockSerializer({ relationship: mockRelationSerialized });
   sandbox.stub(adapter, 'fetch', function () { return RSVP.Promise.resolve(null); });
   let resource = this.container.lookup('model:post').create(postMock.data);
   resource.addRelationship('author', '1');
@@ -567,11 +623,10 @@ test('#patchRelationship (to-one)', function(assert) {
 
   assert.ok(typeof promise.then === 'function', 'returns a thenable');
   promise.then(() => {
-    let jsonBody = JSON.stringify({data: {type: 'authors', id: '1'}});
     assert.ok(
       adapter.fetch.calledWith(
         postMock.data.relationships.author.links.self,
-        {method: 'PATCH', body: jsonBody}
+        { method: 'PATCH', body: JSON.stringify(mockRelationSerialized) }
       ),
       '#fetch called with url and options with data'
     );
@@ -585,6 +640,8 @@ test('#patchRelationship uses optional resource type', function (assert) {
 
   mockServices.call(this);
   let adapter = this.subject({type: 'supervisors', url: '/supervisors'});
+  let mockRelationSerialized = { data: [{type: 'employees', id: '1'}] };
+  adapter.serializer = mockSerializer({ relationship: mockRelationSerialized });
   sandbox.stub(adapter, 'fetch', function () { return RSVP.Promise.resolve(null); });
   let resource = this.container.lookup('model:supervisor').create(supervisorMock.data);
   resource.addRelationship('directReports', '1');
@@ -592,11 +649,10 @@ test('#patchRelationship uses optional resource type', function (assert) {
 
   assert.ok(typeof promise.then === 'function', 'returns a thenable');
   promise.then(() => {
-    let jsonBody = JSON.stringify({data: [{type: 'employees', id: '1'}]});
     assert.ok(
       adapter.fetch.calledWith(
         supervisorMock.data.relationships['direct-reports'].links.self,
-        {method: 'PATCH', body: jsonBody}
+        { method: 'PATCH', body: JSON.stringify(mockRelationSerialized) }
       ),
       '#fetch called with url and options with data'
     );
@@ -614,17 +670,18 @@ test('createRelationship casts id to string', function (assert) {
 
   mockServices.call(this);
   const adapter = this.subject({type: 'posts', url: '/posts'});
+  let mockRelationSerialized = { data: [{type: 'comments', id: '1'}] };
+  adapter.serializer = mockSerializer({ relationship: mockRelationSerialized });
   sandbox.stub(adapter, 'fetch', function () { return RSVP.Promise.resolve(null); });
   let resource = this.container.lookup('model:post').create(postMock.data);
   let createPromise = adapter.createRelationship(resource, 'comments', 1);
   let deletePromise = adapter.deleteRelationship(resource, 'comments', 1);
 
-  let jsonBody = JSON.stringify({data: [{type: 'comments', id: '1'}]});
   createPromise.then(() => {
     assert.ok(
       adapter.fetch.calledWith(
         postMock.data.relationships.comments.links.self,
-        {method: 'POST', body: jsonBody}
+        { method: 'POST', body: JSON.stringify(mockRelationSerialized) }
       ),
       '#createRelationship casts id to String'
     );
@@ -633,7 +690,7 @@ test('createRelationship casts id to string', function (assert) {
     assert.ok(
       adapter.fetch.calledWith(
         postMock.data.relationships.comments.links.self,
-        {method: 'DELETE', body: jsonBody}
+        { method: 'DELETE', body: JSON.stringify(mockRelationSerialized) }
       ),
       '#deleteRelationship casts id to String'
     );
@@ -801,10 +858,7 @@ test('#cacheUpdate called after #updateResource success', function(assert) {
       }
     }
   };
-  adapter.serializer = {
-    serializeChanged: function () { return payload; },
-    transformAttributes: function(json) { return json; }
-  };
+  adapter.serializer = mockSerializer({ changed: payload });
   let resource = this.container.lookup('model:post').create(postMock.data);
   let promise = adapter.updateResource(resource);
 
@@ -1006,3 +1060,15 @@ test('re-opening AuthorizationMixin can customize the settings for Authorization
   });
   assert.equal(adapter.get('authorizationCredential'), 'Bearer SecretToken');
 });
+
+function mockSerializer(mock = {}) {
+  mock.changed = mock.changed || null;
+  mock.relationships = mock.relationships || {};
+  mock.relationship = mock.relationship || null;
+  return {
+    serializeChanged: function () { return mock.changed; },
+    serializeRelationships: function () { return mock.relationships; },
+    serializeRelationship: function () { return mock.relationship; },
+    transformAttributes: function(json) { return json; }
+  };
+}
