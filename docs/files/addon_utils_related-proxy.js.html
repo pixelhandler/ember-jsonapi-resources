@@ -202,7 +202,9 @@ const RelatedProxyUtil = Ember.Object.extend({
     let proxyProto = proxyFactory.extend(Ember.PromiseProxyMixin, {
       &#x27;promise&#x27;: promise, &#x27;type&#x27;: relation, &#x27;kind&#x27;: kind
     });
-    return proxyProto.create();
+    return proxyProto.create({
+      content: (kind === &#x27;hasOne&#x27;) ? Ember.Object.create() : Ember.A([])
+    });
   },
 
   /**

@@ -293,14 +293,21 @@ export default Ember.Object.extend(FetchMixin, Evented, {
 
     @method updateResource
     @param {Resource} resource instance to serialize the changed attributes
+    @param {Array} includeRelationships (optional) list of {String} relationships
+      to opt-into an update
     @return {Promise} resolves with PATCH response or &#x60;null&#x60; if nothing to update
   */
-  updateResource(resource) {
+  updateResource(resource, includeRelationships = false) {
     let url = resource.get(&#x27;links.self&#x27;) || this.get(&#x27;url&#x27;) + &#x27;/&#x27; + resource.get(&#x27;id&#x27;);
-    const json = this.serializer.serializeChanged(resource);
-    if (!json) {
+    let json = this.serializer.serializeChanged(resource);
+    let relationships = this.serializer.serializeRelationships(resource, includeRelationships);
+    if ((includeRelationships &amp;&amp;
+          ((!json &amp;&amp; !relationships) || (!json &amp;&amp; relationships.length === 0))) ||
+        (!includeRelationships &amp;&amp; !json)) {
       return RSVP.Promise.resolve(null);
     }
+    json = json || { data: { id: resource.get(&#x27;id&#x27;), type: resource.get(&#x27;type&#x27;) } };
+    json.data.relationships = relationships;
     return this.fetch(url, {
       method: &#x27;PATCH&#x27;,
       body: JSON.stringify(json),
@@ -344,14 +351,14 @@ export default Ember.Object.extend(FetchMixin, Evented, {
 
     @method createRelationship
     @param {Resource} resource instance, has URLs via it&#x27;s relationships property
-    @param {String} relationship name (plural) to find the url from the resource instance
+    @param {String} relationship name
     @param {String} id of the related resource
     @return {Promise}
   */
   createRelationship(resource, relationship, id) {
     return this.fetch(this._urlForRelationship(resource, relationship), {
       method: &#x27;POST&#x27;,
-      body: JSON.stringify(this._payloadForRelationship(resource, relationship, id))
+      body: JSON.stringify(this.serializer.serializeRelationship(resource, relationship, id))
     });
   },
 
@@ -385,13 +392,13 @@ export default Ember.Object.extend(FetchMixin, Evented, {
 
     @method patchRelationship
     @param {Resource} resource instance, has URLs via it&#x27;s relationships property
-    @param {String} relationship name (plural) to find the url from the resource instance
+    @param {String} relationship
     @return {Promise}
   */
   patchRelationship(resource, relationship) {
     return this.fetch(this._urlForRelationship(resource, relationship), {
       method: &#x27;PATCH&#x27;,
-      body: JSON.stringify(this._payloadForRelationship(resource, relationship))
+      body: JSON.stringify(this.serializer.serializeRelationship(resource, relationship))
     });
   },
 
@@ -414,14 +421,14 @@ export default Ember.Object.extend(FetchMixin, Evented, {
 
     @method deleteRelationship
     @param {Resource} resource instance, has URLs via it&#x27;s relationships property
-    @param {String} relationship name (plural) to find the url from the resource instance
+    @param {String} relationship name
     @param {String} id of the related resource
     @return {Promise}
   */
   deleteRelationship(resource, relationship, id) {
     return this.fetch(this._urlForRelationship(resource, relationship), {
       method: &#x27;DELETE&#x27;,
-      body: JSON.stringify(this._payloadForRelationship(resource, relationship, id))
+      body: JSON.stringify(this.serializer.serializeRelationship(resource, relationship, id))
     });
   },
 
@@ -429,30 +436,13 @@ export default Ember.Object.extend(FetchMixin, Evented, {
     @method _urlForRelationship
     @private
     @param {Resource} resource instance, has URLs via it&#x27;s relationships property
-    @param {String} relationship name (plural) to find the url from the resource instance
+    @param {String} relationship name
     @return {String} url
   */
   _urlForRelationship(resource, relationship) {
-    let meta = resource.constructor.metaForProperty(relationship);
+    let meta = resource.relationMetadata(relationship);
     let url  = resource.get([&#x27;relationships&#x27;, meta.relation, &#x27;links&#x27;, &#x27;self&#x27;].join(&#x27;.&#x27;));
     return url || [this.get(&#x27;url&#x27;), resource.get(&#x27;id&#x27;), &#x27;relationships&#x27;, relationship].join(&#x27;/&#x27;);
-  },
-
-  /**
-    @method _payloadForRelationship
-    @private
-    @param {Resource} resource instance, has URLs via it&#x27;s relationships property
-    @param {String} relationship name (plural) to find the url from the resource instance
-    @param {String} id the id for the related resource or undefined current relationship data
-    @return {Object} payload
-  */
-  _payloadForRelationship(resource, relationship, id) {
-    // actual resource type of this relationship is found in related-proxy&#x27;s meta.
-    let meta  = resource.constructor.metaForProperty(relationship);
-    let data  = resource.get([&#x27;relationships&#x27;, meta.relation, &#x27;data&#x27;].join(&#x27;.&#x27;));
-    if (id === undefined) { return {data: data}; }
-    let resourceObject = { type: pluralize(meta.type), id: id.toString() };
-    return { data: (Array.isArray(data)) ? [resourceObject] : resourceObject };
   },
 
   /**

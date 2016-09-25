@@ -959,6 +959,11 @@
                     "name": "resource",
                     "description": "instance to serialize the changed attributes",
                     "type": "Resource"
+                },
+                {
+                    "name": "includeRelationships",
+                    "description": "(optional) list of {String} relationships\n  to opt-into an update",
+                    "type": "Array"
                 }
             ],
             "return": {
@@ -971,7 +976,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 200,
+            "line": 207,
             "description": "Delete an existing resource, sends a DELETE request",
             "itemtype": "method",
             "name": "deleteResource",
@@ -992,7 +997,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 219,
+            "line": 226,
             "description": "Create (add) a relationship for `to-many` relation, sends a POST request.\n\nSee: <http://jsonapi.org/format/#crud-updating-to-many-relationships>\n\nAdds a relation using a payload with a resource identifier object:\n\n```\n{\n  \"data\": [\n    { \"type\": \"comments\", \"id\": \"12\" }\n  ]\n}\n```",
             "itemtype": "method",
             "name": "createRelationship",
@@ -1004,7 +1009,7 @@
                 },
                 {
                     "name": "relationship",
-                    "description": "name (plural) to find the url from the resource instance",
+                    "description": "name",
                     "type": "String"
                 },
                 {
@@ -1023,7 +1028,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 247,
+            "line": 254,
             "description": "Patch a relationship, either adds or removes everyting, sends a PATCH request.\n\nSee: <http://jsonapi.org/format/#crud-updating-to-one-relationships>\n\nFor `to-one` relation:\n\n- Remove (delete) with payload: `{ \"data\": null }`\n- Create/Update with payload:\n  ```\n  {\n    \"data\": { \"type\": \"comments\", \"id\": \"1\" }\n  }\n  ```\n\nFor `to-many` relation:\n\n- Remove (delete) all with payload: `{ \"data\": [] }`\n- Replace all with payload:\n  ```\n  {\n    \"data\": [\n      { \"type\": \"comments\", \"id\": \"1\" },\n      { \"type\": \"comments\", \"id\": \"2\" }\n    ]\n  }\n  ```",
             "itemtype": "method",
             "name": "patchRelationship",
@@ -1035,7 +1040,7 @@
                 },
                 {
                     "name": "relationship",
-                    "description": "name (plural) to find the url from the resource instance",
+                    "description": "",
                     "type": "String"
                 }
             ],
@@ -1049,7 +1054,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 287,
+            "line": 294,
             "description": "Deletes a relationship for `to-many` relation, sends a DELETE request.\n\nSee: <http://jsonapi.org/format/#crud-updating-to-many-relationships>\n\nRemove using a payload with the resource identifier object:\n\nFor `to-many`:\n\n```\n{\n  \"data\": [\n    { \"type\": \"comments\", \"id\": \"1\" }\n  ]\n}\n```",
             "itemtype": "method",
             "name": "deleteRelationship",
@@ -1061,7 +1066,7 @@
                 },
                 {
                     "name": "relationship",
-                    "description": "name (plural) to find the url from the resource instance",
+                    "description": "name",
                     "type": "String"
                 },
                 {
@@ -1080,7 +1085,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 317,
+            "line": 324,
             "itemtype": "method",
             "name": "_urlForRelationship",
             "access": "private",
@@ -1093,7 +1098,7 @@
                 },
                 {
                     "name": "relationship",
-                    "description": "name (plural) to find the url from the resource instance",
+                    "description": "name",
                     "type": "String"
                 }
             ],
@@ -1107,39 +1112,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 330,
-            "itemtype": "method",
-            "name": "_payloadForRelationship",
-            "access": "private",
-            "tagname": "",
-            "params": [
-                {
-                    "name": "resource",
-                    "description": "instance, has URLs via it's relationships property",
-                    "type": "Resource"
-                },
-                {
-                    "name": "relationship",
-                    "description": "name (plural) to find the url from the resource instance",
-                    "type": "String"
-                },
-                {
-                    "name": "id",
-                    "description": "the id for the related resource or undefined current relationship data",
-                    "type": "String"
-                }
-            ],
-            "return": {
-                "description": "payload",
-                "type": "Object"
-            },
-            "class": "ApplicationAdapter",
-            "module": "ember-jsonapi-resources",
-            "submodule": "adapters"
-        },
-        {
-            "file": "addon/adapters/application.js",
-            "line": 347,
+            "line": 337,
             "description": "Fetches data using Fetch API or XMLHttpRequest",
             "itemtype": "method",
             "name": "fetch",
@@ -1165,7 +1138,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 365,
+            "line": 355,
             "description": "Hook to customize the URL, e.g. if your API is behind a proxy and you need\nto swap a portion of the domain to make a request on the same domain.",
             "itemtype": "method",
             "name": "fetchUrl",
@@ -1186,7 +1159,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 377,
+            "line": 367,
             "description": "Adds params and headers or Fetch request.\n\n- The HTTP Header is set for Content-Type: application/vnd.api+json\n- Sets Authorization header if accessible in the `authorizationCredential` property",
             "itemtype": "method",
             "name": "fetchOptions",
@@ -1207,7 +1180,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 399,
+            "line": 389,
             "description": "Sets Authorization header if accessible in the `authorizationCredential` property",
             "itemtype": "method",
             "name": "fetchAuthorizationHeader",
@@ -1224,7 +1197,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 416,
+            "line": 406,
             "description": "Authentication credentials/token used with HTTP authentication\nThis property should be added by an Authorization Mixin",
             "itemtype": "property",
             "name": "authorizationCredential",
@@ -1235,7 +1208,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 425,
+            "line": 415,
             "description": "The name of the Authorization request-header field\nThis property should be added by an Authorization Mixin",
             "itemtype": "property",
             "name": "authorizationHeaderField",
@@ -1246,7 +1219,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 434,
+            "line": 424,
             "description": "Noop as a hook for defining how deserialized resource objects are cached,\ne.g. in memory",
             "itemtype": "method",
             "name": "cacheResource",
@@ -1263,7 +1236,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 443,
+            "line": 433,
             "description": "Noop as a hook for defining how to handle cache after updating a resource",
             "itemtype": "method",
             "name": "cacheUpdate",
@@ -1280,7 +1253,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 451,
+            "line": 441,
             "description": "Noop as a hook to remove a resource from cached data",
             "itemtype": "method",
             "name": "cacheRemove",
@@ -2243,6 +2216,19 @@
         {
             "file": "addon/models/resource.js",
             "line": 105,
+            "description": "Hash of relationships that were changed",
+            "access": "private",
+            "tagname": "",
+            "itemtype": "property",
+            "name": "_relationships",
+            "type": "Object",
+            "class": "Resource",
+            "module": "ember-jsonapi-resources",
+            "submodule": "resource"
+        },
+        {
+            "file": "addon/models/resource.js",
+            "line": 114,
             "description": "Flag for new instance, e.g. not persisted",
             "itemtype": "property",
             "name": "isNew",
@@ -2253,7 +2239,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 113,
+            "line": 122,
             "description": "Custom `toString` method used for clarity that the instance is a JSON API Resource kind of object",
             "itemtype": "method",
             "name": "toString",
@@ -2263,7 +2249,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 124,
+            "line": 133,
             "access": "private",
             "tagname": "",
             "itemtype": "method",
@@ -2286,7 +2272,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 151,
+            "line": 160,
             "itemtype": "method",
             "name": "addRelationships",
             "params": [
@@ -2307,7 +2293,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 162,
+            "line": 171,
             "itemtype": "method",
             "name": "removeRelationships",
             "params": [
@@ -2328,7 +2314,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 173,
+            "line": 182,
             "description": "Adds related resource identifier object to the relationship data.\n\nAlso sets or adds to the `content` of the related proxy object.\n\n- For has-many relations the related identifier object is added to\n  the resource linkage data array.\n- For has-one relations the resource identifier object is assigned,\n  so the relation may be replaced.\n\nSee:\n- http://jsonapi.org/format/#document-resource-object-linkage\n- http://jsonapi.org/format/#document-resource-identifier-objects",
             "itemtype": "method",
             "name": "addRelationship",
@@ -2350,7 +2336,36 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 219,
+            "line": 231,
+            "description": "Track additions of relationships using a resource identifier objects:\n\n```js\n{ relation {String}, type {String}, kind {String} }`\n```",
+            "access": "private",
+            "tagname": "",
+            "itemtype": "method",
+            "name": "_relationAdded",
+            "params": [
+                {
+                    "name": "relation",
+                    "description": "name of a related resource",
+                    "type": "String"
+                },
+                {
+                    "name": "identifier,",
+                    "description": "a resource identifier object `{type: String, id: String}`",
+                    "type": "Object"
+                },
+                {
+                    "name": "previous,",
+                    "description": "resource identifier object or array of identifiers",
+                    "type": "Object|Array"
+                }
+            ],
+            "class": "Resource",
+            "module": "ember-jsonapi-resources",
+            "submodule": "resource"
+        },
+        {
+            "file": "addon/models/resource.js",
+            "line": 260,
             "description": "Removes resource identifier object of the relationship data. Also, sets the\n`content` of the related (computed property's) proxy object to `null`.\n\n- For has-one relations the (resource linkage) data is set to `null`.\n- For has-many relations the resource identifier object is removed from\n  the resource Linkage `data` array.\n\nSee:\n- http://jsonapi.org/format/#document-resource-object-linkage\n- http://jsonapi.org/format/#document-resource-identifier-objects",
             "itemtype": "method",
             "name": "removeRelationship",
@@ -2372,7 +2387,31 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 257,
+            "line": 301,
+            "description": "Track removals of relationships",
+            "access": "private",
+            "tagname": "",
+            "itemtype": "method",
+            "name": "_relationRemoved",
+            "params": [
+                {
+                    "name": "relation",
+                    "description": "- resource name",
+                    "type": "String"
+                },
+                {
+                    "name": "id",
+                    "description": "",
+                    "type": "String"
+                }
+            ],
+            "class": "Resource",
+            "module": "ember-jsonapi-resources",
+            "submodule": "resource"
+        },
+        {
+            "file": "addon/models/resource.js",
+            "line": 324,
             "itemtype": "method",
             "name": "changedAttributes",
             "return": {
@@ -2385,7 +2424,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 275,
+            "line": 342,
             "itemtype": "method",
             "name": "previousAttributes",
             "return": {
@@ -2398,8 +2437,21 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 293,
-            "description": "Revert to previous attributes",
+            "line": 360,
+            "itemtype": "method",
+            "name": "previousAttributes",
+            "return": {
+                "description": "the previous attributes",
+                "type": "Object"
+            },
+            "class": "Resource",
+            "module": "ember-jsonapi-resources",
+            "submodule": "resource"
+        },
+        {
+            "file": "addon/models/resource.js",
+            "line": 375,
+            "description": "Rollback changes to attributes and relationships",
             "itemtype": "method",
             "name": "rollback",
             "class": "Resource",
@@ -2408,7 +2460,17 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 309,
+            "line": 385,
+            "description": "Revert to previous attributes",
+            "itemtype": "method",
+            "name": "rollbackAttributes",
+            "class": "Resource",
+            "module": "ember-jsonapi-resources",
+            "submodule": "resource"
+        },
+        {
+            "file": "addon/models/resource.js",
+            "line": 401,
             "description": "Reset tracked changed/previous attrs",
             "access": "private",
             "tagname": "",
@@ -2420,7 +2482,49 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 323,
+            "line": 415,
+            "description": "Revert to previous relationships",
+            "itemtype": "method",
+            "name": "rollbackRelationships",
+            "class": "Resource",
+            "module": "ember-jsonapi-resources",
+            "submodule": "resource"
+        },
+        {
+            "file": "addon/models/resource.js",
+            "line": 445,
+            "description": "Reset tracked relationship changes",
+            "access": "private",
+            "tagname": "",
+            "itemtype": "method",
+            "name": "_resetRelationships",
+            "class": "Resource",
+            "module": "ember-jsonapi-resources",
+            "submodule": "resource"
+        },
+        {
+            "file": "addon/models/resource.js",
+            "line": 459,
+            "itemtype": "method",
+            "name": "relationMetadata",
+            "params": [
+                {
+                    "name": "property",
+                    "description": "name of a related resource",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "`{ relation {String}, type {String}, kind {String} }`",
+                "type": "Object|undefined"
+            },
+            "class": "Resource",
+            "module": "ember-jsonapi-resources",
+            "submodule": "resource"
+        },
+        {
+            "file": "addon/models/resource.js",
+            "line": 474,
             "description": "Sets all payload properties on the resource and resets private _attributes\nused for changed/previous tracking",
             "itemtype": "method",
             "name": "didUpdateResource",
@@ -2437,7 +2541,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 336,
+            "line": 487,
             "description": "Sets the relationships data, used after the promise proxy resolves by\nhasOne and hasMany helpers",
             "itemtype": "method",
             "name": "didResolveProxyRelation",
@@ -2464,7 +2568,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 366,
+            "line": 517,
             "description": "A local cache duration, to minimize duplicate fetch requests",
             "itemtype": "property",
             "name": "cacheDuration",
@@ -2475,7 +2579,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 374,
+            "line": 525,
             "itemtype": "property",
             "name": "isCacheExpired",
             "type": "Boolean",
@@ -2485,7 +2589,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 386,
+            "line": 537,
             "description": "To protect the JSON API Resource properties for attributes, links and\nrelationships these objects are setup during create(). This has to be\ndefined since the attr() helper needs to have new objects for each instance,\nto project from keeping a reference on the prototype.\n\nThe create method should only be called after looking up a factory from the\ncontainer, for example in a route's model hook:\n\n```\nmodel() {\n  let owner = (typeof Ember.getOwner === 'function') ? Ember.getOwner(this) : this.container;\n  return owner.lookup('model:post').create({\n    attributes: {\n      title: 'The JSON API 1.0 Spec Rocks!'\n    }\n  });\n}\n```\n\nThe create method uses the container to lookup the factory's prototype and\nfind the computed properties used for relations to setup the relationships\nfor the Resource instance you create. Calling Resource#create without using\nthe factory lookup will result in an instance without a reference to the\napplication's container and you will have to manually setup the relationships\nobject prior to adding a relationship.",
             "itemtype": "method",
             "name": "create",
@@ -2584,6 +2688,88 @@
         {
             "file": "addon/serializers/application.js",
             "line": 104,
+            "itemtype": "method",
+            "name": "serializeRelationships",
+            "params": [
+                {
+                    "name": "resource",
+                    "description": "with relationships to serialize",
+                    "type": "Resource"
+                },
+                {
+                    "name": "relationships",
+                    "description": "list of {String} relationship properties",
+                    "type": "Array"
+                }
+            ],
+            "return": {
+                "description": "the serialized `relationship` node for the JSON payload",
+                "type": "Object"
+            },
+            "class": "ApplicationSerializer",
+            "module": "ember-jsonapi-resources",
+            "submodule": "serializers"
+        },
+        {
+            "file": "addon/serializers/application.js",
+            "line": 123,
+            "itemtype": "method",
+            "name": "serializeRelationship",
+            "params": [
+                {
+                    "name": "resource",
+                    "description": "instance, has URLs via it's relationships property",
+                    "type": "Resource"
+                },
+                {
+                    "name": "relationship",
+                    "description": "name",
+                    "type": "String"
+                },
+                {
+                    "name": "id",
+                    "description": "(optional) of the related resource",
+                    "type": "String|undefined"
+                }
+            ],
+            "return": {
+                "description": "payload",
+                "type": "Object"
+            },
+            "class": "ApplicationSerializer",
+            "module": "ember-jsonapi-resources",
+            "submodule": "serializers"
+        },
+        {
+            "file": "addon/serializers/application.js",
+            "line": 142,
+            "access": "private",
+            "tagname": "",
+            "itemtype": "method",
+            "name": "_intersection",
+            "params": [
+                {
+                    "name": "first",
+                    "description": "",
+                    "type": "Array"
+                },
+                {
+                    "name": "second",
+                    "description": "",
+                    "type": "Array"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Array"
+            },
+            "class": "ApplicationSerializer",
+            "module": "ember-jsonapi-resources",
+            "submodule": "serializers"
+        },
+        {
+            "file": "addon/serializers/application.js",
+            "line": 163,
             "description": "Deserialize response objects from the request payload",
             "itemtype": "method",
             "name": "deserialize",
@@ -2604,7 +2790,7 @@
         },
         {
             "file": "addon/serializers/application.js",
-            "line": 121,
+            "line": 180,
             "description": "Deserialize response objects in the payload data",
             "itemtype": "method",
             "name": "deserializeResources",
@@ -2625,7 +2811,7 @@
         },
         {
             "file": "addon/serializers/application.js",
-            "line": 135,
+            "line": 194,
             "description": "Deserialize response an object in the payload data",
             "itemtype": "method",
             "name": "deserializeResource",
@@ -2646,7 +2832,7 @@
         },
         {
             "file": "addon/serializers/application.js",
-            "line": 147,
+            "line": 206,
             "description": "Deserialize optional included array of payload and add to service cache",
             "itemtype": "method",
             "name": "deserializeIncluded",
@@ -2668,7 +2854,7 @@
         },
         {
             "file": "addon/serializers/application.js",
-            "line": 167,
+            "line": 226,
             "description": "Transform attributes, serialize or deserialize by specified method or\nper type of attribute, e.g. date.\n\nYour serializer may define a specific method for a type of attribute,\ni.e. `serializeDateAttribute` and/or `deserializeDateAttribute`. Likewise,\nyour serializer may define a specific method for the name of an attribute,\nlike `serializeUpdatedAtAttribute` and `deserializeUpdatedAtAttribute`.\n\nDuring transformation a method based on the name of the attribute takes\npriority over a transform method based on the type of attribute, e.g. date.",
             "itemtype": "method",
             "name": "transformAttributes",
@@ -2696,7 +2882,7 @@
         },
         {
             "file": "addon/serializers/application.js",
-            "line": 208,
+            "line": 267,
             "description": "Create a Resource from a JSON API Resource Object\n\nSee <http://jsonapi.org/format/#document-resource-objects>",
             "access": "private",
             "tagname": "",
@@ -2718,7 +2904,7 @@
         },
         {
             "file": "addon/serializers/application.js",
-            "line": 235,
+            "line": 294,
             "access": "private",
             "tagname": "",
             "itemtype": "method",
@@ -2827,6 +3013,11 @@
                     "name": "resource",
                     "description": "instance to serialize the changed attributes",
                     "type": "Resource"
+                },
+                {
+                    "name": "includeRelationships",
+                    "description": "(optional) list of {String} relationships\n  to opt-into an update",
+                    "type": "Array"
                 }
             ],
             "return": {
@@ -2839,7 +3030,7 @@
         },
         {
             "file": "addon/services/store.js",
-            "line": 69,
+            "line": 71,
             "description": "Delete an existing resource, sends a DELETE request",
             "itemtype": "method",
             "name": "deleteResource",
@@ -2865,7 +3056,7 @@
         },
         {
             "file": "addon/services/store.js",
-            "line": 82,
+            "line": 84,
             "description": "Create (add) a relationship for `to-many` relation, sends a POST request.\n\nSee: <http://jsonapi.org/format/#crud-updating-to-many-relationships>\n\nAdds a relation using a payload with a resource identifier object:\n\n```\n{\n  \"data\": [\n    { \"type\": \"comments\", \"id\": \"12\" }\n  ]\n}\n```",
             "itemtype": "method",
             "name": "createRelationship",
@@ -2901,7 +3092,7 @@
         },
         {
             "file": "addon/services/store.js",
-            "line": 109,
+            "line": 111,
             "description": "Patch a relationship, either adds or removes everyting, sends a PATCH request.\n\nSee: <http://jsonapi.org/format/#crud-updating-to-one-relationships>\n\nFor `to-one` relation:\n\n- Remove (delete) with payload: `{ \"data\": null }`\n- Create/Update with payload:\n  ```\n  {\n    \"data\": { \"type\": \"comments\", \"id\": \"1\" }\n  }\n  ```\n\nFor `to-many` relation:\n\n- Remove (delete) all with payload: `{ \"data\": [] }`\n- Replace all with payload:\n  ```\n  {\n    \"data\": [\n      { \"type\": \"comments\", \"id\": \"1\" },\n      { \"type\": \"comments\", \"id\": \"2\" }\n    ]\n  }\n  ```",
             "itemtype": "method",
             "name": "patchRelationship",
@@ -2932,7 +3123,7 @@
         },
         {
             "file": "addon/services/store.js",
-            "line": 148,
+            "line": 150,
             "description": "Deletes a relationship for `to-many` relation, sends a DELETE request.\n\nSee: <http://jsonapi.org/format/#crud-updating-to-many-relationships>\n\nRemove using a payload with the resource identifier object:\n\nFor `to-many`:\n\n```\n{\n  \"data\": [\n    { \"type\": \"comments\", \"id\": \"1\" }\n  ]\n}\n```",
             "itemtype": "method",
             "name": "deleteRelationship",
@@ -2968,7 +3159,7 @@
         },
         {
             "file": "addon/services/store.js",
-            "line": 177,
+            "line": 179,
             "description": "Lookup the injected service for a resource, pluralize type arg.",
             "access": "private",
             "tagname": "",
@@ -3245,7 +3436,7 @@
         },
         {
             "file": "addon/utils/related-proxy.js",
-            "line": 97,
+            "line": 99,
             "itemtype": "method",
             "name": "proxyResolution",
             "params": [
@@ -3265,7 +3456,7 @@
         },
         {
             "file": "addon/utils/related-proxy.js",
-            "line": 119,
+            "line": 121,
             "description": "Proxy url to fetch for the resource's relation",
             "itemtype": "method",
             "name": "proxyUrl",
@@ -3291,7 +3482,7 @@
         },
         {
             "file": "addon/utils/related-proxy.js",
-            "line": 136,
+            "line": 138,
             "description": "Lookup relation from service cache and pomisify result",
             "itemtype": "method",
             "name": "promiseFromCache",
@@ -3322,7 +3513,7 @@
         },
         {
             "file": "addon/utils/related-proxy.js",
-            "line": 164,
+            "line": 166,
             "description": "Lookup data in service cache",
             "itemtype": "method",
             "name": "serviceCacheLookup",
@@ -3348,7 +3539,7 @@
         },
         {
             "file": "addon/utils/related-proxy.js",
-            "line": 179,
+            "line": 181,
             "itemtype": "method",
             "name": "linksPath",
             "params": [

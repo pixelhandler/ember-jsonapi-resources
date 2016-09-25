@@ -170,11 +170,13 @@ export default Ember.Service.extend({
     @method updateResource
     @param {String} type the entity or resource name will be pluralized
     @param {Resource} resource instance to serialize the changed attributes
+    @param {Array} includeRelationships (optional) list of {String} relationships
+      to opt-into an update
     @return {Promise}
   */
-  updateResource(type, resource) {
+  updateResource(type, resource, includeRelationships = false) {
     let service = this._service(type);
-    return service.updateResource(resource);
+    return service.updateResource(resource, includeRelationships);
   },
 
   /**

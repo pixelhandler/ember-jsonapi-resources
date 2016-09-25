@@ -150,7 +150,19 @@ let model = owner.lookup('model:entity').create({ attributes: { key: value } });
 
                     <ul class="index-list methods">
                             <li class="index-item method private">
+                                <a href="#method__relationAdded">_relationAdded</a>
+
+                            </li>
+                            <li class="index-item method private">
+                                <a href="#method__relationRemoved">_relationRemoved</a>
+
+                            </li>
+                            <li class="index-item method private">
                                 <a href="#method__resetAttributes">_resetAttributes</a>
+
+                            </li>
+                            <li class="index-item method private">
+                                <a href="#method__resetRelationships">_resetRelationships</a>
 
                             </li>
                             <li class="index-item method private">
@@ -203,6 +215,14 @@ let model = owner.lookup('model:entity').create({ attributes: { key: value } });
 
                             </li>
                             <li class="index-item method">
+                                <a href="#method_previousAttributes">previousAttributes</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_relationMetadata">relationMetadata</a>
+
+                            </li>
+                            <li class="index-item method">
                                 <a href="#method_removeRelationship">removeRelationship</a>
 
                             </li>
@@ -212,6 +232,14 @@ let model = owner.lookup('model:entity').create({ attributes: { key: value } });
                             </li>
                             <li class="index-item method">
                                 <a href="#method_rollback">rollback</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_rollbackAttributes">rollbackAttributes</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_rollbackRelationships">rollbackRelationships</a>
 
                             </li>
                             <li class="index-item method">
@@ -227,6 +255,10 @@ let model = owner.lookup('model:entity').create({ attributes: { key: value } });
                     <ul class="index-list properties">
                             <li class="index-item property private">
                                 <a href="#property__attributes">_attributes</a>
+
+                            </li>
+                            <li class="index-item property private">
+                                <a href="#property__relationships">_relationships</a>
 
                             </li>
                             <li class="index-item property protected">
@@ -274,6 +306,161 @@ let model = owner.lookup('model:entity').create({ attributes: { key: value } });
             <div id="methods" class="api-class-tabpanel">
                 <h2 class="off-left">Methods</h2>
 
+<div id="method__relationAdded" class="method item private">
+    <h3 class="name"><code>_relationAdded</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>relation</code>
+                </li>
+                <li class="arg">
+                        <code>identifier,</code>
+                </li>
+                <li class="arg">
+                        <code>previous,</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+
+
+        <span class="flag private">private</span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/addon_models_resource.js.html#l231"><code>addon&#x2F;models&#x2F;resource.js:231</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Track additions of relationships using a resource identifier objects:</p>
+<pre class="code prettyprint"><code class="language-js">{ relation {String}, type {String}, kind {String} }`
+</code></pre>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">relation</code>
+                        <span class="type">String</span>
+
+
+                    <div class="param-description">
+                        <p>name of a related resource</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">identifier,</code>
+                        <span class="type">Object</span>
+
+
+                    <div class="param-description">
+                        <p>a resource identifier object <code>{type: String, id: String}</code></p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">previous,</code>
+                        <span class="type">Object | Array</span>
+
+
+                    <div class="param-description">
+                        <p>resource identifier object or array of identifiers</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+
+
+</div>
+<div id="method__relationRemoved" class="method item private">
+    <h3 class="name"><code>_relationRemoved</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>relation</code>
+                </li>
+                <li class="arg">
+                        <code>id</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+
+
+        <span class="flag private">private</span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/addon_models_resource.js.html#l301"><code>addon&#x2F;models&#x2F;resource.js:301</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Track removals of relationships</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">relation</code>
+                        <span class="type">String</span>
+
+
+                    <div class="param-description">
+                        <ul>
+<li>resource name</li>
+</ul>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">id</code>
+                        <span class="type">String</span>
+
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+
+
+</div>
 <div id="method__resetAttributes" class="method item private">
     <h3 class="name"><code>_resetAttributes</code></h3>
 
@@ -290,7 +477,7 @@ let model = owner.lookup('model:entity').create({ attributes: { key: value } });
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l309"><code>addon&#x2F;models&#x2F;resource.js:309</code></a>
+        <a href="../files/addon_models_resource.js.html#l401"><code>addon&#x2F;models&#x2F;resource.js:401</code></a>
         </p>
 
 
@@ -299,6 +486,38 @@ let model = owner.lookup('model:entity').create({ attributes: { key: value } });
 
     <div class="description">
         <p>Reset tracked changed/previous attrs</p>
+
+    </div>
+
+
+
+
+</div>
+<div id="method__resetRelationships" class="method item private">
+    <h3 class="name"><code>_resetRelationships</code></h3>
+
+        <span class="paren">()</span>
+
+
+
+        <span class="flag private">private</span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/addon_models_resource.js.html#l445"><code>addon&#x2F;models&#x2F;resource.js:445</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Reset tracked relationship changes</p>
 
     </div>
 
@@ -331,7 +550,7 @@ let model = owner.lookup('model:entity').create({ attributes: { key: value } });
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l124"><code>addon&#x2F;models&#x2F;resource.js:124</code></a>
+        <a href="../files/addon_models_resource.js.html#l133"><code>addon&#x2F;models&#x2F;resource.js:133</code></a>
         </p>
 
 
@@ -396,7 +615,7 @@ let model = owner.lookup('model:entity').create({ attributes: { key: value } });
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l173"><code>addon&#x2F;models&#x2F;resource.js:173</code></a>
+        <a href="../files/addon_models_resource.js.html#l182"><code>addon&#x2F;models&#x2F;resource.js:182</code></a>
         </p>
 
 
@@ -477,7 +696,7 @@ so the relation may be replaced.</li>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l151"><code>addon&#x2F;models&#x2F;resource.js:151</code></a>
+        <a href="../files/addon_models_resource.js.html#l160"><code>addon&#x2F;models&#x2F;resource.js:160</code></a>
         </p>
 
 
@@ -648,7 +867,7 @@ export default Resource.extend({
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l257"><code>addon&#x2F;models&#x2F;resource.js:257</code></a>
+        <a href="../files/addon_models_resource.js.html#l324"><code>addon&#x2F;models&#x2F;resource.js:324</code></a>
         </p>
 
 
@@ -691,7 +910,7 @@ export default Resource.extend({
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l386"><code>addon&#x2F;models&#x2F;resource.js:386</code></a>
+        <a href="../files/addon_models_resource.js.html#l537"><code>addon&#x2F;models&#x2F;resource.js:537</code></a>
         </p>
 
 
@@ -764,7 +983,7 @@ object prior to adding a relationship.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l336"><code>addon&#x2F;models&#x2F;resource.js:336</code></a>
+        <a href="../files/addon_models_resource.js.html#l487"><code>addon&#x2F;models&#x2F;resource.js:487</code></a>
         </p>
 
 
@@ -841,7 +1060,7 @@ hasOne and hasMany helpers</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l323"><code>addon&#x2F;models&#x2F;resource.js:323</code></a>
+        <a href="../files/addon_models_resource.js.html#l474"><code>addon&#x2F;models&#x2F;resource.js:474</code></a>
         </p>
 
 
@@ -1138,7 +1357,7 @@ let Employee = Person.extend({
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l275"><code>addon&#x2F;models&#x2F;resource.js:275</code></a>
+        <a href="../files/addon_models_resource.js.html#l360"><code>addon&#x2F;models&#x2F;resource.js:360</code></a>
         </p>
 
 
@@ -1156,6 +1375,113 @@ let Employee = Person.extend({
             <div class="returns-description">
                         <span class="type">Object</span>:
                     <p>the previous attributes</p>
+
+            </div>
+        </div>
+
+
+</div>
+<div id="method_previousAttributes" class="method item">
+    <h3 class="name"><code>previousAttributes</code></h3>
+
+        <span class="paren">()</span>
+
+        <span class="returns-inline">
+            <span class="type">Object</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/addon_models_resource.js.html#l342"><code>addon&#x2F;models&#x2F;resource.js:342</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        
+    </div>
+
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Object</span>:
+                    <p>the previous attributes</p>
+
+            </div>
+        </div>
+
+
+</div>
+<div id="method_relationMetadata" class="method item">
+    <h3 class="name"><code>relationMetadata</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>property</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">Object | Undefined</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/addon_models_resource.js.html#l459"><code>addon&#x2F;models&#x2F;resource.js:459</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">property</code>
+                        <span class="type">String</span>
+
+
+                    <div class="param-description">
+                        <p>name of a related resource</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Object | Undefined</span>:
+                    <p><code>{ relation {String}, type {String}, kind {String} }</code></p>
 
             </div>
         </div>
@@ -1186,7 +1512,7 @@ let Employee = Person.extend({
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l219"><code>addon&#x2F;models&#x2F;resource.js:219</code></a>
+        <a href="../files/addon_models_resource.js.html#l260"><code>addon&#x2F;models&#x2F;resource.js:260</code></a>
         </p>
 
 
@@ -1266,7 +1592,7 @@ the resource Linkage <code>data</code> array.</li>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l162"><code>addon&#x2F;models&#x2F;resource.js:162</code></a>
+        <a href="../files/addon_models_resource.js.html#l171"><code>addon&#x2F;models&#x2F;resource.js:171</code></a>
         </p>
 
 
@@ -1325,7 +1651,38 @@ the resource Linkage <code>data</code> array.</li>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l293"><code>addon&#x2F;models&#x2F;resource.js:293</code></a>
+        <a href="../files/addon_models_resource.js.html#l375"><code>addon&#x2F;models&#x2F;resource.js:375</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Rollback changes to attributes and relationships</p>
+
+    </div>
+
+
+
+
+</div>
+<div id="method_rollbackAttributes" class="method item">
+    <h3 class="name"><code>rollbackAttributes</code></h3>
+
+        <span class="paren">()</span>
+
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/addon_models_resource.js.html#l385"><code>addon&#x2F;models&#x2F;resource.js:385</code></a>
         </p>
 
 
@@ -1334,6 +1691,37 @@ the resource Linkage <code>data</code> array.</li>
 
     <div class="description">
         <p>Revert to previous attributes</p>
+
+    </div>
+
+
+
+
+</div>
+<div id="method_rollbackRelationships" class="method item">
+    <h3 class="name"><code>rollbackRelationships</code></h3>
+
+        <span class="paren">()</span>
+
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/addon_models_resource.js.html#l415"><code>addon&#x2F;models&#x2F;resource.js:415</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Revert to previous relationships</p>
 
     </div>
 
@@ -1356,7 +1744,7 @@ the resource Linkage <code>data</code> array.</li>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l113"><code>addon&#x2F;models&#x2F;resource.js:113</code></a>
+        <a href="../files/addon_models_resource.js.html#l122"><code>addon&#x2F;models&#x2F;resource.js:122</code></a>
         </p>
 
 
@@ -1403,6 +1791,32 @@ the resource Linkage <code>data</code> array.</li>
 
 
 </div>
+<div id="property__relationships" class="property item private">
+    <h3 class="name"><code>_relationships</code></h3>
+    <span class="type">Object</span>
+
+
+        <span class="flag private">private</span>
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/addon_models_resource.js.html#l105"><code>addon&#x2F;models&#x2F;resource.js:105</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>Hash of relationships that were changed</p>
+
+    </div>
+
+
+
+</div>
 <div id="property_attributes" class="property item protected">
     <h3 class="name"><code>attributes</code></h3>
     <span class="type">Object</span>
@@ -1443,7 +1857,7 @@ Use this as a refence for creating computed properties</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l366"><code>addon&#x2F;models&#x2F;resource.js:366</code></a>
+        <a href="../files/addon_models_resource.js.html#l517"><code>addon&#x2F;models&#x2F;resource.js:517</code></a>
         </p>
 
 
@@ -1493,7 +1907,7 @@ Use this as a refence for creating computed properties</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l374"><code>addon&#x2F;models&#x2F;resource.js:374</code></a>
+        <a href="../files/addon_models_resource.js.html#l525"><code>addon&#x2F;models&#x2F;resource.js:525</code></a>
         </p>
 
 
@@ -1517,7 +1931,7 @@ Use this as a refence for creating computed properties</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l105"><code>addon&#x2F;models&#x2F;resource.js:105</code></a>
+        <a href="../files/addon_models_resource.js.html#l114"><code>addon&#x2F;models&#x2F;resource.js:114</code></a>
         </p>
 
 
