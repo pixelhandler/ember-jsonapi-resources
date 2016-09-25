@@ -240,7 +240,7 @@ export default Ember.Object.extend(FetchMixin, Evented, {
 
     @method createRelationship
     @param {Resource} resource instance, has URLs via it's relationships property
-    @param {String} relationship name (plural) to find the url from the resource instance
+    @param {String} relationship name
     @param {String} id of the related resource
     @return {Promise}
   */
@@ -281,7 +281,7 @@ export default Ember.Object.extend(FetchMixin, Evented, {
 
     @method patchRelationship
     @param {Resource} resource instance, has URLs via it's relationships property
-    @param {String} relationship name (plural) to find the url from the resource instance
+    @param {String} relationship
     @return {Promise}
   */
   patchRelationship(resource, relationship) {
@@ -310,7 +310,7 @@ export default Ember.Object.extend(FetchMixin, Evented, {
 
     @method deleteRelationship
     @param {Resource} resource instance, has URLs via it's relationships property
-    @param {String} relationship name (plural) to find the url from the resource instance
+    @param {String} relationship name
     @param {String} id of the related resource
     @return {Promise}
   */
@@ -325,7 +325,7 @@ export default Ember.Object.extend(FetchMixin, Evented, {
     @method _urlForRelationship
     @private
     @param {Resource} resource instance, has URLs via it's relationships property
-    @param {String} relationship name (plural) to find the url from the resource instance
+    @param {String} relationship name
     @return {String} url
   */
   _urlForRelationship(resource, relationship) {

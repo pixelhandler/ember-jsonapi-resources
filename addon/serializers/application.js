@@ -123,7 +123,7 @@ export default Ember.Object.extend({
   /**
     @method serializeRelationship
     @param {Resource} resource instance, has URLs via it's relationships property
-    @param {String} relationship name (plural) to find the url from the resource instance
+    @param {String} relationship name
     @param {String|undefined} id (optional) of the related resource
     @return {Object} payload
   */

@@ -279,9 +279,9 @@ test('#findRelated is called with optional type for the resource', function (ass
   let supervisor = this.container.lookup('model:supervisor').create(supervisorMock.data);
   let employee = this.container.lookup('model:employee').create(employeeMock.data);
 
-  let SupervisorAdapter = Adapter.extend({type: 'supervisors', url: '/supervisors'});
+  let SupervisorAdapter = Adapter.extend({ type: 'supervisors', url: '/supervisors' });
   SupervisorAdapter.reopenClass({isServiceFactory: true});
-  let EmployeeAdapter   = Adapter.extend({type: 'employees', url: '/employees'});
+  let EmployeeAdapter = Adapter.extend({ type: 'employees', url: '/employees' });
   EmployeeAdapter.reopenClass({isServiceFactory: true});
 
   this.registry.register('service:employees', EmployeeAdapter.extend({
@@ -335,11 +335,11 @@ test('#createResource', function(assert) {
   });
 });
 
-test('#updateResource', function(assert) {
+test('#updateResource updates changed attributes', function(assert) {
   assert.expect(3);
   const done = assert.async();
 
-  const adapter = this.subject({type: 'posts', url: '/posts'});
+  const adapter = this.subject({ type: 'posts', url: '/posts' });
   let payload = {
     data: {
       type: postMock.data.type,
@@ -359,9 +359,56 @@ test('#updateResource', function(assert) {
     assert.ok(
       adapter.fetch.calledWith(
         postMock.data.links.self,
-        {method: 'PATCH', body: JSON.stringify(payload), update: true}
+        { method: 'PATCH', body: JSON.stringify(payload), update: true }
       ),
       '#fetch called with url and options with data'
+    );
+    done();
+  });
+});
+
+test('#updateResource updates (optional) relationships', function(assert) {
+  assert.expect(3);
+  const done = assert.async();
+  let adapter = this.subject({ type: 'posts', url: '/posts' });
+  sandbox.stub(adapter, 'fetch', function () { return RSVP.Promise.resolve(null); });
+
+  let author = this.container.lookup('model:comment').create(postMock.included[0]);
+  author.set('id', '2');
+  this.registry.register('service:authors', adapter.constructor.extend({
+    cacheLookup: function () { return author; }
+  }));
+  let comment = this.container.lookup('model:comment').create(postMock.included[1]);
+  comment.set('id', '3');
+  this.registry.register('service:comments', adapter.constructor.extend({
+    cacheLookup: function () { return comment; }
+  }));
+  let payload = {
+    data: {
+      id: '1',
+      type: 'posts',
+      relationships: {
+        author: { data: { type: 'authors', id: '2' } },
+        comments: { data: [{ type: 'comments', id: '3' }] }
+      }
+    }
+  };
+  adapter.serializer = mockSerializer({ relationships: payload.data.relationships });
+
+  let resource = this.container.lookup('model:post').create(postMock.data);
+  resource.addRelationship('author', '2');
+  resource.addRelationship('comments', '3');
+
+  let promise = adapter.updateResource(resource, ['author', 'comments']);
+  assert.ok(typeof promise.then === 'function', 'returns a thenable');
+  promise.then(() => {
+    assert.ok(adapter.fetch.calledOnce, '#fetch method called');
+    assert.ok(
+      adapter.fetch.calledWith(
+        postMock.data.links.self,
+        { method: 'PATCH', body: JSON.stringify(payload), update: true }
+      ),
+      '#fetch called with url and options with relationships data'
     );
     done();
   });
