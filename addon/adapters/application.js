@@ -196,12 +196,16 @@ export default Ember.Object.extend(FetchMixin, Evented, {
       return RSVP.Promise.resolve(null);
     }
     json = json || { data: { id: resource.get('id'), type: resource.get('type') } };
-    json.data.relationships = relationships;
+    let cleanup = Ember.K;
+    if (relationships) {
+      json.data.relationships = relationships;
+      cleanup = resource._resetRelationships.bind(resource);
+    }
     return this.fetch(url, {
       method: 'PATCH',
       body: JSON.stringify(json),
       update: true
-    });
+    }).then(cleanup);
   },
 
   /**
@@ -248,7 +252,7 @@ export default Ember.Object.extend(FetchMixin, Evented, {
     return this.fetch(this._urlForRelationship(resource, relationship), {
       method: 'POST',
       body: JSON.stringify(this.serializer.serializeRelationship(resource, relationship, id))
-    });
+    }).then(resource._resetRelationships.bind(resource));
   },
 
   /**
@@ -288,7 +292,7 @@ export default Ember.Object.extend(FetchMixin, Evented, {
     return this.fetch(this._urlForRelationship(resource, relationship), {
       method: 'PATCH',
       body: JSON.stringify(this.serializer.serializeRelationship(resource, relationship))
-    });
+    }).then(resource._resetRelationships.bind(resource));
   },
 
   /**
@@ -318,7 +322,7 @@ export default Ember.Object.extend(FetchMixin, Evented, {
     return this.fetch(this._urlForRelationship(resource, relationship), {
       method: 'DELETE',
       body: JSON.stringify(this.serializer.serializeRelationship(resource, relationship, id))
-    });
+    }).then(resource._resetRelationships.bind(resource));
   },
 
   /**
