@@ -471,7 +471,15 @@ const Resource = Ember.Object.extend(ResourceOperationsMixin, {
     try {
       meta = this.constructor.metaForProperty(property);
     } catch (e) {
-      meta = this.get('content').constructor.metaForProperty(property);
+      // Could be a Ember Proxy object. Try that, otherwise throw original error.
+      // This could contain a very useful message ("could not find computed property
+      // with key `property`" on undefined relationships for example)
+      const content = this.get('content');
+      if (content && content.constructor.metaForProperty) {
+        meta = content.constructor.metaForProperty(property);
+      } else {
+        throw e;
+      }
     }
     return meta;
   },
