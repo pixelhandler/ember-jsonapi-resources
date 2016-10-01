@@ -15,9 +15,10 @@ By considering this equation **e = mc<sup>2</sup>**
 specification, and follows common patterns for data persistence in Ember apps.
 
 * [ember-jsonapi-resources.com]
+* [The Guide](https://guide.ember-jsonapi-resources.com)
 * [API Docs][generated docs]
 * [Example App]
-* [Wiki | Guides | Cookbooks][Wiki Guide]
+* [Cookbooks / Wiki][Wiki Guide]
 
 [![Build Status](https://travis-ci.org/pixelhandler/ember-jsonapi-resources.svg?branch=master)](https://travis-ci.org/pixelhandler/ember-jsonapi-resources)
 [![Ember Observer Score](http://emberobserver.com/badges/ember-jsonapi-resources.svg)](http://emberobserver.com/addons/ember-jsonapi-resources)
