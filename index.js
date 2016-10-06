@@ -10,8 +10,8 @@ module.exports = {
     // addon passed as an app doesn't define app.import
     if (typeof app.import === 'function') {
       app.import({
-        development: app.bowerDirectory + '/es6-promise/promise.js',
-        production: app.bowerDirectory + '/es6-promise/promise.min.js'
+        development: app.bowerDirectory + '/es6-promise/es6-promise.js',
+        production: app.bowerDirectory + '/es6-promise/es6-promise.min.js'
       });
 
       app.import(app.bowerDirectory + '/fetch/fetch.js');

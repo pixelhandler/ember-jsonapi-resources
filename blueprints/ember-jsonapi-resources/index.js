@@ -9,7 +9,7 @@ module.exports = {
     return Promise.all([
       this.addBowerPackagesToProject([
         { name: 'fetch' },
-        { name: 'es6-promise', target: '~3.0.2' }
+        { name: 'es6-promise', target: '^4.0.5' }
       ]),
       this.addPackagesToProject([
         { name: 'inflection', target: '~1.7.1' },

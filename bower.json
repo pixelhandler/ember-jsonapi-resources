@@ -4,7 +4,7 @@
     "ember": "~2.8.1",
     "ember-cli-shims": "0.1.1",
     "fetch": "~0.10.1",
-    "es6-promise": "~3.0.2"
+    "es6-promise": "^4.0.5"
   },
   "devDependencies": {
     "sinon": "http://sinonjs.org/releases/sinon-1.15.0.js",
