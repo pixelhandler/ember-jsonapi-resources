@@ -313,9 +313,19 @@ test('#addRelationship tracks relationships changes', function(assert) {
   assert.equal(post._relationships.author.changed.id, '1', 'changed id is 1');
   assert.equal(post._relationships.author.changed.type, 'authors', 'changed type is authors');
 
+  let changed = post.get('changedRelationships');
+  assert.equal(changed.length, 1, 'one changedRelationship');
+  assert.equal(changed[0], 'author', 'changedRelationship is "author"');
+
   post.addRelationship('comments', '1');
   assert.ok(post._relationships.comments.added, 'comments relation added');
   assert.equal(post._relationships.comments.added.length, 1, 'one comments relation added');
+
+  changed = post.get('changedRelationships');
+  assert.equal(changed.length, 2, 'two changedRelationships');
+  assert.equal(changed.filter(i => { return i==="comments"; }).length,
+               '1', 'changedRelationships contains "comments"');
+
   post.addRelationship('comments', '2');
   assert.equal(post._relationships.comments.added.length, 2, 'two comments relation added');
 });
