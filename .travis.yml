@@ -10,8 +10,10 @@ cache:
     - node_modules
 
 env:
-  - EMBER_TRY_SCENARIO=default
+  # - EMBER_TRY_SCENARIO=default
+  # we recommend testing LTS's and latest stable release (bonus points to beta/canary)
   - EMBER_TRY_SCENARIO=ember-1.13
+  - EMBER_TRY_SCENARIO=ember-lts-2.4
   - EMBER_TRY_SCENARIO=ember-release
   - EMBER_TRY_SCENARIO=ember-beta
   - EMBER_TRY_SCENARIO=ember-canary
@@ -19,10 +21,10 @@ env:
   - EMBER_TRY_SCENARIO=ember-2.1.2
   - EMBER_TRY_SCENARIO=ember-2.2.2
   - EMBER_TRY_SCENARIO=ember-2.3.1
-  - EMBER_TRY_SCENARIO=ember-2.4.6-LTS
   - EMBER_TRY_SCENARIO=ember-2.5.1
   - EMBER_TRY_SCENARIO=ember-2.6.2
   - EMBER_TRY_SCENARIO=ember-2.7.3
+  - EMBER_TRY_SCENARIO=ember-2.8.2
 
 matrix:
   fast_finish: true
