@@ -215,7 +215,7 @@ const Resource = Ember.Object.extend(ResourceOperationsMixin, {
       data.push(identifier);
       if (resource) {
         let resources = this.get(related);
-        if (!resources.contains(resource)) {
+        if (!resources.includes(resource)) {
           resources.pushObject(resource);
         }
       }

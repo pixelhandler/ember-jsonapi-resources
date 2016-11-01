@@ -25,7 +25,7 @@ test('it registers service and injects into route and controller', function(asse
   initialize(registry, application);
 
   let registered = Ember.A(factories.mapBy('name'));
-  assert.ok(registered.contains('service:store'), 'service:briefs registered');
+  assert.ok(registered.includes('service:store'), 'service:briefs registered');
 
   let injection = injections.findBy('factory', 'route');
   assert.equal(injection.property, 'store', 'store injected into route factory');

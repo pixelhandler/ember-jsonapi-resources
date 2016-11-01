@@ -25,7 +25,7 @@ test('it registers <%= resource %> factory: model, injects into: service, serial
   <%= classifiedModuleName %>Initializer.initialize(registry, application);
 
   let registered = Ember.A(factories.mapBy('name'));
-  assert.ok(registered.contains('model:<%= entity %>'), 'model:<%= entity %> registered');
+  assert.ok(registered.includes('model:<%= entity %>'), 'model:<%= entity %> registered');
   let msg = '<%= resource %> injected into service:store';
   assert.equal(injections.findBy('factory', 'service:store').property, '<%= resource %>', msg);
   msg = 'serializer injected into service:<%= resource %>';

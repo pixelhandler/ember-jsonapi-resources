@@ -65,6 +65,7 @@
   "dependencies": {
     "ember-cli-babel": "^5.1.7",
     "ember-inflector": "^1.9.1",
+    "ember-runtime-enumerable-includes-polyfill": "^1.0.2",
     "inflection": "~1.7.1",
     "lodash": "~3.10.1"
   },
