@@ -8,7 +8,7 @@ export default Ember.Route.extend({
   },
 
   model() {
-    let owner = (typeof Ember.getOwner === 'function') ? Ember.getOwner(this) : this.container;
+    let owner = Ember.getOwner(this);
     return owner.lookup('model:post').create({
       isNew: true,
       attributes: { date: new Date() }

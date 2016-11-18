@@ -4,11 +4,7 @@ import Ember from 'ember';
 
 moduleFor('serializer:<%= entity %>', '<%= friendlyTestDescription %>', {
   beforeEach() {
-    if (typeof Ember.setOwner === 'function') {
-      Ember.setOwner(Resource.prototype, Ember.getOwner(this));
-    } else {
-      Resource.prototype.container = this.container;
-    }
+    Ember.setOwner(Resource.prototype, Ember.getOwner(this));
     let opts = { instantiate: false, singleton: false };
     this.registry.register('model:<%= entity %>', Resource, opts);
   },
@@ -19,7 +15,7 @@ moduleFor('serializer:<%= entity %>', '<%= friendlyTestDescription %>', {
 
 // Replace this with your real tests.
 test('it serializes resources', function(assert) {
-  let owner = (typeof Ember.getOwner === 'function') ? Ember.getOwner(this) : this.container;
+  let owner = Ember.getOwner(this);
   let resource = owner.lookup('model:<%= entity %>').create();
   let serializer = this.subject();
   var serializedResource = serializer.serialize(resource);

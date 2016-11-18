@@ -48,13 +48,14 @@ function setupOwner() {
   let ogLookup, ogLookupFactory;
   if (typeof Ember.getOwner === 'function') {
     this.container = this.owner || Ember.getOwner(this);
-    ogLookup = this.container.lookup;
+    ogLookup = Ember.getOwner(this).lookup;
     ogLookupFactory = this.container._lookupFactory;
   } else {
     ogLookup = this._ogContainer.lookup;
     ogLookupFactory = this._ogContainer.lookupFactory;
   }
-  this.container.lookup = function(factory) {
+
+  Ember.getOwner(this).lookup = function(factory) {
     if (factory.match(/^model/) !== null) {
       return ogLookupFactory.call(this, factory);
     } else {

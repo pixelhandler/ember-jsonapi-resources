@@ -11,7 +11,7 @@ moduleFor('mixin:service-cache', 'Unit | Mixin | service-cache', {
     let ServiceCacheObject = Ember.Object.extend(ServiceCacheMixin);
     subject = ServiceCacheObject.create();
     setup.call(this);
-    Post = this.container.lookup('model:post');
+    Post = Ember.getOwner(this).lookup('model:post');
   },
   afterEach() {
     sandbox.restore();

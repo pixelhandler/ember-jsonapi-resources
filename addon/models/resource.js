@@ -21,8 +21,7 @@ const { getOwner, computed, Logger } = Ember;
   use the owner API or the container to `lookup` the factory, for example:
 
   ```js
-  let owner = (typeof Ember.getOwner === 'function') ? Ember.getOwner(this) : this.container;
-  let model = owner.lookup('model:entity').create({ attributes: { key: value } });
+  let model = Ember.getOwner(this).lookup('model:entity').create({ attributes: { key: value } });
   ```
 
   See <http://jsonapi.org/format/#document-resource-objects>
@@ -208,8 +207,7 @@ const Resource = Ember.Object.extend(ResourceOperationsMixin, {
     let data = this.get(key);
     let type = pluralize(meta.type);
     let identifier = { type: type, id: id };
-    let owner = (typeof getOwner === 'function') ? getOwner(this) : this.container;
-    let resource = owner.lookup(`service:${type}`).cacheLookup(id);
+    let resource = getOwner(this).lookup(`service:${type}`).cacheLookup(id);
     if (Array.isArray(data)) {
       this._relationAdded(related, identifier);
       data.push(identifier);
@@ -558,7 +556,7 @@ Resource.reopenClass({
 
     ```
     model() {
-      let owner = (typeof Ember.getOwner === 'function') ? Ember.getOwner(this) : this.container;
+      let owner = Ember.getOwner(this);
       return owner.lookup('model:post').create({
         attributes: {
           title: 'The JSON API 1.0 Spec Rocks!'
@@ -604,12 +602,12 @@ Resource.reopenClass({
     if (!type) {
       Logger.warn(msg + '#create called, instead you should first use ' + msg + '.extend({type:"entity"})');
     } else {
-      let owner = (typeof getOwner === 'function') ? getOwner(instance) : instance.container;
+      let owner = getOwner(instance);
       if (owner) {
         useComputedPropsMetaToSetupRelationships(owner, factory, instance);
       } else {
         msg += '#create should only be called from a container lookup (relationships not setup), instead use: \n';
-        msg += "`let owner = (typeof Ember.getOwner === 'function') ? Ember.getOwner(this) : this.container; \n";
+        msg += "`let owner = Ember.getOwner(this); \n";
         msg += 'owner.lookup("' + factory + '").create()`';
         Logger.warn(msg);
       }

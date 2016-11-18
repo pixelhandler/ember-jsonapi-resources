@@ -41,7 +41,7 @@ export default Ember.Object.extend(FetchMixin, Evented, {
   */
   url: Ember.computed('type', {
     get() {
-      const config = this.container.lookupFactory('config:environment');
+      const config = getOwner(this).resolveRegistration('config:environment');
       const enclosingSlashes = /^\/|\/$/g;
       const host = config.APP.API_HOST.replace(enclosingSlashes, '');
       const path = config.APP.API_PATH.replace(enclosingSlashes, '');
@@ -137,8 +137,7 @@ export default Ember.Object.extend(FetchMixin, Evented, {
       type = resource.type;
     }
     // use resource's service if in container, otherwise use this service to fetch
-    let owner = (typeof getOwner === 'function') ? getOwner(this) : this.container;
-    let service = owner.lookup('service:' + pluralize(type)) || this;
+    let service = getOwner(this).lookup('service:' + pluralize(type)) || this;
     url = this.fetchUrl(url);
     return service.fetch(url, { method: 'GET' });
   },
