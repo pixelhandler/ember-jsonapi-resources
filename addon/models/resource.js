@@ -6,8 +6,8 @@
 import Ember from 'ember';
 import { pluralize, singularize } from 'ember-inflector';
 import attr from 'ember-jsonapi-resources/utils/attr';
-import hasOne from 'ember-jsonapi-resources/utils/has-one';
-import hasMany from 'ember-jsonapi-resources/utils/has-many';
+import { toOne, hasOne } from 'ember-jsonapi-resources/utils/to-one';
+import { toMany, hasMany } from 'ember-jsonapi-resources/utils/to-many';
 import { isType } from 'ember-jsonapi-resources/utils/is';
 import ResourceOperationsMixin from '../mixins/resource-operations';
 
@@ -187,9 +187,9 @@ const Resource = Ember.Object.extend(ResourceOperationsMixin, {
 
     Also sets or adds to the `content` of the related proxy object.
 
-    - For has-many relations the related identifier object is added to
+    - For to-many relations the related identifier object is added to
       the resource linkage data array.
-    - For has-one relations the resource identifier object is assigned,
+    - For to-one relations the resource identifier object is assigned,
       so the relation may be replaced.
 
     See:
@@ -248,12 +248,12 @@ const Resource = Ember.Object.extend(ResourceOperationsMixin, {
     setupRelationshipTracking.call(this, relation, meta.kind);
     let ref = this._relationships[relation];
     let relationshipData = this.get(`relationships.${relation}.data`);
-    if (meta && meta.kind === 'hasOne') {
+    if (meta && meta.kind === 'toOne') {
       if (!relationshipData || relationshipData.id !== identifier.id) {
         ref.changed = identifier;
         ref.previous = ref.previous || previous;
       }
-    } else if (meta && meta.kind === 'hasMany') {
+    } else if (meta && meta.kind === 'toMany') {
       let id = identifier.id;
       ref.removals = Ember.A(ref.removals.rejectBy('id', id));
       if (!ref.added.findBy('id', id)) {
@@ -266,8 +266,8 @@ const Resource = Ember.Object.extend(ResourceOperationsMixin, {
     Removes resource identifier object of the relationship data. Also, sets the
     `content` of the related (computed property's) proxy object to `null`.
 
-    - For has-one relations the (resource linkage) data is set to `null`.
-    - For has-many relations the resource identifier object is removed from
+    - For to-one relations the (resource linkage) data is set to `null`.
+    - For to-many relations the resource identifier object is removed from
       the resource Linkage `data` array.
 
     See:
@@ -315,10 +315,10 @@ const Resource = Ember.Object.extend(ResourceOperationsMixin, {
     let ref = this._relationships[relation] = this._relationships[relation] || {};
     let meta = this.relationMetadata(relation);
     setupRelationshipTracking.call(this, relation, meta.kind);
-    if (meta.kind === 'hasOne') {
+    if (meta.kind === 'toOne') {
       ref.changed = null;
       ref.previous = ref.previous || this.get('relationships.' + relation).data;
-    } else if (meta.kind === 'hasMany') {
+    } else if (meta.kind === 'toMany') {
       ref.added = Ember.A(ref.added.rejectBy('id', id));
       if (!ref.removals.findBy('id', id)) {
         ref.removals.pushObject({ type: pluralize(relation), id: id });
@@ -428,11 +428,11 @@ const Resource = Ember.Object.extend(ResourceOperationsMixin, {
       relations.forEach((relation) => {
         let ref = this._relationships[relation];
         let meta = this.relationMetadata(relation);
-        if (meta && meta.kind === 'hasOne') {
+        if (meta && meta.kind === 'toOne') {
           if (ref.changed && ref.changed.id && ref.previous && ref.previous.id) {
             this.addRelationship(relation, ref.previous.id);
           }
-        } else if (meta && meta.kind === 'hasMany') {
+        } else if (meta && meta.kind === 'toMany') {
           let added = ref.added.mapBy('id');
           let removed = ref.removals.mapBy('id');
           added.forEach( (id) => {
@@ -499,11 +499,11 @@ const Resource = Ember.Object.extend(ResourceOperationsMixin, {
 
   /**
     Sets the relationships data, used after the promise proxy resolves by
-    hasOne and hasMany helpers
+    toOne and toMany helpers
 
     @method didResolveProxyRelation
     @param {String} relation name
-    @param {String} kind of relation hasOne or hasMany
+    @param {String} kind of relation toOne or toMany
     @param {Array|Object} related resource(s)
   */
   didResolveProxyRelation(relation, kind, related) {
@@ -518,9 +518,9 @@ const Resource = Ember.Object.extend(ResourceOperationsMixin, {
     let relationshipData = 'relationships.' + relation + '.data';
     let data = this.get(relationshipData);
     if (!data) {
-      if (kind === 'hasOne') {
+      if (kind === 'toOne') {
         this.set(relationshipData, {});
-      } else if (kind === 'hasMany') {
+      } else if (kind === 'toMany') {
         this.set(relationshipData, Ember.A([]));
       }
     }
@@ -620,7 +620,7 @@ Resource.reopenClass({
 
 export default Resource;
 
-export { attr, hasOne, hasMany };
+export { attr, toOne, toMany, hasOne, hasMany };
 
 let _rp = 'service type id attributes relationships links meta _attributes isNew cacheDuration isCacheExpired';
 const ignoredMetaProps = _rp.split(' ');
@@ -650,9 +650,9 @@ function setupRelationship(relation, kind) {
     ref.links = {};
   }
   if (!ref.data) {
-    if (kind === 'hasOne') {
+    if (kind === 'toOne') {
       ref.data = null;
-    } else if (kind === 'hasMany') {
+    } else if (kind === 'toMany') {
       ref.data = Ember.A([]);
     }
   }
@@ -661,10 +661,10 @@ function setupRelationship(relation, kind) {
 function setupRelationshipTracking(relation, kind) {
   this._relationships[relation] = this._relationships[relation] || {};
   let ref = this._relationships[relation];
-  if (kind === 'hasOne') {
+  if (kind === 'toOne') {
     ref.changed = ref.changed || null;
     ref.previous = ref.previous || null;
-  } else if (kind === 'hasMany') {
+  } else if (kind === 'toMany') {
     ref.added = ref.added || Ember.A([]);
     ref.removals = ref.removals || Ember.A([]);
   }

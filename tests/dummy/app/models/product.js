@@ -1,6 +1,6 @@
 import Ember from 'ember';
 import Resource from './resource';
-import { attr, hasMany } from 'ember-jsonapi-resources/models/resource';
+import { attr, toMany } from 'ember-jsonapi-resources/models/resource';
 
 export default Resource.extend({
   type: 'products',
@@ -8,5 +8,5 @@ export default Resource.extend({
 
   name: attr('string'),
 
-  pictures: hasMany('pictures')
+  pictures: toMany('pictures')
 });

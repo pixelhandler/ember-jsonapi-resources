@@ -136,7 +136,7 @@ test('#_getAjaxHeaders', function(assert) {
   assert.equal(headers['Cache-Control'], 'max-age=0, private, must-revalidate', 'Catch control header ok');
 });
 
-test('#ajaxSuccessHandler handles response for empty has-one relationship', function(assert) {
+test('#ajaxSuccessHandler handles response for empty to-one relationship', function(assert) {
   assert.expect(1);
   let result = void 0;
   let resolve = function(resp) { result = resp; };
@@ -148,7 +148,7 @@ test('#ajaxSuccessHandler handles response for empty has-one relationship', func
   assert.ok(result === null, 'resolved with `null`');
 });
 
-test('#fetchSuccessHandler handles response for empty has-one relationship', function(assert) {
+test('#fetchSuccessHandler handles response for empty to-one relationship', function(assert) {
   assert.expect(1);
   let done = assert.async();
   let response = {

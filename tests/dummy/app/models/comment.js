@@ -1,6 +1,6 @@
 import Ember from 'ember';
 import Resource from './resource';
-import { attr, hasOne } from 'ember-jsonapi-resources/models/resource';
+import { attr, toOne } from 'ember-jsonapi-resources/models/resource';
 
 export default Resource.extend({
   type: 'comments',
@@ -14,6 +14,6 @@ export default Resource.extend({
     }
   }),
 
-  commenter: hasOne('commenter'),
-  post: hasOne('post')
+  commenter: toOne('commenter'),
+  post: toOne('post')
 });

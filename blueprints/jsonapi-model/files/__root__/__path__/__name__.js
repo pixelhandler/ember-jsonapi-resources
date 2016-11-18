@@ -1,6 +1,6 @@
 import Ember from 'ember';
 import Resource from 'ember-jsonapi-resources/models/resource';
-import { attr, hasOne, hasMany } from 'ember-jsonapi-resources/models/resource';
+import { attr, toOne, toMany } from 'ember-jsonapi-resources/models/resource';
 
 let <%= classifiedModuleName %>Model = Resource.extend({
   type: '<%= resource %>',

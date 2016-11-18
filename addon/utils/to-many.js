@@ -1,7 +1,7 @@
 /**
   @module ember-jsonapi-resources
   @submodule utils
-  @main hasOne
+  @main toMany
 **/
 
 import Ember from 'ember';
@@ -10,12 +10,13 @@ import { linksPath } from 'ember-jsonapi-resources/utils/related-proxy';
 import { isDasherized } from 'ember-jsonapi-resources/utils/is';
 
 /**
-  Helper to setup a has one relationship to another resource
+  Helper to setup a has many relationship to another resource
 
   ```js
-  let Employee = Person.extend({
-    type: 'employees',
-    supervisor: hasOne('supervisor')
+  let Author = Resource.extend({
+    type: 'authors',
+    name: attr(),
+    posts: toMany('posts')
   });
   ```
 
@@ -27,13 +28,13 @@ import { isDasherized } from 'ember-jsonapi-resources/utils/is';
     name: attr()
   });
 
-  let Employee = Person.extend({
-    type: 'employees',
-    supervisor: hasOne({ resource: 'supervisor', type: 'people' })
+  let Supervisor = Person.extend({
+    type: 'supervisors',
+    directReports: toMany({ resource: 'employees', type: 'people' })
   });
   ```
 
-  @method hasOne
+  @method toMany
   @for Resource
   @final
   @param {String|Object} relation the name of the relationship
@@ -41,21 +42,23 @@ import { isDasherized } from 'ember-jsonapi-resources/utils/is';
   @param {String} relation.type the name of the type or service to use
   @return {Object} computed property
 */
-export default function hasOne(relation) {
+export function toMany(relation) {
   let type = relation;
   if (typeof type === 'object') {
     assertResourceAndTypeProps(relation);
     type = relation.type;
     relation = relation.resource;
   }
-  assertDasherizedHasOneRelation(type);
-  let kind = 'hasOne';
-  let util = RelatedProxyUtil.create({relationship: relation, type: type, kind: kind});
+  assertDasherizedHasManyRelation(relation);
+  let kind = 'toMany';
+  let util = RelatedProxyUtil.create({'relationship': relation, 'type': type, kind: kind});
   let path = linksPath(relation);
   return Ember.computed(path, function () {
     return util.createProxy(this, kind);
   }).meta({relation: relation, type: type, kind: kind});
 }
+
+export let hasMany = toMany;
 
 function assertResourceAndTypeProps(relation) {
   try {
@@ -66,11 +69,11 @@ function assertResourceAndTypeProps(relation) {
   }
 }
 
-function assertDasherizedHasOneRelation(name) {
+function assertDasherizedHasManyRelation(name) {
   try {
     let relationName = Ember.String.dasherize(name);
-    let msg = " are recommended to use dasherized names, e.g `hasOne('"+ relationName +"')`";
-    msg += ", instead of `hasOne('"+ name +"')`";
+    let msg = " are recommended to use dasherized names, e.g `toMany('"+ relationName +"')`";
+    msg += ", instead of `toMany('"+ name +"')`";
     Ember.assert(msg, isDasherized(name));
   } catch(e) {
     Ember.Logger.warn(e.message);

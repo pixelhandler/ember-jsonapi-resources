@@ -1,8 +1,8 @@
 import PersonResource from './person';
-import { hasOne, hasMany } from 'ember-jsonapi-resources/models/resource';
+import { toOne, toMany } from 'ember-jsonapi-resources/models/resource';
 
 export default PersonResource.extend({
   type: 'employees',
-  pictures: hasMany('pictures'),
-  supervisor: hasOne('supervisor')
+  pictures: toMany('pictures'),
+  supervisor: toOne('supervisor')
 });

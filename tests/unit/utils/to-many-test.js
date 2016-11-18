@@ -13,7 +13,7 @@ const mockService = function () {
 };
 let entities = ['post', 'author'];
 
-moduleFor('model:resource', 'Unit | Utility | hasMany', {
+moduleFor('model:resource', 'Unit | Utility | toMany', {
   beforeEach() {
     setup.call(this);
     this.sandbox = window.sinon.sandbox.create();
@@ -31,7 +31,7 @@ moduleFor('model:resource', 'Unit | Utility | hasMany', {
   }
 });
 
-test('hasMany() helper sets up a promise proxy to a related resource', function(assert) {
+test('toMany() helper sets up a promise proxy to a related resource', function(assert) {
   let author = Ember.getOwner(this)._lookupFactory('model:author').create({
     id: '1', attributes: { name: 'pixelhandler' },
     relationships: {
@@ -56,5 +56,5 @@ test('hasMany() helper sets up a promise proxy to a related resource', function(
     }
   });
   let promise = author.get('posts');
-  assert.ok(promise.toString().match('ArrayProxy').length === 1, 'ArrayProxy used for hasMany relation');
+  assert.ok(promise.toString().match('ArrayProxy').length === 1, 'ArrayProxy used for toMany relation');
 });

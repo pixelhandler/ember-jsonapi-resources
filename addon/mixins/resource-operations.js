@@ -127,9 +127,9 @@ export default Ember.Mixin.create({
   updateRelationship(relationship, ids, errorCallback) {
     let related = this.get(relationship);
     let rollback;
-    if (related.kind === 'hasOne') {
+    if (related.kind === 'toOne') {
       rollback = related.get('id');
-    } else if (related.kind === 'hasMany') {
+    } else if (related.kind === 'toMany') {
       rollback = related.mapBy('id');
     }
     this._updateRelationshipsData(relationship, ids);

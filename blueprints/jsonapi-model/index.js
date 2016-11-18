@@ -94,10 +94,10 @@ module.exports = {
 
 function resourceAttr(name, type) {
   switch (type) {
-  case 'has-one':
-    return 'hasOne(\'' + name + '\')';
-  case 'has-many':
-    return 'hasMany(\'' + name + '\')';
+  case 'to-one':
+    return 'toOne(\'' + name + '\')';
+  case 'to-many':
+    return 'toMany(\'' + name + '\')';
   case '':
     return 'attr()';
   default:

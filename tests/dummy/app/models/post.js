@@ -1,6 +1,6 @@
 import Ember from 'ember';
 import Resource from './resource';
-import { attr, hasOne, hasMany } from 'ember-jsonapi-resources/models/resource';
+import { attr, toOne, toMany } from 'ember-jsonapi-resources/models/resource';
 
 export default Resource.extend({
   type: 'posts',
@@ -10,6 +10,6 @@ export default Resource.extend({
   date: attr(),
   excerpt: attr('string'),
 
-  author: hasOne('author'),
-  comments: hasMany('comments')
+  author: toOne('author'),
+  comments: toMany('comments')
 });

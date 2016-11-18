@@ -22,7 +22,7 @@ import { isBlank, isDasherized, isType } from 'ember-jsonapi-resources/utils/is'
   ```js
   import Ember from 'ember';
   import Resource from 'ember-jsonapi-resources/models/resource';
-  import { attr, hasOne, hasMany } from 'ember-jsonapi-resources/models/resource';
+  import { attr, toOne, toMany } from 'ember-jsonapi-resources/models/resource';
 
   export default Resource.extend({
     type: 'articles',

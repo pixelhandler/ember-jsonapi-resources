@@ -53,15 +53,15 @@ const RelatedProxyUtil = Ember.Object.extend({
 
     @method createProxy
     @param {Resource} resource
-    @param {String} kind 'hasMany' or 'hasOne'
+    @param {String} kind 'toMany' or 'toOne'
     @return {PromiseProxy|ObjectProxy|ArrayProxy} proxy instance, new resource uses mock relations
   */
   createProxy(resource, kind) {
     let proxyFactory, newContent;
-    if (kind === 'hasMany') {
+    if (kind === 'toMany') {
       proxyFactory = Ember.ArrayProxy;
       newContent = Ember.A([]);
-    } else if (kind === 'hasOne') {
+    } else if (kind === 'toOne') {
       proxyFactory = Ember.ObjectProxy;
       newContent = Ember.Object.create();
     }
@@ -76,7 +76,7 @@ const RelatedProxyUtil = Ember.Object.extend({
   /**
     @method proxySetup
     @param {Resource} resource
-    @param {String} kind 'hasMany' or 'hasOne'
+    @param {String} kind 'toMany' or 'toOne'
     @param {Ember.ObjectProxy|Ember.ArrayProxy} proxyFactory
     @return {PromiseProxy} proxy
   */
@@ -92,7 +92,7 @@ const RelatedProxyUtil = Ember.Object.extend({
       'promise': promise, 'type': relation, 'kind': kind
     });
     return proxyProto.create({
-      content: (kind === 'hasOne') ? Ember.Object.create() : Ember.A([])
+      content: (kind === 'toOne') ? Ember.Object.create() : Ember.A([])
     });
   },
 

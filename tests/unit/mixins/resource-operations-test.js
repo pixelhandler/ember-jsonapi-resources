@@ -3,7 +3,7 @@ import RSVP from 'rsvp';
 // import ResourceOperationsMixin from 'ember-jsonapi-resources/mixins/resource-operations';
 import { module, test } from 'qunit';
 import Resource from 'ember-jsonapi-resources/models/resource';
-import { attr/*, hasOne, hasMany*/ } from 'ember-jsonapi-resources/models/resource';
+import { attr/*, toOne, toMany*/ } from 'ember-jsonapi-resources/models/resource';
 
 let promiseResolved = function() { return RSVP.Promise.resolve(); };
 
@@ -24,8 +24,8 @@ module('Unit | Mixin | resource-operations', {
       },
       name: attr('string'),
       // mock relationship computed properties
-      guns: {kind: 'hasMany', mapBy: Ember.K }, // hasMany('guns')
-      horse: {kind: 'hasOne', get: Ember.K } // hasOne('horse')
+      guns: {kind: 'toMany', mapBy: Ember.K }, // toMany('guns')
+      horse: {kind: 'toOne', get: Ember.K } // toOne('horse')
     });
     this.subject = Cowboy.create({ id: 1, name:'Lone Ranger'});
     // mock payload setup

@@ -14,7 +14,7 @@ const mockService = function () {
 };
 let entities = ['post', 'author'];
 
-moduleFor('model:resource', 'Unit | Utility | hasOne', {
+moduleFor('model:resource', 'Unit | Utility | toOne', {
   beforeEach() {
     setup.call(this);
     this.sandbox = window.sinon.sandbox.create();
@@ -32,7 +32,7 @@ moduleFor('model:resource', 'Unit | Utility | hasOne', {
   }
 });
 
-test('hasOne() helper sets up a promise proxy to a related resource', function(assert) {
+test('toOne() helper sets up a promise proxy to a related resource', function(assert) {
   let post = Ember.getOwner(this)._lookupFactory('model:post').create({
     id: '1', attributes: { title: 'Wyatt Earp', excerpt: 'Was a gambler.'},
     relationships: {
@@ -46,5 +46,5 @@ test('hasOne() helper sets up a promise proxy to a related resource', function(a
     }
   });
   let promise = post.get('author');
-  assert.ok(promise.toString().match('ObjectProxy').length === 1, 'ObjectProxy used for hasOne relation');
+  assert.ok(promise.toString().match('ObjectProxy').length === 1, 'ObjectProxy used for toOne relation');
 });
