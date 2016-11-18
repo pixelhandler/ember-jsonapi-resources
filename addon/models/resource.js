@@ -18,11 +18,13 @@ const { getOwner, computed, Logger } = Ember;
   define a prototype using `Resource.extend({ type: entity })`. Model prototypes
   are registered in the container as factories, they use the options:
   `{ instantiate: false, singleton: false }`. So, to create a model instance
-  use the owner API or the container to `lookup` the factory, for example:
+  use the owner API method `_lookupFactory('model:name')`† then `create()`:
 
   ```js
-  let model = Ember.getOwner(this).lookup('model:entity').create({ attributes: { key: value } });
+  let model = Ember.getOwner(this)._lookupFactory('model:entity').create({ attributes: { key: value } });
   ```
+
+  † **Note:** eventually `factoryFor` will replace `_lookupFactory`
 
   See <http://jsonapi.org/format/#document-resource-objects>
 
@@ -557,7 +559,7 @@ Resource.reopenClass({
     ```
     model() {
       let owner = Ember.getOwner(this);
-      return owner.lookup('model:post').create({
+      return owner._lookupFactory('model:post').create({
         attributes: {
           title: 'The JSON API 1.0 Spec Rocks!'
         }
@@ -608,7 +610,7 @@ Resource.reopenClass({
       } else {
         msg += '#create should only be called from a container lookup (relationships not setup), instead use: \n';
         msg += "`let owner = Ember.getOwner(this); \n";
-        msg += 'owner.lookup("' + factory + '").create()`';
+        msg += 'owner._lookupFactory("' + factory + '").create()`';
         Logger.warn(msg);
       }
     }

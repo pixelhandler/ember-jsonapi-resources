@@ -22,7 +22,6 @@ export const Supervisor = SupervisorResource.extend({service: null});
 
 export function setup() {
   let opts = { instantiate: false, singleton: false };
-  setupOwner.call(this);
   this.registry.register('model:post', Post, opts);
   this.registry.register('model:author', Author, opts);
   this.registry.register('model:comment', Comment, opts);
@@ -43,32 +42,4 @@ export function mockServices() {
   }
 }
 
-function setupOwner() {
-  this._ogContainer = this.container;
-  let ogLookup, ogLookupFactory;
-  if (typeof Ember.getOwner === 'function') {
-    this.container = this.owner || Ember.getOwner(this);
-    ogLookup = Ember.getOwner(this).lookup;
-    ogLookupFactory = this.container._lookupFactory;
-  } else {
-    ogLookup = this._ogContainer.lookup;
-    ogLookupFactory = this._ogContainer.lookupFactory;
-  }
-
-  Ember.getOwner(this).lookup = function(factory) {
-    if (factory.match(/^model/) !== null) {
-      return ogLookupFactory.call(this, factory);
-    } else {
-      return ogLookup.call(this, factory);
-    }
-  };
-}
-
-export function teardown() {
-  this.container = this._ogContainer;
-  delete this._ogContainer;
-  delete Post.prototype.container;
-  delete Author.prototype.container;
-  delete Comment.prototype.container;
-  delete Commenter.prototype.container;
-}
+export function teardown() {}

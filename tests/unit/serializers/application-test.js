@@ -36,7 +36,7 @@ test('#serialize calls serializeResource', function(assert) {
 
 test('#serializeResource with only attributes data', function(assert) {
   const serializer = this.subject();
-  let resource = Ember.getOwner(this).lookup('model:author').create({
+  let resource = Ember.getOwner(this)._lookupFactory('model:author').create({
     attributes: authorMock.data.attributes
   });
   let data = serializer.serializeResource(resource);
@@ -54,7 +54,7 @@ test('#serializeResource with only attributes data', function(assert) {
 test('#serializeResource with attributes and relationship', function(assert) {
   const serializer = this.subject();
   mockServices.call(this);
-  let resource = Ember.getOwner(this).lookup('model:post').create({
+  let resource = Ember.getOwner(this)._lookupFactory('model:post').create({
     attributes: postMock.data.attributes
   });
   resource.addRelationship('author', '1');
@@ -75,7 +75,7 @@ test('#serializeResource with attributes and relationship', function(assert) {
 
 test('#serializeChanged', function(assert) {
   const serializer = this.subject();
-  let resource = Ember.getOwner(this).lookup('model:post').create(postMock.data);
+  let resource = Ember.getOwner(this)._lookupFactory('model:post').create(postMock.data);
   let changedTitle = postMock.data.attributes.title + ' changed';
   resource.set('title', changedTitle);
   let serialized = serializer.serializeChanged(resource);
@@ -89,7 +89,7 @@ test('#serializeChanged', function(assert) {
 
 test('when #serializedChanged has nothing to return', function(assert) {
   const serializer = this.subject();
-  let resource = Ember.getOwner(this).lookup('model:post').create(postMock.data);
+  let resource = Ember.getOwner(this)._lookupFactory('model:post').create(postMock.data);
   let serialized = serializer.serializeChanged(resource);
   assert.equal(serialized, null, 'null is returned when there are no changed attributes');
 });
@@ -116,7 +116,7 @@ test('#serializeRelationships', function(assert) {
 });
 
 function createPost() {
-  return Ember.getOwner(this).lookup('model:post').create({
+  return Ember.getOwner(this)._lookupFactory('model:post').create({
     id: '1', attributes: {
       title: 'Wyatt Earp', excerpt: 'Was a gambler.'
     },

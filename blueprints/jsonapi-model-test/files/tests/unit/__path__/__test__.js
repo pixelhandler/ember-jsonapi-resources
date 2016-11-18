@@ -16,6 +16,6 @@ moduleFor('model:<%= dasherizedModuleName %>', '<%= friendlyDescription %>', {
 
 test('<%= resource %> has "type" property set to: <%= resource %>', function(assert) {
   let owner = Ember.getOwner(this);
-  let model = owner.lookup('model:<%= entity %>').create();
+  let model = owner._lookupFactory('model:<%= entity %>').create();
   assert.equal(model.get('type'), '<%= resource %>', 'resource has expected type');
 });

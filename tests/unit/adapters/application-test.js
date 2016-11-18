@@ -247,7 +247,7 @@ test('#findRelated', function(assert) {
   const done = assert.async();
 
   // Resource to findRelated on.
-  let resource   = Ember.getOwner(this).lookup('model:post').create(postMock.data);
+  let resource   = Ember.getOwner(this)._lookupFactory('model:post').create(postMock.data);
   let relatedUrl = resource.get('relationships.author.links.related');
   const adapter  = this.subject({type: 'posts', url: '/posts'});
 
@@ -257,7 +257,7 @@ test('#findRelated', function(assert) {
   sandbox.stub(service, 'fetch', function () { return RSVP.Promise.resolve(related); });
 
   // The related resource we expect to find.
-  let related = Ember.getOwner(this).lookup('model:author').create(authorMock.data);
+  let related = Ember.getOwner(this)._lookupFactory('model:author').create(authorMock.data);
 
   let promise = adapter.findRelated('author', relatedUrl);
 
@@ -276,8 +276,8 @@ test('#findRelated is called with optional type for the resource', function (ass
   assert.expect(4);
   const done = assert.async();
 
-  let supervisor = Ember.getOwner(this).lookup('model:supervisor').create(supervisorMock.data);
-  let employee = Ember.getOwner(this).lookup('model:employee').create(employeeMock.data);
+  let supervisor = Ember.getOwner(this)._lookupFactory('model:supervisor').create(supervisorMock.data);
+  let employee = Ember.getOwner(this)._lookupFactory('model:employee').create(employeeMock.data);
 
   let SupervisorAdapter = Adapter.extend({ type: 'supervisors', url: '/supervisors' });
   SupervisorAdapter.reopenClass({isServiceFactory: true});
@@ -308,7 +308,7 @@ test('#createResource', function(assert) {
 
   const adapter = this.subject({type: 'posts', url: '/posts'});
   // create new resource (without id, which "server" (response) assigns).
-  let postFactory = Ember.getOwner(this).lookup('model:post');
+  let postFactory = Ember.getOwner(this)._lookupFactory('model:post');
   let data = JSON.parse(JSON.stringify(postMock.data)); // clones postMock.data
   delete data.id;
   let newResource = postFactory.create(data);
@@ -351,7 +351,7 @@ test('#updateResource updates changed attributes', function(assert) {
   };
   adapter.serializer = mockSerializer({ changed: payload });
   sandbox.stub(adapter, 'fetch', function () { return RSVP.Promise.resolve(null); });
-  let resource = Ember.getOwner(this).lookup('model:post').create(postMock.data);
+  let resource = Ember.getOwner(this)._lookupFactory('model:post').create(postMock.data);
   let promise = adapter.updateResource(resource);
   assert.ok(typeof promise.then === 'function', 'returns a thenable');
   promise.then(() => {
@@ -373,12 +373,12 @@ test('#updateResource updates (optional) relationships', function(assert) {
   let adapter = this.subject({ type: 'posts', url: '/posts' });
   sandbox.stub(adapter, 'fetch', function () { return RSVP.Promise.resolve(null); });
 
-  let author = Ember.getOwner(this).lookup('model:comment').create(postMock.included[0]);
+  let author = Ember.getOwner(this)._lookupFactory('model:comment').create(postMock.included[0]);
   author.set('id', '2');
   this.registry.register('service:authors', adapter.constructor.extend({
     cacheLookup: function () { return author; }
   }));
-  let comment = Ember.getOwner(this).lookup('model:comment').create(postMock.included[1]);
+  let comment = Ember.getOwner(this)._lookupFactory('model:comment').create(postMock.included[1]);
   comment.set('id', '3');
   this.registry.register('service:comments', adapter.constructor.extend({
     cacheLookup: function () { return comment; }
@@ -395,7 +395,7 @@ test('#updateResource updates (optional) relationships', function(assert) {
   };
   adapter.serializer = mockSerializer({ relationships: payload.data.relationships });
 
-  let resource = Ember.getOwner(this).lookup('model:post').create(postMock.data);
+  let resource = Ember.getOwner(this)._lookupFactory('model:post').create(postMock.data);
   resource.addRelationship('author', '2');
   resource.addRelationship('comments', '3');
 
@@ -421,7 +421,7 @@ test('when serializer returns null (nothing changed) #updateResource return prom
   let adapter = this.subject({type: 'posts', url: '/posts'});
   adapter.serializer = mockSerializer();
   sandbox.stub(adapter, 'fetch', function () { return RSVP.Promise.resolve(null); });
-  let resource = Ember.getOwner(this).lookup('model:post').create(postMock.data);
+  let resource = Ember.getOwner(this)._lookupFactory('model:post').create(postMock.data);
   let promise = adapter.updateResource(resource);
 
   assert.ok(typeof promise.then === 'function', 'returns a thenable');
@@ -440,7 +440,7 @@ test('#createRelationship (to-many)', function(assert) {
   let payload = {data: [{type: 'comments', id: '1'}]};
   adapter.serializer = mockSerializer({ relationship: payload });
   sandbox.stub(adapter, 'fetch', function () { return RSVP.Promise.resolve(null); });
-  let resource = Ember.getOwner(this).lookup('model:post').create(postMock.data);
+  let resource = Ember.getOwner(this)._lookupFactory('model:post').create(postMock.data);
   let promise = adapter.createRelationship(resource, 'comments', '1');
 
   assert.ok(typeof promise.then === 'function', 'returns a thenable');
@@ -466,7 +466,7 @@ test('#createRelationship (to-one)', function(assert) {
   adapter.serializer = mockSerializer({ relationship: mockRelationSerialized });
   mockServices.call(this);
   sandbox.stub(adapter, 'fetch', function () { return RSVP.Promise.resolve(null); });
-  let resource = Ember.getOwner(this).lookup('model:post').create(postMock.data);
+  let resource = Ember.getOwner(this)._lookupFactory('model:post').create(postMock.data);
   let promise = adapter.createRelationship(resource, 'author', '1');
 
   assert.ok(typeof promise.then === 'function', 'returns a thenable');
@@ -491,7 +491,7 @@ test('#createRelationship uses optional resource type', function (assert) {
   let mockRelationSerialized = { data: [{ type: 'employees', id: '1' }] };
   adapter.serializer = mockSerializer({ relationship: mockRelationSerialized });
   sandbox.stub(adapter, 'fetch', function () { return RSVP.Promise.resolve(null); });
-  let resource = Ember.getOwner(this).lookup('model:supervisor').create(supervisorMock.data);
+  let resource = Ember.getOwner(this)._lookupFactory('model:supervisor').create(supervisorMock.data);
   let promise = adapter.createRelationship(resource, 'directReports', '1');
 
   assert.ok(typeof promise.then === 'function', 'returns a thenable');
@@ -516,7 +516,7 @@ test('#deleteRelationship (to-many)', function(assert) {
   let mockRelationSerialized = { data: [{ type: 'comments', id: '1' }] };
   adapter.serializer = mockSerializer({ relationship: mockRelationSerialized });
   sandbox.stub(adapter, 'fetch', function () { return RSVP.Promise.resolve(null); });
-  let resource = Ember.getOwner(this).lookup('model:post').create(postMock.data);
+  let resource = Ember.getOwner(this)._lookupFactory('model:post').create(postMock.data);
   let promise = adapter.deleteRelationship(resource, 'comments', '1');
 
   assert.ok(typeof promise.then === 'function', 'returns a thenable');
@@ -541,7 +541,7 @@ test('#deleteRelationship (to-one)', function(assert) {
   let mockRelationSerialized = { data: { type: 'authors', id: '1' } };
   adapter.serializer = mockSerializer({ relationship: mockRelationSerialized });
   sandbox.stub(adapter, 'fetch', function () { return RSVP.Promise.resolve(null); });
-  let resource = Ember.getOwner(this).lookup('model:post').create(postMock.data);
+  let resource = Ember.getOwner(this)._lookupFactory('model:post').create(postMock.data);
   let promise = adapter.deleteRelationship(resource, 'author', '1');
 
   assert.ok(typeof promise.then === 'function', 'returns a thenable');
@@ -566,7 +566,7 @@ test('#deleteRelationship uses optional resource type', function (assert) {
   let mockRelationSerialized = { data: [{ type: 'employees', id: '1' }] };
   adapter.serializer = mockSerializer({ relationship: mockRelationSerialized });
   sandbox.stub(adapter, 'fetch', function () { return RSVP.Promise.resolve(null); });
-  let resource = Ember.getOwner(this).lookup('model:supervisor').create(supervisorMock.data);
+  let resource = Ember.getOwner(this)._lookupFactory('model:supervisor').create(supervisorMock.data);
   let promise = adapter.deleteRelationship(resource, 'directReports', '1');
 
   assert.ok(typeof promise.then === 'function', 'returns a thenable');
@@ -591,7 +591,7 @@ test('#patchRelationship (to-many)', function(assert) {
   let mockRelationSerialized = { data: [{ type: 'comments', id: '1' }] };
   adapter.serializer = mockSerializer({ relationship: mockRelationSerialized });
   sandbox.stub(adapter, 'fetch', function () { return RSVP.Promise.resolve(null); });
-  let resource = Ember.getOwner(this).lookup('model:post').create(postMock.data);
+  let resource = Ember.getOwner(this)._lookupFactory('model:post').create(postMock.data);
   resource.addRelationship('comments', '1');
   let promise = adapter.patchRelationship(resource, 'comments');
 
@@ -617,7 +617,7 @@ test('#patchRelationship (to-one)', function(assert) {
   let mockRelationSerialized = { data: { type: 'authors', id: '1' } };
   adapter.serializer = mockSerializer({ relationship: mockRelationSerialized });
   sandbox.stub(adapter, 'fetch', function () { return RSVP.Promise.resolve(null); });
-  let resource = Ember.getOwner(this).lookup('model:post').create(postMock.data);
+  let resource = Ember.getOwner(this)._lookupFactory('model:post').create(postMock.data);
   resource.addRelationship('author', '1');
   let promise = adapter.patchRelationship(resource, 'author');
 
@@ -643,7 +643,7 @@ test('#patchRelationship uses optional resource type', function (assert) {
   let mockRelationSerialized = { data: [{type: 'employees', id: '1'}] };
   adapter.serializer = mockSerializer({ relationship: mockRelationSerialized });
   sandbox.stub(adapter, 'fetch', function () { return RSVP.Promise.resolve(null); });
-  let resource = Ember.getOwner(this).lookup('model:supervisor').create(supervisorMock.data);
+  let resource = Ember.getOwner(this)._lookupFactory('model:supervisor').create(supervisorMock.data);
   resource.addRelationship('directReports', '1');
   let promise = adapter.patchRelationship(resource, 'directReports');
 
@@ -673,7 +673,7 @@ test('createRelationship casts id to string', function (assert) {
   let mockRelationSerialized = { data: [{type: 'comments', id: '1'}] };
   adapter.serializer = mockSerializer({ relationship: mockRelationSerialized });
   sandbox.stub(adapter, 'fetch', function () { return RSVP.Promise.resolve(null); });
-  let resource = Ember.getOwner(this).lookup('model:post').create(postMock.data);
+  let resource = Ember.getOwner(this)._lookupFactory('model:post').create(postMock.data);
   let createPromise = adapter.createRelationship(resource, 'comments', 1);
   let deletePromise = adapter.deleteRelationship(resource, 'comments', 1);
 
@@ -723,7 +723,7 @@ test('#deleteResource can be called with a resource having a self link, and call
 
   const adapter = this.subject({type: 'posts', url: '/posts'});
   sandbox.stub(adapter, 'fetch', function () { return RSVP.Promise.resolve(null); });
-  let resource = Ember.getOwner(this).lookup('model:post').create(postMock.data);
+  let resource = Ember.getOwner(this)._lookupFactory('model:post').create(postMock.data);
   sandbox.stub(resource, 'destroy', function () {});
   let promise = adapter.deleteResource(resource);
 
@@ -744,7 +744,7 @@ test('when called with resource argument, #deleteResource calls #cacheRemove', f
 
   const adapter = this.subject({type: 'posts', url: '/posts'});
   sandbox.stub(adapter, 'fetch', function () { return RSVP.Promise.resolve(null); });
-  let resource = Ember.getOwner(this).lookup('model:post').create(postMock.data);
+  let resource = Ember.getOwner(this)._lookupFactory('model:post').create(postMock.data);
   sandbox.stub(adapter, 'cacheRemove', function () {});
   Ember.run(() => {
     adapter.deleteResource(resource);
@@ -859,7 +859,7 @@ test('#cacheUpdate called after #updateResource success', function(assert) {
     }
   };
   adapter.serializer = mockSerializer({ changed: payload });
-  let resource = Ember.getOwner(this).lookup('model:post').create(postMock.data);
+  let resource = Ember.getOwner(this)._lookupFactory('model:post').create(postMock.data);
   let promise = adapter.updateResource(resource);
 
   assert.ok(typeof promise.then === 'function', 'returns a thenable');

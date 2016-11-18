@@ -9,7 +9,7 @@ export default Ember.Route.extend({
 
   model() {
     let owner = Ember.getOwner(this);
-    return owner.lookup('model:post').create({
+    return owner._lookupFactory('model:post').create({
       isNew: true,
       attributes: { date: new Date() }
     });

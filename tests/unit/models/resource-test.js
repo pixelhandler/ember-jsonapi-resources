@@ -9,12 +9,12 @@ moduleFor('model:resource', 'Unit | Model | resource', {
   beforeEach() {
     setup.call(this);
     mockServices.call(this);
-    let owner = this.container;
+    let owner = Ember.getOwner(this);
     this.sandbox = window.sinon.sandbox.create();
     this.registry.register('model:resource', Resource, { instantiate: false });
     this._ogSubject = this.subject;
     this.subject = function(options) {
-      let Factory = owner.lookup('model:resource');
+      let Factory = owner._lookupFactory('model:resource');
       Factory = Factory.extend({type: 'resource'});
       return Factory.create(options);
     };
@@ -59,7 +59,7 @@ test('in creating instances, ids are cast to string', function (assert) {
 test('in creating instances, optional resource is used to set up relationships', function (assert) {
   assert.expect(2);
 
-  let supervisor = Ember.getOwner(this).lookup('model:supervisor').create();
+  let supervisor = Ember.getOwner(this)._lookupFactory('model:supervisor').create();
   let meta       = supervisor.constructor.metaForProperty('directReports');
   let relationships = supervisor.get('relationships');
 
@@ -117,7 +117,7 @@ test('attr() uses the attributes hash for computed model attributes', function(a
 });
 
 test('attr() helper creates a computed property using a unique (protected) attributes hash', function(assert) {
-  const Factory = Ember.getOwner(this).lookup('model:resource');
+  const Factory = Ember.getOwner(this)._lookupFactory('model:resource');
   const PersonFactory = Factory.extend({ name: attr('string'), type: 'person' });
 
   let personA = PersonFactory.create({ attributes: { 'name': 'Ricky' }});
@@ -223,7 +223,7 @@ test('#rollback resets attributes and relationships', function(assert){
 });
 
 test('#didUpdateResource empties the resource _attributes hash when resource id matches json arg id value', function(assert) {
-  let post = Ember.getOwner(this).lookup('model:post').create({
+  let post = Ember.getOwner(this)._lookupFactory('model:post').create({
     id: '1', attributes: {title: 'Wyatt Earp', excerpt: 'Was a gambler.'}
   });
   post.set('excerpt', 'became a deputy.');
@@ -233,7 +233,7 @@ test('#didUpdateResource empties the resource _attributes hash when resource id 
 });
 
 test('#didUpdateResource does nothing if json argument has an id that does not match the resource id', function(assert) {
-  let post = Ember.getOwner(this).lookup('model:post').create({
+  let post = Ember.getOwner(this)._lookupFactory('model:post').create({
     id: '1', attributes: {title: 'Wyatt Earp', excerpt: 'Was a gambler.'}
   });
   post.set('excerpt', 'became a deputy.');
@@ -243,7 +243,7 @@ test('#didUpdateResource does nothing if json argument has an id that does not m
 });
 
 test('#relationMetadata', function(assert) {
-  let post = Ember.getOwner(this).lookup('model:post').create({
+  let post = Ember.getOwner(this)._lookupFactory('model:post').create({
     id: '1', attributes: { title: 'Wyatt Earp', excerpt: 'Was a gambler.' },
     relationships: {
       author: { data: { type: 'authors', id: '1' } },
@@ -264,7 +264,7 @@ test('#relationMetadata', function(assert) {
 
 test('#addRelationship', function(assert) {
   // create resource with relation from json payload.
-  let comment = Ember.getOwner(this).lookup('model:comment').create({
+  let comment = Ember.getOwner(this)._lookupFactory('model:comment').create({
     id: '4',  attributes: {body: 'Wyatt become a deputy too.' },
     relationships: { commenter: { data: { type: 'commenter', id: '3' } } }
   });
@@ -275,7 +275,7 @@ test('#addRelationship', function(assert) {
 
   // create resource and add relationships through .addRelationship()
   // make sure both relationships exist after all manipulations.
-  let post = Ember.getOwner(this).lookup('model:post').create({
+  let post = Ember.getOwner(this)._lookupFactory('model:post').create({
     id: '1', attributes: {title: 'Wyatt Earp', excerpt: 'Was a gambler.'}
   });
   post.addRelationship('author', '2');
@@ -292,7 +292,7 @@ test('#addRelationship', function(assert) {
 });
 
 test('#addRelationship cast id to string', function (assert) {
-  let post = Ember.getOwner(this).lookup('model:post').create({
+  let post = Ember.getOwner(this)._lookupFactory('model:post').create({
     id: '1', attributes: {title: 'Wyatt Earp', excerpt: 'Was a gambler.'}
   });
   post.addRelationship('author', 1);
@@ -303,7 +303,7 @@ test('#addRelationship cast id to string', function (assert) {
 });
 
 test('#addRelationship tracks relationships changes', function(assert) {
-  let post = Ember.getOwner(this).lookup('model:post').create({
+  let post = Ember.getOwner(this)._lookupFactory('model:post').create({
     id: '1', attributes: {title: 'Wyatt Earp', excerpt: 'Was a gambler.'}
   });
 
@@ -331,7 +331,7 @@ test('#addRelationship tracks relationships changes', function(assert) {
 });
 
 test('#addRelationships', function(assert) {
-  let post = Ember.getOwner(this).lookup('model:post').create({
+  let post = Ember.getOwner(this)._lookupFactory('model:post').create({
     id: '1', attributes: {title: 'Wyatt Earp', excerpt: 'Was a gambler.'}
   });
   post.addRelationships('comments', ['4', '5']);
@@ -349,20 +349,20 @@ test('#addRelationships', function(assert) {
 test('#removeRelationship', function(assert) {
   // set up models and their relations through create with json payload.
   let post = createPostWithRelationships.call(this);
-  let author = Ember.getOwner(this).lookup('model:author').create({
+  let author = Ember.getOwner(this)._lookupFactory('model:author').create({
     id: '2', attributes: { name: 'Bill' },
     relationships: {
       posts: { data: [{ type: 'posts', id: '1' }], links: { related: 'url'} }
     }
   });
-  let comment = Ember.getOwner(this).lookup('model:comment').create({
+  let comment = Ember.getOwner(this)._lookupFactory('model:comment').create({
     id: '3', attributes: { body: 'Wyatt become a deputy too.' },
     relationships: {
       commenter: { data: { type: 'commenters', id: '4' }, links: { related: 'url'} },
       post: { data: { type: 'posts', id: '1' }, links: { related: 'url'} }
     }
   });
-  let commenter = Ember.getOwner(this).lookup('model:commenter').create({
+  let commenter = Ember.getOwner(this)._lookupFactory('model:commenter').create({
     id: '4', attributes: { name: 'Virgil Erp' },
     relationships: {
       comments: { data: [{ type: 'comments', id: '3' }], links: { related: 'url'} }
@@ -468,7 +468,7 @@ test('#removeRelationship', function(assert) {
 
 test('#removeRelationship casts id to string', function (assert) {
   // set up model and its relations through create with json payload.
-  let post = Ember.getOwner(this).lookup('model:post').create({
+  let post = Ember.getOwner(this)._lookupFactory('model:post').create({
     id: '1', attributes: { title: 'Wyatt Earp', excerpt: 'Was a gambler.' },
     relationships: {
       comments: {
@@ -525,13 +525,13 @@ test('#changedRelationships', function(assert) {
 });
 
 test('#didResolveProxyRelation', function(assert) {
-  let post = Ember.getOwner(this).lookup('model:post').create({
+  let post = Ember.getOwner(this)._lookupFactory('model:post').create({
     id: '1', attributes: {title: 'Wyatt Earp', excerpt: 'Was a gambler.'},
     relationships: {
       author: { data: { type: 'authors', id: '2'}, links: { related: 'url-here'} }
     }
   });
-  let author = Ember.getOwner(this).lookup('model:author').create({
+  let author = Ember.getOwner(this)._lookupFactory('model:author').create({
     id: '2', attributes: { name: 'Bill' },
     relationships: {
       posts: { data: [{ type: 'posts', id: '1' }], links: { related: 'url-here'} }
@@ -553,7 +553,7 @@ test('#didResolveProxyRelation', function(assert) {
 
 test('#isNew resource uses relations without proxied content', function(assert) {
   let serviceOp = this.sandbox.spy();
-  let post = Ember.getOwner(this).lookup('model:post').create({
+  let post = Ember.getOwner(this)._lookupFactory('model:post').create({
     id: '1', attributes: {title: 'Wyatt Earp', excerpt: 'Was a gambler.'},
     isNew: true,
     // mock service
@@ -602,7 +602,7 @@ test('#updateRelationship, from resource-operations mixin', function(assert) {
   let serviceOp = this.sandbox.spy(function() {
     return RSVP.Promise.resolve(null);
   });
-  let post = Ember.getOwner(this).lookup('model:post').create({
+  let post = Ember.getOwner(this)._lookupFactory('model:post').create({
     id: '1', attributes: { title: 'Wyatt Earp', excerpt: 'Was a gambler.' },
     relationships: {
       author: { data: { type: 'authors', id: '2' }, links: { related: 'url-here'} },
@@ -642,14 +642,14 @@ test('#updateRelationship, from resource-operations mixin', function(assert) {
 });
 
 function createPost() {
-  return Ember.getOwner(this).lookup('model:post').create({
+  return Ember.getOwner(this)._lookupFactory('model:post').create({
     id: '1',
     attributes: { title: 'Wyatt Earp', excerpt: 'Was a gambler.' }
   });
 }
 
 function createPostWithRelationships() {
-  return Ember.getOwner(this).lookup('model:post').create({
+  return Ember.getOwner(this)._lookupFactory('model:post').create({
     id: '1', attributes: {
       title: 'Wyatt Earp', excerpt: 'Was a gambler.'
     },

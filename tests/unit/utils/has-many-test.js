@@ -32,7 +32,7 @@ moduleFor('model:resource', 'Unit | Utility | hasMany', {
 });
 
 test('hasMany() helper sets up a promise proxy to a related resource', function(assert) {
-  let author = Ember.getOwner(this).lookup('model:author').create({
+  let author = Ember.getOwner(this)._lookupFactory('model:author').create({
     id: '1', attributes: { name: 'pixelhandler' },
     relationships: {
       posts: {
@@ -43,7 +43,7 @@ test('hasMany() helper sets up a promise proxy to a related resource', function(
       }
     }
   });
-  Ember.getOwner(this).lookup('model:post').create({
+  Ember.getOwner(this)._lookupFactory('model:post').create({
     id: '2', attributes: { title: 'Wyatt Earp', excerpt: 'Was a gambler.'},
     relationships: {
       author: {
