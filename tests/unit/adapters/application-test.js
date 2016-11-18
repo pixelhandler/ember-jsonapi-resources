@@ -272,7 +272,7 @@ test('#findRelated', function(assert) {
   });
 });
 
-test('#findRelated is called with optional type for the resource', function (assert) {
+test('#findRelated is called with optional type for the relation', function (assert) {
   assert.expect(4);
   const done = assert.async();
 
@@ -295,7 +295,7 @@ test('#findRelated is called with optional type for the resource', function (ass
   let url = supervisor.get('relationships.direct-reports.links.related');
   supervisor.get('directReports').then(() => {
     assert.ok(stub.calledOnce, 'employees service findRelated method called once');
-    assert.equal(stub.firstCall.args[0].resource, 'direct-reports', 'findRelated called with "direct-reports" resource');
+    assert.equal(stub.firstCall.args[0].relation, 'direct-reports', 'findRelated called with "direct-reports" relation');
     assert.equal(stub.firstCall.args[0].type, 'employees', 'findRelated called with employees type');
     assert.equal(stub.firstCall.args[1], url, 'findRelated called with url, ' + url);
     done();

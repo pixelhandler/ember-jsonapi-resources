@@ -118,23 +118,23 @@ export default Ember.Object.extend(FetchMixin, Evented, {
     service.findRelated('photographer', '/api/v1/photos/1/relationships/photographer');
     ```
 
-    Or, with option to find releated resource using a different service
+    Or, with option to find related resource using a different service
 
     ```js
-    service.findRelated({resource: 'photographer', type: 'people'}, url);
+    service.findRelated({relation: 'photographer', type: 'people'}, url);
     ```
 
     @method findRelated
-    @param {String|Object} resource name to lookup the service object w/ serializer
-    @param {String} resource.resource the name of the resource
+    @param {String|Object} relation name to lookup the service object w/ serializer
+    @param {String} relation.relation the name of the relationship
     @param {String} resource.type the name of the resource
     @param {String} url
     @return {Promise}
   */
-  findRelated(resource, url) {
-    let type = resource;
+  findRelated(relation, url) {
+    let type = relation;
     if (typeof type === 'object') {
-      type = resource.type;
+      type = relation.type;
     }
     // use resource's service if in container, otherwise use this service to fetch
     let service = getOwner(this).lookup('service:' + pluralize(type)) || this;
