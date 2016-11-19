@@ -161,7 +161,7 @@ npm install
 
 <div class="highlight highlight-source-js"><pre><span class="pl-k">import</span> <span class="pl-smi">Ember</span> <span class="pl-k">from</span> <span class="pl-s"><span class="pl-pds">'</span>ember<span class="pl-pds">'</span></span>;
 <span class="pl-k">import</span> <span class="pl-smi">Resource</span> <span class="pl-k">from</span> <span class="pl-s"><span class="pl-pds">'</span>./resource<span class="pl-pds">'</span></span>;
-<span class="pl-k">import</span> { <span class="pl-smi">attr</span>, <span class="pl-smi">hasOne</span>, <span class="pl-smi">hasMany</span> } <span class="pl-k">from</span> <span class="pl-s"><span class="pl-pds">'</span>ember-jsonapi-resources/models/resource<span class="pl-pds">'</span></span>;
+<span class="pl-k">import</span> { <span class="pl-smi">attr</span>, <span class="pl-smi">toOne</span>, <span class="pl-smi">toMany</span> } <span class="pl-k">from</span> <span class="pl-s"><span class="pl-pds">'</span>ember-jsonapi-resources/models/resource<span class="pl-pds">'</span></span>;
 
 <span class="pl-k">export</span> <span class="pl-v">default</span> <span class="pl-smi">Resource</span>.<span class="pl-en">extend</span>({
   type<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>&lt;%= resource %&gt;<span class="pl-pds">'</span></span>,
@@ -176,8 +176,8 @@ npm install
 <span class="pl-c">  version: attr('number'),</span>
 <span class="pl-c">  "is-approved": attr('boolean'),</span>
 <span class="pl-c"></span>
-<span class="pl-c">  author: hasOne('author'),</span>
-<span class="pl-c">  comments: hasMany('comments')</span>
+<span class="pl-c">  author: toOne('author'),</span>
+<span class="pl-c">  comments: toMany('comments')</span>
 <span class="pl-c">  */</span>
 });</pre></div>
 

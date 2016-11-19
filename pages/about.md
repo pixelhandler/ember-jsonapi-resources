@@ -22,13 +22,10 @@ to expire that cached object (in the browser application) based on the response
 headers; or by whatever means the developer chooses.
 
 
-## Status
-
-This addon's current release is 1.4.x. The Travis build suports Ember
-versions from 1.13.x though the current release, 2.8.x
-
-
 ## Requirements
+
+- v2.X supports Ember v2.4.x or newer
+- v1.X supports Ember v1.13.x or newer
 
 This data persistence solution for an Ember.js application is a simple approach;
 however, there are a few things you'll need to understand in order to get up

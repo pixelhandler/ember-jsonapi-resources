@@ -51,9 +51,9 @@ A `store` service is injected into the routes. This is similar to how
 [Ember Data](https://github.com/emberjs/data) uses a `store`, but the `resource`
 is referenced in the plural form (like your API endpoint).
 
-[This is the interface for the `store`](/addon/services/store.js) which is a facade 
+[This is the interface for the `store`](/addon/services/store.js) which is a facade
 for the service for a specific `resource`. Basically you call the `store` methods
-and pass in the `resource` name, e.g. 'posts' which interacts with the service for 
+and pass in the `resource` name, e.g. 'posts' which interacts with the service for
 your `resource`.
 
 An example `route`:
@@ -74,7 +74,7 @@ The store object will pluralize the type to lookup the resources' service object
 
 Each `resource` has an associated service that is used by the `store`.
 
-A `resource` service is a combination of an `adapter`, `serializer` and `cache` 
+A `resource` service is a combination of an `adapter`, `serializer` and `cache`
 object. The `service` is also injected into the `resource` (model) objects.
 
 The caching plan for a service is simply a mixin that can be easily customized.
@@ -83,7 +83,7 @@ work together to provide a basic plan.
 
 The services are "evented" to facilitate close to real time updates.
 
-An `attr` of the resource is a computed property to the actual attribute in an 
+An `attr` of the resource is a computed property to the actual attribute in an
 `attributes` hash on the `resource` (model) instance. Using `attr()` supports
 any type, and an optional `type` (String) argument can be used to enforce
 setting and getting with a specific type. `'string'`, `'number'`, `'boolean'`,
@@ -96,7 +96,7 @@ to this event and handles it with a call to `updateResource`.
 The `resource` `adapter`'s `updateResource` method sends a PATCH request with
 only the data for the changed attributes.
 
-You might want to buffer changes on the resource that is passed into a component 
+You might want to buffer changes on the resource that is passed into a component
 using [ember-state-services] and [ember-buffered-proxy], or you could just
 re-define the `resource`'s `adapter` prototype so that `initEvents` returns
 a noop instead of listening for the `attributeChanged` event.
@@ -111,7 +111,7 @@ Here is the blueprint for a `resource` (model) prototype:
 ```javascript
 import Ember from 'ember';
 import Resource from './resource';
-import { attr, hasOne, hasMany } from 'ember-jsonapi-resources/models/resource';
+import { attr, toOne, toMany } from 'ember-jsonapi-resources/models/resource';
 
 export default Resource.extend({
   type: '<%= resource %>',
@@ -126,8 +126,8 @@ export default Resource.extend({
   version: attr('number'),
   "is-approved": attr('boolean'),
 
-  author: hasOne('author'),
-  comments: hasMany('comments')
+  author: toOne('author'),
+  comments: toMany('comments')
   */
 });
 ```
@@ -144,7 +144,7 @@ attribute or based on the name of the attribute, the transform methods based on
 the name of the attribute will be called instead of any transform methods based
 on the type of the attribute.
 
-The relationships are async using promise proxy objects. So when a template accesses 
+The relationships are async using promise proxy objects. So when a template accesses
 the `resource`'s relationship a request is made for the relation.
 
 ### Configuration
@@ -194,10 +194,10 @@ export default ApplicationAdapter.extend({
 });
 ```
 
-The example above also includes a customized method for the url. In the case where 
-your API server is running on it's own domain and you use a proxy with your nginx 
-server to access the API server on your same domain at `/api` then the JSON documents 
-may have it's own link references to the original server so you can replace the URL 
+The example above also includes a customized method for the url. In the case where
+your API server is running on it's own domain and you use a proxy with your nginx
+server to access the API server on your same domain at `/api` then the JSON documents
+may have it's own link references to the original server so you can replace the URL
 as needed to act as if the API server is running on your same domain.
 
 #### Authorization
@@ -270,5 +270,3 @@ curl -i -H "Accept: application/vnd.api+json" -H "Content-Type: application/vnd.
 
 The api.pixelhandler.com server is running the [JSONAPI::Resources] gem. It
 follows the [JSON API 1.0 spec](http://jsonapi.org).
-
-
