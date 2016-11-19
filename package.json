@@ -1,6 +1,6 @@
 {
   "name": "ember-jsonapi-resources",
-  "version": "2.0.0-beta.2",
+  "version": "2.0.0",
   "description": "Data Persistence for an Ember CLI app using the JSON API 1.0 specification.",
   "directories": {
     "doc": "doc",
@@ -14,7 +14,7 @@
   },
   "repository": "git@github.com:pixelhandler/ember-jsonapi-resources.git",
   "engines": {
-    "node": ">= 0.10.0"
+    "node": ">= 0.12.0"
   },
   "author": "Bill Heaton <pixelhandler@gmail.com>",
   "license": "MIT",
