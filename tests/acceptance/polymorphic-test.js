@@ -82,12 +82,14 @@ function setupFetchResponses(sandbox) {
         resp = pictures1MockResponse();
         break;
       case [apiUrl, 'pictures/1/imageable'].join('/'):
+      case pictures1Mock.data.relationships.imageable.links.related:
         resp = pictures1ImageableMockResponse();
         break;
       case [apiUrl, 'pictures/5'].join('/'):
         resp = pictures5MockResponse();
         break;
       case [apiUrl, 'pictures/5/imageable'].join('/'):
+      case pictures5Mock.data.relationships.imageable.links.related:
         resp = pictures5ImageableMockResponse();
         break;
       default:

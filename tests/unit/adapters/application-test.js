@@ -10,6 +10,7 @@ import postsMock from 'fixtures/api/posts';
 import authorMock from 'fixtures/api/authors/1';
 import employeeMock from 'fixtures/api/employees/1';
 import supervisorMock from 'fixtures/api/supervisors/2';
+import { ServerError, ClientError } from 'ember-fetchjax/utils/errors';
 
 let sandbox;
 
@@ -757,17 +758,24 @@ test('when called with resource argument, #deleteResource calls #cacheRemove', f
 test('#fetch calls #fetchURL to customize if needed', function(assert) {
   assert.expect(2);
   const done = assert.async();
-
   const adapter = this.subject({type: 'posts', url: '/posts'});
-  sandbox.stub(adapter, 'fetchUrl', function () {});
-  sandbox.stub(window, 'fetch', function () {
-    return RSVP.Promise.resolve({
-      "status": 204,
-      "text": function() { return RSVP.Promise.resolve(''); }
-    });
+
+  sandbox.spy(adapter, 'fetchUrl');
+  mockFetchJax(sandbox, adapter, null); // 204 No Content
+
+  let url = '/posts';
+  let promise = adapter.fetch(url, {
+    method: 'PATCH',
+    body: JSON.stringify({
+      data: {
+        id: '1',
+        type: 'posts',
+        attributes: {
+          title: 'changed'
+        }
+      }
+    })
   });
-  let url     = '/posts';
-  let promise = adapter.fetch(url, {method: 'PATCH', body: 'json string here'});
 
   assert.ok(typeof promise.then === 'function', 'returns a thenable');
   promise.then(() => {
@@ -781,18 +789,11 @@ test('#fetch calls #fetchOptions checking if the request is an update, if true s
   const done = assert.async();
 
   const adapter = this.subject({type: 'posts', url: '/posts'});
-  sandbox.stub(adapter, 'fetchUrl', function () {});
-  sandbox.stub(window, 'fetch', function () {
-    return RSVP.Promise.resolve({
-      "status": 202,
-      "json": function() {
-        return RSVP.Promise.resolve({data: {}, meta: {}});
-      }
-    });
-  });
+  sandbox.stub(adapter, 'fetchUrl', function (url) { return url; });
+  mockFetchJax(sandbox, adapter, { data: {} });
   sandbox.stub(adapter, 'cacheResource', function () {});
   adapter.serializer = { deserialize: sandbox.spy(), transformAttributes: sandbox.spy() };
-  let promise = adapter.fetch('/posts', {method: 'PATCH', body: 'json string here', update: true});
+  let promise = adapter.fetch('/posts', {method: 'PATCH', body: '{"data": null}', update: true});
 
   assert.ok(typeof promise.then === 'function', 'returns a thenable');
   promise.then(() => {
@@ -818,14 +819,8 @@ test('#cacheResource called after successful fetch', function(assert) {
     deserialize: function () { return postsMock.data; },
     deserializeIncluded: function () { return; }
   };
-  sandbox.stub(window, 'fetch', function () {
-    return RSVP.Promise.resolve({
-      "status": 200,
-      "json": function() {
-        return RSVP.Promise.resolve(postsMock);
-      }
-    });
-  });
+  mockFetchJax(sandbox, adapter, postsMock);
+
   let promise = adapter.fetch('/posts/1', {method: 'GET'});
 
   assert.ok(typeof promise.then === 'function', 'returns a thenable');
@@ -841,14 +836,8 @@ test('#cacheUpdate called after #updateResource success', function(assert) {
 
   const adapter = this.subject();
   sandbox.stub(adapter, 'cacheUpdate', function () {});
-  sandbox.stub(window, 'fetch', function () {
-    return RSVP.Promise.resolve({
-      "status": 200,
-      "json": function() {
-        return RSVP.Promise.resolve(postsMock);
-      }
-    });
-  });
+  mockFetchJax(sandbox, adapter, postsMock);
+
   let payload = {
     data: {
       type: postMock.data.type,
@@ -878,14 +867,8 @@ test('serializer#deserializeIncluded called after successful fetch', function(as
     deserialize: function () { return postMock.data; },
     deserializeIncluded: sandbox.spy()
   };
-  sandbox.stub(window, 'fetch', function () {
-    return RSVP.Promise.resolve({
-      "status": 200,
-      "json": function() {
-        return RSVP.Promise.resolve(postMock);
-      }
-    });
-  });
+  mockFetchJax(sandbox, adapter, postMock);
+
   let promise = adapter.fetch('/posts/1', { method: 'GET' });
   assert.ok(typeof promise.then === 'function', 'returns a thenable');
   promise.then(() => {
@@ -900,15 +883,9 @@ test('#fetch handles 5xx (ServerError) response status', function(assert) {
   const done = assert.async();
 
   const adapter = this.subject({type: 'posts', url: '/posts'});
-  sandbox.stub(window, 'fetch', function () {
-    return RSVP.Promise.resolve({
-      "status": 500,
-      "text": function() {
-        return RSVP.Promise.resolve('');
-      }
-    });
-  });
-  let promise = adapter.fetch('/posts', {method: 'POST', body: 'json string here'});
+
+  mockFetchJax(sandbox, adapter, new ServerError('Server Error', {status: 500}));
+  let promise = adapter.fetch('/posts', {method: 'POST', body: '{"data": null}'});
 
   assert.ok(typeof promise.then === 'function', 'returns a thenable');
   promise.catch((error) => {
@@ -923,17 +900,10 @@ test('#fetch handles 4xx (Client Error) response status', function(assert) {
   const done = assert.async();
 
   const adapter = this.subject({type: 'posts', url: '/posts'});
-  const mockError = {errors: [{status: 404, title: 'I am an error'}]};
   sandbox.stub(adapter, 'fetchUrl', function () {});
-  sandbox.stub(window, 'fetch', function () {
-    return RSVP.Promise.resolve({
-      "status": 404,
-      "text": function() {
-        return RSVP.Promise.resolve(JSON.stringify(mockError));
-      }
-    });
-  });
-  let promise = adapter.fetch('/posts', { method: 'POST', body: 'json string here' });
+  const mockError = { errors: [{status: 404, title: 'I am an error'}], status: 404 };
+  mockFetchJax(sandbox, adapter, new ClientError('Not Found', mockError));
+  let promise = adapter.fetch('/posts', { method: 'POST', body: '{"data": null}' });
   assert.ok(typeof promise.then === 'function', 'returns a thenable');
   promise.catch((error) => {
     assert.ok(error.name, 'Client Error', '4xx response throws a custom error');
@@ -950,15 +920,10 @@ test('#fetch handles 204 (Success, no content) response status w/o calling deser
 
   const adapter = this.subject({type: 'posts', url: '/posts'});
   sandbox.stub(adapter, 'fetchUrl', function () {});
-  sandbox.stub(window, 'fetch', function () {
-    return RSVP.Promise.resolve({
-      "status": 204,
-      "text": function() { return RSVP.Promise.resolve(''); }
-    });
-  });
+  mockFetchJax(sandbox, adapter, '');
   sandbox.stub(adapter, 'cacheResource', function () {});
   adapter.serializer = {deserialize: sandbox.spy(), deserializeIncluded: Ember.K};
-  let promise = adapter.fetch('/posts', {method: 'PATCH', body: 'json string here'});
+  let promise = adapter.fetch('/posts', {method: 'PATCH', body: '{"data": null}'});
 
   assert.ok(typeof promise.then === 'function', 'returns a thenable');
   promise.then(() => {
@@ -973,12 +938,7 @@ test('#fetch handles 200 (Success) response status', function(assert) {
   const done = assert.async();
 
   const adapter = this.subject({type: 'posts', url: '/posts'});
-  sandbox.stub(window, 'fetch', function () {
-    return RSVP.Promise.resolve({
-      "status": 200,
-      "json": function() { return RSVP.Promise.resolve(postMock); }
-    });
-  });
+  mockFetchJax(sandbox, adapter, postMock);
   sandbox.stub(adapter, 'cacheResource', function () {});
   adapter.serializer = { deserialize: sandbox.spy(), deserializeIncluded: Ember.K };
   let promise = adapter.fetch('/posts/1', { method: 'GET' });
@@ -1071,4 +1031,16 @@ function mockSerializer(mock = {}) {
     serializeRelationship: function () { return mock.relationship; },
     transformAttributes: function(json) { return json; }
   };
+}
+
+function mockFetchJax(sandbox, adapter, response) {
+  sandbox.stub(adapter, '_fetch', function (url, options) { // fetchjax instance
+    // skip the call to window.fetch, mock successful call back to adapter's deserialize method
+    adapter.deserialize(response, options.headers, options);
+    if (response instanceof Error) {
+      return Ember.RSVP.Promise.reject(response);
+    } else {
+      return Ember.RSVP.Promise.resolve(response);
+    }
+  });
 }

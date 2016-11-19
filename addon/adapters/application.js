@@ -6,7 +6,7 @@
 import Ember from 'ember';
 import RSVP from 'rsvp';
 import { pluralize } from 'ember-inflector';
-import FetchMixin from 'ember-jsonapi-resources/mixins/fetch';
+import FetchOrAjax from 'ember-fetchjax/utils/fetchjax';
 
 const { Evented, getOwner } = Ember;
 
@@ -18,7 +18,7 @@ const { Evented, getOwner } = Ember;
   @uses Ember.Evented
   @static
 */
-export default Ember.Object.extend(FetchMixin, Evented, {
+export default Ember.Object.extend(Evented, {
 
   /**
     The name of the entity
@@ -48,6 +48,41 @@ export default Ember.Object.extend(FetchMixin, Evented, {
       return [host, path, pluralize(this.get('type'))].join('/');
     }
   }),
+
+  /**
+    @method init
+  */
+  init() {
+    this._super(...arguments);
+    let fetchjax = new FetchOrAjax({
+      useAjax: false,
+      ajax: Ember.$.ajax,
+      promise: Ember.RSVP.Promise,
+      deserialize: this.deserialize.bind(this)
+    });
+    this._fetch = fetchjax.fetch.bind(fetchjax);
+  },
+
+  /**
+    @method deserialize
+    @param {Object} json payload from response
+    @param {Object} headers received from response
+    @param {Object} options passed into original request
+  */
+  deserialize(json, headers, options) {
+    if (!json || json === '' || !json.data) {
+      return null;
+    } else if (options.isUpdate) {
+      json.data = this.serializer.transformAttributes(json.data);
+      this.cacheUpdate({ meta: json.meta, data: json.data, headers: headers });
+      return json.data;
+    } else {
+      let resource = this.serializer.deserialize(json);
+      this.cacheResource({ meta: json.meta, data: resource, headers: headers });
+      this.serializer.deserializeIncluded(json.included, { headers: headers });
+      return resource;
+    }
+  },
 
   /**
     Find resource(s) using an id or a using a query `{id: '', query: {}}`
@@ -348,11 +383,10 @@ export default Ember.Object.extend(FetchMixin, Evented, {
   fetch(url, options = {}) {
     url = this.fetchUrl(url);
     let isUpdate = this.fetchOptions(options);
-    if (this.get('useFetch')) {
-      return this._fetch(url, options, isUpdate);
-    } else {
-      return this._ajax(url, options, isUpdate);
+    if (isUpdate) {
+      options.isUpdate = true;
     }
+    return this._fetch(url, options);
   },
 
   /**
