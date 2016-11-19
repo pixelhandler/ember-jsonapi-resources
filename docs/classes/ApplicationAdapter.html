@@ -42,13 +42,9 @@
                                 <li><a href="../classes/ApplicationAdapter.html">ApplicationAdapter</a></li>
                                 <li><a href="../classes/ApplicationSerializer.html">ApplicationSerializer</a></li>
                                 <li><a href="../classes/AuthorizationMixin.html">AuthorizationMixin</a></li>
-                                <li><a href="../classes/ClientError.html">ClientError</a></li>
-                                <li><a href="../classes/FetchError.html">FetchError</a></li>
-                                <li><a href="../classes/FetchMixin.html">FetchMixin</a></li>
                                 <li><a href="../classes/RelatedProxyUtil.html">RelatedProxyUtil</a></li>
                                 <li><a href="../classes/Resource.html">Resource</a></li>
                                 <li><a href="../classes/ResourceOperationsMixin.html">ResourceOperationsMixin</a></li>
-                                <li><a href="../classes/ServerError.html">ServerError</a></li>
                                 <li><a href="../classes/ServiceCacheMixin.html">ServiceCacheMixin</a></li>
                                 <li><a href="../classes/StoreService.html">StoreService</a></li>
                                 <li><a href="../classes/TransformDateAttribute.html">TransformDateAttribute</a></li>
@@ -64,7 +60,6 @@
                                 <li><a href="../modules/authorization.html">authorization</a></li>
                                 <li><a href="../modules/cache.html">cache</a></li>
                                 <li><a href="../modules/ember-jsonapi-resources.html">ember-jsonapi-resources</a></li>
-                                <li><a href="../modules/fetch.html">fetch</a></li>
                                 <li><a href="../modules/initializers.html">initializers</a></li>
                                 <li><a href="../modules/resource.html">resource</a></li>
                                 <li><a href="../modules/resource-operations.html">resource-operations</a></li>
@@ -180,6 +175,10 @@
 
                             </li>
                             <li class="index-item method">
+                                <a href="#method_deserialize">deserialize</a>
+
+                            </li>
+                            <li class="index-item method">
                                 <a href="#method_fetch">fetch</a>
 
                             </li>
@@ -209,6 +208,10 @@
                             </li>
                             <li class="index-item method">
                                 <a href="#method_findRelated">findRelated</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_init">init</a>
 
                             </li>
                             <li class="index-item method">
@@ -279,7 +282,7 @@
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_adapters_application.js.html#l324"><code>addon&#x2F;adapters&#x2F;application.js:324</code></a>
+        <a href="../files/addon_adapters_application.js.html#l362"><code>addon&#x2F;adapters&#x2F;application.js:362</code></a>
         </p>
 
 
@@ -352,7 +355,7 @@
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_adapters_application.js.html#l441"><code>addon&#x2F;adapters&#x2F;application.js:441</code></a>
+        <a href="../files/addon_adapters_application.js.html#l478"><code>addon&#x2F;adapters&#x2F;application.js:478</code></a>
         </p>
 
 
@@ -405,7 +408,7 @@
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_adapters_application.js.html#l424"><code>addon&#x2F;adapters&#x2F;application.js:424</code></a>
+        <a href="../files/addon_adapters_application.js.html#l461"><code>addon&#x2F;adapters&#x2F;application.js:461</code></a>
         </p>
 
 
@@ -460,7 +463,7 @@ e.g. in memory</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_adapters_application.js.html#l433"><code>addon&#x2F;adapters&#x2F;application.js:433</code></a>
+        <a href="../files/addon_adapters_application.js.html#l470"><code>addon&#x2F;adapters&#x2F;application.js:470</code></a>
         </p>
 
 
@@ -523,7 +526,7 @@ e.g. in memory</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_adapters_application.js.html#l226"><code>addon&#x2F;adapters&#x2F;application.js:226</code></a>
+        <a href="../files/addon_adapters_application.js.html#l264"><code>addon&#x2F;adapters&#x2F;application.js:264</code></a>
         </p>
 
 
@@ -617,7 +620,7 @@ e.g. in memory</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_adapters_application.js.html#l146"><code>addon&#x2F;adapters&#x2F;application.js:146</code></a>
+        <a href="../files/addon_adapters_application.js.html#l180"><code>addon&#x2F;adapters&#x2F;application.js:180</code></a>
         </p>
 
 
@@ -688,7 +691,7 @@ with persisted data, and updates cache with persisted resource</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_adapters_application.js.html#l294"><code>addon&#x2F;adapters&#x2F;application.js:294</code></a>
+        <a href="../files/addon_adapters_application.js.html#l332"><code>addon&#x2F;adapters&#x2F;application.js:332</code></a>
         </p>
 
 
@@ -783,7 +786,7 @@ with persisted data, and updates cache with persisted resource</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_adapters_application.js.html#l207"><code>addon&#x2F;adapters&#x2F;application.js:207</code></a>
+        <a href="../files/addon_adapters_application.js.html#l245"><code>addon&#x2F;adapters&#x2F;application.js:245</code></a>
         </p>
 
 
@@ -823,6 +826,87 @@ with persisted data, and updates cache with persisted resource</p>
 
 
 </div>
+<div id="method_deserialize" class="method item">
+    <h3 class="name"><code>deserialize</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>json</code>
+                </li>
+                <li class="arg">
+                        <code>headers</code>
+                </li>
+                <li class="arg">
+                        <code>options</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/addon_adapters_application.js.html#l66"><code>addon&#x2F;adapters&#x2F;application.js:66</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">json</code>
+                        <span class="type">Object</span>
+
+
+                    <div class="param-description">
+                        <p>payload from response</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">headers</code>
+                        <span class="type">Object</span>
+
+
+                    <div class="param-description">
+                        <p>received from response</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">options</code>
+                        <span class="type">Object</span>
+
+
+                    <div class="param-description">
+                        <p>passed into original request</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+
+
+</div>
 <div id="method_fetch" class="method item">
     <h3 class="name"><code>fetch</code></h3>
 
@@ -850,7 +934,7 @@ with persisted data, and updates cache with persisted resource</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_adapters_application.js.html#l337"><code>addon&#x2F;adapters&#x2F;application.js:337</code></a>
+        <a href="../files/addon_adapters_application.js.html#l375"><code>addon&#x2F;adapters&#x2F;application.js:375</code></a>
         </p>
 
 
@@ -921,7 +1005,7 @@ with persisted data, and updates cache with persisted resource</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_adapters_application.js.html#l389"><code>addon&#x2F;adapters&#x2F;application.js:389</code></a>
+        <a href="../files/addon_adapters_application.js.html#l426"><code>addon&#x2F;adapters&#x2F;application.js:426</code></a>
         </p>
 
 
@@ -977,7 +1061,7 @@ with persisted data, and updates cache with persisted resource</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_adapters_application.js.html#l367"><code>addon&#x2F;adapters&#x2F;application.js:367</code></a>
+        <a href="../files/addon_adapters_application.js.html#l404"><code>addon&#x2F;adapters&#x2F;application.js:404</code></a>
         </p>
 
 
@@ -1044,7 +1128,7 @@ with persisted data, and updates cache with persisted resource</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_adapters_application.js.html#l355"><code>addon&#x2F;adapters&#x2F;application.js:355</code></a>
+        <a href="../files/addon_adapters_application.js.html#l392"><code>addon&#x2F;adapters&#x2F;application.js:392</code></a>
         </p>
 
 
@@ -1108,7 +1192,7 @@ to swap a portion of the domain to make a request on the same domain.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_adapters_application.js.html#l52"><code>addon&#x2F;adapters&#x2F;application.js:52</code></a>
+        <a href="../files/addon_adapters_application.js.html#l87"><code>addon&#x2F;adapters&#x2F;application.js:87</code></a>
         </p>
 
 
@@ -1175,7 +1259,7 @@ to swap a portion of the domain to make a request on the same domain.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_adapters_application.js.html#l82"><code>addon&#x2F;adapters&#x2F;application.js:82</code></a>
+        <a href="../files/addon_adapters_application.js.html#l117"><code>addon&#x2F;adapters&#x2F;application.js:117</code></a>
         </p>
 
 
@@ -1249,7 +1333,7 @@ to swap a portion of the domain to make a request on the same domain.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_adapters_application.js.html#l98"><code>addon&#x2F;adapters&#x2F;application.js:98</code></a>
+        <a href="../files/addon_adapters_application.js.html#l133"><code>addon&#x2F;adapters&#x2F;application.js:133</code></a>
         </p>
 
 
@@ -1294,7 +1378,10 @@ to swap a portion of the domain to make a request on the same domain.</p>
         <div class="args">
             <span class="paren">(</span><ul class="args-list inline commas">
                 <li class="arg">
-                        <code>resource</code>
+                        <code>relation</code>
+                </li>
+                <li class="arg">
+                        <code>resource.type</code>
                 </li>
                 <li class="arg">
                         <code>url</code>
@@ -1315,7 +1402,7 @@ to swap a portion of the domain to make a request on the same domain.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_adapters_application.js.html#l112"><code>addon&#x2F;adapters&#x2F;application.js:112</code></a>
+        <a href="../files/addon_adapters_application.js.html#l147"><code>addon&#x2F;adapters&#x2F;application.js:147</code></a>
         </p>
 
 
@@ -1327,8 +1414,8 @@ to swap a portion of the domain to make a request on the same domain.</p>
 <p>A Url like: /photos/1/relationships/photographer is a required param</p>
 <pre class="code prettyprint"><code class="language-js">service.findRelated('photographer', '/api/v1/photos/1/relationships/photographer');
 </code></pre>
-<p>Or, with option to find releated resource using a different service</p>
-<pre class="code prettyprint"><code class="language-js">service.findRelated({resource: 'photographer', type: 'people'}, url);
+<p>Or, with option to find related resource using a different service</p>
+<pre class="code prettyprint"><code class="language-js">service.findRelated({relation: 'photographer', type: 'people'}, url);
 </code></pre>
 
     </div>
@@ -1338,7 +1425,7 @@ to swap a portion of the domain to make a request on the same domain.</p>
 
             <ul class="params-list">
                 <li class="param">
-                        <code class="param-name">resource</code>
+                        <code class="param-name">relation</code>
                         <span class="type">String | Object</span>
 
 
@@ -1349,26 +1436,27 @@ to swap a portion of the domain to make a request on the same domain.</p>
 
                         <ul class="params-list">
                             <li class="param">
-                                    <code class="param-name">resource</code>
+                                    <code class="param-name">relation</code>
                                     <span class="type">String</span>
 
                                 <div class="param-description">
-                                    <p>the name of the resource</p>
-
-                                </div>
-
-                            </li>
-                            <li class="param">
-                                    <code class="param-name">type</code>
-                                    <span class="type">String</span>
-
-                                <div class="param-description">
-                                    <p>the name of the resource</p>
+                                    <p>the name of the relationship</p>
 
                                 </div>
 
                             </li>
                         </ul>
+                </li>
+                <li class="param">
+                        <code class="param-name">resource.type</code>
+                        <span class="type">String</span>
+
+
+                    <div class="param-description">
+                        <p>the name of the resource</p>
+
+                    </div>
+
                 </li>
                 <li class="param">
                         <code class="param-name">url</code>
@@ -1390,6 +1478,36 @@ to swap a portion of the domain to make a request on the same domain.</p>
                         <span class="type">Promise</span>:
             </div>
         </div>
+
+
+</div>
+<div id="method_init" class="method item">
+    <h3 class="name"><code>init</code></h3>
+
+        <span class="paren">()</span>
+
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/addon_adapters_application.js.html#l52"><code>addon&#x2F;adapters&#x2F;application.js:52</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        
+    </div>
+
+
 
 
 </div>
@@ -1420,7 +1538,7 @@ to swap a portion of the domain to make a request on the same domain.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_adapters_application.js.html#l254"><code>addon&#x2F;adapters&#x2F;application.js:254</code></a>
+        <a href="../files/addon_adapters_application.js.html#l292"><code>addon&#x2F;adapters&#x2F;application.js:292</code></a>
         </p>
 
 
@@ -1519,7 +1637,7 @@ to swap a portion of the domain to make a request on the same domain.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_adapters_application.js.html#l180"><code>addon&#x2F;adapters&#x2F;application.js:180</code></a>
+        <a href="../files/addon_adapters_application.js.html#l214"><code>addon&#x2F;adapters&#x2F;application.js:214</code></a>
         </p>
 
 
@@ -1589,7 +1707,7 @@ to opt-into an update</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_adapters_application.js.html#l406"><code>addon&#x2F;adapters&#x2F;application.js:406</code></a>
+        <a href="../files/addon_adapters_application.js.html#l443"><code>addon&#x2F;adapters&#x2F;application.js:443</code></a>
         </p>
 
 
@@ -1615,7 +1733,7 @@ This property should be added by an Authorization Mixin</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_adapters_application.js.html#l415"><code>addon&#x2F;adapters&#x2F;application.js:415</code></a>
+        <a href="../files/addon_adapters_application.js.html#l452"><code>addon&#x2F;adapters&#x2F;application.js:452</code></a>
         </p>
 
 

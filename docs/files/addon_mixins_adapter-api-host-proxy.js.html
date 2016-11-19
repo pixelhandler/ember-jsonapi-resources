@@ -42,13 +42,9 @@
                                 <li><a href="../classes/ApplicationAdapter.html">ApplicationAdapter</a></li>
                                 <li><a href="../classes/ApplicationSerializer.html">ApplicationSerializer</a></li>
                                 <li><a href="../classes/AuthorizationMixin.html">AuthorizationMixin</a></li>
-                                <li><a href="../classes/ClientError.html">ClientError</a></li>
-                                <li><a href="../classes/FetchError.html">FetchError</a></li>
-                                <li><a href="../classes/FetchMixin.html">FetchMixin</a></li>
                                 <li><a href="../classes/RelatedProxyUtil.html">RelatedProxyUtil</a></li>
                                 <li><a href="../classes/Resource.html">Resource</a></li>
                                 <li><a href="../classes/ResourceOperationsMixin.html">ResourceOperationsMixin</a></li>
-                                <li><a href="../classes/ServerError.html">ServerError</a></li>
                                 <li><a href="../classes/ServiceCacheMixin.html">ServiceCacheMixin</a></li>
                                 <li><a href="../classes/StoreService.html">StoreService</a></li>
                                 <li><a href="../classes/TransformDateAttribute.html">TransformDateAttribute</a></li>
@@ -64,7 +60,6 @@
                                 <li><a href="../modules/authorization.html">authorization</a></li>
                                 <li><a href="../modules/cache.html">cache</a></li>
                                 <li><a href="../modules/ember-jsonapi-resources.html">ember-jsonapi-resources</a></li>
-                                <li><a href="../modules/fetch.html">fetch</a></li>
                                 <li><a href="../modules/initializers.html">initializers</a></li>
                                 <li><a href="../modules/resource.html">resource</a></li>
                                 <li><a href="../modules/resource-operations.html">resource-operations</a></li>
@@ -115,6 +110,8 @@
 **/
 import Ember from &#x27;ember&#x27;;
 
+const { getOwner } = Ember;
+
 /**
   Mixin to provide url rewrite for proxied api. Mostly used as example.
 
@@ -123,7 +120,7 @@ import Ember from &#x27;ember&#x27;;
 */
 export default Ember.Mixin.create({
 	fetchUrl: function(url) {
-    const config = this.container.lookupFactory(&#x27;config:environment&#x27;);
+    const config = getOwner(this).resolveRegistration(&#x27;config:environment&#x27;);
     const proxy  = config.APP.API_HOST_PROXY;
     const host   = config.APP.API_HOST;
     if (proxy &amp;&amp; host) {

@@ -42,13 +42,9 @@
                                 <li><a href="../classes/ApplicationAdapter.html">ApplicationAdapter</a></li>
                                 <li><a href="../classes/ApplicationSerializer.html">ApplicationSerializer</a></li>
                                 <li><a href="../classes/AuthorizationMixin.html">AuthorizationMixin</a></li>
-                                <li><a href="../classes/ClientError.html">ClientError</a></li>
-                                <li><a href="../classes/FetchError.html">FetchError</a></li>
-                                <li><a href="../classes/FetchMixin.html">FetchMixin</a></li>
                                 <li><a href="../classes/RelatedProxyUtil.html">RelatedProxyUtil</a></li>
                                 <li><a href="../classes/Resource.html">Resource</a></li>
                                 <li><a href="../classes/ResourceOperationsMixin.html">ResourceOperationsMixin</a></li>
-                                <li><a href="../classes/ServerError.html">ServerError</a></li>
                                 <li><a href="../classes/ServiceCacheMixin.html">ServiceCacheMixin</a></li>
                                 <li><a href="../classes/StoreService.html">StoreService</a></li>
                                 <li><a href="../classes/TransformDateAttribute.html">TransformDateAttribute</a></li>
@@ -64,7 +60,6 @@
                                 <li><a href="../modules/authorization.html">authorization</a></li>
                                 <li><a href="../modules/cache.html">cache</a></li>
                                 <li><a href="../modules/ember-jsonapi-resources.html">ember-jsonapi-resources</a></li>
-                                <li><a href="../modules/fetch.html">fetch</a></li>
                                 <li><a href="../modules/initializers.html">initializers</a></li>
                                 <li><a href="../modules/resource.html">resource</a></li>
                                 <li><a href="../modules/resource-operations.html">resource-operations</a></li>
@@ -147,21 +142,6 @@
                     </a>
                 </li>
                 <li class="module-class">
-                    <a href="../classes/ClientError.html">
-                        ClientError
-                    </a>
-                </li>
-                <li class="module-class">
-                    <a href="../classes/FetchError.html">
-                        FetchError
-                    </a>
-                </li>
-                <li class="module-class">
-                    <a href="../classes/FetchMixin.html">
-                        FetchMixin
-                    </a>
-                </li>
-                <li class="module-class">
                     <a href="../classes/RelatedProxyUtil.html">
                         RelatedProxyUtil
                     </a>
@@ -174,11 +154,6 @@
                 <li class="module-class">
                     <a href="../classes/ResourceOperationsMixin.html">
                         ResourceOperationsMixin
-                    </a>
-                </li>
-                <li class="module-class">
-                    <a href="../classes/ServerError.html">
-                        ServerError
                     </a>
                 </li>
                 <li class="module-class">
@@ -258,16 +233,6 @@ The default solution is to use localStorage['AuthorizationHeader'] for the crede
                     </div>
                 </li>
                 <li class="module-submodule">
-                    <a href="../modules/fetch.html">
-                        fetch
-                    </a>
-
-                    <div class="module-submodule-description">
-                        Fetch/Ajax methods for use with an Adapter calls <code>cacheUpdate</code>, <code>cacheResource</code>
-methods and a <code>serializer</code> injection.
-                    </div>
-                </li>
-                <li class="module-submodule">
                     <a href="../modules/initializers.html">
                         initializers
                     </a>
@@ -286,12 +251,13 @@ methods and a <code>serializer</code> injection.
 define a prototype using <code>Resource.extend({ type: entity })</code>. Model prototypes
 are registered in the container as factories, they use the options:
 <code>{ instantiate: false, singleton: false }</code>. So, to create a model instance
-use the owner API or the container to <code>lookup</code> the factory, for example:
+use the owner API method <code>_lookupFactory(&#x27;model:name&#x27;)</code>† then <code>create()</code>:
 
 <code>&#x60;</code>js
-let owner = (typeof Ember.getOwner === 'function') ? Ember.getOwner(this) : this.container;
-let model = owner.lookup('model:entity').create({ attributes: { key: value } });
+let model = Ember.getOwner(this)._lookupFactory('model:entity').create({ attributes: { key: value } });
 <code>&#x60;</code>
+
+† **Note:** eventually <code>factoryFor</code> will replace <code>_lookupFactory</code>
 
 See <http://jsonapi.org/format/#document-resource-objects>
                     </div>

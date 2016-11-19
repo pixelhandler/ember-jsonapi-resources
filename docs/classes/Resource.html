@@ -42,13 +42,9 @@
                                 <li><a href="../classes/ApplicationAdapter.html">ApplicationAdapter</a></li>
                                 <li><a href="../classes/ApplicationSerializer.html">ApplicationSerializer</a></li>
                                 <li><a href="../classes/AuthorizationMixin.html">AuthorizationMixin</a></li>
-                                <li><a href="../classes/ClientError.html">ClientError</a></li>
-                                <li><a href="../classes/FetchError.html">FetchError</a></li>
-                                <li><a href="../classes/FetchMixin.html">FetchMixin</a></li>
                                 <li><a href="../classes/RelatedProxyUtil.html">RelatedProxyUtil</a></li>
                                 <li><a href="../classes/Resource.html">Resource</a></li>
                                 <li><a href="../classes/ResourceOperationsMixin.html">ResourceOperationsMixin</a></li>
-                                <li><a href="../classes/ServerError.html">ServerError</a></li>
                                 <li><a href="../classes/ServiceCacheMixin.html">ServiceCacheMixin</a></li>
                                 <li><a href="../classes/StoreService.html">StoreService</a></li>
                                 <li><a href="../classes/TransformDateAttribute.html">TransformDateAttribute</a></li>
@@ -64,7 +60,6 @@
                                 <li><a href="../modules/authorization.html">authorization</a></li>
                                 <li><a href="../modules/cache.html">cache</a></li>
                                 <li><a href="../modules/ember-jsonapi-resources.html">ember-jsonapi-resources</a></li>
-                                <li><a href="../modules/fetch.html">fetch</a></li>
                                 <li><a href="../modules/initializers.html">initializers</a></li>
                                 <li><a href="../modules/resource.html">resource</a></li>
                                 <li><a href="../modules/resource-operations.html">resource-operations</a></li>
@@ -124,10 +119,10 @@
 define a prototype using <code>Resource.extend({ type: entity })</code>. Model prototypes
 are registered in the container as factories, they use the options:
 <code>{ instantiate: false, singleton: false }</code>. So, to create a model instance
-use the owner API or the container to <code>lookup</code> the factory, for example:</p>
-<pre class="code prettyprint"><code class="language-js">let owner = (typeof Ember.getOwner === 'function') ? Ember.getOwner(this) : this.container;
-let model = owner.lookup('model:entity').create({ attributes: { key: value } });
+use the owner API method <code>_lookupFactory('model:name')</code>† then <code>create()</code>:</p>
+<pre class="code prettyprint"><code class="language-js">let model = Ember.getOwner(this)._lookupFactory('model:entity').create({ attributes: { key: value } });
 </code></pre>
+<p>† <strong>Note:</strong> eventually <code>factoryFor</code> will replace <code>_lookupFactory</code></p>
 <p>See <a href="http://jsonapi.org/format/#document-resource-objects">http://jsonapi.org/format/#document-resource-objects</a></p>
 
 </div>
@@ -199,14 +194,6 @@ let model = owner.lookup('model:entity').create({ attributes: { key: value } });
 
                             </li>
                             <li class="index-item method">
-                                <a href="#method_hasMany">hasMany</a>
-
-                            </li>
-                            <li class="index-item method">
-                                <a href="#method_hasOne">hasOne</a>
-
-                            </li>
-                            <li class="index-item method">
                                 <a href="#method_initialize">initialize</a>
 
                             </li>
@@ -240,6 +227,14 @@ let model = owner.lookup('model:entity').create({ attributes: { key: value } });
                             </li>
                             <li class="index-item method">
                                 <a href="#method_rollbackRelationships">rollbackRelationships</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_toMany">toMany</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_toOne">toOne</a>
 
                             </li>
                             <li class="index-item method">
@@ -334,7 +329,7 @@ let model = owner.lookup('model:entity').create({ attributes: { key: value } });
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l231"><code>addon&#x2F;models&#x2F;resource.js:231</code></a>
+        <a href="../files/addon_models_resource.js.html#l233"><code>addon&#x2F;models&#x2F;resource.js:233</code></a>
         </p>
 
 
@@ -416,7 +411,7 @@ let model = owner.lookup('model:entity').create({ attributes: { key: value } });
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l301"><code>addon&#x2F;models&#x2F;resource.js:301</code></a>
+        <a href="../files/addon_models_resource.js.html#l306"><code>addon&#x2F;models&#x2F;resource.js:306</code></a>
         </p>
 
 
@@ -477,7 +472,7 @@ let model = owner.lookup('model:entity').create({ attributes: { key: value } });
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l401"><code>addon&#x2F;models&#x2F;resource.js:401</code></a>
+        <a href="../files/addon_models_resource.js.html#l406"><code>addon&#x2F;models&#x2F;resource.js:406</code></a>
         </p>
 
 
@@ -509,7 +504,7 @@ let model = owner.lookup('model:entity').create({ attributes: { key: value } });
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l445"><code>addon&#x2F;models&#x2F;resource.js:445</code></a>
+        <a href="../files/addon_models_resource.js.html#l450"><code>addon&#x2F;models&#x2F;resource.js:450</code></a>
         </p>
 
 
@@ -550,7 +545,7 @@ let model = owner.lookup('model:entity').create({ attributes: { key: value } });
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l133"><code>addon&#x2F;models&#x2F;resource.js:133</code></a>
+        <a href="../files/addon_models_resource.js.html#l134"><code>addon&#x2F;models&#x2F;resource.js:134</code></a>
         </p>
 
 
@@ -615,7 +610,7 @@ let model = owner.lookup('model:entity').create({ attributes: { key: value } });
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l182"><code>addon&#x2F;models&#x2F;resource.js:182</code></a>
+        <a href="../files/addon_models_resource.js.html#l185"><code>addon&#x2F;models&#x2F;resource.js:185</code></a>
         </p>
 
 
@@ -626,9 +621,9 @@ let model = owner.lookup('model:entity').create({ attributes: { key: value } });
         <p>Adds related resource identifier object to the relationship data.</p>
 <p>Also sets or adds to the <code>content</code> of the related proxy object.</p>
 <ul>
-<li>For has-many relations the related identifier object is added to
+<li>For to-many relations the related identifier object is added to
 the resource linkage data array.</li>
-<li>For has-one relations the resource identifier object is assigned,
+<li>For to-one relations the resource identifier object is assigned,
 so the relation may be replaced.</li>
 </ul>
 <p>See:</p>
@@ -696,7 +691,7 @@ so the relation may be replaced.</li>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l160"><code>addon&#x2F;models&#x2F;resource.js:160</code></a>
+        <a href="../files/addon_models_resource.js.html#l163"><code>addon&#x2F;models&#x2F;resource.js:163</code></a>
         </p>
 
 
@@ -787,7 +782,7 @@ setting and getting with a specific type. <code>'string'</code>, <code>'number'<
 <p>Use <code>attr()</code>, with optional type argument, to compose your model attributes, e.g:</p>
 <pre class="code prettyprint"><code class="language-js">import Ember from 'ember';
 import Resource from 'ember-jsonapi-resources/models/resource';
-import { attr, hasOne, hasMany } from 'ember-jsonapi-resources/models/resource';
+import { attr, toOne, toMany } from 'ember-jsonapi-resources/models/resource';
 
 export default Resource.extend({
   type: 'articles',
@@ -867,7 +862,7 @@ export default Resource.extend({
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l324"><code>addon&#x2F;models&#x2F;resource.js:324</code></a>
+        <a href="../files/addon_models_resource.js.html#l329"><code>addon&#x2F;models&#x2F;resource.js:329</code></a>
         </p>
 
 
@@ -910,7 +905,7 @@ export default Resource.extend({
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l537"><code>addon&#x2F;models&#x2F;resource.js:537</code></a>
+        <a href="../files/addon_models_resource.js.html#l550"><code>addon&#x2F;models&#x2F;resource.js:550</code></a>
         </p>
 
 
@@ -925,8 +920,8 @@ to project from keeping a reference on the prototype.</p>
 <p>The create method should only be called after looking up a factory from the
 container, for example in a route's model hook:</p>
 <pre class="code prettyprint"><code>model() {
-  let owner = (typeof Ember.getOwner === 'function') ? Ember.getOwner(this) : this.container;
-  return owner.lookup('model:post').create({
+  let owner = Ember.getOwner(this);
+  return owner._lookupFactory('model:post').create({
     attributes: {
       title: 'The JSON API 1.0 Spec Rocks!'
     }
@@ -983,7 +978,7 @@ object prior to adding a relationship.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l487"><code>addon&#x2F;models&#x2F;resource.js:487</code></a>
+        <a href="../files/addon_models_resource.js.html#l500"><code>addon&#x2F;models&#x2F;resource.js:500</code></a>
         </p>
 
 
@@ -992,7 +987,7 @@ object prior to adding a relationship.</p>
 
     <div class="description">
         <p>Sets the relationships data, used after the promise proxy resolves by
-hasOne and hasMany helpers</p>
+toOne and toMany helpers</p>
 
     </div>
 
@@ -1017,7 +1012,7 @@ hasOne and hasMany helpers</p>
 
 
                     <div class="param-description">
-                        <p>of relation hasOne or hasMany</p>
+                        <p>of relation toOne or toMany</p>
 
                     </div>
 
@@ -1060,7 +1055,7 @@ hasOne and hasMany helpers</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l474"><code>addon&#x2F;models&#x2F;resource.js:474</code></a>
+        <a href="../files/addon_models_resource.js.html#l487"><code>addon&#x2F;models&#x2F;resource.js:487</code></a>
         </p>
 
 
@@ -1091,219 +1086,6 @@ used for changed/previous tracking</p>
             </ul>
         </div>
 
-
-
-</div>
-<div id="method_hasMany" class="method item">
-    <h3 class="name"><code>hasMany</code></h3>
-
-        <div class="args">
-            <span class="paren">(</span><ul class="args-list inline commas">
-                <li class="arg">
-                        <code>relation</code>
-                </li>
-            </ul><span class="paren">)</span>
-        </div>
-
-        <span class="returns-inline">
-            <span class="type">Object</span>
-        </span>
-
-
-
-        <span class="flag final">final</span>
-
-
-
-
-    <div class="meta">
-                    <p>Provided by the <a href="../modules/utils.html">utils</a> module.</p>
-                <p>
-                Defined in
-        <a href="../files/addon_utils_has-many.js.html#l12"><code>addon&#x2F;utils&#x2F;has-many.js:12</code></a>
-        </p>
-
-
-
-    </div>
-
-    <div class="description">
-        <p>Helper to setup a has many relationship to another resource</p>
-<pre class="code prettyprint"><code class="language-js">let Author = Resource.extend({
-  type: 'authors',
-  name: attr(),
-  posts: hasMany('posts')
-});
-</code></pre>
-<p>Or, with an optional type to use instead of the resource's service</p>
-<pre class="code prettyprint"><code class="language-js">let Person = Resource.extend({
-  type: 'people',
-  name: attr()
-});
-
-let Supervisor = Person.extend({
-  type: 'supervisors',
-  directReports: hasMany({ resource: 'employees', type: 'people' })
-});
-</code></pre>
-
-    </div>
-
-        <div class="params">
-            <h4>Parameters:</h4>
-
-            <ul class="params-list">
-                <li class="param">
-                        <code class="param-name">relation</code>
-                        <span class="type">String | Object</span>
-
-
-                    <div class="param-description">
-                        <p>the name of the relationship</p>
-
-                    </div>
-
-                        <ul class="params-list">
-                            <li class="param">
-                                    <code class="param-name">resource</code>
-                                    <span class="type">String</span>
-
-                                <div class="param-description">
-                                    <p>the name of the relationship</p>
-
-                                </div>
-
-                            </li>
-                            <li class="param">
-                                    <code class="param-name">type</code>
-                                    <span class="type">String</span>
-
-                                <div class="param-description">
-                                    <p>the name of the type or service to use</p>
-
-                                </div>
-
-                            </li>
-                        </ul>
-                </li>
-            </ul>
-        </div>
-
-        <div class="returns">
-            <h4>Returns:</h4>
-
-            <div class="returns-description">
-                        <span class="type">Object</span>:
-                    <p>computed property</p>
-
-            </div>
-        </div>
-
-
-</div>
-<div id="method_hasOne" class="method item">
-    <h3 class="name"><code>hasOne</code></h3>
-
-        <div class="args">
-            <span class="paren">(</span><ul class="args-list inline commas">
-                <li class="arg">
-                        <code>relation</code>
-                </li>
-            </ul><span class="paren">)</span>
-        </div>
-
-        <span class="returns-inline">
-            <span class="type">Object</span>
-        </span>
-
-
-
-        <span class="flag final">final</span>
-
-
-
-
-    <div class="meta">
-                    <p>Provided by the <a href="../modules/utils.html">utils</a> module.</p>
-                <p>
-                Defined in
-        <a href="../files/addon_utils_has-one.js.html#l12"><code>addon&#x2F;utils&#x2F;has-one.js:12</code></a>
-        </p>
-
-
-
-    </div>
-
-    <div class="description">
-        <p>Helper to setup a has one relationship to another resource</p>
-<pre class="code prettyprint"><code class="language-js">let Employee = Person.extend({
-  type: 'employees',
-  supervisor: hasOne('supervisor')
-});
-</code></pre>
-<p>Or, with an optional type to use instead of the resource's service</p>
-<pre class="code prettyprint"><code class="language-js">let Person = Resource.extend({
-  type: 'people',
-  name: attr()
-});
-
-let Employee = Person.extend({
-  type: 'employees',
-  supervisor: hasOne({ resource: 'supervisor', type: 'people' })
-});
-</code></pre>
-
-    </div>
-
-        <div class="params">
-            <h4>Parameters:</h4>
-
-            <ul class="params-list">
-                <li class="param">
-                        <code class="param-name">relation</code>
-                        <span class="type">String | Object</span>
-
-
-                    <div class="param-description">
-                        <p>the name of the relationship</p>
-
-                    </div>
-
-                        <ul class="params-list">
-                            <li class="param">
-                                    <code class="param-name">resource</code>
-                                    <span class="type">String</span>
-
-                                <div class="param-description">
-                                    <p>the name of the relationship</p>
-
-                                </div>
-
-                            </li>
-                            <li class="param">
-                                    <code class="param-name">type</code>
-                                    <span class="type">String</span>
-
-                                <div class="param-description">
-                                    <p>the name of the type or service to use</p>
-
-                                </div>
-
-                            </li>
-                        </ul>
-                </li>
-            </ul>
-        </div>
-
-        <div class="returns">
-            <h4>Returns:</h4>
-
-            <div class="returns-description">
-                        <span class="type">Object</span>:
-                    <p>computed property</p>
-
-            </div>
-        </div>
 
 
 </div>
@@ -1357,7 +1139,7 @@ let Employee = Person.extend({
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l360"><code>addon&#x2F;models&#x2F;resource.js:360</code></a>
+        <a href="../files/addon_models_resource.js.html#l365"><code>addon&#x2F;models&#x2F;resource.js:365</code></a>
         </p>
 
 
@@ -1399,7 +1181,7 @@ let Employee = Person.extend({
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l342"><code>addon&#x2F;models&#x2F;resource.js:342</code></a>
+        <a href="../files/addon_models_resource.js.html#l347"><code>addon&#x2F;models&#x2F;resource.js:347</code></a>
         </p>
 
 
@@ -1447,7 +1229,7 @@ let Employee = Person.extend({
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l459"><code>addon&#x2F;models&#x2F;resource.js:459</code></a>
+        <a href="../files/addon_models_resource.js.html#l464"><code>addon&#x2F;models&#x2F;resource.js:464</code></a>
         </p>
 
 
@@ -1512,7 +1294,7 @@ let Employee = Person.extend({
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l260"><code>addon&#x2F;models&#x2F;resource.js:260</code></a>
+        <a href="../files/addon_models_resource.js.html#l265"><code>addon&#x2F;models&#x2F;resource.js:265</code></a>
         </p>
 
 
@@ -1523,8 +1305,8 @@ let Employee = Person.extend({
         <p>Removes resource identifier object of the relationship data. Also, sets the
 <code>content</code> of the related (computed property's) proxy object to <code>null</code>.</p>
 <ul>
-<li>For has-one relations the (resource linkage) data is set to <code>null</code>.</li>
-<li>For has-many relations the resource identifier object is removed from
+<li>For to-one relations the (resource linkage) data is set to <code>null</code>.</li>
+<li>For to-many relations the resource identifier object is removed from
 the resource Linkage <code>data</code> array.</li>
 </ul>
 <p>See:</p>
@@ -1592,7 +1374,7 @@ the resource Linkage <code>data</code> array.</li>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l171"><code>addon&#x2F;models&#x2F;resource.js:171</code></a>
+        <a href="../files/addon_models_resource.js.html#l174"><code>addon&#x2F;models&#x2F;resource.js:174</code></a>
         </p>
 
 
@@ -1651,7 +1433,7 @@ the resource Linkage <code>data</code> array.</li>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l375"><code>addon&#x2F;models&#x2F;resource.js:375</code></a>
+        <a href="../files/addon_models_resource.js.html#l380"><code>addon&#x2F;models&#x2F;resource.js:380</code></a>
         </p>
 
 
@@ -1682,7 +1464,7 @@ the resource Linkage <code>data</code> array.</li>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l385"><code>addon&#x2F;models&#x2F;resource.js:385</code></a>
+        <a href="../files/addon_models_resource.js.html#l390"><code>addon&#x2F;models&#x2F;resource.js:390</code></a>
         </p>
 
 
@@ -1713,7 +1495,7 @@ the resource Linkage <code>data</code> array.</li>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l415"><code>addon&#x2F;models&#x2F;resource.js:415</code></a>
+        <a href="../files/addon_models_resource.js.html#l420"><code>addon&#x2F;models&#x2F;resource.js:420</code></a>
         </p>
 
 
@@ -1726,6 +1508,219 @@ the resource Linkage <code>data</code> array.</li>
     </div>
 
 
+
+
+</div>
+<div id="method_toMany" class="method item">
+    <h3 class="name"><code>toMany</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>relation</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">Object</span>
+        </span>
+
+
+
+        <span class="flag final">final</span>
+
+
+
+
+    <div class="meta">
+                    <p>Provided by the <a href="../modules/utils.html">utils</a> module.</p>
+                <p>
+                Defined in
+        <a href="../files/addon_utils_to-many.js.html#l12"><code>addon&#x2F;utils&#x2F;to-many.js:12</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Helper to setup a has many relationship to another resource</p>
+<pre class="code prettyprint"><code class="language-js">let Author = Resource.extend({
+  type: 'authors',
+  name: attr(),
+  posts: toMany('posts')
+});
+</code></pre>
+<p>Or, with an optional type to use instead of the resource's service</p>
+<pre class="code prettyprint"><code class="language-js">let Person = Resource.extend({
+  type: 'people',
+  name: attr()
+});
+
+let Supervisor = Person.extend({
+  type: 'supervisors',
+  directReports: toMany({ resource: 'employees', type: 'people' })
+});
+</code></pre>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">relation</code>
+                        <span class="type">String | Object</span>
+
+
+                    <div class="param-description">
+                        <p>the name of the relationship</p>
+
+                    </div>
+
+                        <ul class="params-list">
+                            <li class="param">
+                                    <code class="param-name">resource</code>
+                                    <span class="type">String</span>
+
+                                <div class="param-description">
+                                    <p>the name of the relationship</p>
+
+                                </div>
+
+                            </li>
+                            <li class="param">
+                                    <code class="param-name">type</code>
+                                    <span class="type">String</span>
+
+                                <div class="param-description">
+                                    <p>the name of the type or service to use</p>
+
+                                </div>
+
+                            </li>
+                        </ul>
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Object</span>:
+                    <p>computed property</p>
+
+            </div>
+        </div>
+
+
+</div>
+<div id="method_toOne" class="method item">
+    <h3 class="name"><code>toOne</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>relation</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">Object</span>
+        </span>
+
+
+
+        <span class="flag final">final</span>
+
+
+
+
+    <div class="meta">
+                    <p>Provided by the <a href="../modules/utils.html">utils</a> module.</p>
+                <p>
+                Defined in
+        <a href="../files/addon_utils_to-one.js.html#l12"><code>addon&#x2F;utils&#x2F;to-one.js:12</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Helper to setup a has one relationship to another resource</p>
+<pre class="code prettyprint"><code class="language-js">let Employee = Person.extend({
+  type: 'employees',
+  supervisor: toOne('supervisor')
+});
+</code></pre>
+<p>Or, with an optional type to use instead of the resource's service</p>
+<pre class="code prettyprint"><code class="language-js">let Person = Resource.extend({
+  type: 'people',
+  name: attr()
+});
+
+let Employee = Person.extend({
+  type: 'employees',
+  supervisor: toOne({ resource: 'supervisor', type: 'people' })
+});
+</code></pre>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">relation</code>
+                        <span class="type">String | Object</span>
+
+
+                    <div class="param-description">
+                        <p>the name of the relationship</p>
+
+                    </div>
+
+                        <ul class="params-list">
+                            <li class="param">
+                                    <code class="param-name">resource</code>
+                                    <span class="type">String</span>
+
+                                <div class="param-description">
+                                    <p>the name of the relationship</p>
+
+                                </div>
+
+                            </li>
+                            <li class="param">
+                                    <code class="param-name">type</code>
+                                    <span class="type">String</span>
+
+                                <div class="param-description">
+                                    <p>the name of the type or service to use</p>
+
+                                </div>
+
+                            </li>
+                        </ul>
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Object</span>:
+                    <p>computed property</p>
+
+            </div>
+        </div>
 
 
 </div>
@@ -1744,7 +1739,7 @@ the resource Linkage <code>data</code> array.</li>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l122"><code>addon&#x2F;models&#x2F;resource.js:122</code></a>
+        <a href="../files/addon_models_resource.js.html#l123"><code>addon&#x2F;models&#x2F;resource.js:123</code></a>
         </p>
 
 
@@ -1777,7 +1772,7 @@ the resource Linkage <code>data</code> array.</li>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l96"><code>addon&#x2F;models&#x2F;resource.js:96</code></a>
+        <a href="../files/addon_models_resource.js.html#l97"><code>addon&#x2F;models&#x2F;resource.js:97</code></a>
         </p>
 
 
@@ -1803,7 +1798,7 @@ the resource Linkage <code>data</code> array.</li>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l105"><code>addon&#x2F;models&#x2F;resource.js:105</code></a>
+        <a href="../files/addon_models_resource.js.html#l106"><code>addon&#x2F;models&#x2F;resource.js:106</code></a>
         </p>
 
 
@@ -1829,7 +1824,7 @@ the resource Linkage <code>data</code> array.</li>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l55"><code>addon&#x2F;models&#x2F;resource.js:55</code></a>
+        <a href="../files/addon_models_resource.js.html#l56"><code>addon&#x2F;models&#x2F;resource.js:56</code></a>
         </p>
 
 
@@ -1857,7 +1852,7 @@ Use this as a refence for creating computed properties</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l517"><code>addon&#x2F;models&#x2F;resource.js:517</code></a>
+        <a href="../files/addon_models_resource.js.html#l530"><code>addon&#x2F;models&#x2F;resource.js:530</code></a>
         </p>
 
 
@@ -1882,7 +1877,7 @@ Use this as a refence for creating computed properties</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l46"><code>addon&#x2F;models&#x2F;resource.js:46</code></a>
+        <a href="../files/addon_models_resource.js.html#l47"><code>addon&#x2F;models&#x2F;resource.js:47</code></a>
         </p>
 
 
@@ -1907,7 +1902,7 @@ Use this as a refence for creating computed properties</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l525"><code>addon&#x2F;models&#x2F;resource.js:525</code></a>
+        <a href="../files/addon_models_resource.js.html#l538"><code>addon&#x2F;models&#x2F;resource.js:538</code></a>
         </p>
 
 
@@ -1931,7 +1926,7 @@ Use this as a refence for creating computed properties</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l114"><code>addon&#x2F;models&#x2F;resource.js:114</code></a>
+        <a href="../files/addon_models_resource.js.html#l115"><code>addon&#x2F;models&#x2F;resource.js:115</code></a>
         </p>
 
 
@@ -1957,7 +1952,7 @@ Use this as a refence for creating computed properties</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l78"><code>addon&#x2F;models&#x2F;resource.js:78</code></a>
+        <a href="../files/addon_models_resource.js.html#l79"><code>addon&#x2F;models&#x2F;resource.js:79</code></a>
         </p>
 
 
@@ -1983,7 +1978,7 @@ Use this as a refence for creating computed properties</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l87"><code>addon&#x2F;models&#x2F;resource.js:87</code></a>
+        <a href="../files/addon_models_resource.js.html#l88"><code>addon&#x2F;models&#x2F;resource.js:88</code></a>
         </p>
 
 
@@ -2009,7 +2004,7 @@ Use this as a refence for creating computed properties</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l69"><code>addon&#x2F;models&#x2F;resource.js:69</code></a>
+        <a href="../files/addon_models_resource.js.html#l70"><code>addon&#x2F;models&#x2F;resource.js:70</code></a>
         </p>
 
 
@@ -2034,7 +2029,7 @@ Use this as a refence for creating computed properties</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l37"><code>addon&#x2F;models&#x2F;resource.js:37</code></a>
+        <a href="../files/addon_models_resource.js.html#l38"><code>addon&#x2F;models&#x2F;resource.js:38</code></a>
         </p>
 
 

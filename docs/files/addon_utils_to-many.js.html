@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>addon/utils/has-one.js - Ember JSON API Resources</title>
+    <title>addon/utils/to-many.js - Ember JSON API Resources</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -42,13 +42,9 @@
                                 <li><a href="../classes/ApplicationAdapter.html">ApplicationAdapter</a></li>
                                 <li><a href="../classes/ApplicationSerializer.html">ApplicationSerializer</a></li>
                                 <li><a href="../classes/AuthorizationMixin.html">AuthorizationMixin</a></li>
-                                <li><a href="../classes/ClientError.html">ClientError</a></li>
-                                <li><a href="../classes/FetchError.html">FetchError</a></li>
-                                <li><a href="../classes/FetchMixin.html">FetchMixin</a></li>
                                 <li><a href="../classes/RelatedProxyUtil.html">RelatedProxyUtil</a></li>
                                 <li><a href="../classes/Resource.html">Resource</a></li>
                                 <li><a href="../classes/ResourceOperationsMixin.html">ResourceOperationsMixin</a></li>
-                                <li><a href="../classes/ServerError.html">ServerError</a></li>
                                 <li><a href="../classes/ServiceCacheMixin.html">ServiceCacheMixin</a></li>
                                 <li><a href="../classes/StoreService.html">StoreService</a></li>
                                 <li><a href="../classes/TransformDateAttribute.html">TransformDateAttribute</a></li>
@@ -64,7 +60,6 @@
                                 <li><a href="../modules/authorization.html">authorization</a></li>
                                 <li><a href="../modules/cache.html">cache</a></li>
                                 <li><a href="../modules/ember-jsonapi-resources.html">ember-jsonapi-resources</a></li>
-                                <li><a href="../modules/fetch.html">fetch</a></li>
                                 <li><a href="../modules/initializers.html">initializers</a></li>
                                 <li><a href="../modules/resource.html">resource</a></li>
                                 <li><a href="../modules/resource-operations.html">resource-operations</a></li>
@@ -105,14 +100,14 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-<h1 class="file-heading">File: addon/utils/has-one.js</h1>
+<h1 class="file-heading">File: addon/utils/to-many.js</h1>
 
 <div class="file">
     <pre class="code prettyprint linenums">
 /**
   @module ember-jsonapi-resources
   @submodule utils
-  @main hasOne
+  @main toMany
 **/
 
 import Ember from &#x27;ember&#x27;;
@@ -121,12 +116,13 @@ import { linksPath } from &#x27;ember-jsonapi-resources/utils/related-proxy&#x27
 import { isDasherized } from &#x27;ember-jsonapi-resources/utils/is&#x27;;
 
 /**
-  Helper to setup a has one relationship to another resource
+  Helper to setup a has many relationship to another resource
 
   &#x60;&#x60;&#x60;js
-  let Employee = Person.extend({
-    type: &#x27;employees&#x27;,
-    supervisor: hasOne(&#x27;supervisor&#x27;)
+  let Author = Resource.extend({
+    type: &#x27;authors&#x27;,
+    name: attr(),
+    posts: toMany(&#x27;posts&#x27;)
   });
   &#x60;&#x60;&#x60;
 
@@ -138,13 +134,13 @@ import { isDasherized } from &#x27;ember-jsonapi-resources/utils/is&#x27;;
     name: attr()
   });
 
-  let Employee = Person.extend({
-    type: &#x27;employees&#x27;,
-    supervisor: hasOne({ resource: &#x27;supervisor&#x27;, type: &#x27;people&#x27; })
+  let Supervisor = Person.extend({
+    type: &#x27;supervisors&#x27;,
+    directReports: toMany({ resource: &#x27;employees&#x27;, type: &#x27;people&#x27; })
   });
   &#x60;&#x60;&#x60;
 
-  @method hasOne
+  @method toMany
   @for Resource
   @final
   @param {String|Object} relation the name of the relationship
@@ -152,21 +148,23 @@ import { isDasherized } from &#x27;ember-jsonapi-resources/utils/is&#x27;;
   @param {String} relation.type the name of the type or service to use
   @return {Object} computed property
 */
-export default function hasOne(relation) {
+export function toMany(relation) {
   let type = relation;
   if (typeof type === &#x27;object&#x27;) {
     assertResourceAndTypeProps(relation);
     type = relation.type;
     relation = relation.resource;
   }
-  assertDasherizedHasOneRelation(type);
-  let kind = &#x27;hasOne&#x27;;
-  let util = RelatedProxyUtil.create({relationship: relation, type: type, kind: kind});
+  assertDasherizedHasManyRelation(relation);
+  let kind = &#x27;toMany&#x27;;
+  let util = RelatedProxyUtil.create({&#x27;relationship&#x27;: relation, &#x27;type&#x27;: type, kind: kind});
   let path = linksPath(relation);
   return Ember.computed(path, function () {
     return util.createProxy(this, kind);
   }).meta({relation: relation, type: type, kind: kind});
 }
+
+export let hasMany = toMany;
 
 function assertResourceAndTypeProps(relation) {
   try {
@@ -177,11 +175,11 @@ function assertResourceAndTypeProps(relation) {
   }
 }
 
-function assertDasherizedHasOneRelation(name) {
+function assertDasherizedHasManyRelation(name) {
   try {
     let relationName = Ember.String.dasherize(name);
-    let msg = &quot; are recommended to use dasherized names, e.g &#x60;hasOne(&#x27;&quot;+ relationName +&quot;&#x27;)&#x60;&quot;;
-    msg += &quot;, instead of &#x60;hasOne(&#x27;&quot;+ name +&quot;&#x27;)&#x60;&quot;;
+    let msg = &quot; are recommended to use dasherized names, e.g &#x60;toMany(&#x27;&quot;+ relationName +&quot;&#x27;)&#x60;&quot;;
+    msg += &quot;, instead of &#x60;toMany(&#x27;&quot;+ name +&quot;&#x27;)&#x60;&quot;;
     Ember.assert(msg, isDasherized(name));
   } catch(e) {
     Ember.Logger.warn(e.message);

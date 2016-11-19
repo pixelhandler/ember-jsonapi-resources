@@ -42,13 +42,9 @@
                                 <li><a href="../classes/ApplicationAdapter.html">ApplicationAdapter</a></li>
                                 <li><a href="../classes/ApplicationSerializer.html">ApplicationSerializer</a></li>
                                 <li><a href="../classes/AuthorizationMixin.html">AuthorizationMixin</a></li>
-                                <li><a href="../classes/ClientError.html">ClientError</a></li>
-                                <li><a href="../classes/FetchError.html">FetchError</a></li>
-                                <li><a href="../classes/FetchMixin.html">FetchMixin</a></li>
                                 <li><a href="../classes/RelatedProxyUtil.html">RelatedProxyUtil</a></li>
                                 <li><a href="../classes/Resource.html">Resource</a></li>
                                 <li><a href="../classes/ResourceOperationsMixin.html">ResourceOperationsMixin</a></li>
-                                <li><a href="../classes/ServerError.html">ServerError</a></li>
                                 <li><a href="../classes/ServiceCacheMixin.html">ServiceCacheMixin</a></li>
                                 <li><a href="../classes/StoreService.html">StoreService</a></li>
                                 <li><a href="../classes/TransformDateAttribute.html">TransformDateAttribute</a></li>
@@ -64,7 +60,6 @@
                                 <li><a href="../modules/authorization.html">authorization</a></li>
                                 <li><a href="../modules/cache.html">cache</a></li>
                                 <li><a href="../modules/ember-jsonapi-resources.html">ember-jsonapi-resources</a></li>
-                                <li><a href="../modules/fetch.html">fetch</a></li>
                                 <li><a href="../modules/initializers.html">initializers</a></li>
                                 <li><a href="../modules/resource.html">resource</a></li>
                                 <li><a href="../modules/resource-operations.html">resource-operations</a></li>
@@ -117,8 +112,8 @@
 import Ember from &#x27;ember&#x27;;
 import { pluralize, singularize } from &#x27;ember-inflector&#x27;;
 import attr from &#x27;ember-jsonapi-resources/utils/attr&#x27;;
-import hasOne from &#x27;ember-jsonapi-resources/utils/has-one&#x27;;
-import hasMany from &#x27;ember-jsonapi-resources/utils/has-many&#x27;;
+import { toOne, hasOne } from &#x27;ember-jsonapi-resources/utils/to-one&#x27;;
+import { toMany, hasMany } from &#x27;ember-jsonapi-resources/utils/to-many&#x27;;
 import { isType } from &#x27;ember-jsonapi-resources/utils/is&#x27;;
 import ResourceOperationsMixin from &#x27;../mixins/resource-operations&#x27;;
 
@@ -129,12 +124,13 @@ const { getOwner, computed, Logger } = Ember;
   define a prototype using &#x60;Resource.extend({ type: entity })&#x60;. Model prototypes
   are registered in the container as factories, they use the options:
   &#x60;{ instantiate: false, singleton: false }&#x60;. So, to create a model instance
-  use the owner API or the container to &#x60;lookup&#x60; the factory, for example:
+  use the owner API method &#x60;_lookupFactory(&#x27;model:name&#x27;)&#x60;† then &#x60;create()&#x60;:
 
   &#x60;&#x60;&#x60;js
-  let owner = (typeof Ember.getOwner === &#x27;function&#x27;) ? Ember.getOwner(this) : this.container;
-  let model = owner.lookup(&#x27;model:entity&#x27;).create({ attributes: { key: value } });
+  let model = Ember.getOwner(this)._lookupFactory(&#x27;model:entity&#x27;).create({ attributes: { key: value } });
   &#x60;&#x60;&#x60;
+
+  † **Note:** eventually &#x60;factoryFor&#x60; will replace &#x60;_lookupFactory&#x60;
 
   See &lt;http://jsonapi.org/format/#document-resource-objects&gt;
 
@@ -252,9 +248,11 @@ const Resource = Ember.Object.extend(ResourceOperationsMixin, {
     let existing;
     if (!Array.isArray(ids)) {
       existing = this.get(relationshipData).id;
-      this.removeRelationship(relation, existing);
-      if (isType(&#x27;string&#x27;, ids)) {
-        this.addRelationship(relation, ids);
+      if (ids === null || isType(&#x27;string&#x27;, ids) &amp;&amp; existing !== ids) {
+        this.removeRelationship(relation, existing);
+        if (ids !== null) {
+          this.addRelationship(relation, ids);
+        }
       }
     } else {
       existing = this.get(relationshipData).map(function(rel) { return rel.id; });
@@ -295,9 +293,9 @@ const Resource = Ember.Object.extend(ResourceOperationsMixin, {
 
     Also sets or adds to the &#x60;content&#x60; of the related proxy object.
 
-    - For has-many relations the related identifier object is added to
+    - For to-many relations the related identifier object is added to
       the resource linkage data array.
-    - For has-one relations the resource identifier object is assigned,
+    - For to-one relations the resource identifier object is assigned,
       so the relation may be replaced.
 
     See:
@@ -317,14 +315,13 @@ const Resource = Ember.Object.extend(ResourceOperationsMixin, {
     let data = this.get(key);
     let type = pluralize(meta.type);
     let identifier = { type: type, id: id };
-    let owner = (typeof getOwner === &#x27;function&#x27;) ? getOwner(this) : this.container;
-    let resource = owner.lookup(&#x60;service:${type}&#x60;).cacheLookup(id);
+    let resource = getOwner(this).lookup(&#x60;service:${type}&#x60;).cacheLookup(id);
     if (Array.isArray(data)) {
       this._relationAdded(related, identifier);
       data.push(identifier);
       if (resource) {
         let resources = this.get(related);
-        if (!resources.contains(resource)) {
+        if (!resources.includes(resource)) {
           resources.pushObject(resource);
         }
       }
@@ -356,10 +353,13 @@ const Resource = Ember.Object.extend(ResourceOperationsMixin, {
     let meta = this.relationMetadata(relation);
     setupRelationshipTracking.call(this, relation, meta.kind);
     let ref = this._relationships[relation];
-    if (meta &amp;&amp; meta.kind === &#x27;hasOne&#x27;) {
-      ref.changed = identifier;
-      ref.previous = ref.previous || previous;
-    } else if (meta &amp;&amp; meta.kind === &#x27;hasMany&#x27;) {
+    let relationshipData = this.get(&#x60;relationships.${relation}.data&#x60;);
+    if (meta &amp;&amp; meta.kind === &#x27;toOne&#x27;) {
+      if (!relationshipData || relationshipData.id !== identifier.id) {
+        ref.changed = identifier;
+        ref.previous = ref.previous || previous;
+      }
+    } else if (meta &amp;&amp; meta.kind === &#x27;toMany&#x27;) {
       let id = identifier.id;
       ref.removals = Ember.A(ref.removals.rejectBy(&#x27;id&#x27;, id));
       if (!ref.added.findBy(&#x27;id&#x27;, id)) {
@@ -372,8 +372,8 @@ const Resource = Ember.Object.extend(ResourceOperationsMixin, {
     Removes resource identifier object of the relationship data. Also, sets the
     &#x60;content&#x60; of the related (computed property&#x27;s) proxy object to &#x60;null&#x60;.
 
-    - For has-one relations the (resource linkage) data is set to &#x60;null&#x60;.
-    - For has-many relations the resource identifier object is removed from
+    - For to-one relations the (resource linkage) data is set to &#x60;null&#x60;.
+    - For to-many relations the resource identifier object is removed from
       the resource Linkage &#x60;data&#x60; array.
 
     See:
@@ -421,10 +421,10 @@ const Resource = Ember.Object.extend(ResourceOperationsMixin, {
     let ref = this._relationships[relation] = this._relationships[relation] || {};
     let meta = this.relationMetadata(relation);
     setupRelationshipTracking.call(this, relation, meta.kind);
-    if (meta.kind === &#x27;hasOne&#x27;) {
+    if (meta.kind === &#x27;toOne&#x27;) {
       ref.changed = null;
       ref.previous = ref.previous || this.get(&#x27;relationships.&#x27; + relation).data;
-    } else if (meta.kind === &#x27;hasMany&#x27;) {
+    } else if (meta.kind === &#x27;toMany&#x27;) {
       ref.added = Ember.A(ref.added.rejectBy(&#x27;id&#x27;, id));
       if (!ref.removals.findBy(&#x27;id&#x27;, id)) {
         ref.removals.pushObject({ type: pluralize(relation), id: id });
@@ -476,7 +476,7 @@ const Resource = Ember.Object.extend(ResourceOperationsMixin, {
     get() {
       let relationships = Object.keys(this._relationships).filter( (relation) =&gt; {
         let ref = this._relationships[relation];
-        return !!ref.previous || (ref.removals &amp;&amp; ref.removals.length) ||
+        return !!ref.changed || (ref.removals &amp;&amp; ref.removals.length) ||
           (ref.added &amp;&amp; ref.added.length);
       });
       return Ember.A(relationships);
@@ -534,11 +534,11 @@ const Resource = Ember.Object.extend(ResourceOperationsMixin, {
       relations.forEach((relation) =&gt; {
         let ref = this._relationships[relation];
         let meta = this.relationMetadata(relation);
-        if (meta &amp;&amp; meta.kind === &#x27;hasOne&#x27;) {
+        if (meta &amp;&amp; meta.kind === &#x27;toOne&#x27;) {
           if (ref.changed &amp;&amp; ref.changed.id &amp;&amp; ref.previous &amp;&amp; ref.previous.id) {
             this.addRelationship(relation, ref.previous.id);
           }
-        } else if (meta &amp;&amp; meta.kind === &#x27;hasMany&#x27;) {
+        } else if (meta &amp;&amp; meta.kind === &#x27;toMany&#x27;) {
           let added = ref.added.mapBy(&#x27;id&#x27;);
           let removed = ref.removals.mapBy(&#x27;id&#x27;);
           added.forEach( (id) =&gt; {
@@ -577,7 +577,15 @@ const Resource = Ember.Object.extend(ResourceOperationsMixin, {
     try {
       meta = this.constructor.metaForProperty(property);
     } catch (e) {
-      meta = this.get(&#x27;content&#x27;).constructor.metaForProperty(property);
+      // Could be a Ember Proxy object. Try that, otherwise throw original error.
+      // This could contain a very useful message (&quot;could not find computed property
+      // with key &#x60;property&#x60;&quot; on undefined relationships for example)
+      const content = this.get(&#x27;content&#x27;);
+      if (content &amp;&amp; content.constructor.metaForProperty) {
+        meta = content.constructor.metaForProperty(property);
+      } else {
+        throw e;
+      }
     }
     return meta;
   },
@@ -597,11 +605,11 @@ const Resource = Ember.Object.extend(ResourceOperationsMixin, {
 
   /**
     Sets the relationships data, used after the promise proxy resolves by
-    hasOne and hasMany helpers
+    toOne and toMany helpers
 
     @method didResolveProxyRelation
     @param {String} relation name
-    @param {String} kind of relation hasOne or hasMany
+    @param {String} kind of relation toOne or toMany
     @param {Array|Object} related resource(s)
   */
   didResolveProxyRelation(relation, kind, related) {
@@ -616,9 +624,9 @@ const Resource = Ember.Object.extend(ResourceOperationsMixin, {
     let relationshipData = &#x27;relationships.&#x27; + relation + &#x27;.data&#x27;;
     let data = this.get(relationshipData);
     if (!data) {
-      if (kind === &#x27;hasOne&#x27;) {
+      if (kind === &#x27;toOne&#x27;) {
         this.set(relationshipData, {});
-      } else if (kind === &#x27;hasMany&#x27;) {
+      } else if (kind === &#x27;toMany&#x27;) {
         this.set(relationshipData, Ember.A([]));
       }
     }
@@ -656,8 +664,8 @@ Resource.reopenClass({
 
     &#x60;&#x60;&#x60;
     model() {
-      let owner = (typeof Ember.getOwner === &#x27;function&#x27;) ? Ember.getOwner(this) : this.container;
-      return owner.lookup(&#x27;model:post&#x27;).create({
+      let owner = Ember.getOwner(this);
+      return owner._lookupFactory(&#x27;model:post&#x27;).create({
         attributes: {
           title: &#x27;The JSON API 1.0 Spec Rocks!&#x27;
         }
@@ -702,13 +710,13 @@ Resource.reopenClass({
     if (!type) {
       Logger.warn(msg + &#x27;#create called, instead you should first use &#x27; + msg + &#x27;.extend({type:&quot;entity&quot;})&#x27;);
     } else {
-      let owner = (typeof getOwner === &#x27;function&#x27;) ? getOwner(instance) : instance.container;
+      let owner = getOwner(instance);
       if (owner) {
         useComputedPropsMetaToSetupRelationships(owner, factory, instance);
       } else {
         msg += &#x27;#create should only be called from a container lookup (relationships not setup), instead use: \n&#x27;;
-        msg += &quot;&#x60;let owner = (typeof Ember.getOwner === &#x27;function&#x27;) ? Ember.getOwner(this) : this.container; \n&quot;;
-        msg += &#x27;owner.lookup(&quot;&#x27; + factory + &#x27;&quot;).create()&#x60;&#x27;;
+        msg += &quot;&#x60;let owner = Ember.getOwner(this); \n&quot;;
+        msg += &#x27;owner._lookupFactory(&quot;&#x27; + factory + &#x27;&quot;).create()&#x60;&#x27;;
         Logger.warn(msg);
       }
     }
@@ -718,7 +726,7 @@ Resource.reopenClass({
 
 export default Resource;
 
-export { attr, hasOne, hasMany };
+export { attr, toOne, toMany, hasOne, hasMany };
 
 let _rp = &#x27;service type id attributes relationships links meta _attributes isNew cacheDuration isCacheExpired&#x27;;
 const ignoredMetaProps = _rp.split(&#x27; &#x27;);
@@ -748,9 +756,9 @@ function setupRelationship(relation, kind) {
     ref.links = {};
   }
   if (!ref.data) {
-    if (kind === &#x27;hasOne&#x27;) {
+    if (kind === &#x27;toOne&#x27;) {
       ref.data = null;
-    } else if (kind === &#x27;hasMany&#x27;) {
+    } else if (kind === &#x27;toMany&#x27;) {
       ref.data = Ember.A([]);
     }
   }
@@ -759,10 +767,10 @@ function setupRelationship(relation, kind) {
 function setupRelationshipTracking(relation, kind) {
   this._relationships[relation] = this._relationships[relation] || {};
   let ref = this._relationships[relation];
-  if (kind === &#x27;hasOne&#x27;) {
+  if (kind === &#x27;toOne&#x27;) {
     ref.changed = ref.changed || null;
     ref.previous = ref.previous || null;
-  } else if (kind === &#x27;hasMany&#x27;) {
+  } else if (kind === &#x27;toMany&#x27;) {
     ref.added = ref.added || Ember.A([]);
     ref.removals = ref.removals || Ember.A([]);
   }

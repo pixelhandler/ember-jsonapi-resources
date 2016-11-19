@@ -59,17 +59,6 @@
             "fors": {},
             "namespaces": {}
         },
-        "addon/mixins/fetch.js": {
-            "name": "addon/mixins/fetch.js",
-            "modules": {
-                "fetch": 1
-            },
-            "classes": {
-                "FetchMixin": 1
-            },
-            "fors": {},
-            "namespaces": {}
-        },
         "addon/mixins/resource-operations.js": {
             "name": "addon/mixins/resource-operations.js",
             "modules": {
@@ -147,35 +136,6 @@
             },
             "namespaces": {}
         },
-        "addon/utils/errors.js": {
-            "name": "addon/utils/errors.js",
-            "modules": {},
-            "classes": {
-                "ServerError": 1,
-                "ClientError": 1,
-                "FetchError": 1
-            },
-            "fors": {},
-            "namespaces": {}
-        },
-        "addon/utils/has-many.js": {
-            "name": "addon/utils/has-many.js",
-            "modules": {},
-            "classes": {},
-            "fors": {
-                "Resource": 1
-            },
-            "namespaces": {}
-        },
-        "addon/utils/has-one.js": {
-            "name": "addon/utils/has-one.js",
-            "modules": {},
-            "classes": {},
-            "fors": {
-                "Resource": 1
-            },
-            "namespaces": {}
-        },
         "addon/utils/is.js": {
             "name": "addon/utils/is.js",
             "modules": {},
@@ -192,6 +152,24 @@
                 "RelatedProxyUtil": 1
             },
             "fors": {},
+            "namespaces": {}
+        },
+        "addon/utils/to-many.js": {
+            "name": "addon/utils/to-many.js",
+            "modules": {},
+            "classes": {},
+            "fors": {
+                "Resource": 1
+            },
+            "namespaces": {}
+        },
+        "addon/utils/to-one.js": {
+            "name": "addon/utils/to-one.js",
+            "modules": {},
+            "classes": {},
+            "fors": {
+                "Resource": 1
+            },
             "namespaces": {}
         },
         "addon/utils/transform-map.js": {
@@ -221,7 +199,6 @@
                 "initializers": 1,
                 "adapter-api-host-proxy-mixin": 1,
                 "authorization": 1,
-                "fetch": 1,
                 "resource-operations": 1,
                 "cache": 1,
                 "transforms": 1,
@@ -237,14 +214,10 @@
                 "StoreService": 1,
                 "AdapterApiHostProxyMixin": 1,
                 "AuthorizationMixin": 1,
-                "FetchMixin": 1,
                 "ResourceOperationsMixin": 1,
                 "ServiceCacheMixin": 1,
                 "TransformsMixin": 1,
                 "ApplicationSerializer": 1,
-                "ServerError": 1,
-                "ClientError": 1,
-                "FetchError": 1,
                 "Utils": 1,
                 "RelatedProxyUtil": 1,
                 "TransformMap": 1,
@@ -303,7 +276,7 @@
             "module": "ember-jsonapi-resources",
             "namespace": "",
             "file": "addon/mixins/adapter-api-host-proxy.js",
-            "line": 7,
+            "line": 9,
             "description": "Mixin to provide url rewrite for proxied api. Mostly used as example."
         },
         "authorization": {
@@ -321,22 +294,6 @@
             "file": "addon/mixins/authorization.js",
             "line": 8,
             "description": "A Mixin class for storage of credential/token uses with a HTTP Authorization request-header\n\nThe default solution is to use localStorage['AuthorizationHeader'] for the credential"
-        },
-        "fetch": {
-            "name": "fetch",
-            "submodules": {},
-            "elements": {},
-            "classes": {
-                "FetchMixin": 1
-            },
-            "fors": {},
-            "is_submodule": 1,
-            "namespaces": {},
-            "module": "ember-jsonapi-resources",
-            "namespace": "",
-            "file": "addon/mixins/fetch.js",
-            "line": 9,
-            "description": "Fetch/Ajax methods for use with an Adapter calls `cacheUpdate`, `cacheResource`\nmethods and a `serializer` injection."
         },
         "resource-operations": {
             "name": "resource-operations",
@@ -400,7 +357,7 @@
             "namespace": "",
             "file": "addon/models/resource.js",
             "line": 16,
-            "description": "A Resource class to create JSON API resource objects. This is abstract, first\ndefine a prototype using `Resource.extend({ type: entity })`. Model prototypes\nare registered in the container as factories, they use the options:\n`{ instantiate: false, singleton: false }`. So, to create a model instance\nuse the owner API or the container to `lookup` the factory, for example:\n\n```js\nlet owner = (typeof Ember.getOwner === 'function') ? Ember.getOwner(this) : this.container;\nlet model = owner.lookup('model:entity').create({ attributes: { key: value } });\n```\n\nSee <http://jsonapi.org/format/#document-resource-objects>"
+            "description": "A Resource class to create JSON API resource objects. This is abstract, first\ndefine a prototype using `Resource.extend({ type: entity })`. Model prototypes\nare registered in the container as factories, they use the options:\n`{ instantiate: false, singleton: false }`. So, to create a model instance\nuse the owner API method `_lookupFactory('model:name')`† then `create()`:\n\n```js\nlet model = Ember.getOwner(this)._lookupFactory('model:entity').create({ attributes: { key: value } });\n```\n\n† **Note:** eventually `factoryFor` will replace `_lookupFactory`\n\nSee <http://jsonapi.org/format/#document-resource-objects>"
         },
         "serializers": {
             "name": "serializers",
@@ -439,9 +396,6 @@
             "submodules": {},
             "elements": {},
             "classes": {
-                "ServerError": 1,
-                "ClientError": 1,
-                "FetchError": 1,
                 "Utils": 1,
                 "RelatedProxyUtil": 1,
                 "TransformMap": 1,
@@ -497,7 +451,7 @@
             "namespace": "",
             "file": "addon/models/resource.js",
             "line": 16,
-            "description": "A Resource class to create JSON API resource objects. This is abstract, first\ndefine a prototype using `Resource.extend({ type: entity })`. Model prototypes\nare registered in the container as factories, they use the options:\n`{ instantiate: false, singleton: false }`. So, to create a model instance\nuse the owner API or the container to `lookup` the factory, for example:\n\n```js\nlet owner = (typeof Ember.getOwner === 'function') ? Ember.getOwner(this) : this.container;\nlet model = owner.lookup('model:entity').create({ attributes: { key: value } });\n```\n\nSee <http://jsonapi.org/format/#document-resource-objects>",
+            "description": "A Resource class to create JSON API resource objects. This is abstract, first\ndefine a prototype using `Resource.extend({ type: entity })`. Model prototypes\nare registered in the container as factories, they use the options:\n`{ instantiate: false, singleton: false }`. So, to create a model instance\nuse the owner API method `_lookupFactory('model:name')`† then `create()`:\n\n```js\nlet model = Ember.getOwner(this)._lookupFactory('model:entity').create({ attributes: { key: value } });\n```\n\n† **Note:** eventually `factoryFor` will replace `_lookupFactory`\n\nSee <http://jsonapi.org/format/#document-resource-objects>",
             "requires": [
                 "Ember.Inflector"
             ],
@@ -534,7 +488,7 @@
             "submodule": "adapter-api-host-proxy-mixin",
             "namespace": "",
             "file": "addon/mixins/adapter-api-host-proxy.js",
-            "line": 7,
+            "line": 9,
             "description": "Mixin to provide url rewrite for proxied api. Mostly used as example.",
             "static": 1
         },
@@ -552,22 +506,6 @@
             "file": "addon/mixins/authorization.js",
             "line": 8,
             "description": "A Mixin class for storage of credential/token uses with a HTTP Authorization request-header\n\nThe default solution is to use localStorage['AuthorizationHeader'] for the credential",
-            "static": 1
-        },
-        "FetchMixin": {
-            "name": "FetchMixin",
-            "shortname": "FetchMixin",
-            "classitems": [],
-            "plugins": [],
-            "extensions": [],
-            "plugin_for": [],
-            "extension_for": [],
-            "module": "ember-jsonapi-resources",
-            "submodule": "fetch",
-            "namespace": "",
-            "file": "addon/mixins/fetch.js",
-            "line": 9,
-            "description": "Fetch/Ajax methods for use with an Adapter calls `cacheUpdate`, `cacheResource`\nmethods and a `serializer` injection.",
             "static": 1
         },
         "ResourceOperationsMixin": {
@@ -636,99 +574,6 @@
             "line": 9,
             "description": "Serializer/Deserializer for a JSON API resource object, used by adapter.\n\nWhen extending use a mixin or define transform methods to serialize and/or\ndeserializer attributes based on the name or the type of attribute.\n\nThe methods use a naming convention:\n\n  - '[de]serialize' + 'AttrName' or 'TypeName' + 'Attribute'\n  - E.g. use `serializeNameAttribute` and `deserializeNameAttribute` in\n    a generated serializer for use with `name: attr()`\n  - Or, redefine `serializeDateAttribute` and `deserializeDateAttribute`\n    to use your own data transformation with `attr('date')` the default,\n    Date type [de]serialize methods transfrom to/from ISO Format.\n  - Transform methods based on the name of the attribute will be called\n    instead of any transform methods based on the type of the attribute.",
             "static": 1
-        },
-        "ServerError": {
-            "name": "ServerError",
-            "shortname": "ServerError",
-            "classitems": [],
-            "plugins": [],
-            "extensions": [],
-            "plugin_for": [],
-            "extension_for": [],
-            "module": "ember-jsonapi-resources",
-            "submodule": "utils",
-            "namespace": "",
-            "file": "addon/utils/errors.js",
-            "line": 6,
-            "is_constructor": 1,
-            "params": [
-                {
-                    "name": "message",
-                    "description": "",
-                    "type": "String"
-                },
-                {
-                    "name": "response",
-                    "description": "",
-                    "type": "Object"
-                }
-            ],
-            "return": {
-                "description": "",
-                "type": "Error"
-            }
-        },
-        "ClientError": {
-            "name": "ClientError",
-            "shortname": "ClientError",
-            "classitems": [],
-            "plugins": [],
-            "extensions": [],
-            "plugin_for": [],
-            "extension_for": [],
-            "module": "ember-jsonapi-resources",
-            "submodule": "utils",
-            "namespace": "",
-            "file": "addon/utils/errors.js",
-            "line": 25,
-            "is_constructor": 1,
-            "params": [
-                {
-                    "name": "message",
-                    "description": "",
-                    "type": "String"
-                },
-                {
-                    "name": "response",
-                    "description": "",
-                    "type": "Object"
-                }
-            ],
-            "return": {
-                "description": "",
-                "type": "Error"
-            }
-        },
-        "FetchError": {
-            "name": "FetchError",
-            "shortname": "FetchError",
-            "classitems": [],
-            "plugins": [],
-            "extensions": [],
-            "plugin_for": [],
-            "extension_for": [],
-            "module": "ember-jsonapi-resources",
-            "submodule": "utils",
-            "namespace": "",
-            "file": "addon/utils/errors.js",
-            "line": 44,
-            "is_constructor": 1,
-            "params": [
-                {
-                    "name": "message",
-                    "description": "",
-                    "type": "String"
-                },
-                {
-                    "name": "error",
-                    "description": "or response object",
-                    "type": "Error|Object"
-                }
-            ],
-            "return": {
-                "description": "",
-                "type": "Error"
-            }
         },
         "Utils": {
             "name": "Utils",
@@ -824,6 +669,41 @@
         {
             "file": "addon/adapters/application.js",
             "line": 52,
+            "itemtype": "method",
+            "name": "init",
+            "class": "ApplicationAdapter",
+            "module": "ember-jsonapi-resources",
+            "submodule": "adapters"
+        },
+        {
+            "file": "addon/adapters/application.js",
+            "line": 66,
+            "itemtype": "method",
+            "name": "deserialize",
+            "params": [
+                {
+                    "name": "json",
+                    "description": "payload from response",
+                    "type": "Object"
+                },
+                {
+                    "name": "headers",
+                    "description": "received from response",
+                    "type": "Object"
+                },
+                {
+                    "name": "options",
+                    "description": "passed into original request",
+                    "type": "Object"
+                }
+            ],
+            "class": "ApplicationAdapter",
+            "module": "ember-jsonapi-resources",
+            "submodule": "adapters"
+        },
+        {
+            "file": "addon/adapters/application.js",
+            "line": 87,
             "description": "Find resource(s) using an id or a using a query `{id: '', query: {}}`",
             "itemtype": "method",
             "name": "find",
@@ -844,7 +724,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 82,
+            "line": 117,
             "description": "Find a resource by id, optionally pass a query object, e.g. w/ filter param(s)\n\nUses a url like: /photos/1",
             "itemtype": "method",
             "name": "findOne",
@@ -870,7 +750,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 98,
+            "line": 133,
             "description": "Find resources using an optional query object, e.g. w/ pagination params",
             "itemtype": "method",
             "name": "findQuery",
@@ -891,27 +771,27 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 112,
-            "description": "Find resources by relationship or use a specificed (optional) service to find relation\n\nA Url like: /photos/1/relationships/photographer is a required param\n\n```js\nservice.findRelated('photographer', '/api/v1/photos/1/relationships/photographer');\n```\n\nOr, with option to find releated resource using a different service\n\n```js\nservice.findRelated({resource: 'photographer', type: 'people'}, url);\n```",
+            "line": 147,
+            "description": "Find resources by relationship or use a specificed (optional) service to find relation\n\nA Url like: /photos/1/relationships/photographer is a required param\n\n```js\nservice.findRelated('photographer', '/api/v1/photos/1/relationships/photographer');\n```\n\nOr, with option to find related resource using a different service\n\n```js\nservice.findRelated({relation: 'photographer', type: 'people'}, url);\n```",
             "itemtype": "method",
             "name": "findRelated",
             "params": [
                 {
-                    "name": "resource",
+                    "name": "relation",
                     "description": "name to lookup the service object w/ serializer",
                     "type": "String|Object",
                     "props": [
                         {
-                            "name": "resource",
-                            "description": "the name of the resource",
-                            "type": "String"
-                        },
-                        {
-                            "name": "type",
-                            "description": "the name of the resource",
+                            "name": "relation",
+                            "description": "the name of the relationship",
                             "type": "String"
                         }
                     ]
+                },
+                {
+                    "name": "resource.type",
+                    "description": "the name of the resource",
+                    "type": "String"
                 },
                 {
                     "name": "url",
@@ -929,7 +809,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 146,
+            "line": 180,
             "description": "Create a new resource, sends a POST request, updates resource instance\nwith persisted data, and updates cache with persisted resource",
             "itemtype": "method",
             "name": "createResource",
@@ -950,7 +830,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 180,
+            "line": 214,
             "description": "Patch an existing resource, sends a PATCH request.",
             "itemtype": "method",
             "name": "updateResource",
@@ -976,7 +856,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 207,
+            "line": 245,
             "description": "Delete an existing resource, sends a DELETE request",
             "itemtype": "method",
             "name": "deleteResource",
@@ -997,7 +877,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 226,
+            "line": 264,
             "description": "Create (add) a relationship for `to-many` relation, sends a POST request.\n\nSee: <http://jsonapi.org/format/#crud-updating-to-many-relationships>\n\nAdds a relation using a payload with a resource identifier object:\n\n```\n{\n  \"data\": [\n    { \"type\": \"comments\", \"id\": \"12\" }\n  ]\n}\n```",
             "itemtype": "method",
             "name": "createRelationship",
@@ -1028,7 +908,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 254,
+            "line": 292,
             "description": "Patch a relationship, either adds or removes everyting, sends a PATCH request.\n\nSee: <http://jsonapi.org/format/#crud-updating-to-one-relationships>\n\nFor `to-one` relation:\n\n- Remove (delete) with payload: `{ \"data\": null }`\n- Create/Update with payload:\n  ```\n  {\n    \"data\": { \"type\": \"comments\", \"id\": \"1\" }\n  }\n  ```\n\nFor `to-many` relation:\n\n- Remove (delete) all with payload: `{ \"data\": [] }`\n- Replace all with payload:\n  ```\n  {\n    \"data\": [\n      { \"type\": \"comments\", \"id\": \"1\" },\n      { \"type\": \"comments\", \"id\": \"2\" }\n    ]\n  }\n  ```",
             "itemtype": "method",
             "name": "patchRelationship",
@@ -1054,7 +934,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 294,
+            "line": 332,
             "description": "Deletes a relationship for `to-many` relation, sends a DELETE request.\n\nSee: <http://jsonapi.org/format/#crud-updating-to-many-relationships>\n\nRemove using a payload with the resource identifier object:\n\nFor `to-many`:\n\n```\n{\n  \"data\": [\n    { \"type\": \"comments\", \"id\": \"1\" }\n  ]\n}\n```",
             "itemtype": "method",
             "name": "deleteRelationship",
@@ -1085,7 +965,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 324,
+            "line": 362,
             "itemtype": "method",
             "name": "_urlForRelationship",
             "access": "private",
@@ -1112,7 +992,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 337,
+            "line": 375,
             "description": "Fetches data using Fetch API or XMLHttpRequest",
             "itemtype": "method",
             "name": "fetch",
@@ -1138,7 +1018,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 355,
+            "line": 392,
             "description": "Hook to customize the URL, e.g. if your API is behind a proxy and you need\nto swap a portion of the domain to make a request on the same domain.",
             "itemtype": "method",
             "name": "fetchUrl",
@@ -1159,7 +1039,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 367,
+            "line": 404,
             "description": "Adds params and headers or Fetch request.\n\n- The HTTP Header is set for Content-Type: application/vnd.api+json\n- Sets Authorization header if accessible in the `authorizationCredential` property",
             "itemtype": "method",
             "name": "fetchOptions",
@@ -1180,7 +1060,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 389,
+            "line": 426,
             "description": "Sets Authorization header if accessible in the `authorizationCredential` property",
             "itemtype": "method",
             "name": "fetchAuthorizationHeader",
@@ -1197,7 +1077,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 406,
+            "line": 443,
             "description": "Authentication credentials/token used with HTTP authentication\nThis property should be added by an Authorization Mixin",
             "itemtype": "property",
             "name": "authorizationCredential",
@@ -1208,7 +1088,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 415,
+            "line": 452,
             "description": "The name of the Authorization request-header field\nThis property should be added by an Authorization Mixin",
             "itemtype": "property",
             "name": "authorizationHeaderField",
@@ -1219,7 +1099,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 424,
+            "line": 461,
             "description": "Noop as a hook for defining how deserialized resource objects are cached,\ne.g. in memory",
             "itemtype": "method",
             "name": "cacheResource",
@@ -1236,7 +1116,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 433,
+            "line": 470,
             "description": "Noop as a hook for defining how to handle cache after updating a resource",
             "itemtype": "method",
             "name": "cacheUpdate",
@@ -1253,7 +1133,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 441,
+            "line": 478,
             "description": "Noop as a hook to remove a resource from cached data",
             "itemtype": "method",
             "name": "cacheRemove",
@@ -1349,444 +1229,6 @@
             "class": "AuthorizationMixin",
             "module": "ember-jsonapi-resources",
             "submodule": "authorization"
-        },
-        {
-            "file": "addon/mixins/fetch.js",
-            "line": 17,
-            "description": "Flag indicates whether to use window.fetch or not, computed from `useAjax`",
-            "itemtype": "property",
-            "name": "useFetch",
-            "type": "Boolean",
-            "class": "FetchMixin",
-            "module": "ember-jsonapi-resources",
-            "submodule": "fetch"
-        },
-        {
-            "file": "addon/mixins/fetch.js",
-            "line": 28,
-            "description": "Flag to use $.ajax instead of window.fetch",
-            "itemtype": "property",
-            "name": "useAjax",
-            "type": "Boolean",
-            "class": "FetchMixin",
-            "module": "ember-jsonapi-resources",
-            "submodule": "fetch"
-        },
-        {
-            "file": "addon/mixins/fetch.js",
-            "line": 36,
-            "description": "Makes a fetch request via Fetch API (may use polyfill)\n\nSee http://updates.html5rocks.com/2015/03/introduction-to-fetch",
-            "access": "private",
-            "tagname": "",
-            "itemtype": "method",
-            "name": "_fetch",
-            "params": [
-                {
-                    "name": "url",
-                    "description": "",
-                    "type": "String"
-                },
-                {
-                    "name": "options",
-                    "description": "- May include a query object or an update flag",
-                    "type": "Object"
-                },
-                {
-                    "name": "isUpdate",
-                    "description": "",
-                    "type": "Boolean"
-                }
-            ],
-            "return": {
-                "description": "",
-                "type": "Promise"
-            },
-            "class": "FetchMixin",
-            "module": "ember-jsonapi-resources",
-            "submodule": "fetch"
-        },
-        {
-            "file": "addon/mixins/fetch.js",
-            "line": 66,
-            "description": "Fetch server error handler ~ status >= 500",
-            "itemtype": "method",
-            "name": "fetchServerErrorHandler",
-            "params": [
-                {
-                    "name": "response",
-                    "description": "- Fetch response",
-                    "type": "Response"
-                },
-                {
-                    "name": "reject",
-                    "description": "- Promise reject handler",
-                    "type": "Function"
-                }
-            ],
-            "class": "FetchMixin",
-            "module": "ember-jsonapi-resources",
-            "submodule": "fetch"
-        },
-        {
-            "file": "addon/mixins/fetch.js",
-            "line": 81,
-            "description": "Fetch client error handler ~ status >= 400",
-            "itemtype": "method",
-            "name": "fetchClientErrorHandler",
-            "params": [
-                {
-                    "name": "response",
-                    "description": "- Fetch response",
-                    "type": "Response"
-                },
-                {
-                    "name": "reject",
-                    "description": "- Promise reject handler",
-                    "type": "Function"
-                }
-            ],
-            "class": "FetchMixin",
-            "module": "ember-jsonapi-resources",
-            "submodule": "fetch"
-        },
-        {
-            "file": "addon/mixins/fetch.js",
-            "line": 96,
-            "description": "Fetch generic error handler",
-            "itemtype": "method",
-            "name": "fetchErrorHandler",
-            "params": [
-                {
-                    "name": "error",
-                    "description": "- Fetch error or response object",
-                    "type": "Error|Response"
-                },
-                {
-                    "name": "reject",
-                    "description": "- Promise reject handler",
-                    "type": "Function"
-                }
-            ],
-            "class": "FetchMixin",
-            "module": "ember-jsonapi-resources",
-            "submodule": "fetch"
-        },
-        {
-            "file": "addon/mixins/fetch.js",
-            "line": 118,
-            "description": "Fetch 204 No Content handler",
-            "itemtype": "method",
-            "name": "fetchNoContentHandler",
-            "params": [
-                {
-                    "name": "response",
-                    "description": "- Fetch response",
-                    "type": "Response"
-                },
-                {
-                    "name": "resolve",
-                    "description": "- Promise resolve handler",
-                    "type": "Function"
-                }
-            ],
-            "class": "FetchMixin",
-            "module": "ember-jsonapi-resources",
-            "submodule": "fetch"
-        },
-        {
-            "file": "addon/mixins/fetch.js",
-            "line": 131,
-            "description": "Fetch 20x Success handler",
-            "itemtype": "method",
-            "name": "fetchSuccessHandler",
-            "params": [
-                {
-                    "name": "response",
-                    "description": "- Fetch response",
-                    "type": "Response"
-                },
-                {
-                    "name": "resolve",
-                    "description": "- Promise resolve handler",
-                    "type": "Function"
-                },
-                {
-                    "name": "isUpdate",
-                    "description": "- Used with patch to update a resource",
-                    "type": "Boolean"
-                }
-            ],
-            "class": "FetchMixin",
-            "module": "ember-jsonapi-resources",
-            "submodule": "fetch"
-        },
-        {
-            "file": "addon/mixins/fetch.js",
-            "line": 156,
-            "description": "Makes an XHR request via $.ajax",
-            "access": "private",
-            "tagname": "",
-            "itemtype": "method",
-            "name": "_ajax",
-            "params": [
-                {
-                    "name": "url",
-                    "description": "",
-                    "type": "String"
-                },
-                {
-                    "name": "options",
-                    "description": "- may include a query object or an update flag",
-                    "type": "Object"
-                },
-                {
-                    "name": "isUpdate",
-                    "description": "",
-                    "type": "Boolean"
-                }
-            ],
-            "return": {
-                "description": "",
-                "type": "Promise"
-            },
-            "requires": [
-                "jQuery"
-            ],
-            "class": "FetchMixin",
-            "module": "ember-jsonapi-resources",
-            "submodule": "fetch"
-        },
-        {
-            "file": "addon/mixins/fetch.js",
-            "line": 177,
-            "itemtype": "method",
-            "name": "ajaxFailHandler",
-            "params": [
-                {
-                    "name": "reject",
-                    "description": "- Promise reject handler",
-                    "type": "Function"
-                }
-            ],
-            "return": {
-                "description": "closure with reject handler",
-                "type": "Function"
-            },
-            "class": "FetchMixin",
-            "module": "ember-jsonapi-resources",
-            "submodule": "fetch"
-        },
-        {
-            "file": "addon/mixins/fetch.js",
-            "line": 200,
-            "itemtype": "method",
-            "name": "ajaxDoneHandler",
-            "params": [
-                {
-                    "name": "resolve",
-                    "description": "- Promise resolve handler",
-                    "type": "Function"
-                },
-                {
-                    "name": "isUpdate",
-                    "description": "- Used with patch to update a resource",
-                    "type": "Boolean"
-                }
-            ],
-            "return": {
-                "description": "closure with resolve handler",
-                "type": "Function"
-            },
-            "class": "FetchMixin",
-            "module": "ember-jsonapi-resources",
-            "submodule": "fetch"
-        },
-        {
-            "file": "addon/mixins/fetch.js",
-            "line": 222,
-            "description": "Ajax server error handler ~ status >= 500",
-            "itemtype": "method",
-            "name": "ajaxServerErrorHandler",
-            "params": [
-                {
-                    "name": "jqXHR",
-                    "description": "",
-                    "type": "Object"
-                },
-                {
-                    "name": "textStatus",
-                    "description": "",
-                    "type": "String"
-                },
-                {
-                    "name": "errorThrown",
-                    "description": "",
-                    "type": "String"
-                },
-                {
-                    "name": "reject",
-                    "description": "- Promise reject handler",
-                    "type": "Function"
-                }
-            ],
-            "class": "FetchMixin",
-            "module": "ember-jsonapi-resources",
-            "submodule": "fetch"
-        },
-        {
-            "file": "addon/mixins/fetch.js",
-            "line": 237,
-            "description": "Ajax client error handler ~ status >= 400",
-            "itemtype": "method",
-            "name": "ajaxClientErrorHandler",
-            "params": [
-                {
-                    "name": "jqXHR",
-                    "description": "",
-                    "type": "Object"
-                },
-                {
-                    "name": "textStatus",
-                    "description": "",
-                    "type": "String"
-                },
-                {
-                    "name": "errorThrown",
-                    "description": "",
-                    "type": "String"
-                },
-                {
-                    "name": "reject",
-                    "description": "- Promise reject handler",
-                    "type": "Function"
-                }
-            ],
-            "class": "FetchMixin",
-            "module": "ember-jsonapi-resources",
-            "submodule": "fetch"
-        },
-        {
-            "file": "addon/mixins/fetch.js",
-            "line": 252,
-            "description": "Ajax Generic error handler",
-            "itemtype": "method",
-            "name": "ajaxErrorHandler",
-            "params": [
-                {
-                    "name": "jqXHR",
-                    "description": "",
-                    "type": "Object"
-                },
-                {
-                    "name": "textStatus",
-                    "description": "",
-                    "type": "String"
-                },
-                {
-                    "name": "errorThrown",
-                    "description": "",
-                    "type": "String"
-                },
-                {
-                    "name": "reject",
-                    "description": "- Promise reject handler",
-                    "type": "Function"
-                }
-            ],
-            "class": "FetchMixin",
-            "module": "ember-jsonapi-resources",
-            "submodule": "fetch"
-        },
-        {
-            "file": "addon/mixins/fetch.js",
-            "line": 267,
-            "description": "Ajax 204 No Content handler",
-            "itemtype": "method",
-            "name": "ajaxNoContentHandler",
-            "params": [
-                {
-                    "name": "json",
-                    "description": "- payload should be empty",
-                    "type": "Object"
-                },
-                {
-                    "name": "textStatus",
-                    "description": "",
-                    "type": "String"
-                },
-                {
-                    "name": "jqXHR",
-                    "description": "",
-                    "type": "JqXHR"
-                },
-                {
-                    "name": "resolve",
-                    "description": "- Promise resolve handler",
-                    "type": "Function"
-                }
-            ],
-            "class": "FetchMixin",
-            "module": "ember-jsonapi-resources",
-            "submodule": "fetch"
-        },
-        {
-            "file": "addon/mixins/fetch.js",
-            "line": 280,
-            "description": "Ajax 20x Success handler",
-            "itemtype": "method",
-            "name": "ajaxSuccessHandler",
-            "params": [
-                {
-                    "name": "json",
-                    "description": "- payload",
-                    "type": "Object"
-                },
-                {
-                    "name": "textStatus",
-                    "description": "",
-                    "type": "String"
-                },
-                {
-                    "name": "jqXHR",
-                    "description": "",
-                    "type": "JqXHR"
-                },
-                {
-                    "name": "resolve",
-                    "description": "- Promise resolve handler",
-                    "type": "Function"
-                },
-                {
-                    "name": "isUpdate",
-                    "description": "- Used with patch to update a resource",
-                    "type": "Boolean"
-                }
-            ],
-            "class": "FetchMixin",
-            "module": "ember-jsonapi-resources",
-            "submodule": "fetch"
-        },
-        {
-            "file": "addon/mixins/fetch.js",
-            "line": 308,
-            "access": "private",
-            "tagname": "",
-            "itemtype": "method",
-            "name": "_getXHRHeaders",
-            "params": [
-                {
-                    "name": "jqXHR",
-                    "description": "",
-                    "type": "Object"
-                }
-            ],
-            "return": {
-                "description": "",
-                "type": "Object"
-            },
-            "class": "FetchMixin",
-            "module": "ember-jsonapi-resources",
-            "submodule": "fetch"
         },
         {
             "file": "addon/mixins/resource-operations.js",
@@ -2126,7 +1568,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 37,
+            "line": 38,
             "description": "Extending Prototypes Must define a `type` value for the entity, e.g. `posts`",
             "itemtype": "property",
             "name": "type",
@@ -2138,7 +1580,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 46,
+            "line": 47,
             "description": "Persisted resource ID value",
             "itemtype": "property",
             "name": "id",
@@ -2150,7 +1592,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 55,
+            "line": 56,
             "description": "An optional `attributes` property of for a JSON API Resource object, setup in create()\n\nThis object will keep the values from the response object and may be mutable\nUse this as a refence for creating computed properties\n\nFor example the `attr()` helper sets up a properties based on this content",
             "access": "protected",
             "tagname": "",
@@ -2163,7 +1605,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 69,
+            "line": 70,
             "description": "An optional `relationships` property of for a JSON API Resource object, setup in create()",
             "access": "protected",
             "tagname": "",
@@ -2176,7 +1618,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 78,
+            "line": 79,
             "description": "An optional `links` property of for a JSON API Resource object, setup in create()",
             "access": "protected",
             "tagname": "",
@@ -2189,7 +1631,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 87,
+            "line": 88,
             "description": "An optional property of for a JSON API Resource object, setup in create()",
             "access": "protected",
             "tagname": "",
@@ -2202,7 +1644,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 96,
+            "line": 97,
             "description": "Hash of attributes for changed/previous values",
             "access": "private",
             "tagname": "",
@@ -2215,7 +1657,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 105,
+            "line": 106,
             "description": "Hash of relationships that were changed",
             "access": "private",
             "tagname": "",
@@ -2228,7 +1670,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 114,
+            "line": 115,
             "description": "Flag for new instance, e.g. not persisted",
             "itemtype": "property",
             "name": "isNew",
@@ -2239,7 +1681,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 122,
+            "line": 123,
             "description": "Custom `toString` method used for clarity that the instance is a JSON API Resource kind of object",
             "itemtype": "method",
             "name": "toString",
@@ -2249,7 +1691,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 133,
+            "line": 134,
             "access": "private",
             "tagname": "",
             "itemtype": "method",
@@ -2272,7 +1714,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 160,
+            "line": 163,
             "itemtype": "method",
             "name": "addRelationships",
             "params": [
@@ -2293,7 +1735,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 171,
+            "line": 174,
             "itemtype": "method",
             "name": "removeRelationships",
             "params": [
@@ -2314,8 +1756,8 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 182,
-            "description": "Adds related resource identifier object to the relationship data.\n\nAlso sets or adds to the `content` of the related proxy object.\n\n- For has-many relations the related identifier object is added to\n  the resource linkage data array.\n- For has-one relations the resource identifier object is assigned,\n  so the relation may be replaced.\n\nSee:\n- http://jsonapi.org/format/#document-resource-object-linkage\n- http://jsonapi.org/format/#document-resource-identifier-objects",
+            "line": 185,
+            "description": "Adds related resource identifier object to the relationship data.\n\nAlso sets or adds to the `content` of the related proxy object.\n\n- For to-many relations the related identifier object is added to\n  the resource linkage data array.\n- For to-one relations the resource identifier object is assigned,\n  so the relation may be replaced.\n\nSee:\n- http://jsonapi.org/format/#document-resource-object-linkage\n- http://jsonapi.org/format/#document-resource-identifier-objects",
             "itemtype": "method",
             "name": "addRelationship",
             "params": [
@@ -2336,7 +1778,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 231,
+            "line": 233,
             "description": "Track additions of relationships using a resource identifier objects:\n\n```js\n{ relation {String}, type {String}, kind {String} }`\n```",
             "access": "private",
             "tagname": "",
@@ -2365,8 +1807,8 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 260,
-            "description": "Removes resource identifier object of the relationship data. Also, sets the\n`content` of the related (computed property's) proxy object to `null`.\n\n- For has-one relations the (resource linkage) data is set to `null`.\n- For has-many relations the resource identifier object is removed from\n  the resource Linkage `data` array.\n\nSee:\n- http://jsonapi.org/format/#document-resource-object-linkage\n- http://jsonapi.org/format/#document-resource-identifier-objects",
+            "line": 265,
+            "description": "Removes resource identifier object of the relationship data. Also, sets the\n`content` of the related (computed property's) proxy object to `null`.\n\n- For to-one relations the (resource linkage) data is set to `null`.\n- For to-many relations the resource identifier object is removed from\n  the resource Linkage `data` array.\n\nSee:\n- http://jsonapi.org/format/#document-resource-object-linkage\n- http://jsonapi.org/format/#document-resource-identifier-objects",
             "itemtype": "method",
             "name": "removeRelationship",
             "params": [
@@ -2387,7 +1829,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 301,
+            "line": 306,
             "description": "Track removals of relationships",
             "access": "private",
             "tagname": "",
@@ -2411,7 +1853,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 324,
+            "line": 329,
             "itemtype": "method",
             "name": "changedAttributes",
             "return": {
@@ -2424,7 +1866,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 342,
+            "line": 347,
             "itemtype": "method",
             "name": "previousAttributes",
             "return": {
@@ -2437,7 +1879,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 360,
+            "line": 365,
             "itemtype": "method",
             "name": "previousAttributes",
             "return": {
@@ -2450,7 +1892,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 375,
+            "line": 380,
             "description": "Rollback changes to attributes and relationships",
             "itemtype": "method",
             "name": "rollback",
@@ -2460,7 +1902,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 385,
+            "line": 390,
             "description": "Revert to previous attributes",
             "itemtype": "method",
             "name": "rollbackAttributes",
@@ -2470,7 +1912,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 401,
+            "line": 406,
             "description": "Reset tracked changed/previous attrs",
             "access": "private",
             "tagname": "",
@@ -2482,7 +1924,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 415,
+            "line": 420,
             "description": "Revert to previous relationships",
             "itemtype": "method",
             "name": "rollbackRelationships",
@@ -2492,7 +1934,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 445,
+            "line": 450,
             "description": "Reset tracked relationship changes",
             "access": "private",
             "tagname": "",
@@ -2504,7 +1946,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 459,
+            "line": 464,
             "itemtype": "method",
             "name": "relationMetadata",
             "params": [
@@ -2524,7 +1966,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 474,
+            "line": 487,
             "description": "Sets all payload properties on the resource and resets private _attributes\nused for changed/previous tracking",
             "itemtype": "method",
             "name": "didUpdateResource",
@@ -2541,8 +1983,8 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 487,
-            "description": "Sets the relationships data, used after the promise proxy resolves by\nhasOne and hasMany helpers",
+            "line": 500,
+            "description": "Sets the relationships data, used after the promise proxy resolves by\ntoOne and toMany helpers",
             "itemtype": "method",
             "name": "didResolveProxyRelation",
             "params": [
@@ -2553,7 +1995,7 @@
                 },
                 {
                     "name": "kind",
-                    "description": "of relation hasOne or hasMany",
+                    "description": "of relation toOne or toMany",
                     "type": "String"
                 },
                 {
@@ -2568,7 +2010,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 517,
+            "line": 530,
             "description": "A local cache duration, to minimize duplicate fetch requests",
             "itemtype": "property",
             "name": "cacheDuration",
@@ -2579,7 +2021,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 525,
+            "line": 538,
             "itemtype": "property",
             "name": "isCacheExpired",
             "type": "Boolean",
@@ -2589,8 +2031,8 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 537,
-            "description": "To protect the JSON API Resource properties for attributes, links and\nrelationships these objects are setup during create(). This has to be\ndefined since the attr() helper needs to have new objects for each instance,\nto project from keeping a reference on the prototype.\n\nThe create method should only be called after looking up a factory from the\ncontainer, for example in a route's model hook:\n\n```\nmodel() {\n  let owner = (typeof Ember.getOwner === 'function') ? Ember.getOwner(this) : this.container;\n  return owner.lookup('model:post').create({\n    attributes: {\n      title: 'The JSON API 1.0 Spec Rocks!'\n    }\n  });\n}\n```\n\nThe create method uses the container to lookup the factory's prototype and\nfind the computed properties used for relations to setup the relationships\nfor the Resource instance you create. Calling Resource#create without using\nthe factory lookup will result in an instance without a reference to the\napplication's container and you will have to manually setup the relationships\nobject prior to adding a relationship.",
+            "line": 550,
+            "description": "To protect the JSON API Resource properties for attributes, links and\nrelationships these objects are setup during create(). This has to be\ndefined since the attr() helper needs to have new objects for each instance,\nto project from keeping a reference on the prototype.\n\nThe create method should only be called after looking up a factory from the\ncontainer, for example in a route's model hook:\n\n```\nmodel() {\n  let owner = Ember.getOwner(this);\n  return owner._lookupFactory('model:post').create({\n    attributes: {\n      title: 'The JSON API 1.0 Spec Rocks!'\n    }\n  });\n}\n```\n\nThe create method uses the container to lookup the factory's prototype and\nfind the computed properties used for relations to setup the relationships\nfor the Resource instance you create. Calling Resource#create without using\nthe factory lookup will result in an instance without a reference to the\napplication's container and you will have to manually setup the relationships\nobject prior to adding a relationship.",
             "itemtype": "method",
             "name": "create",
             "static": 1,
@@ -2854,7 +2296,7 @@
         },
         {
             "file": "addon/serializers/application.js",
-            "line": 226,
+            "line": 225,
             "description": "Transform attributes, serialize or deserialize by specified method or\nper type of attribute, e.g. date.\n\nYour serializer may define a specific method for a type of attribute,\ni.e. `serializeDateAttribute` and/or `deserializeDateAttribute`. Likewise,\nyour serializer may define a specific method for the name of an attribute,\nlike `serializeUpdatedAtAttribute` and `deserializeUpdatedAtAttribute`.\n\nDuring transformation a method based on the name of the attribute takes\npriority over a transform method based on the type of attribute, e.g. date.",
             "itemtype": "method",
             "name": "transformAttributes",
@@ -2882,7 +2324,7 @@
         },
         {
             "file": "addon/serializers/application.js",
-            "line": 267,
+            "line": 266,
             "description": "Create a Resource from a JSON API Resource Object\n\nSee <http://jsonapi.org/format/#document-resource-objects>",
             "access": "private",
             "tagname": "",
@@ -2904,7 +2346,7 @@
         },
         {
             "file": "addon/serializers/application.js",
-            "line": 294,
+            "line": 293,
             "access": "private",
             "tagname": "",
             "itemtype": "method",
@@ -3184,7 +2626,7 @@
         {
             "file": "addon/utils/attr.js",
             "line": 10,
-            "description": "Utility helper to setup a computed property for a resource attribute, imported and\nexported with the resource submodule.\n\nAn `attr` of the resource is a computed property to the actual attribute in an\n`attributes` hash on the `resource` (model) instance. Using `attr()` supports\nany type, and an optional `type` (String) argument can be used to enforce\nsetting and getting with a specific type. `'string'`, `'number'`, `'boolean'`,\n`'date'`, `'object'`, and `'array'` are all valid types for attributes.\n\nUse `attr()`, with optional type argument, to compose your model attributes, e.g:\n\n```js\nimport Ember from 'ember';\nimport Resource from 'ember-jsonapi-resources/models/resource';\nimport { attr, hasOne, hasMany } from 'ember-jsonapi-resources/models/resource';\n\nexport default Resource.extend({\n  type: 'articles',\n  service: Ember.inject.service('articles'),\n\n  title: attr('string'),\n  published: attr('date'),\n  tags: attr('array'),\n  footnotes: attr('object'),\n  revisions: attr()\n  version: attr('number'),\n  \"is-approved\": attr('boolean')\n});\n```",
+            "description": "Utility helper to setup a computed property for a resource attribute, imported and\nexported with the resource submodule.\n\nAn `attr` of the resource is a computed property to the actual attribute in an\n`attributes` hash on the `resource` (model) instance. Using `attr()` supports\nany type, and an optional `type` (String) argument can be used to enforce\nsetting and getting with a specific type. `'string'`, `'number'`, `'boolean'`,\n`'date'`, `'object'`, and `'array'` are all valid types for attributes.\n\nUse `attr()`, with optional type argument, to compose your model attributes, e.g:\n\n```js\nimport Ember from 'ember';\nimport Resource from 'ember-jsonapi-resources/models/resource';\nimport { attr, toOne, toMany } from 'ember-jsonapi-resources/models/resource';\n\nexport default Resource.extend({\n  type: 'articles',\n  service: Ember.inject.service('articles'),\n\n  title: attr('string'),\n  published: attr('date'),\n  tags: attr('array'),\n  footnotes: attr('object'),\n  revisions: attr()\n  version: attr('number'),\n  \"is-approved\": attr('boolean')\n});\n```",
             "itemtype": "method",
             "name": "attr",
             "final": 1,
@@ -3201,74 +2643,6 @@
                     "type": "Boolean",
                     "optional": true,
                     "optdefault": "true"
-                }
-            ],
-            "return": {
-                "description": "computed property",
-                "type": "Object"
-            },
-            "class": "Resource",
-            "module": "ember-jsonapi-resources",
-            "submodule": "utils"
-        },
-        {
-            "file": "addon/utils/has-many.js",
-            "line": 12,
-            "description": "Helper to setup a has many relationship to another resource\n\n```js\nlet Author = Resource.extend({\n  type: 'authors',\n  name: attr(),\n  posts: hasMany('posts')\n});\n```\n\nOr, with an optional type to use instead of the resource's service\n\n```js\nlet Person = Resource.extend({\n  type: 'people',\n  name: attr()\n});\n\nlet Supervisor = Person.extend({\n  type: 'supervisors',\n  directReports: hasMany({ resource: 'employees', type: 'people' })\n});\n```",
-            "itemtype": "method",
-            "name": "hasMany",
-            "final": 1,
-            "params": [
-                {
-                    "name": "relation",
-                    "description": "the name of the relationship",
-                    "type": "String|Object",
-                    "props": [
-                        {
-                            "name": "resource",
-                            "description": "the name of the relationship",
-                            "type": "String"
-                        },
-                        {
-                            "name": "type",
-                            "description": "the name of the type or service to use",
-                            "type": "String"
-                        }
-                    ]
-                }
-            ],
-            "return": {
-                "description": "computed property",
-                "type": "Object"
-            },
-            "class": "Resource",
-            "module": "ember-jsonapi-resources",
-            "submodule": "utils"
-        },
-        {
-            "file": "addon/utils/has-one.js",
-            "line": 12,
-            "description": "Helper to setup a has one relationship to another resource\n\n```js\nlet Employee = Person.extend({\n  type: 'employees',\n  supervisor: hasOne('supervisor')\n});\n```\n\nOr, with an optional type to use instead of the resource's service\n\n```js\nlet Person = Resource.extend({\n  type: 'people',\n  name: attr()\n});\n\nlet Employee = Person.extend({\n  type: 'employees',\n  supervisor: hasOne({ resource: 'supervisor', type: 'people' })\n});\n```",
-            "itemtype": "method",
-            "name": "hasOne",
-            "final": 1,
-            "params": [
-                {
-                    "name": "relation",
-                    "description": "the name of the relationship",
-                    "type": "String|Object",
-                    "props": [
-                        {
-                            "name": "resource",
-                            "description": "the name of the relationship",
-                            "type": "String"
-                        },
-                        {
-                            "name": "type",
-                            "description": "the name of the type or service to use",
-                            "type": "String"
-                        }
-                    ]
                 }
             ],
             "return": {
@@ -3392,7 +2766,7 @@
                 },
                 {
                     "name": "kind",
-                    "description": "'hasMany' or 'hasOne'",
+                    "description": "'toMany' or 'toOne'",
                     "type": "String"
                 }
             ],
@@ -3417,7 +2791,7 @@
                 },
                 {
                     "name": "kind",
-                    "description": "'hasMany' or 'hasOne'",
+                    "description": "'toMany' or 'toOne'",
                     "type": "String"
                 },
                 {
@@ -3554,6 +2928,74 @@
                 "type": "String"
             },
             "class": "RelatedProxyUtil",
+            "module": "ember-jsonapi-resources",
+            "submodule": "utils"
+        },
+        {
+            "file": "addon/utils/to-many.js",
+            "line": 12,
+            "description": "Helper to setup a has many relationship to another resource\n\n```js\nlet Author = Resource.extend({\n  type: 'authors',\n  name: attr(),\n  posts: toMany('posts')\n});\n```\n\nOr, with an optional type to use instead of the resource's service\n\n```js\nlet Person = Resource.extend({\n  type: 'people',\n  name: attr()\n});\n\nlet Supervisor = Person.extend({\n  type: 'supervisors',\n  directReports: toMany({ resource: 'employees', type: 'people' })\n});\n```",
+            "itemtype": "method",
+            "name": "toMany",
+            "final": 1,
+            "params": [
+                {
+                    "name": "relation",
+                    "description": "the name of the relationship",
+                    "type": "String|Object",
+                    "props": [
+                        {
+                            "name": "resource",
+                            "description": "the name of the relationship",
+                            "type": "String"
+                        },
+                        {
+                            "name": "type",
+                            "description": "the name of the type or service to use",
+                            "type": "String"
+                        }
+                    ]
+                }
+            ],
+            "return": {
+                "description": "computed property",
+                "type": "Object"
+            },
+            "class": "Resource",
+            "module": "ember-jsonapi-resources",
+            "submodule": "utils"
+        },
+        {
+            "file": "addon/utils/to-one.js",
+            "line": 12,
+            "description": "Helper to setup a has one relationship to another resource\n\n```js\nlet Employee = Person.extend({\n  type: 'employees',\n  supervisor: toOne('supervisor')\n});\n```\n\nOr, with an optional type to use instead of the resource's service\n\n```js\nlet Person = Resource.extend({\n  type: 'people',\n  name: attr()\n});\n\nlet Employee = Person.extend({\n  type: 'employees',\n  supervisor: toOne({ resource: 'supervisor', type: 'people' })\n});\n```",
+            "itemtype": "method",
+            "name": "toOne",
+            "final": 1,
+            "params": [
+                {
+                    "name": "relation",
+                    "description": "the name of the relationship",
+                    "type": "String|Object",
+                    "props": [
+                        {
+                            "name": "resource",
+                            "description": "the name of the relationship",
+                            "type": "String"
+                        },
+                        {
+                            "name": "type",
+                            "description": "the name of the type or service to use",
+                            "type": "String"
+                        }
+                    ]
+                }
+            ],
+            "return": {
+                "description": "computed property",
+                "type": "Object"
+            },
+            "class": "Resource",
             "module": "ember-jsonapi-resources",
             "submodule": "utils"
         },
