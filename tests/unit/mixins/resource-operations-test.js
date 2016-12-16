@@ -30,8 +30,8 @@ module('Unit | Mixin | resource-operations', {
     this.subject = Cowboy.create({ id: 1, name:'Lone Ranger'});
     // mock payload setup
     this.subject.set('relationships', {
-      guns: { links: { related: 'url' } },
-      horse: { links: { related: 'url' } }
+      guns: { links: { related: 'url' }, data: [] },
+      horse: { links: { related: 'url' }, data: null }
     });
   },
   afterEach() {
@@ -115,13 +115,13 @@ test('deleteRelationship for to-many relation', function(assert) {
 
 
 test('updateRelationship for to-one relation', function(assert) {
-  this.sandbox.stub(this.subject, '_updateRelationshipsData');
+  this.sandbox.stub(this.subject, '_replaceRelationshipsData');
 
   let promise = this.subject.updateRelationship('horse', 1);
   assert.ok(typeof promise.then === 'function', 'returns a thenable');
   assert.ok(
-    this.subject._updateRelationshipsData.calledWith('horse', 1),
-    'called _updateRelationshipsData'
+    this.subject._replaceRelationshipsData.calledWith('horse', 1),
+    'called _replaceRelationshipsData'
   );
 
   let args = this.subject.get('service').patchRelationship.firstCall.args;
