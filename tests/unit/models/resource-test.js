@@ -613,24 +613,41 @@ test('#updateRelationship, from resource-operations mixin', function(assert) {
   });
   let author = post.get('relationships.author.data');
   let comments = post.get('relationships.comments.data');
+  let commentsIds = comments.map(comment => comment.id).sort();
   assert.equal(author.id, 2, 'post has author id 2');
+  assert.deepEqual(commentsIds, ['4'], 'post has comments with id 4');
 
   post.updateRelationship('comments', ['4', '5']);
   comments = post.get('relationships.comments.data');
+  commentsIds = comments.map(comment => comment.id).sort();
   assert.ok(serviceOp.calledOnce, 'service#patchRelationship called once');
   assert.equal(comments.length, 2, 'post has 2 comments');
+  assert.deepEqual(commentsIds, ['4', '5'], 'post has comments with id 4 and 5');
+
+  post.updateRelationship('comments', ['2', '5']);
+  comments = post.get('relationships.comments.data');
+  commentsIds = comments.map(comment => comment.id).sort();
+  assert.ok(serviceOp.calledOnce, 'service#patchRelationship called once');
+  assert.deepEqual(comments.length, 2, 'post has 2 comments');
+  assert.deepEqual(commentsIds, ['2', '5'], 'post has comments with id 2 and 5');
 
   post.updateRelationship('comments', ['1', '2', '3', '4']);
   comments = post.get('relationships.comments.data');
-  assert.equal(comments.length, 5, 'post has 5 comments');
+  commentsIds = comments.map(comment => comment.id).sort();
+  assert.equal(comments.length, 4, 'post has 4 comments');
+  assert.deepEqual(commentsIds, ['1', '2', '3', '4'], 'post has comments with id 1, 2, 3 and 4');
 
   post.updateRelationship('comments', ['1', '2']);
   comments = post.get('relationships.comments.data');
+  commentsIds = comments.map(comment => comment.id).sort();
   assert.equal(comments.length, 2, 'post has 2 comments');
+  assert.deepEqual(commentsIds, ['1', '2'], 'post has comments with id 1 and 2');
 
   post.updateRelationship('comments', []);
   comments = post.get('relationships.comments.data');
+  commentsIds = comments.map(comment => comment.id).sort();
   assert.equal(comments.length, 0, 'post has 0 comments');
+  assert.deepEqual(commentsIds, [], 'post has not comments');
 
   post.updateRelationship('author', '1');
   author = post.get('relationships.author.data');
