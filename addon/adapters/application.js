@@ -30,6 +30,14 @@ export default Ember.Object.extend(Evented, {
   type: null,
 
   /**
+    Flag to use $.ajax instead of window.fetch
+
+    @property useAjax
+    @type Boolean
+  */
+  useAjax: false,
+
+  /**
     The url for the entity, e.g. /posts or /api/v1/posts
 
     defaults to config.APP.API_HOST/config.APP.API_PATH/pluralize(type) if
@@ -55,7 +63,7 @@ export default Ember.Object.extend(Evented, {
   init() {
     this._super(...arguments);
     let fetchjax = new FetchOrAjax({
-      useAjax: false,
+      useAjax: this.get('useAjax'),
       ajax: Ember.$.ajax,
       promise: Ember.RSVP.Promise,
       deserialize: this.deserialize.bind(this)
@@ -69,7 +77,7 @@ export default Ember.Object.extend(Evented, {
     @param {Object} headers received from response
     @param {Object} options passed into original request
   */
-  deserialize(json, headers, options) {
+  deserialize(json, headers, options={}) {
     if (!json || json === '' || !json.data) {
       return null;
     } else if (options.isUpdate) {
