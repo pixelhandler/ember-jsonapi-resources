@@ -627,7 +627,7 @@ test('#updateRelationship, from resource-operations mixin', function(assert) {
   post.updateRelationship('comments', ['2', '5']);
   comments = post.get('relationships.comments.data');
   commentsIds = comments.map(comment => comment.id).sort();
-  assert.ok(serviceOp.calledOnce, 'service#patchRelationship called once');
+  assert.ok(serviceOp.calledTwice, 'service#patchRelationship called once');
   assert.deepEqual(comments.length, 2, 'post has 2 comments');
   assert.deepEqual(commentsIds, ['2', '5'], 'post has comments with id 2 and 5');
 
