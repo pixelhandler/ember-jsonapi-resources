@@ -156,15 +156,16 @@ const Resource = Ember.Object.extend(ResourceOperationsMixin, {
     @private
     @method _updateToOneRelationshipData
     @param {String} relation
-    @param {Array|String|null} ids
+    @param {String|null} id
   */
-  _updateToOneRelationshipData(relation, ids) {
+  _updateToOneRelationshipData(relation, id) {
     let relationshipData = 'relationships.' + relation + '.data';
-    let existing = this.get(relationshipData).id;
-    if (ids === null || isType('string', ids) && existing !== ids) {
+    let existing = this.get(relationshipData);
+    existing = (existing) ? existing.id : null;
+    if (id === null || isType('string', id) && existing !== id) {
       this.removeRelationship(relation, existing);
-      if (ids !== null) {
-        this.addRelationship(relation, ids);
+      if (id !== null) {
+        this.addRelationship(relation, id);
       }
     }
   },
