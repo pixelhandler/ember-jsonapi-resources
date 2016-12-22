@@ -2,29 +2,40 @@
   "name": "ember-jsonapi-resources",
   "version": "2.0.0",
   "description": "Data Persistence for an Ember CLI app using the JSON API 1.0 specification.",
+  "keywords": [
+    "ember-addon",
+    "ember-jsonapi-resources",
+    "jsonapi-resources",
+    "jsonapi"
+  ],
+  "license": "MIT",
+  "author": "Bill Heaton <pixelhandler@gmail.com>",
   "directories": {
     "doc": "doc",
     "test": "tests"
   },
+  "repository": "git@github.com:pixelhandler/ember-jsonapi-resources.git",
   "scripts": {
     "build": "ember build",
     "start": "ember server",
     "test": "ember try:each",
     "nodetest": "mocha node-tests --recursive"
   },
-  "repository": "git@github.com:pixelhandler/ember-jsonapi-resources.git",
-  "engines": {
-    "node": ">= 0.12.0"
+  "dependencies": {
+    "ember-cli-babel": "^5.1.7",
+    "ember-fetchjax": "^0.6.1",
+    "ember-inflector": "^1.9.1",
+    "ember-runtime-enumerable-includes-polyfill": "^1.0.2",
+    "inflection": "~1.7.1",
+    "lodash": "~3.10.1"
   },
-  "author": "Bill Heaton <pixelhandler@gmail.com>",
-  "license": "MIT",
   "devDependencies": {
     "broccoli-asset-rev": "^2.4.5",
     "broccoli-es6-concatenator": "^0.1.11",
     "broccoli-filter": "^0.1.14",
     "broccoli-static-compiler": "^0.2.1",
     "ember-buffered-proxy": "^0.5.1",
-    "ember-cli": "2.9.1",
+    "ember-cli": "2.10.0",
     "ember-cli-app-version": "^2.0.0",
     "ember-cli-blueprint-test-helpers": "^0.13.0",
     "ember-cli-content-security-policy": "0.4.0",
@@ -33,7 +44,7 @@
     "ember-cli-htmlbars": "^1.0.10",
     "ember-cli-htmlbars-inline-precompile": "^0.3.3",
     "ember-cli-inject-live-reload": "^1.4.1",
-    "ember-cli-jshint": "^1.0.4",
+    "ember-cli-jshint": "^2.0.1",
     "ember-cli-path-utils": "^1.0.0",
     "ember-cli-qunit": "^3.0.1",
     "ember-cli-release": "^0.2.9",
@@ -54,19 +65,8 @@
     "silent-error": "^1.0.0",
     "yuidocjs": "^0.7.0"
   },
-  "keywords": [
-    "ember-addon",
-    "ember-jsonapi-resources",
-    "jsonapi-resources",
-    "jsonapi"
-  ],
-  "dependencies": {
-    "ember-cli-babel": "^5.1.7",
-    "ember-fetchjax": "^0.6.1",
-    "ember-inflector": "^1.9.1",
-    "ember-runtime-enumerable-includes-polyfill": "^1.0.2",
-    "inflection": "~1.7.1",
-    "lodash": "~3.10.1"
+  "engines": {
+    "node": ">= 0.12.0"
   },
   "ember-addon": {
     "configPath": "tests/dummy/config"

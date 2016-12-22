@@ -57,7 +57,7 @@ see source code for the unit tests: [tests/unit](tests/unit).
 
 * `ember build`
 
-For more information on using ember-cli, visit [http://www.ember-cli.com/][Ember CLI]
+For more information on using ember-cli, visit [https://www.ember-cli.com/][Ember CLI]
 
 ## Documentation
 
@@ -73,7 +73,7 @@ To generate docs for the gh-pages branch:
 
 * `yuidoc ./addon/* -c yuidoc.json`
 
-[Ember CLI]: http://www.ember-cli.com/
+[Ember CLI]: https://www.ember-cli.com/
 [Ember.js]: http://emberjs.com
 [ember-jsonapi-resources.com]: http://ember-jsonapi-resources.com
 [Example App]: https://github.com/pixelhandler/jr-test
