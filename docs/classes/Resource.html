@@ -145,11 +145,19 @@ use the owner API method <code>_lookupFactory('model:name')</code>† then <code
 
                     <ul class="index-list methods">
                             <li class="index-item method private">
+                                <a href="#method__existingRelationshipData">_existingRelationshipData</a>
+
+                            </li>
+                            <li class="index-item method private">
                                 <a href="#method__relationAdded">_relationAdded</a>
 
                             </li>
                             <li class="index-item method private">
                                 <a href="#method__relationRemoved">_relationRemoved</a>
+
+                            </li>
+                            <li class="index-item method private">
+                                <a href="#method__replaceRelationshipsData">_replaceRelationshipsData</a>
 
                             </li>
                             <li class="index-item method private">
@@ -162,6 +170,10 @@ use the owner API method <code>_lookupFactory('model:name')</code>† then <code
                             </li>
                             <li class="index-item method private">
                                 <a href="#method__updateRelationshipsData">_updateRelationshipsData</a>
+
+                            </li>
+                            <li class="index-item method private">
+                                <a href="#method__updateToOneRelationshipData">_updateToOneRelationshipData</a>
 
                             </li>
                             <li class="index-item method">
@@ -301,6 +313,59 @@ use the owner API method <code>_lookupFactory('model:name')</code>† then <code
             <div id="methods" class="api-class-tabpanel">
                 <h2 class="off-left">Methods</h2>
 
+<div id="method__existingRelationshipData" class="method item private">
+    <h3 class="name"><code>_existingRelationshipData</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>relation</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+
+
+        <span class="flag private">private</span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/addon_models_resource.js.html#l193"><code>addon&#x2F;models&#x2F;resource.js:193</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">relation</code>
+                        <span class="type">String</span>
+
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+
+
+</div>
 <div id="method__relationAdded" class="method item private">
     <h3 class="name"><code>_relationAdded</code></h3>
 
@@ -329,7 +394,7 @@ use the owner API method <code>_lookupFactory('model:name')</code>† then <code
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l233"><code>addon&#x2F;models&#x2F;resource.js:233</code></a>
+        <a href="../files/addon_models_resource.js.html#l273"><code>addon&#x2F;models&#x2F;resource.js:273</code></a>
         </p>
 
 
@@ -411,7 +476,7 @@ use the owner API method <code>_lookupFactory('model:name')</code>† then <code
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l306"><code>addon&#x2F;models&#x2F;resource.js:306</code></a>
+        <a href="../files/addon_models_resource.js.html#l346"><code>addon&#x2F;models&#x2F;resource.js:346</code></a>
         </p>
 
 
@@ -456,6 +521,72 @@ use the owner API method <code>_lookupFactory('model:name')</code>† then <code
 
 
 </div>
+<div id="method__replaceRelationshipsData" class="method item private">
+    <h3 class="name"><code>_replaceRelationshipsData</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>relation</code>
+                </li>
+                <li class="arg">
+                        <code>ids</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+
+
+        <span class="flag private">private</span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/addon_models_resource.js.html#l173"><code>addon&#x2F;models&#x2F;resource.js:173</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">relation</code>
+                        <span class="type">String</span>
+
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">ids</code>
+                        <span class="type">Array | String | Null</span>
+
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+
+
+</div>
 <div id="method__resetAttributes" class="method item private">
     <h3 class="name"><code>_resetAttributes</code></h3>
 
@@ -472,7 +603,7 @@ use the owner API method <code>_lookupFactory('model:name')</code>† then <code
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l406"><code>addon&#x2F;models&#x2F;resource.js:406</code></a>
+        <a href="../files/addon_models_resource.js.html#l446"><code>addon&#x2F;models&#x2F;resource.js:446</code></a>
         </p>
 
 
@@ -504,7 +635,7 @@ use the owner API method <code>_lookupFactory('model:name')</code>† then <code
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l450"><code>addon&#x2F;models&#x2F;resource.js:450</code></a>
+        <a href="../files/addon_models_resource.js.html#l490"><code>addon&#x2F;models&#x2F;resource.js:490</code></a>
         </p>
 
 
@@ -586,6 +717,72 @@ use the owner API method <code>_lookupFactory('model:name')</code>† then <code
 
 
 </div>
+<div id="method__updateToOneRelationshipData" class="method item private">
+    <h3 class="name"><code>_updateToOneRelationshipData</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>relation</code>
+                </li>
+                <li class="arg">
+                        <code>id</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+
+
+        <span class="flag private">private</span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/addon_models_resource.js.html#l155"><code>addon&#x2F;models&#x2F;resource.js:155</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">relation</code>
+                        <span class="type">String</span>
+
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">id</code>
+                        <span class="type">String | Null</span>
+
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+
+
+</div>
 <div id="method_addRelationship" class="method item">
     <h3 class="name"><code>addRelationship</code></h3>
 
@@ -610,7 +807,7 @@ use the owner API method <code>_lookupFactory('model:name')</code>† then <code
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l185"><code>addon&#x2F;models&#x2F;resource.js:185</code></a>
+        <a href="../files/addon_models_resource.js.html#l225"><code>addon&#x2F;models&#x2F;resource.js:225</code></a>
         </p>
 
 
@@ -691,7 +888,7 @@ so the relation may be replaced.</li>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l163"><code>addon&#x2F;models&#x2F;resource.js:163</code></a>
+        <a href="../files/addon_models_resource.js.html#l203"><code>addon&#x2F;models&#x2F;resource.js:203</code></a>
         </p>
 
 
@@ -862,7 +1059,7 @@ export default Resource.extend({
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l329"><code>addon&#x2F;models&#x2F;resource.js:329</code></a>
+        <a href="../files/addon_models_resource.js.html#l369"><code>addon&#x2F;models&#x2F;resource.js:369</code></a>
         </p>
 
 
@@ -905,7 +1102,7 @@ export default Resource.extend({
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l550"><code>addon&#x2F;models&#x2F;resource.js:550</code></a>
+        <a href="../files/addon_models_resource.js.html#l590"><code>addon&#x2F;models&#x2F;resource.js:590</code></a>
         </p>
 
 
@@ -978,7 +1175,7 @@ object prior to adding a relationship.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l500"><code>addon&#x2F;models&#x2F;resource.js:500</code></a>
+        <a href="../files/addon_models_resource.js.html#l540"><code>addon&#x2F;models&#x2F;resource.js:540</code></a>
         </p>
 
 
@@ -1055,7 +1252,7 @@ toOne and toMany helpers</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l487"><code>addon&#x2F;models&#x2F;resource.js:487</code></a>
+        <a href="../files/addon_models_resource.js.html#l527"><code>addon&#x2F;models&#x2F;resource.js:527</code></a>
         </p>
 
 
@@ -1139,7 +1336,7 @@ used for changed/previous tracking</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l365"><code>addon&#x2F;models&#x2F;resource.js:365</code></a>
+        <a href="../files/addon_models_resource.js.html#l405"><code>addon&#x2F;models&#x2F;resource.js:405</code></a>
         </p>
 
 
@@ -1181,7 +1378,7 @@ used for changed/previous tracking</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l347"><code>addon&#x2F;models&#x2F;resource.js:347</code></a>
+        <a href="../files/addon_models_resource.js.html#l387"><code>addon&#x2F;models&#x2F;resource.js:387</code></a>
         </p>
 
 
@@ -1229,7 +1426,7 @@ used for changed/previous tracking</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l464"><code>addon&#x2F;models&#x2F;resource.js:464</code></a>
+        <a href="../files/addon_models_resource.js.html#l504"><code>addon&#x2F;models&#x2F;resource.js:504</code></a>
         </p>
 
 
@@ -1294,7 +1491,7 @@ used for changed/previous tracking</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l265"><code>addon&#x2F;models&#x2F;resource.js:265</code></a>
+        <a href="../files/addon_models_resource.js.html#l305"><code>addon&#x2F;models&#x2F;resource.js:305</code></a>
         </p>
 
 
@@ -1374,7 +1571,7 @@ the resource Linkage <code>data</code> array.</li>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l174"><code>addon&#x2F;models&#x2F;resource.js:174</code></a>
+        <a href="../files/addon_models_resource.js.html#l214"><code>addon&#x2F;models&#x2F;resource.js:214</code></a>
         </p>
 
 
@@ -1433,7 +1630,7 @@ the resource Linkage <code>data</code> array.</li>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l380"><code>addon&#x2F;models&#x2F;resource.js:380</code></a>
+        <a href="../files/addon_models_resource.js.html#l420"><code>addon&#x2F;models&#x2F;resource.js:420</code></a>
         </p>
 
 
@@ -1464,7 +1661,7 @@ the resource Linkage <code>data</code> array.</li>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l390"><code>addon&#x2F;models&#x2F;resource.js:390</code></a>
+        <a href="../files/addon_models_resource.js.html#l430"><code>addon&#x2F;models&#x2F;resource.js:430</code></a>
         </p>
 
 
@@ -1495,7 +1692,7 @@ the resource Linkage <code>data</code> array.</li>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l420"><code>addon&#x2F;models&#x2F;resource.js:420</code></a>
+        <a href="../files/addon_models_resource.js.html#l460"><code>addon&#x2F;models&#x2F;resource.js:460</code></a>
         </p>
 
 
@@ -1852,7 +2049,7 @@ Use this as a refence for creating computed properties</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l530"><code>addon&#x2F;models&#x2F;resource.js:530</code></a>
+        <a href="../files/addon_models_resource.js.html#l570"><code>addon&#x2F;models&#x2F;resource.js:570</code></a>
         </p>
 
 
@@ -1902,7 +2099,7 @@ Use this as a refence for creating computed properties</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_models_resource.js.html#l538"><code>addon&#x2F;models&#x2F;resource.js:538</code></a>
+        <a href="../files/addon_models_resource.js.html#l578"><code>addon&#x2F;models&#x2F;resource.js:578</code></a>
         </p>
 
 

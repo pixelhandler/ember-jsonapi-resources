@@ -202,7 +202,7 @@ export default Ember.Mixin.create({
 
   /**
     Update a relationship, works with both &#x60;to-many&#x60; and &#x60;to-one&#x60;. Primarily use
-    with &#x60;to-one&#x60; as &#x60;to-many&#x60; is for a full replacement only.
+    with &#x60;to-one&#x60; and &#x60;to-many&#x60; is for a full replacement only.
 
     For a &#x60;to-one&#x60; relationship, add, replace or remove, and persist the change
     using the service. With an id the relation will be added or changed, with
@@ -211,7 +211,8 @@ export default Ember.Mixin.create({
     See: &lt;http://jsonapi.org/format/#crud-updating-resource-relationships&gt;
 
     For &#x60;to-many&#x60; relationships the backend will need to support editing as a set,
-    full replacement (most often that may be disabled).
+    full replacement (most often that may be disabled). The list of all related
+    resource identifiers will be sent to the server as a replace operation.
 
     Update a relationship by adding or removing using a list, id, or null. When
     adding an id for a to-many relationship send one or more ids, include the
@@ -238,7 +239,7 @@ export default Ember.Mixin.create({
     } else if (related.kind === &#x27;toMany&#x27;) {
       rollback = related.mapBy(&#x27;id&#x27;);
     }
-    this._updateRelationshipsData(relationship, ids);
+    this._replaceRelationshipsData(relationship, ids);
     return this.get(&#x27;service&#x27;).patchRelationship(this, relationship)
     .catch(function (error) {
       this._updateRelationshipsData(relationship, rollback);

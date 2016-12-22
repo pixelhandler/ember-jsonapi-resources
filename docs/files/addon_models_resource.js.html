@@ -244,18 +244,10 @@ const Resource = Ember.Object.extend(ResourceOperationsMixin, {
     @param {Array|String|null} ids
   */
   _updateRelationshipsData(relation, ids) {
-    let relationshipData = &#x27;relationships.&#x27; + relation + &#x27;.data&#x27;;
-    let existing;
     if (!Array.isArray(ids)) {
-      existing = this.get(relationshipData).id;
-      if (ids === null || isType(&#x27;string&#x27;, ids) &amp;&amp; existing !== ids) {
-        this.removeRelationship(relation, existing);
-        if (ids !== null) {
-          this.addRelationship(relation, ids);
-        }
-      }
+      this._updateToOneRelationshipData(relation, ids); 
     } else {
-      existing = this.get(relationshipData).map(function(rel) { return rel.id; });
+      let existing = this._existingRelationshipData(relation);
       if (!existing.length) {
         this.addRelationships(relation, ids);
       } else if (ids.length &gt; existing.length) {
@@ -264,6 +256,54 @@ const Resource = Ember.Object.extend(ResourceOperationsMixin, {
         this.removeRelationships(relation, unique(existing, ids));
       }
     }
+  },
+
+  /**
+    @private
+    @method _updateToOneRelationshipData
+    @param {String} relation
+    @param {String|null} id
+  */
+  _updateToOneRelationshipData(relation, id) {
+    let relationshipData = &#x27;relationships.&#x27; + relation + &#x27;.data&#x27;;
+    let existing = this.get(relationshipData);
+    existing = (existing) ? existing.id : null;
+    if (id === null || isType(&#x27;string&#x27;, id) &amp;&amp; existing !== id) {
+      this.removeRelationship(relation, existing);
+      if (id !== null) {
+        this.addRelationship(relation, id);
+      }
+    }
+  },
+
+  /**
+    @private
+    @method _replaceRelationshipsData
+    @param {String} relation
+    @param {Array|String|null} ids
+  */
+  _replaceRelationshipsData(relation, ids) {
+    if (!Array.isArray(ids)) {
+      this._updateToOneRelationshipData(relation, ids); 
+    } else {
+      let existing = this._existingRelationshipData(relation);
+      if (!existing.length) {
+        this.addRelationships(relation, ids);
+      } else {
+        this.removeRelationships(relation, existing);
+        this.addRelationships(relation, ids);
+      }
+    }
+  },
+
+  /**
+    @private
+    @method _existingRelationshipData
+    @param {String} relation
+  */
+  _existingRelationshipData(relation) {
+    let relationshipData = &#x27;relationships.&#x27; + relation + &#x27;.data&#x27;;
+    return this.get(relationshipData).map(function(rel) { return rel.id; });
   },
 
   /**

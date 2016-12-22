@@ -657,6 +657,17 @@
         {
             "file": "addon/adapters/application.js",
             "line": 32,
+            "description": "Flag to use $.ajax instead of window.fetch",
+            "itemtype": "property",
+            "name": "useAjax",
+            "type": "Boolean",
+            "class": "ApplicationAdapter",
+            "module": "ember-jsonapi-resources",
+            "submodule": "adapters"
+        },
+        {
+            "file": "addon/adapters/application.js",
+            "line": 40,
             "description": "The url for the entity, e.g. /posts or /api/v1/posts\n\ndefaults to config.APP.API_HOST/config.APP.API_PATH/pluralize(type) if\nnot set explicitly.",
             "itemtype": "property",
             "name": "url",
@@ -668,7 +679,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 52,
+            "line": 60,
             "itemtype": "method",
             "name": "init",
             "class": "ApplicationAdapter",
@@ -677,7 +688,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 66,
+            "line": 74,
             "itemtype": "method",
             "name": "deserialize",
             "params": [
@@ -703,7 +714,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 87,
+            "line": 95,
             "description": "Find resource(s) using an id or a using a query `{id: '', query: {}}`",
             "itemtype": "method",
             "name": "find",
@@ -724,7 +735,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 117,
+            "line": 125,
             "description": "Find a resource by id, optionally pass a query object, e.g. w/ filter param(s)\n\nUses a url like: /photos/1",
             "itemtype": "method",
             "name": "findOne",
@@ -750,7 +761,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 133,
+            "line": 141,
             "description": "Find resources using an optional query object, e.g. w/ pagination params",
             "itemtype": "method",
             "name": "findQuery",
@@ -771,7 +782,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 147,
+            "line": 155,
             "description": "Find resources by relationship or use a specificed (optional) service to find relation\n\nA Url like: /photos/1/relationships/photographer is a required param\n\n```js\nservice.findRelated('photographer', '/api/v1/photos/1/relationships/photographer');\n```\n\nOr, with option to find related resource using a different service\n\n```js\nservice.findRelated({relation: 'photographer', type: 'people'}, url);\n```",
             "itemtype": "method",
             "name": "findRelated",
@@ -809,7 +820,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 180,
+            "line": 188,
             "description": "Create a new resource, sends a POST request, updates resource instance\nwith persisted data, and updates cache with persisted resource",
             "itemtype": "method",
             "name": "createResource",
@@ -830,7 +841,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 214,
+            "line": 222,
             "description": "Patch an existing resource, sends a PATCH request.",
             "itemtype": "method",
             "name": "updateResource",
@@ -856,7 +867,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 245,
+            "line": 253,
             "description": "Delete an existing resource, sends a DELETE request",
             "itemtype": "method",
             "name": "deleteResource",
@@ -877,7 +888,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 264,
+            "line": 272,
             "description": "Create (add) a relationship for `to-many` relation, sends a POST request.\n\nSee: <http://jsonapi.org/format/#crud-updating-to-many-relationships>\n\nAdds a relation using a payload with a resource identifier object:\n\n```\n{\n  \"data\": [\n    { \"type\": \"comments\", \"id\": \"12\" }\n  ]\n}\n```",
             "itemtype": "method",
             "name": "createRelationship",
@@ -908,7 +919,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 292,
+            "line": 300,
             "description": "Patch a relationship, either adds or removes everyting, sends a PATCH request.\n\nSee: <http://jsonapi.org/format/#crud-updating-to-one-relationships>\n\nFor `to-one` relation:\n\n- Remove (delete) with payload: `{ \"data\": null }`\n- Create/Update with payload:\n  ```\n  {\n    \"data\": { \"type\": \"comments\", \"id\": \"1\" }\n  }\n  ```\n\nFor `to-many` relation:\n\n- Remove (delete) all with payload: `{ \"data\": [] }`\n- Replace all with payload:\n  ```\n  {\n    \"data\": [\n      { \"type\": \"comments\", \"id\": \"1\" },\n      { \"type\": \"comments\", \"id\": \"2\" }\n    ]\n  }\n  ```",
             "itemtype": "method",
             "name": "patchRelationship",
@@ -934,7 +945,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 332,
+            "line": 340,
             "description": "Deletes a relationship for `to-many` relation, sends a DELETE request.\n\nSee: <http://jsonapi.org/format/#crud-updating-to-many-relationships>\n\nRemove using a payload with the resource identifier object:\n\nFor `to-many`:\n\n```\n{\n  \"data\": [\n    { \"type\": \"comments\", \"id\": \"1\" }\n  ]\n}\n```",
             "itemtype": "method",
             "name": "deleteRelationship",
@@ -965,7 +976,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 362,
+            "line": 370,
             "itemtype": "method",
             "name": "_urlForRelationship",
             "access": "private",
@@ -992,7 +1003,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 375,
+            "line": 383,
             "description": "Fetches data using Fetch API or XMLHttpRequest",
             "itemtype": "method",
             "name": "fetch",
@@ -1018,7 +1029,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 392,
+            "line": 400,
             "description": "Hook to customize the URL, e.g. if your API is behind a proxy and you need\nto swap a portion of the domain to make a request on the same domain.",
             "itemtype": "method",
             "name": "fetchUrl",
@@ -1039,7 +1050,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 404,
+            "line": 412,
             "description": "Adds params and headers or Fetch request.\n\n- The HTTP Header is set for Content-Type: application/vnd.api+json\n- Sets Authorization header if accessible in the `authorizationCredential` property",
             "itemtype": "method",
             "name": "fetchOptions",
@@ -1060,7 +1071,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 426,
+            "line": 434,
             "description": "Sets Authorization header if accessible in the `authorizationCredential` property",
             "itemtype": "method",
             "name": "fetchAuthorizationHeader",
@@ -1077,7 +1088,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 443,
+            "line": 451,
             "description": "Authentication credentials/token used with HTTP authentication\nThis property should be added by an Authorization Mixin",
             "itemtype": "property",
             "name": "authorizationCredential",
@@ -1088,7 +1099,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 452,
+            "line": 460,
             "description": "The name of the Authorization request-header field\nThis property should be added by an Authorization Mixin",
             "itemtype": "property",
             "name": "authorizationHeaderField",
@@ -1099,7 +1110,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 461,
+            "line": 469,
             "description": "Noop as a hook for defining how deserialized resource objects are cached,\ne.g. in memory",
             "itemtype": "method",
             "name": "cacheResource",
@@ -1116,7 +1127,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 470,
+            "line": 478,
             "description": "Noop as a hook for defining how to handle cache after updating a resource",
             "itemtype": "method",
             "name": "cacheUpdate",
@@ -1133,7 +1144,7 @@
         },
         {
             "file": "addon/adapters/application.js",
-            "line": 478,
+            "line": 486,
             "description": "Noop as a hook to remove a resource from cached data",
             "itemtype": "method",
             "name": "cacheRemove",
@@ -1318,7 +1329,7 @@
         {
             "file": "addon/mixins/resource-operations.js",
             "line": 97,
-            "description": "Update a relationship, works with both `to-many` and `to-one`. Primarily use\nwith `to-one` as `to-many` is for a full replacement only.\n\nFor a `to-one` relationship, add, replace or remove, and persist the change\nusing the service. With an id the relation will be added or changed, with\n`null` a relationship will be removed.\n\nSee: <http://jsonapi.org/format/#crud-updating-resource-relationships>\n\nFor `to-many` relationships the backend will need to support editing as a set,\nfull replacement (most often that may be disabled).\n\nUpdate a relationship by adding or removing using a list, id, or null. When\nadding an id for a to-many relationship send one or more ids, include the\nexisting ids as well. When removing from a to-many relationship pass the ids\nthat should remain, missing ids will be removed, or remove all with an empty\narray.\n\nCalling `this.updateRelationship` will call the service to persist the changes,\nvia it's `patchRelationship` method. Since the default `catch` for this\nmethod is to rollback the relationships, an optional `errorCallback` function\ncan be used to handle the error response.",
+            "description": "Update a relationship, works with both `to-many` and `to-one`. Primarily use\nwith `to-one` and `to-many` is for a full replacement only.\n\nFor a `to-one` relationship, add, replace or remove, and persist the change\nusing the service. With an id the relation will be added or changed, with\n`null` a relationship will be removed.\n\nSee: <http://jsonapi.org/format/#crud-updating-resource-relationships>\n\nFor `to-many` relationships the backend will need to support editing as a set,\nfull replacement (most often that may be disabled). The list of all related\nresource identifiers will be sent to the server as a replace operation.\n\nUpdate a relationship by adding or removing using a list, id, or null. When\nadding an id for a to-many relationship send one or more ids, include the\nexisting ids as well. When removing from a to-many relationship pass the ids\nthat should remain, missing ids will be removed, or remove all with an empty\narray.\n\nCalling `this.updateRelationship` will call the service to persist the changes,\nvia it's `patchRelationship` method. Since the default `catch` for this\nmethod is to rollback the relationships, an optional `errorCallback` function\ncan be used to handle the error response.",
             "itemtype": "method",
             "name": "updateRelationship",
             "params": [
@@ -1348,7 +1359,7 @@
         },
         {
             "file": "addon/mixins/resource-operations.js",
-            "line": 147,
+            "line": 148,
             "description": "Deletes a relationship for `to-many` relation, calls service to persist.\n\nSee: <http://jsonapi.org/format/#crud-updating-to-many-relationships>\n\nCalling `this.deleteRelationship` will call the service to persist the changes,\nvia it's `deleteRelationship` method. Since the default `catch` for this\nmethod is to rollback the relationships, an optional `errorCallback` function\ncan be used to handle the error response.",
             "itemtype": "method",
             "name": "deleteRelationship",
@@ -1714,7 +1725,71 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 163,
+            "line": 155,
+            "access": "private",
+            "tagname": "",
+            "itemtype": "method",
+            "name": "_updateToOneRelationshipData",
+            "params": [
+                {
+                    "name": "relation",
+                    "description": "",
+                    "type": "String"
+                },
+                {
+                    "name": "id",
+                    "description": "",
+                    "type": "String|null"
+                }
+            ],
+            "class": "Resource",
+            "module": "ember-jsonapi-resources",
+            "submodule": "resource"
+        },
+        {
+            "file": "addon/models/resource.js",
+            "line": 173,
+            "access": "private",
+            "tagname": "",
+            "itemtype": "method",
+            "name": "_replaceRelationshipsData",
+            "params": [
+                {
+                    "name": "relation",
+                    "description": "",
+                    "type": "String"
+                },
+                {
+                    "name": "ids",
+                    "description": "",
+                    "type": "Array|String|null"
+                }
+            ],
+            "class": "Resource",
+            "module": "ember-jsonapi-resources",
+            "submodule": "resource"
+        },
+        {
+            "file": "addon/models/resource.js",
+            "line": 193,
+            "access": "private",
+            "tagname": "",
+            "itemtype": "method",
+            "name": "_existingRelationshipData",
+            "params": [
+                {
+                    "name": "relation",
+                    "description": "",
+                    "type": "String"
+                }
+            ],
+            "class": "Resource",
+            "module": "ember-jsonapi-resources",
+            "submodule": "resource"
+        },
+        {
+            "file": "addon/models/resource.js",
+            "line": 203,
             "itemtype": "method",
             "name": "addRelationships",
             "params": [
@@ -1735,7 +1810,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 174,
+            "line": 214,
             "itemtype": "method",
             "name": "removeRelationships",
             "params": [
@@ -1756,7 +1831,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 185,
+            "line": 225,
             "description": "Adds related resource identifier object to the relationship data.\n\nAlso sets or adds to the `content` of the related proxy object.\n\n- For to-many relations the related identifier object is added to\n  the resource linkage data array.\n- For to-one relations the resource identifier object is assigned,\n  so the relation may be replaced.\n\nSee:\n- http://jsonapi.org/format/#document-resource-object-linkage\n- http://jsonapi.org/format/#document-resource-identifier-objects",
             "itemtype": "method",
             "name": "addRelationship",
@@ -1778,7 +1853,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 233,
+            "line": 273,
             "description": "Track additions of relationships using a resource identifier objects:\n\n```js\n{ relation {String}, type {String}, kind {String} }`\n```",
             "access": "private",
             "tagname": "",
@@ -1807,7 +1882,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 265,
+            "line": 305,
             "description": "Removes resource identifier object of the relationship data. Also, sets the\n`content` of the related (computed property's) proxy object to `null`.\n\n- For to-one relations the (resource linkage) data is set to `null`.\n- For to-many relations the resource identifier object is removed from\n  the resource Linkage `data` array.\n\nSee:\n- http://jsonapi.org/format/#document-resource-object-linkage\n- http://jsonapi.org/format/#document-resource-identifier-objects",
             "itemtype": "method",
             "name": "removeRelationship",
@@ -1829,7 +1904,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 306,
+            "line": 346,
             "description": "Track removals of relationships",
             "access": "private",
             "tagname": "",
@@ -1853,7 +1928,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 329,
+            "line": 369,
             "itemtype": "method",
             "name": "changedAttributes",
             "return": {
@@ -1866,7 +1941,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 347,
+            "line": 387,
             "itemtype": "method",
             "name": "previousAttributes",
             "return": {
@@ -1879,7 +1954,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 365,
+            "line": 405,
             "itemtype": "method",
             "name": "previousAttributes",
             "return": {
@@ -1892,7 +1967,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 380,
+            "line": 420,
             "description": "Rollback changes to attributes and relationships",
             "itemtype": "method",
             "name": "rollback",
@@ -1902,7 +1977,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 390,
+            "line": 430,
             "description": "Revert to previous attributes",
             "itemtype": "method",
             "name": "rollbackAttributes",
@@ -1912,7 +1987,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 406,
+            "line": 446,
             "description": "Reset tracked changed/previous attrs",
             "access": "private",
             "tagname": "",
@@ -1924,7 +1999,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 420,
+            "line": 460,
             "description": "Revert to previous relationships",
             "itemtype": "method",
             "name": "rollbackRelationships",
@@ -1934,7 +2009,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 450,
+            "line": 490,
             "description": "Reset tracked relationship changes",
             "access": "private",
             "tagname": "",
@@ -1946,7 +2021,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 464,
+            "line": 504,
             "itemtype": "method",
             "name": "relationMetadata",
             "params": [
@@ -1966,7 +2041,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 487,
+            "line": 527,
             "description": "Sets all payload properties on the resource and resets private _attributes\nused for changed/previous tracking",
             "itemtype": "method",
             "name": "didUpdateResource",
@@ -1983,7 +2058,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 500,
+            "line": 540,
             "description": "Sets the relationships data, used after the promise proxy resolves by\ntoOne and toMany helpers",
             "itemtype": "method",
             "name": "didResolveProxyRelation",
@@ -2010,7 +2085,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 530,
+            "line": 570,
             "description": "A local cache duration, to minimize duplicate fetch requests",
             "itemtype": "property",
             "name": "cacheDuration",
@@ -2021,7 +2096,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 538,
+            "line": 578,
             "itemtype": "property",
             "name": "isCacheExpired",
             "type": "Boolean",
@@ -2031,7 +2106,7 @@
         },
         {
             "file": "addon/models/resource.js",
-            "line": 550,
+            "line": 590,
             "description": "To protect the JSON API Resource properties for attributes, links and\nrelationships these objects are setup during create(). This has to be\ndefined since the attr() helper needs to have new objects for each instance,\nto project from keeping a reference on the prototype.\n\nThe create method should only be called after looking up a factory from the\ncontainer, for example in a route's model hook:\n\n```\nmodel() {\n  let owner = Ember.getOwner(this);\n  return owner._lookupFactory('model:post').create({\n    attributes: {\n      title: 'The JSON API 1.0 Spec Rocks!'\n    }\n  });\n}\n```\n\nThe create method uses the container to lookup the factory's prototype and\nfind the computed properties used for relations to setup the relationships\nfor the Resource instance you create. Calling Resource#create without using\nthe factory lookup will result in an instance without a reference to the\napplication's container and you will have to manually setup the relationships\nobject prior to adding a relationship.",
             "itemtype": "method",
             "name": "create",

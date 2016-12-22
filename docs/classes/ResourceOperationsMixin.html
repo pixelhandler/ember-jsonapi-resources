@@ -353,7 +353,7 @@ via it's <code>createResource</code> method.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_mixins_resource-operations.js.html#l147"><code>addon&#x2F;mixins&#x2F;resource-operations.js:147</code></a>
+        <a href="../files/addon_mixins_resource-operations.js.html#l148"><code>addon&#x2F;mixins&#x2F;resource-operations.js:148</code></a>
         </p>
 
 
@@ -505,13 +505,14 @@ via it's <code>deleteResource</code> method.</p>
 
     <div class="description">
         <p>Update a relationship, works with both <code>to-many</code> and <code>to-one</code>. Primarily use
-with <code>to-one</code> as <code>to-many</code> is for a full replacement only.</p>
+with <code>to-one</code> and <code>to-many</code> is for a full replacement only.</p>
 <p>For a <code>to-one</code> relationship, add, replace or remove, and persist the change
 using the service. With an id the relation will be added or changed, with
 <code>null</code> a relationship will be removed.</p>
 <p>See: <a href="http://jsonapi.org/format/#crud-updating-resource-relationships">http://jsonapi.org/format/#crud-updating-resource-relationships</a></p>
 <p>For <code>to-many</code> relationships the backend will need to support editing as a set,
-full replacement (most often that may be disabled).</p>
+full replacement (most often that may be disabled). The list of all related
+resource identifiers will be sent to the server as a replace operation.</p>
 <p>Update a relationship by adding or removing using a list, id, or null. When
 adding an id for a to-many relationship send one or more ids, include the
 existing ids as well. When removing from a to-many relationship pass the ids
