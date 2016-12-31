@@ -922,7 +922,7 @@ test('#fetch handles 204 (Success, no content) response status w/o calling deser
   sandbox.stub(adapter, 'fetchUrl', function () {});
   mockFetchJax(sandbox, adapter, '');
   sandbox.stub(adapter, 'cacheResource', function () {});
-  adapter.serializer = {deserialize: sandbox.spy(), deserializeIncluded: Ember.K};
+  adapter.serializer = {deserialize: sandbox.spy(), deserializeIncluded() {}};
   let promise = adapter.fetch('/posts', {method: 'PATCH', body: '{"data": null}'});
 
   assert.ok(typeof promise.then === 'function', 'returns a thenable');
@@ -940,7 +940,7 @@ test('#fetch handles 200 (Success) response status', function(assert) {
   const adapter = this.subject({type: 'posts', url: '/posts'});
   mockFetchJax(sandbox, adapter, postMock);
   sandbox.stub(adapter, 'cacheResource', function () {});
-  adapter.serializer = { deserialize: sandbox.spy(), deserializeIncluded: Ember.K };
+  adapter.serializer = { deserialize: sandbox.spy(), deserializeIncluded() {} };
   let promise = adapter.fetch('/posts/1', { method: 'GET' });
 
   assert.ok(typeof promise.then === 'function', 'returns a thenable');

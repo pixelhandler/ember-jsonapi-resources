@@ -1,4 +1,3 @@
-import Ember from 'ember';
 import RSVP from 'rsvp';
 // import ResourceOperationsMixin from 'ember-jsonapi-resources/mixins/resource-operations';
 import { module, test } from 'qunit';
@@ -20,12 +19,12 @@ module('Unit | Mixin | resource-operations', {
         createRelationship: this.sandbox.spy(promiseResolved),
         patchRelationship: this.sandbox.spy(promiseResolved),
         deleteRelationship: this.sandbox.spy(promiseResolved),
-        trigger: Ember.K
+        trigger() {}
       },
       name: attr('string'),
       // mock relationship computed properties
-      guns: {kind: 'toMany', mapBy: Ember.K }, // toMany('guns')
-      horse: {kind: 'toOne', get: Ember.K } // toOne('horse')
+      guns: {kind: 'toMany', mapBy() {} }, // toMany('guns')
+      horse: {kind: 'toOne', get() {} } // toOne('horse')
     });
     this.subject = Cowboy.create({ id: 1, name:'Lone Ranger'});
     // mock payload setup
