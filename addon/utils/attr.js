@@ -71,9 +71,11 @@ export default function attr(type = 'any', mutable = true) {
       this.set('attributes.' + key, value);
       if (!this.get('isNew')) {
         this._attributes[key] = this._attributes[key] || {};
+        if (this._attributes[key].previous === undefined) {
+          this._attributes[key].previous = lastValue;
+        }
         this._attributes[key].changed = value;
-        this._attributes[key].previous = lastValue;
-        const service = this.get('service');
+        let service = this.get('service');
         if (service) {
           service.trigger('attributeChanged', this);
         }

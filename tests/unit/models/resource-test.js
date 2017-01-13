@@ -208,17 +208,30 @@ test('#rollbackAttributes resets attributes based on #previousAttributes', funct
 
 test('#rollbackRelationships resets relationships', function(assert) {
   let post = createPostWithRelationships.call(this);
-  let ogAuthorId = post.get('relationships.author.data.id');
+  const ogAuthorId = post.get('relationships.author.data.id');
   let relationships = post.get('relationships');
 
   post.addRelationship('author', '5');
-  assert.notEqual(relationships.author.id, ogAuthorId, 'author changed');
+  assert.notEqual(relationships.author.data.id, ogAuthorId, 'author changed');
 
   assert.equal(relationships.comments.data.length, 1, 'one comment');
   post.removeRelationships('comments', ['3']);
   assert.equal(relationships.comments.data.length, 0, 'no comments');
 
   let changes = post.get('changedRelationships');
+  assert.equal(changes.length, 2, 'two relationships were changed');
+
+  post.addRelationship('author', '6');
+  assert.equal(relationships.author.data.id, 6, 'author changed');
+  post.addRelationships('comments', ['4', '5']);
+  assert.equal(relationships.comments.data.length, 2, 'two comments added');
+
+  changes = post.get('changedRelationships');
+  assert.equal(changes.length, 2, 'two relationships were changed');
+
+  post.removeRelationship('author');
+  assert.equal(relationships.author.id, null, 'no author');
+  changes = post.get('changedRelationships');
   assert.equal(changes.length, 2, 'two relationships were changed');
 
   post.rollbackRelationships();
