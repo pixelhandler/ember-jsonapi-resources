@@ -72,9 +72,9 @@ export default function attr(type = 'any', mutable = true) {
       if (!this.get('isNew')) {
         this._attributes[key] = this._attributes[key] || {};
         if (this._attributes[key].previous === undefined) {
-          this._attributes[key].previous = lastValue;
+          this._attributes[key].previous = Ember.copy(lastValue, true);
         }
-        this._attributes[key].changed = value;
+        this._attributes[key].changed = Ember.copy(value, true);
         let service = this.get('service');
         if (service) {
           service.trigger('attributeChanged', this);
