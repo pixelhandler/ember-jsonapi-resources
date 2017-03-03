@@ -99,20 +99,29 @@ export default Ember.Mixin.create({
     if (!Array.isArray(resp.data) && typeof resp.data === 'object') {
       resp.data = [ resp.data ];
     }
-    let index, id, item, isResourceType;
+
     for (let i = 0; i < resp.data.length; i++) {
-      id = resp.data[i].id || resp.data[i].get('id');
-      index = ids.indexOf(id);
-      isResourceType = resp.data[i].toString().indexOf('JSONAPIResource') > -1;
-      if (index === -1 && isResourceType) {
-        this.cache.data.pushObject(resp.data[i]);
-      } else if (isResourceType) {
-        this.cache.data.replaceContent(index, 1, resp.data[i]);
-      } else if (index > -1) {
-        item = this.cache.data.findBy('id', id);
-        item.didUpdateResource(resp.data[i]);
+      let data           = resp.data[i];
+      let id             = data.id || data.get('id');
+      let index          = ids.indexOf(id);
+      let isCached       = index !== -1;
+      let isResourceType = data.toString().indexOf('JSONAPIResource') > -1;
+      let resource       = isResourceType ? data : null;
+
+      // Given Resources we can add or replace,
+      // otherwise we can only update cache by id.
+      if (isCached && isResourceType) { // cached resource -> replace
+        this.cache.data.replaceContent(index, 1, resource);
+      } else if (isResourceType) { // non-cached resource -> add
+        this.cache.data.pushObject(resource);
+      } else if (isCached) { // id found in cache -> update
+        resource = this.cache.data.findBy('id', id);
+        resource.didUpdateResource(data);
       }
-      this.cacheControl(item || this.cache.data.findBy('id', id), resp.headers);
+
+      if (resource) {
+        this.cacheControl(resource, resp.headers);
+      }
     }
   },
 
