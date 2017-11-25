@@ -14,8 +14,8 @@ By considering this equation **e = mc<sup>2</sup>**
 …The "EJR" addon is a lightweight library that simply focuses on one solid
 specification, and follows common patterns for data persistence in Ember apps.
 
-* [ember-jsonapi-resources.com]
-* [The Guide](https://guide.ember-jsonapi-resources.com)
+* [ember-jsonapi-resources] website
+* [The Guide](https://pixelhandler.gitbooks.io/ember-jsonapi-resources-guide/content/)
 * [API Docs][generated docs]
 * [Example App]
 * [Cookbooks / Wiki][Wiki Guide]
@@ -75,7 +75,7 @@ To generate docs for the gh-pages branch:
 
 [Ember CLI]: https://www.ember-cli.com/
 [Ember.js]: http://emberjs.com
-[ember-jsonapi-resources.com]: http://ember-jsonapi-resources.com
+[ember-jsonapi-resources]: https://pixelhandler.github.io/ember-jsonapi-resources/
 [Example App]: https://github.com/pixelhandler/jr-test
 [generated docs]: http://pixelhandler.github.io/ember-jsonapi-resources/docs
 [JSON API]: http://jsonapi.org
