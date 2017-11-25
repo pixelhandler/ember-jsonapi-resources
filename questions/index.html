@@ -3,6 +3,7 @@
     <meta charset="UTF-8">
     <title>Ember JSONAPI Resources by pixelhandler</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <base href="https://pixelhandler.github.io/ember-jsonapi-resources/">
     <link rel="stylesheet" type="text/css" href="../stylesheets/normalize.css" media="screen">
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Pacifico' rel='stylesheet' type='text/css'>
@@ -19,11 +20,11 @@
 
     <section class="main-content">
       <nav class="cursive">
-        <a href="/">Home</a> |
-        <a href="/about">About</a> |
-        <a href="/questions/">Questions</a> |
-        <a href="/usage/">Usage</a> |
-        <a href="/example/">Example App</a>
+        <a href="./">Home</a> |
+        <a href="./about">About</a> |
+        <a href="./questions/">Questions</a> |
+        <a href="./usage/">Usage</a> |
+        <a href="./example/">Example App</a>
         <hr>
       </nav>
 
@@ -34,8 +35,8 @@
 
       <h3>Is this a replacement for Ember Data or an interface to it?</h3>
 
-      <p><strong>Neither</strong>. This is a completely separate solution. Ember Data needs <em>foreign keys</em> 
-      and provides an abstraction for adapters and serializers. It's solution helps you work 
+      <p><strong>Neither</strong>. This is a completely separate solution. Ember Data needs <em>foreign keys</em>
+      and provides an abstraction for adapters and serializers. It's solution helps you work
       with various JSON document formats. Ember JSON API Resources needs <em>URLs</em> and fits
       a specific specification for an API server without the need for an abstraction.</p>
 
@@ -61,7 +62,7 @@
 
       <h3>What does the `store` actually do?</h3>
 
-      <p><strong>Caching, and it behaves as expected in the default <code>model</code> hook of a route</strong>. 
+      <p><strong>Caching, and it behaves as expected in the default <code>model</code> hook of a route</strong>.
 
       The store service is a facade for the services for each resource.
       Calling <code>this.store.find('entity')</code> in a route's model hook will lookup the service
@@ -79,7 +80,7 @@
           &copy; 2015 Bill Heaton, All rights reserved
         </span>
         <span class="site-footer-credits">
-          <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by 
+          <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by
           <a href="https://twitter.com/jasonlong">Jason Long</a>.
         </span>
       </footer>

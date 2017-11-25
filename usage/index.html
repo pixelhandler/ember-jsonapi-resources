@@ -3,6 +3,7 @@
     <meta charset="UTF-8">
     <title>Ember JSONAPI Resources by pixelhandler</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <base href="https://pixelhandler.github.io/ember-jsonapi-resources/">
     <link rel="stylesheet" type="text/css" href="../stylesheets/normalize.css" media="screen">
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Pacifico' rel='stylesheet' type='text/css'>
@@ -19,11 +20,11 @@
 
     <section class="main-content">
       <nav class="cursive">
-        <a href="/">Home</a> |
-        <a href="/about">About</a> |
-        <a href="/questions/">Questions</a> |
-        <a href="/usage/">Usage</a> |
-        <a href="/example/">Example App</a>
+        <a href="./">Home</a> |
+        <a href="./about">About</a> |
+        <a href="./questions/">Questions</a> |
+        <a href="./usage/">Usage</a> |
+        <a href="./example/">Example App</a>
         <hr>
       </nav>
 
@@ -99,9 +100,9 @@ npm install
       <a href="https://github.com/emberjs/data">Ember Data</a> uses a <code>store</code>, but the <code>resource</code>
       is referenced in the plural form (like your API endpoint).</p>
 
-      <p><a href="/addon/services/store.js">This is the interface for the <code>store</code></a> which is a facade 
+      <p><a href="/addon/services/store.js">This is the interface for the <code>store</code></a> which is a facade
       for the service for a specific <code>resource</code>. Basically you call the <code>store</code> methods
-      and pass in the <code>resource</code> name, e.g. 'posts' which interacts with the service for 
+      and pass in the <code>resource</code> name, e.g. 'posts' which interacts with the service for
       your <code>resource</code>.</p>
 
       <p>An example <code>route</code>:</p>
@@ -124,7 +125,7 @@ npm install
 
       <p>Each <code>resource</code> has an associated service that is used by the <code>store</code>.</p>
 
-      <p>A <code>resource</code> service is a combination of an <code>adapter</code>, <code>serializer</code> and <code>cache</code> 
+      <p>A <code>resource</code> service is a combination of an <code>adapter</code>, <code>serializer</code> and <code>cache</code>
       object. The <code>service</code> is also injected into the <code>resource</code> (model) objects.</p>
 
       <p>The caching plan for a service is simply a mixin that can be easily customized.
@@ -133,7 +134,7 @@ npm install
 
       <p>The services are "evented" to facilitate close to real time updates.</p>
 
-      <p>An <code>attr</code> of the resource is a computed property to the actual attribute in an 
+      <p>An <code>attr</code> of the resource is a computed property to the actual attribute in an
       <code>attributes</code> hash on the <code>resource</code> (model) instance. Using <code>attr()</code> supports
       any type, and an optional <code>type</code> (String) argument can be used to enforce
       setting and getting with a specific type. <code>'string'</code>, <code>'number'</code>, <code>'boolean'</code>,
@@ -146,7 +147,7 @@ npm install
       <p>The <code>resource</code> <code>adapter</code>'s <code>updateResource</code> method sends a PATCH request with
       only the data for the changed attributes.</p>
 
-      <p>You might want to buffer changes on the resource that is passed into a component 
+      <p>You might want to buffer changes on the resource that is passed into a component
       using <a href="https://github.com/stefanpenner/ember-state-services">ember-state-services</a> and <a href="https://github.com/yapplabs/ember-buffered-proxy">ember-buffered-proxy</a>, or you could just
       re-define the <code>resource</code>'s <code>adapter</code> prototype so that <code>initEvents</code> returns
       a noop instead of listening for the <code>attributeChanged</code> event.</p>
@@ -193,7 +194,7 @@ npm install
       the name of the attribute will be called instead of any transform methods based
       on the type of the attribute.</p>
 
-      <p>The relationships are async using promise proxy objects. So when a template accesses 
+      <p>The relationships are async using promise proxy objects. So when a template accesses
       the <code>resource</code>'s relationship a request is made for the relation.</p>
 
       <h3>
@@ -243,10 +244,10 @@ npm install
   }
 });</pre></div>
 
-      <p>The example above also includes a customized method for the url. In the case where 
-      your API server is running on it's own domain and you use a proxy with your nginx 
-      server to access the API server on your same domain at <code>/api</code> then the JSON documents 
-      may have it's own link references to the original server so you can replace the URL 
+      <p>The example above also includes a customized method for the url. In the case where
+      your API server is running on it's own domain and you use a proxy with your nginx
+      server to access the API server on your same domain at <code>/api</code> then the JSON documents
+      may have it's own link references to the original server so you can replace the URL
       as needed to act as if the API server is running on your same domain.</p>
 
       <h4>
@@ -299,7 +300,7 @@ npm install
 
       <p>For more examples see my API's resources:</p>
 
-      
+
       <p>GET /api/v1/posts</p>
 
       <div class="highlight highlight-source-shell"><pre>curl -i -H <span class="pl-s"><span class="pl-pds">"</span>Accept: application/vnd.api+json<span class="pl-pds">"</span></span> -H <span class="pl-s"><span class="pl-pds">"</span>Content-Type: application/vnd.api+json<span class="pl-pds">"</span></span> -X GET http://api.pixelhandler.com/api/v1/posts</pre></div>
@@ -326,7 +327,7 @@ npm install
           &copy; 2015 Bill Heaton, All rights reserved
         </span>
         <span class="site-footer-credits">
-          <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by 
+          <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by
           <a href="https://twitter.com/jasonlong">Jason Long</a>.
         </span>
       </footer>
